@@ -21,7 +21,7 @@
                     <div class="panel-heading">
                         <h3 class="panel-title">Supplier Detail</h3>
 						<div class="actions pull-right">
-							<a href="{{ url('inventory/supplier/'.$supplier->id.'/edit') }}" class="btn-sm btn-circle" title="Edit" >
+							<a href="{{ url('inventory/supplier/edit/'.$supplier->id) }}" class="btn-sm btn-circle" title="Edit" >
 							<i class="fa fa-edit"></i> Edit </a>
 						</div>
                     </div>
