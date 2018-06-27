@@ -208,11 +208,11 @@ Route::get('inventory/dashboard', 'Inventory\InventoryController@index');
 Route::get('inventory/supplier/', 'Inventory\SupplierController@index');
 Route::get('inventory/supplier/list', 'Inventory\SupplierController@list');
 Route::get('inventory/supplier/view/{id?}', 'Inventory\SupplierController@show');
-Route::get('inventory/supplier/{id}/edit', 'Inventory\SupplierController@edit');
+Route::get('inventory/supplier/edit/{id?}', 'Inventory\SupplierController@edit');
 Route::post('inventory/supplier/update', 'Inventory\SupplierController@update');
 Route::get('inventory/supplier/create', 'Inventory\SupplierController@create');
 Route::post('inventory/supplier/store', 'Inventory\SupplierController@store');
-Route::get('inventory/supplier/{id}/delete', 'Inventory\SupplierController@destroy');
+Route::get('inventory/supplier/delete/{id?}', 'Inventory\SupplierController@destroy');
 #Stock In
 Route::post('inventory/stock/in/new_stock','Inventory\StockInController@newStock');
 Route::get('inventory/stock/in/new_stock', 'Inventory\StockInController@index');

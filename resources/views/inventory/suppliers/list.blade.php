@@ -74,11 +74,11 @@
 														title=" View {{ $v['id'].' ('.$v['company_name'].')' }}"
 														class=""><span class="fa fa-eye"></span></a>
 													</td>
-													<td><a href="{{ url('inventory/supplier/'.$v['id'].'/edit') }}" 
+													<td><a href="{{ url('inventory/supplier/edit/'.$v['id'].'') }}" 
 															title=' Edit {{$v['supplier_code']}} ({{$v['company_name']}})'
 															class='' ><span class='fa fa-edit'></span></a>
 													</td>
-													<td><a href="{{ url('inventory/supplier/'.$v['id'].'/delete') }}" 
+													<td><a href="{{ url('inventory/supplier/delete/'.$v['id'].'/delete') }}" 
 															title=' Remove {{$v['supplier_code']}} ({{$v['company_name']}})'
 															class='confirm-delete' ><span class='glyphicon glyphicon-trash'></span></a>
 													</td>
