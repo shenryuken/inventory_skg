@@ -207,7 +207,7 @@ Route::get('inventory/dashboard', 'Inventory\InventoryController@index');
 #Supplier
 Route::get('inventory/supplier/', 'Inventory\SupplierController@index');
 Route::get('inventory/supplier/list', 'Inventory\SupplierController@list');
-Route::get('inventory/supplier/{id}', 'Inventory\SupplierController@show');
+Route::get('inventory/supplier/view/{id?}', 'Inventory\SupplierController@show');
 Route::get('inventory/supplier/{id}/edit', 'Inventory\SupplierController@edit');
 Route::post('inventory/supplier/update', 'Inventory\SupplierController@update');
 Route::get('inventory/supplier/create', 'Inventory\SupplierController@create');

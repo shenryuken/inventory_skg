@@ -40,7 +40,7 @@
                         <h3 class="panel-title">Supplier Detail</h3>
 						<?php if(isset($supplier)){ ?>
 							<div class="actions pull-right">
-								<a href="{{ url('inventory/supplier/' . $supplier->id) }}" class="btn-sm btn-circle">
+								<a href="{{ url('inventory/supplier/view/' . $supplier->id) }}" class="btn-sm btn-circle">
 								<i class="fa fa-eye"></i> View </a>
 							</div>
 						<?php } ?>

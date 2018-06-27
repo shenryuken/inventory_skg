@@ -70,7 +70,7 @@
 													<td>{{ $v['fax'] }}</td>
 													<td>{{ $v['attn_no'] }}</td>
 													<td>{{ $v['email'] }}</td>
-													<td><a href="{{ url('inventory/supplier/'.$v['id']) }}" 
+													<td><a href="{{ url('inventory/supplier/view/'.$v['id']) }}" 
 														title=" View {{ $v['id'].' ('.$v['company_name'].')' }}"
 														class=""><span class="fa fa-eye"></span></a>
 													</td>

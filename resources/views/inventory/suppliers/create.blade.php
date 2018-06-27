@@ -45,7 +45,7 @@
 								<div class="form-group">
 									<label class="col-md-3 control-label">Supplier Code</label>
 									<div class="col-md-9">
-											<input name="supplier_code" type="text" class="form-control" value="" readonly>
+											<input name="supplier_code" type="text" class="form-control" value="">
 									</div>
 								</div>
 								<div class="form-group">
