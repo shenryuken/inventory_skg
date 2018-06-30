@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class Config_stockadjustment extends Model
 {
-	protected $fillable = ['code','price'];
+    //
 }

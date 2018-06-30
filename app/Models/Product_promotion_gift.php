@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class Product_promotion_gift extends Model
 {
-	protected $fillable = ['code','price'];
+
 }

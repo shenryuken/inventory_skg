@@ -16,7 +16,7 @@ use App\Models\Product_image;
 use App\Models\Product_package;
 use App\Models\Product_promotion_gift;
 
-use App\Models\Config_productcategorie;
+use App\Models\Config_productcategories;
 use App\Models\Config_quantitytype;
 use App\Models\Config_tax;
 use App\Admin;
