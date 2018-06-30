@@ -15,6 +15,8 @@ use App\Traits\RegisterStaff;
 use App\Admin;
 use App\User;
 use App\Models\Role;
+use App\Models\Supplier;
+use App\Models\Product;
 
 class StockInController extends Controller
 {
@@ -25,8 +27,9 @@ class StockInController extends Controller
 
     public function index()
     {
-       
-        return view('inventory.stocks.stock-in-new');
+        $suppliers = Supplier::all();
+        $products = Product::all();
+        return view('inventory.stocks.stock-in-new',compact('suppliers','products'));
     }
 
     public function newStock(Request $request){

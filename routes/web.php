@@ -214,8 +214,7 @@ Route::get('inventory/supplier/create', 'Inventory\SupplierController@create');
 Route::post('inventory/supplier/store', 'Inventory\SupplierController@store');
 Route::get('inventory/supplier/delete/{id?}', 'Inventory\SupplierController@destroy');
 #Stock In
-Route::post('inventory/stock/in/new_stock','Inventory\StockInController@newStock');
-Route::get('inventory/stock/in/new_stock', 'Inventory\StockInController@index');
+Route::get('inventory/stock/in/', 'Inventory\StockInController@index');
 
 
 /*

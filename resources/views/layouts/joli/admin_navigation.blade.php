@@ -147,8 +147,8 @@
                 <a href="{{ url('stock/report/receive') }}"><span class="glyphicon glyphicon-list-alt"></span> Stock Received Listing </a>
             </li>
             <li><a href="{{ url('stock/report/balance') }}"><span class="fa fa-search"></span> Stock Balance Report </a></li>
-            <li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2), array("inventory/stock/in/new_stock")) ? "active" : "" ; ?>">
-                <a href="{{ url('inventory/stock/in/new_stock') }}"><span class="fa fa-plus"></span>Stock In</a>
+            <li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2), array("inventory/stock/in/")) ? "active" : "" ; ?>">
+                <a href="{{ url('inventory/stock/in/') }}"><span class="fa fa-plus"></span>Stock In</a>
             </li>
             <li class="<?php echo in_array(Request::segment(1) . '/' . Request::segment(2), array("stock/adjustment")) ? "active" : "" ; ?>">
                 <a href="{{ url('stock/adjustment/') }}"><span class="fa fa-plus"></span> Stock Adjustment </a>
