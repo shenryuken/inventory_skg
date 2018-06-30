@@ -84,15 +84,30 @@
                                                         <textarea class="form-control"></textarea>
                                                 </div>      
                                         </div>
+                                        <input type="text" name="serial_number_scan_json" id="serial_number_scan_json" hidden>
                                        
                         
                     </div>
 
-                    <div class="panel-body">                             
-                        <h5>Barcode:</h5>
-                                <button type="button" class="btn btn-md  btn-default"  data-toggle="modal" data-target="#uploadModal"><i class="fa fa-upload"></i>Upload CSV</button>
-                                <button type="button"  class="btn btn-md  btn-default"  data-toggle="modal" data-target="#scannerModal"><i class="fa fa-barcode"></i>Scanner</button>
-                                <button type="button"  class="btn btn-md  btn-default"  data-toggle="modal" data-target="#scannerModal">Add Quantity</button>  
+                    <div class="panel-body">    
+                        <div class="form-horizontal">
+                                <div class="form-group">
+                                         
+                                        <div class="col-md-4">
+                                                <label for="Barcode">Barcode</label>                        
+                                                <input type="text" class="form-control" id="input_barcode">
+                                        </div>    
+                                        <div class="col-md-4">
+                                                <label for="Quantity">Quantity</label>                        
+                                                <input type="number" class="form-control" id="input_quantity">
+                                        </div>
+                                        <div class="col-md-4">
+                                                <label for="Barcode">Upload</label>                        
+                                                <input type="file" class="fileinput btn-danger" name="csv" id="inputCsv" data-filename-placement="inside" title="File name goes inside" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                                        </div>    
+                                </div>
+                        </div>
+                               
                         <div class="table-responsive">
                                 <table class="table datatable" id="table_listing">
                                     <thead>
@@ -131,5 +146,87 @@
 	<script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/tableexport/html2canvas.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/tableexport/jspdf/libs/sprintf.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/tableexport/jspdf/jspdf.js') }}"></script>
-	<script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/tableexport/jspdf/libs/base64.js') }}"></script> 
+    <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/tableexport/jspdf/libs/base64.js') }}"></script> 
+    
+<script  type="text/javascript" >
+$(document).ready(function() {
+    //Init datatable
+    window.t = $('.datatable').DataTable();
+    //init counter
+    window.counter = 1;
+    
+    //quantiy
+    $("#input_quantity").keyup(function(event) {
+                    if (event.keyCode === 13 || event.keyCode === 116) {
+                        var input = $('#input_quantity').val();
+
+                        if(input!=''){
+                            
+                                t.row.add( [
+                                    counter,
+                                    "",
+                                    input
+                                ] ).draw( false );
+                                counter++;
+                                $("#input_barcode").prop('disabled', true);
+                            
+                        }else{
+                            alert('Input cannot be empty')
+                        }
+                        $('#input_quantity').val('');             
+                    }                     
+                });
+    //barcode
+    $("#input_barcode").keyup(function(event) {
+                    if (event.keyCode === 13 || event.keyCode === 116) {
+                        var input = $('#input_barcode').val();
+
+                        if(input!=''){
+                            if(checkIfArrayIsUnique(input) == true){
+                                t.row.add( [
+                                    counter,
+                                    input,
+                                    1
+                                ] ).draw( false );
+                                counter++;
+                                $("#input_quantity").prop('disabled', true);
+                            }else{
+                                alert('Duplicate Serial Number')
+                            }
+                        }else{
+                            alert('Input cannot be empty')
+                        }
+                        $('#input_barcode').val('');             
+                    }                     
+                }); 
+            });
+
+    function checkIfArrayIsUnique(input) {        
+        var myArray = getSerialNumber();
+        myArray.push(input)        
+        return myArray.length === new Set(myArray).size;
+    }
+
+    function getSerialNumber(){
+        // var t = $('.datatable').DataTable();
+        var data = t
+                        .columns( 1 )
+                        .data()
+                        .eq( 0 )      // Reduce the 2D array into a 1D array of data
+                        .sort()       // Sort data alphabetically
+                        // .unique()     // Reduce to unique values
+                        .join( '\n' )
+        var barcode_arr = data.split("\n")        
+		// var temp = [];
+
+		// for(let i of barcode_arr)
+		// 	i && temp.push(i); // copy each non-empty value to the 'temp' array
+
+		// barcode_arr = temp;
+		// delete temp; 
+		$('#serial_number_scan_json').val(JSON.stringify(barcode_arr));		
+		return barcode_arr;
+    }
+</script>
+
 @stop
