@@ -41,7 +41,7 @@
                                             <td  data-order="{{ Carbon\Carbon::parse($stock->stock_date)}}">{{ Carbon\Carbon::parse($stock->stock_date)->format('d/m/Y') }}</td>
                                         <td> <a href="{{ url('stock/in/detail/'.$stock->stock_in_no) }}">{{$stock->stock_in_no}}</a> </td>
                                             <td>{{$stock->description}}</td>
-                                            <td>{{$stock->ProductStocks->where('stocks_id',$stock->id)->sum('quantity')}}</td>
+                                            <td>{{$stock->StockItem->where('stock_id',$stock->id)->sum('quantity')}}</td>
                                         </tr>
                                         @endforeach
                                         @else

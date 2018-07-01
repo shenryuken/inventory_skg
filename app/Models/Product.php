@@ -8,8 +8,8 @@ class Product extends Model
 {
 	protected $fillable = ['code','price'];
    
-    public function ProductStocks()
+    public function StockItems()
     {
-        return $this->hasMany('App\Models\ProductStock', 'products_id');
+        return $this->hasMany('App\Models\StockItem', 'product_id');
     }
 }

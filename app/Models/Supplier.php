@@ -8,8 +8,8 @@ class Supplier extends Model
 {
     protected $guarded = [];
 
-    public function ProductStocks()
+    public function StockItem()
     {
-        return $this->hasMany('App\Models\ProductStock', 'suppliers_id');
+        return $this->hasMany('App\Models\StockItem', 'supplier_id');
     }
 }

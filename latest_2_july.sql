@@ -2798,14 +2798,14 @@ INSERT INTO `product_sales` (`id`, `product_id`, `quantity`, `amount`, `month`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_stock`
+-- Table structure for table `stock_items`
 --
 
-CREATE TABLE `product_stock` (
+CREATE TABLE `stock_items` (
   `id` int(11) NOT NULL,
-  `products_id` int(11) NOT NULL,
-  `stocks_id` int(11) NOT NULL,
-  `suppliers_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `stock_id` int(11) NOT NULL,
+  `supplier_id` int(11) NOT NULL,
   `barcode` varchar(32) NOT NULL,
   `quantity` int(11) NOT NULL,
   `status` varchar(11) NOT NULL,
@@ -2816,10 +2816,10 @@ CREATE TABLE `product_stock` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `product_stock`
+-- Dumping data for table `stock_items`
 --
 
-INSERT INTO `product_stock` (`id`, `products_id`, `stocks_id`, `suppliers_id`, `barcode`, `quantity`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
+INSERT INTO `stock_items` (`id`, `product_id`, `stock_id`, `supplier_id`, `barcode`, `quantity`, `status`, `created_by`, `updated_by`, `created_at`, `updated_at`) VALUES
 (1, 1, 1, 2, '123', 1, '1', 1, NULL, '2018-07-01 14:21:05', '2018-07-01 06:21:05'),
 (2, 1, 1, 2, '234', 1, '1', 1, NULL, '2018-07-01 14:21:05', '2018-07-01 06:21:05'),
 (3, 1, 1, 2, '4', 1, '1', 1, NULL, '2018-07-01 14:21:05', '2018-07-01 06:21:05'),
