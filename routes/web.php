@@ -215,6 +215,8 @@ Route::post('inventory/supplier/store', 'Inventory\SupplierController@store');
 Route::get('inventory/supplier/delete/{id?}', 'Inventory\SupplierController@destroy');
 #Stock In
 Route::get('inventory/stock/in/', 'Inventory\StockInController@index');
+Route::post('inventory/stock/in/store', 'Inventory\StockInController@store');
+Route::get('inventory/stock/list', 'Inventory\StockInController@list');
 #Product
 Route::get('inventory/product', function () {  return redirect("inventory/product/listing"); });
 Route::get('inventory/product/listing', 'Inventory\ProductController@listing');

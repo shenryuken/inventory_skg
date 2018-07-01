@@ -12,11 +12,15 @@ use App\Http\Controllers\Controller;
 
 use App\Traits\RegisterStaff;
 
+use DB;
+use Carbon\Carbon;
 use App\Admin;
 use App\User;
 use App\Models\Role;
 use App\Models\Supplier;
 use App\Models\Product;
+use App\Models\Stock;
+use App\Models\ProductStock;
 
 class StockInController extends Controller
 {
@@ -29,64 +33,77 @@ class StockInController extends Controller
     {
         $suppliers = Supplier::all();
         $products = Product::all();
+        
         return view('inventory.stocks.stock-in-new',compact('suppliers','products'));
     }
 
-    public function newStock(Request $request){
-        $postData = $this->validate($request,[
-			'supplier_code' => 'required',
-			'product_code' => 'required',
-			'stock_date' => 'required',
-            'stock_receive' => 'required',
-            'description' => 'required',
-            'stock_in_id' => 'required',
+    public function list(){
+        $stocks = Stock::all(); 
+        
+        
+        return view('inventory.stocks.stock-in-list',compact('stocks'));
+    }
+
+    public function store(Request $request){
+
+        $this->validate($request,[
+            'stock_date' => 'required',
+            'product' => 'required',
+            'supplier' => 'required',
         ]);
 
-     $supplierCode = $request->input('supplier_code');
-     $stockInId = $request->input('stock_in_id');
-     $productCode = $request->input('product_code');
-     $serialNumberBucket = $request->input('serial_number_scan_json');  
-     $link_redirect  = $request->input('link_redirect');
-     $quantity  = $request->input('quantity');
-     $inStockDate = $request->input('stock_date');
-     $DocNo = $request->input('stock_receive');
-     $description = $request->input('description');     
+        $document_no =  $this->generate_docno();
+        
+        $serialNumberArray = json_decode($request->input('serial_number_scan_json'));
+        $stock = new Stock;
+        $stock->stock_date  	= $request->stock_date;
+        $stock->stock_in_no   = $document_no;
+        $stock->description = $request->description;
+        $stock->created_by = Auth::user()->id;
+        $stock->save();
+        
+        $product_stock_array = [
+            'products_id'   => $request->product,
+            'suppliers_id' => $request->supplier,
+            'stocks_id'     => $stock->id,
+            'barcode'       => $serialNumberArray
+        ];
 
-     $updateStockId = stock_in::where('id',$stockInId)->update([
-         'supplier_id' => $supplierCode,
-         'description' => $description,
-     ]);   
+        $this->storeProductStocks($product_stock_array);
 
-     if($updateStockId){
-        $product =  product_m::get();
-        $supplier = supplier::get();
-        if($serialNumberBucket){
-            $insert = $this->insertSerialNumber($serialNumberBucket,$stockInId,$productCode);
+        return back()->with('success', 'Successfully saved!');
+
+    }
+
+    public function storeProductStocks($product_stock_array){
+        
+        foreach($product_stock_array['barcode'] as $product_supplier){
             
-        }else{
-            $insert = $this->productWithoutSerialNum($productCode,$quantity,$stockInId);
+            $product_stock_array = [
+                'products_id'   => $product_stock_array['products_id'],
+                'suppliers_id' => $product_stock_array['suppliers_id'],
+                'stocks_id'     => $product_stock_array['stocks_id'],
+                'barcode'       => $product_supplier->barcode,
+                'quantity'       => $product_supplier->quantity,
+                'status'        => '01',
+                'created_by'    => Auth::user()->id,
+                'updated_at'    => Carbon::now()    
+            ];
+
+            ProductStock::insert($product_stock_array);
         }
         
-        if($insert){
-            $message = $insert['success']." was successfully saved,".$insert['exist']." was already existed";
-        }else{
-            $message = "Successfully Inserted ";
-        } 
-        
-         
+    }
 
-         
-         if($link_redirect){
-             return redirect($link_redirect);
-         }else{
-            Session::flash('message', $message);
-            return view('Stock.stockIn',compact('product','supplier','DocNo','inStockDate','stockInId'));
-         }   
-         
-     }else{
-        return 'failed';
-     }    
-
+        //Generate SR
+    private function generate_docno(){
+        $LatestDocNo = stock::max('id');    
+            $numberOnly = preg_replace("/[^0-9]/", '', $LatestDocNo);
+            if(!$numberOnly){
+                $numberOnly = "00000";
+            }
+            $generatedNo =  str_pad($numberOnly+1, 5, '0', STR_PAD_LEFT);
+            return "SR".($generatedNo);      
     }
 
  
