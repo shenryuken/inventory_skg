@@ -46,7 +46,7 @@
                                     <button class="btn btn-info pull-right">New Supplier</button>
                                     <button class="btn btn-default pull-right">New Product</button>
                                 </div>
-                            <form action="create" method="POST" class="form-horizontal">
+                            <form  id="create_stock" method="POST" class="form-horizontal" action="{{url('inventory/stock/in/store')}}">
                         <div class="panel-body">
                             
                                 {{ csrf_field() }}
@@ -60,7 +60,7 @@
                         
                                             <div class="col-md-4">
                                                     <label for="stock_in_date">Product</label>                        
-                                                    <select class="form-control" name="product_code" id="product">
+                                                    <select class="form-control" name="product" id="product">
                                                             <option value=""></option>
                                                             @foreach($products as $product)
                                                                 <option value="{{ $product->id }}">{{$product->code}}({{$product->name}})</option>
@@ -70,10 +70,10 @@
                         
                                             <div class="col-md-4">
                                                     <label for="stock_in_date">Supplier</label>                        
-                                                    <select class="form-control" name="supplier_code" id="supplier">
+                                                    <select class="form-control" name="supplier" id="supplier">
                                                             <option value=""></option>
                                                             @foreach($suppliers as $supplier)
-                                                                    <option value="{{ $supplier->id }}">{{$supplier->supplier_code}}</option>
+                                                                    <option  value="{{ $supplier->id }}">{{$supplier->supplier_code}}</option>
                                                                 @endforeach
                                                         </select>
                                             </div>
@@ -81,7 +81,7 @@
                                         <div class="form-group">
                                                 <div class="col-md-12">
                                                         <label for="remarks">Remarks</label>                        
-                                                        <textarea class="form-control"></textarea>
+                                                        <textarea class="form-control" name="description"></textarea>
                                                 </div>      
                                         </div>
                                         <input type="text" name="serial_number_scan_json" id="serial_number_scan_json" hidden>
@@ -103,7 +103,7 @@
                                         </div>
                                         <div class="col-md-4">
                                                 <label for="Barcode">Upload</label>                        
-                                                <input type="file" class="fileinput btn-danger" name="csv" id="inputCsv" data-filename-placement="inside" title="File name goes inside" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                                                <input type="file" class="btn-danger" name="csv" id="inputCsv" data-filename-placement="inside" title="File name goes inside" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
                                         </div>    
                                 </div>
                         </div>
@@ -125,7 +125,7 @@
                     </div>
                     <div class="panel-footer">
                             <input type="button" id="clearBtn" class="btn btn-default" value="Clear Form">
-                            <input type="button" id="saveDialogBtn"class="btn btn-primary pull-right" value="Save">
+                            <input type="button" id="save"class="btn btn-primary pull-right" value="Save">
                     </div>
                         </form>
                 </div>
@@ -154,6 +154,12 @@ $(document).ready(function() {
     window.t = $('.datatable').DataTable();
     //init counter
     window.counter = 1;
+
+    $(document).on('click','#save',function(){
+        getSerialNumber();
+        $('#create_stock').submit();
+        
+    })
     
     //quantiy
     $("#input_quantity").keyup(function(event) {
@@ -208,6 +214,7 @@ $(document).ready(function() {
     }
 
     function getSerialNumber(){
+        
         // var t = $('.datatable').DataTable();
         var data = t
                         .columns( 1 )
@@ -216,7 +223,25 @@ $(document).ready(function() {
                         .sort()       // Sort data alphabetically
                         // .unique()     // Reduce to unique values
                         .join( '\n' )
-        var barcode_arr = data.split("\n")        
+
+        var qty = t
+                        .columns( 2 )
+                        .data()
+                        .eq( 0 )      // Reduce the 2D array into a 1D array of data
+                        .sort()       // Sort data alphabetically
+                        // .unique()     // Reduce to unique values
+                        .join( '\n' )
+        var barcode_arr = data.split("\n")
+        var qty = qty.split("\n")
+        var post_array = [];
+        
+        //sort to each qty
+        for(let x = 0; x < barcode_arr.length;x++){
+            post_array.push({
+                barcode : barcode_arr[x],
+                quantity : qty[x]
+            })
+        }
 		// var temp = [];
 
 		// for(let i of barcode_arr)
@@ -224,7 +249,7 @@ $(document).ready(function() {
 
 		// barcode_arr = temp;
 		// delete temp; 
-		$('#serial_number_scan_json').val(JSON.stringify(barcode_arr));		
+		$('#serial_number_scan_json').val(JSON.stringify(post_array));		
 		return barcode_arr;
     }
 </script>
