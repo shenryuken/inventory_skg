@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ProductStock extends Model
+class StockItem extends Model
 {
     protected $guarded = [];
-    protected $table = 'product_stock';
+    protected $table = 'stock_items';
 
     public function stocks()
     {

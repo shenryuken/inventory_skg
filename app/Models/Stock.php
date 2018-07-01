@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Stock extends Model
 {
-    public function ProductStocks()
+    public function StockItem()
     {
-        return $this->hasMany('App\Models\ProductStock','stocks_id');
+        return $this->hasMany('App\Models\StockItem','stock_id');
     }
 
     

@@ -20,7 +20,7 @@ use App\Models\Role;
 use App\Models\Supplier;
 use App\Models\Product;
 use App\Models\Stock;
-use App\Models\ProductStock;
+use App\Models\StockItem;
 
 class StockInController extends Controller
 {
@@ -63,9 +63,9 @@ class StockInController extends Controller
         $stock->save();
         
         $product_stock_array = [
-            'products_id'   => $request->product,
-            'suppliers_id' => $request->supplier,
-            'stocks_id'     => $stock->id,
+            'product_id'   => $request->product,
+            'supplier_id' => $request->supplier,
+            'stock_id'     => $stock->id,
             'barcode'       => $serialNumberArray
         ];
 
@@ -80,9 +80,9 @@ class StockInController extends Controller
         foreach($product_stock_array['barcode'] as $product_supplier){
             
             $product_stock_array = [
-                'products_id'   => $product_stock_array['products_id'],
-                'suppliers_id' => $product_stock_array['suppliers_id'],
-                'stocks_id'     => $product_stock_array['stocks_id'],
+                'product_id'   => $product_stock_array['product_id'],
+                'supplier_id' => $product_stock_array['supplier_id'],
+                'stock_id'     => $product_stock_array['stock_id'],
                 'barcode'       => $product_supplier->barcode,
                 'quantity'       => $product_supplier->quantity,
                 'status'        => '01',
@@ -90,7 +90,7 @@ class StockInController extends Controller
                 'updated_at'    => Carbon::now()    
             ];
 
-            ProductStock::insert($product_stock_array);
+            StockItem::insert($product_stock_array);
         }
         
     }
