@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Config_courier;
+use App\Models\Courier;
 
 use App\Admin;
 use App\User;
@@ -25,7 +25,7 @@ class CourierController extends Controller
     }
 	
 	public function listing(){
-		$courierdata = New Config_courier;
+		$courierdata = New Courier;
 		$data = array(
 			'counttype' => $courierdata->count(),
 			'startcount' => 0,
@@ -43,7 +43,7 @@ class CourierController extends Controller
 		if($search == '')
 			return redirect('inventory/configuration/courier');
 		
-		$courierdata = New Config_courier;
+		$courierdata = New Courier;
 		if($search != ''){
 			$courierdata = $courierdata->where(function ($q) use($search){
 											$q->where('courier_code','LIKE','%'. $search .'%')
@@ -81,7 +81,7 @@ class CourierController extends Controller
     }
 	
     public function save(Request $postdata){
-		$courierdata = New Config_courier;
+		$courierdata = New Courier;
 		$data = array(
 			'courier_code' => strtoupper(trim($postdata->input("courier_code"))),
 			'courier_name' => strtoupper(trim($postdata->input("courier_name"))),
@@ -127,7 +127,7 @@ class CourierController extends Controller
 		
 		#uppercase & Replacing multiple spaces with a single space
 		$code = trim(preg_replace('!\s+!', ' ', strtoupper($postdata->input("code"))));
-		$courierdata = New Config_courier;
+		$courierdata = New Courier;
 		$countcode = $courierdata->where('courier_code','=',$code)->where('id','<>', $id)->count();
 		if($countcode > 0)
 			return 1;
@@ -137,7 +137,7 @@ class CourierController extends Controller
 
     public function delete($data = ''){
 		if(@unserialize(base64_decode($data)) == true){
-			$courierdata = New Config_courier;
+			$courierdata = New Courier;
 			$datadecode = unserialize(base64_decode($data));
 			$selectid = isset($datadecode['selectid']) ? $datadecode['selectid'] : 0;
 			

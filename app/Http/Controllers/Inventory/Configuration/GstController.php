@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Config_tax;
+use App\Models\Tax;
 
 use App\Admin;
 use App\User;
@@ -23,7 +23,7 @@ class GstController extends Controller{
     }
 	
     public function view(){
-        $taxdata = New Config_tax;
+        $taxdata = New Tax;
 		$data =  $taxdata->where('code', 'gst')->first();
 		if($data == false){
 			#create if gst not found
@@ -44,7 +44,7 @@ class GstController extends Controller{
     }
 	
 	public function form(){
-        $taxdata = New Config_tax;
+        $taxdata = New Tax;
 		$data =  $taxdata->where('code', 'gst')->first();
 		if($data == false){
 			#create if gst not found
@@ -65,7 +65,7 @@ class GstController extends Controller{
     }
 	
 	public function update(Request $postdata){
-		$taxdata = New Config_tax;
+		$taxdata = New Tax;
 		$this->validate($postdata,[
 			'percent' => 'required',
 		]);
@@ -95,7 +95,7 @@ class GstController extends Controller{
 				'updated_by' => Auth::user()->id,
 				'updated_at' => date('Y-m-d H:i:s'),
 			);
-			$taxdata = New Config_tax;
+			$taxdata = New Tax;
 			$taxdata->where('code','gst')->update($data);
 		}
 		

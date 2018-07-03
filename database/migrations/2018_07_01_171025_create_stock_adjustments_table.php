@@ -15,7 +15,7 @@ class CreateStockAdjustmentsTable extends Migration
     {
         Schema::create('stock_adjustments', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('config_stockadjustment_id');
+            $table->integer('stockadjustment_type_id');
             $table->string('description',100)->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

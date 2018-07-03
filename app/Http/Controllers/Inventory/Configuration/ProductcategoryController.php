@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Config_productcategories;
+use App\Models\ProductCategory;
 
 use App\Admin;
 use App\User;
@@ -30,7 +30,7 @@ class ProductcategoryController extends Controller
     }
 	
 	public function listing(){
-		$productcategorydata = New Config_productcategories;
+		$productcategorydata = New ProductCategory;
 		$data = array(
 			'countcategory' => $productcategorydata->count(),
 			'startcount' => 0,
@@ -50,7 +50,7 @@ class ProductcategoryController extends Controller
 		if($search == '' && $search_status == '')
 			return redirect('inventory/configuration/productcategory');
 		
-		$productcategorydata = New Config_productcategories;
+		$productcategorydata = New ProductCategory;
 		if($search != ''){
 			$productcategorydata = $productcategorydata->where(function ($q) use($search){
 											$q->where('category','LIKE','%'. $search .'%')
@@ -93,7 +93,7 @@ class ProductcategoryController extends Controller
     }
 	
     public function save(Request $postdata){
-		$productcategorydata = New Config_productcategories;
+		$productcategorydata = New ProductCategory;
 		$data = array(
 			'category' => strtoupper(trim($postdata->input("category"))),
 			'remarks' => $postdata->input("remarks") != null ? $postdata->input("remarks") : '',
@@ -127,7 +127,7 @@ class ProductcategoryController extends Controller
 
     public function delete($data = ''){
 		if(@unserialize(base64_decode($data)) == true){
-			$productcategorydata = New Config_productcategories;
+			$productcategorydata = New ProductCategory;
 			$datadecode = unserialize(base64_decode($data));
 			$selectid = isset($datadecode['selectid']) ? $datadecode['selectid'] : 0;
 			

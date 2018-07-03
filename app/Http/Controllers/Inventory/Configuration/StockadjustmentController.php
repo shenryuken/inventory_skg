@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Config_stockadjustment;
+use App\Models\StockadjustmentType;
 
 use App\Admin;
 use App\User;
@@ -36,7 +36,7 @@ class StockadjustmentController extends Controller
     }
 	
 	public function listing(){
-		$stockadjustmentdata = New Config_stockadjustment;
+		$stockadjustmentdata = New StockadjustmentType;
 		$data = array(
 			'countadjustment' => $stockadjustmentdata->count(),
 			'startcount' => 0,
@@ -57,7 +57,7 @@ class StockadjustmentController extends Controller
 		if($search == '' && $search_status == '')
 			return redirect('inventory/configuration/stockadjustment');
 		
-		$stockadjustmentdata = New Config_stockadjustment;
+		$stockadjustmentdata = New StockadjustmentType;
 		if($search != '' && $search_status != ''){
 			$countadjustment = $stockadjustmentdata->where(function ($q) use($search){
 											$q->where('adjustment','LIKE','%'. $search .'%')
@@ -114,7 +114,7 @@ class StockadjustmentController extends Controller
     }
 	
     public function save(Request $postdata){
-		$stockadjustmentdata = New Config_stockadjustment;
+		$stockadjustmentdata = New StockadjustmentType;
 		$data = array(
 			'adjustment' => $postdata->input("adjustment"),
 			'remarks' => $postdata->input("remarks") != null ? $postdata->input("remarks") : '',
@@ -149,7 +149,7 @@ class StockadjustmentController extends Controller
 
     public function delete($data = ''){
 		if(@unserialize(base64_decode($data)) == true){
-			$stockadjustmentdata = New Config_stockadjustment;
+			$stockadjustmentdata = New StockadjustmentType;
 			$datadecode = unserialize(base64_decode($data));
 			$selectid = isset($datadecode['selectid']) ? $datadecode['selectid'] : 0;
 			
