@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Config_delivery_type extends Model
+class DeliveryType extends Model
 {
     //
+    protected $table = 'config_delivery_types';
 }

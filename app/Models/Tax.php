@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Config_stockadjustment extends Model
+class Tax extends Model
 {
     //
+    protected $table = 'config_taxes';
 }

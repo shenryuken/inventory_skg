@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Config_quantitytype;
+use App\Models\QuantityType;
 
 use App\Admin;
 use App\User;
@@ -29,7 +29,7 @@ class QuantitytypeController extends Controller
     }
 	
 	public function listing(){
-		$quantitytypedata = New Config_quantitytype;
+		$quantitytypedata = New QuantityType;
 		$data = array(
 			'counttype' => $quantitytypedata->count(),
 			'startcount' => 0,
@@ -49,7 +49,7 @@ class QuantitytypeController extends Controller
 		if($search == '' && $search_status == '')
 			return redirect('inventory/configuration/quantitytype');
 		
-		$quantitytypedata = New Config_quantitytype;
+		$quantitytypedata = New QuantityType;
 		if($search != ''){
 			$quantitytypedata = $quantitytypedata->where(function ($q) use($search){
 											$q->where('type','LIKE','%'. $search .'%')
@@ -91,7 +91,7 @@ class QuantitytypeController extends Controller
     }
 	
     public function save(Request $postdata){
-		$quantitytypedata = New Config_quantitytype;
+		$quantitytypedata = New QuantityType;
 		$data = array(
 			'type' => strtoupper(trim($postdata->input("type"))),
 			'remarks' => $postdata->input("remarks") != null ? $postdata->input("remarks") : '',
@@ -125,7 +125,7 @@ class QuantitytypeController extends Controller
 
     public function delete($data = ''){
 		if(@unserialize(base64_decode($data)) == true){
-			$quantitytypedata = New Config_quantitytype;
+			$quantitytypedata = New QuantityType;
 			$datadecode = unserialize(base64_decode($data));
 			$selectid = isset($datadecode['selectid']) ? $datadecode['selectid'] : 0;
 			

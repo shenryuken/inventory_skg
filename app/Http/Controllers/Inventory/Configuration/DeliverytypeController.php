@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Config_delivery_type;
+use App\Models\DeliveryType;
 
 use App\Admin;
 use App\User;
@@ -24,7 +24,7 @@ class DeliverytypeController extends Controller
     }
 	
 	public function listing(){
-		$deliverytype_data = New Config_delivery_type;
+		$deliverytype_data = New DeliveryType;
 		$data = array(
 			'counttype' => $deliverytype_data->count(),
 			'startcount' => 0,
@@ -42,7 +42,7 @@ class DeliverytypeController extends Controller
 		if($search == '')
 			return redirect('inventory/configuration/deliverytype');
 		
-		$deliverytype_data = New Config_delivery_type;
+		$deliverytype_data = New DeliveryType;
 		if($search != ''){
 			$deliverytype_data = $deliverytype_data->where(function ($q) use($search){
 											$q->where('delivery_code','LIKE','%'. $search .'%')
@@ -78,7 +78,7 @@ class DeliverytypeController extends Controller
     }
 	
     public function save(Request $postdata){
-		$deliverytype_data = New Config_delivery_type;
+		$deliverytype_data = New DeliveryType;
 		$data = array(
 			'delivery_code' => strtoupper(trim($postdata->input("delivery_code"))),
 			'type_description' => $postdata->input("type_description") != null ? trim($postdata->input("type_description")) : '',
@@ -120,7 +120,7 @@ class DeliverytypeController extends Controller
 		
 		#uppercase & Replacing multiple spaces with a single space
 		$code = trim(preg_replace('!\s+!', ' ', strtoupper($postdata->input("code"))));
-		$deliverytype_data = New Config_delivery_type;
+		$deliverytype_data = New DeliveryType;
 		$countcode = $deliverytype_data->where('delivery_code','=',$code)->where('id','<>', $id)->count();
 		if($countcode > 0)
 			return 1;
@@ -130,7 +130,7 @@ class DeliverytypeController extends Controller
 
     public function delete($data = ''){
 		if(@unserialize(base64_decode($data)) == true){
-			$deliverytype_data = New Config_delivery_type;
+			$deliverytype_data = New DeliveryType;
 			$datadecode = unserialize(base64_decode($data));
 			$selectid = isset($datadecode['selectid']) ? $datadecode['selectid'] : 0;
 			

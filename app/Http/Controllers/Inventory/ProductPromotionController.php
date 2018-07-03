@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Product;
 use App\Models\Product_promotion;
 use App\Models\Product_promotion_gift;
-use App\Models\Config_tax;
+use App\Models\Tax;
 use App\Admin;
 use App\User;
 use App\Models\Role;
@@ -106,7 +106,7 @@ class ProductPromotionController extends Controller
 
     public function form(){
 		# get Tax GST percentage
-		$taxgst = Config_tax::where('code', 'gst')->first();
+		$taxgst = Tax::where('code', 'gst')->first();
 		if($taxgst == false)
 			$gstpercentage = 6;
 		else
@@ -145,7 +145,7 @@ class ProductPromotionController extends Controller
 				return redirect("inventory/product/promotion/listing")->with("errorid"," Not Found ");
 				
 			# get Tax GST percentage
-			$taxgst = Config_tax::where('code', 'gst')->first();
+			$taxgst = Tax::where('code', 'gst')->first();
 			if($taxgst == false)
 				$gstpercentage = 6;
 			else
@@ -181,7 +181,7 @@ class ProductPromotionController extends Controller
 				return redirect("inventory/product/promotion/listing")->with("errorid"," Not Found ");
 				
 			# get Tax GST percentage
-			$taxgst = Config_tax::where('code', 'gst')->first();
+			$taxgst = Tax::where('code', 'gst')->first();
 			if($taxgst == false)
 				$gstpercentage = 6;
 			else
