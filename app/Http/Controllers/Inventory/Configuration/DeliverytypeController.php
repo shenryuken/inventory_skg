@@ -20,7 +20,7 @@ class DeliverytypeController extends Controller
     }
 	
 	public function index(){
-        return redirect('inventory/configuration/deliverytype');
+        return redirect('inventory/setting/deliverytype');
     }
 	
 	public function listing(){
@@ -30,17 +30,17 @@ class DeliverytypeController extends Controller
 			'startcount' => 0,
 			'deliverytypeArr' => $deliverytype_data->orderBy('id', 'desc')->paginate(20),
 		);
-		return view('inventory/configuration/deliverytype_listing',$data);
+		return view('inventory/setting/deliverytype_listing',$data);
     }
 	
 	public function search($x = ''){
 		if($x == '' || @unserialize(base64_decode($x)) == false)
-			return redirect('inventory/configuration/deliverytype');
+			return redirect('inventory/setting/deliverytype');
 			
 		$datadecode = unserialize(base64_decode($x));
 		$search = isset($datadecode['search']) ? $datadecode['search'] : '';
 		if($search == '')
-			return redirect('inventory/configuration/deliverytype');
+			return redirect('inventory/setting/deliverytype');
 		
 		$deliverytype_data = New DeliveryType;
 		if($search != ''){
@@ -66,7 +66,7 @@ class DeliverytypeController extends Controller
 		$search = trim($postdata->input("search"));
 		
 		if($search == '')
-			return redirect('inventory/configuration/deliverytype');
+			return redirect('inventory/setting/deliverytype');
 			
 		$rowdata = array(
 			'search' => $search,
@@ -74,7 +74,7 @@ class DeliverytypeController extends Controller
 		
 		$base64data = trim(base64_encode(serialize($rowdata)), "=.");
 		
-        return redirect('inventory/configuration/deliverytype/search/' . $base64data);
+        return redirect('inventory/setting/deliverytype/search/' . $base64data);
     }
 	
     public function save(Request $postdata){
@@ -93,7 +93,7 @@ class DeliverytypeController extends Controller
 			$data['created_at'] = date('Y-m-d H:i:s');
 			$deliverytype_data->insert($data);
 			
-			return redirect('inventory/configuration/deliverytype')->with("info","Success Submit " . $data["type_description"] . " (" . $data["delivery_code"] . ")");
+			return redirect('inventory/setting/deliverytype')->with("info","Success Submit " . $data["type_description"] . " (" . $data["delivery_code"] . ")");
 		}
 		else{
 			# update Delivery Type
@@ -103,9 +103,9 @@ class DeliverytypeController extends Controller
 			
 			$deliverytype_data->where('id',$selectid)->update($data);
 			if($search != '')
-				return redirect('inventory/configuration/deliverytype/search/' . $search)->with("info","Success Save " . strtoupper(trim($postdata->input("type"))) . "");
+				return redirect('inventory/setting/deliverytype/search/' . $search)->with("info","Success Save " . strtoupper(trim($postdata->input("type"))) . "");
 			else
-				return redirect('inventory/configuration/deliverytype')->with("info","Success Save " . $postdata->input("type") . "");
+				return redirect('inventory/setting/deliverytype')->with("info","Success Save " . $postdata->input("type") . "");
 		}
 	}
 	
@@ -136,15 +136,15 @@ class DeliverytypeController extends Controller
 			
 			$checkdeliverytype = $deliverytype_data->where('id', $selectid)->first();
 			if($checkdeliverytype == false)
-				return redirect('inventory/configuration/deliverytype')->with("errorid"," Data not found");
+				return redirect('inventory/setting/deliverytype')->with("errorid"," Data not found");
 			
 			$search = isset($datadecode['search']) ? $datadecode['search'] : '';
 			
 			if($deliverytype_data->where('id', $selectid)->delete()){
 				if($search != '')
-					return redirect('inventory/configuration/deliverytype/search/' . $search)->with("info","Delivery Type " . $checkdeliverytype['type_description'] . " (" . $checkdeliverytype['delivery_code'] . ") Deleted Successfully!!");
+					return redirect('inventory/setting/deliverytype/search/' . $search)->with("info","Delivery Type " . $checkdeliverytype['type_description'] . " (" . $checkdeliverytype['delivery_code'] . ") Deleted Successfully!!");
 				else
-					return redirect('inventory/configuration/deliverytype')->with("info","Delivery Type " . $checkdeliverytype['type_description'] . " (" . $checkdeliverytype['delivery_code'] . ")  Deleted Successfully!!");
+					return redirect('inventory/setting/deliverytype')->with("info","Delivery Type " . $checkdeliverytype['type_description'] . " (" . $checkdeliverytype['delivery_code'] . ")  Deleted Successfully!!");
 				
 			}
 		}
