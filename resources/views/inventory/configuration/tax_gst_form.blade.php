@@ -13,7 +13,7 @@
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb">
 	<li><a href="{{ url('home') }}">Home</a></li>                    
-	<li class="active" ><a href="{{ url('inventory/configuration/gst') }}">Config - Tax GST</a></li>
+	<li class="active" ><a href="{{ url('inventory/setting/gst') }}">Config - Tax GST</a></li>
 </ul>
 <!-- END BREADCRUMB -->
 <!-- PAGE CONTENT WRAPPER -->
@@ -40,14 +40,14 @@
 		<div class="col-md-3"></div>
 		<div class="col-md-6">
 			<div class="panel panel-default">
-				<form id="submit_form" class="form-horizontal" method="POST" action="{{ url('inventory/configuration/gst/update') }}" >
+				<form id="submit_form" class="form-horizontal" method="POST" action="{{ url('inventory/setting/gst/update') }}" >
 					{{ csrf_field() }}
 				<div class="panel-heading">
 					<h3 class="panel-title"><strong>GST</strong> Form </h3>
 					<ul class="panel-controls">
 					</ul>
 					<div class="actions pull-right">
-						<a href="{{ url('inventory/configuration/gst') }}" class="btn btn-default  btn-sm btn-circle" title="View GST" >
+						<a href="{{ url('inventory/setting/gst') }}" class="btn btn-default  btn-sm btn-circle" title="View GST" >
 							<i class="fa fa-eye"></i> View </a>
 					</div>
 				</div>
@@ -76,7 +76,7 @@
 					</div>
 				</div>
 				<div class="panel-footer">
-					<a class="btn btn-default" href="{{ url('inventory/configuration/gst/form') }}">Reset</a>                                    
+					<a class="btn btn-default" href="{{ url('inventory/setting/gst/form') }}">Reset</a>                                    
 					<button type="submit" class="btn btn-primary pull-right">Submit</button>
 				</div>
 				</form>

@@ -219,6 +219,11 @@ Route::post('inventory/stock/in/store', 'Inventory\StockInController@store');
 Route::get('inventory/stock/list', 'Inventory\StockInController@list');
 #Stock Adjustment
 Route::get('inventory/stock/adjustment/', 'Inventory\StockAdjustmentController@index');
+Route::get('inventory/stock/adjustment/stock_product', 'Inventory\StockAdjustmentController@stockProduct');
+#Stock Reports
+Route::get('inventory/stock/current/', 'Inventory\StockReportController@indexCurrentStock');
+Route::get('inventory/stock/report/', 'Inventory\StockReportController@index');
+
 #Product
 Route::get('inventory/product', function () {  return redirect("inventory/product/listing"); });
 Route::get('inventory/product/listing', 'Inventory\ProductController@listing');
@@ -260,11 +265,11 @@ Route::get('inventory/setting/gst', 'Inventory\Configuration\GstController@view'
 Route::get('inventory/setting/gst/form', 'Inventory\Configuration\GstController@form');
 Route::post('inventory/setting/gst/update', 'Inventory\Configuration\GstController@update');
 // Stock Adjustment stockadjustment
-Route::get('inventory/setting/stockadjustment', 'Inventory\Configuration\StockadjustmentController@listing');
-Route::get('inventory/setting/stockadjustment/search/{x?}', 'Inventory\Configuration\StockadjustmentController@search');
-Route::post('inventory/setting/stockadjustment/form_search', 'Inventory\Configuration\StockadjustmentController@form_search');
-Route::get('inventory/setting/stockadjustment/delete/{x?}', 'Inventory\Configuration\StockadjustmentController@delete');
-Route::post('inventory/setting/stockadjustment/save', 'Inventory\Configuration\StockadjustmentController@save');
+Route::get('inventory/setting/stockadjustment', 'Inventory\Configuration\StockadjustmentTypeController@listing');
+Route::get('inventory/setting/stockadjustment/search/{x?}', 'Inventory\Configuration\StockadjustmentTypeController@search');
+Route::post('inventory/setting/stockadjustment/form_search', 'Inventory\Configuration\StockadjustmentTypeController@form_search');
+Route::get('inventory/setting/stockadjustment/delete/{x?}', 'Inventory\Configuration\StockadjustmentTypeController@delete');
+Route::post('inventory/setting/stockadjustment/save', 'Inventory\Configuration\StockadjustmentTypeController@save');
 // Quantity Type
 Route::get('inventory/setting/quantitytype', 'Inventory\Configuration\QuantitytypeController@listing');
 Route::get('inventory/setting/quantitytype/search/{x?}', 'Inventory\Configuration\QuantitytypeController@search');

@@ -10,7 +10,7 @@
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb">
 	<li><a href="{{ url('home') }}">Home</a></li>                    
-	<li class="active" ><a href="{{ url('inventory/configuration/gst') }}">Tax GST</a></li>
+	<li class="active" ><a href="{{ url('inventory/setting/gst') }}">Tax GST</a></li>
 </ul>
 <!-- END BREADCRUMB -->
 <!-- PAGE CONTENT WRAPPER -->
@@ -37,7 +37,7 @@
 					<ul class="panel-controls">
 					</ul>
 					<div class="actions pull-right">
-						<a href="{{ url('inventory/configuration/gst/form') }}" class="btn btn-default  btn-sm btn-circle" title="Edit GST" >
+						<a href="{{ url('inventory/setting/gst/form') }}" class="btn btn-default  btn-sm btn-circle" title="Edit GST" >
 							<i class="fa fa-pencil"></i> Edit </a>
 					</div>
 				</div>

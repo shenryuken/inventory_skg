@@ -25,7 +25,7 @@ class QuantitytypeController extends Controller
     }
 	
 	public function index(){
-        return redirect('inventory/configuration/quantitytype');
+        return redirect('inventory/setting/quantitytype');
     }
 	
 	public function listing(){
@@ -41,13 +41,13 @@ class QuantitytypeController extends Controller
 	
 	public function search($x = ''){
 		if($x == '' || @unserialize(base64_decode($x)) == false)
-			return redirect('inventory/configuration/quantitytype');
+			return redirect('inventory/setting/quantitytype');
 			
 		$datadecode = unserialize(base64_decode($x));
 		$search = isset($datadecode['search']) ? $datadecode['search'] : '';
 		$search_status = isset($datadecode['search_status']) ? $datadecode['search_status'] : '';
 		if($search == '' && $search_status == '')
-			return redirect('inventory/configuration/quantitytype');
+			return redirect('inventory/setting/quantitytype');
 		
 		$quantitytypedata = New QuantityType;
 		if($search != ''){
@@ -78,7 +78,7 @@ class QuantitytypeController extends Controller
 		$search_status = trim($postdata->input("search_status"));
 		
 		if($search == '' && $search_status == '')
-			return redirect('inventory/configuration/quantitytype');
+			return redirect('inventory/setting/quantitytype');
 			
 		$rowdata = array(
 			'search' => $search,
@@ -87,7 +87,7 @@ class QuantitytypeController extends Controller
 		
 		$base64data = trim(base64_encode(serialize($rowdata)), "=.");
 		
-        return redirect('inventory/configuration/quantitytype/search/' . $base64data);
+        return redirect('inventory/setting/quantitytype/search/' . $base64data);
     }
 	
     public function save(Request $postdata){
@@ -107,7 +107,7 @@ class QuantitytypeController extends Controller
 			$data['created_at'] = date('Y-m-d H:i:s');
 			$quantitytypedata->insert($data);
 			
-			return redirect('inventory/configuration/quantitytype')->with("info","Success Submit " . strtoupper(trim($postdata->input("type"))) . "");
+			return redirect('inventory/setting/quantitytype')->with("info","Success Submit " . strtoupper(trim($postdata->input("type"))) . "");
 		}
 		else{
 			# update Quantity Type
@@ -117,9 +117,9 @@ class QuantitytypeController extends Controller
 			
 			$quantitytypedata->where('id',$selectid)->update($data);
 			if($search != '')
-				return redirect('inventory/configuration/quantitytype/search/' . $search)->with("info","Success Save " . strtoupper(trim($postdata->input("type"))) . "");
+				return redirect('inventory/setting/quantitytype/search/' . $search)->with("info","Success Save " . strtoupper(trim($postdata->input("type"))) . "");
 			else
-				return redirect('inventory/configuration/quantitytype')->with("info","Success Save " . $postdata->input("type") . "");
+				return redirect('inventory/setting/quantitytype')->with("info","Success Save " . $postdata->input("type") . "");
 		}
 	}
 
@@ -131,15 +131,15 @@ class QuantitytypeController extends Controller
 			
 			$checkquantitytype = $quantitytypedata->where('id', $selectid)->first();
 			if($checkquantitytype == false)
-				return redirect('inventory/configuration/quantitytype')->with("errorid"," Data not found");
+				return redirect('inventory/setting/quantitytype')->with("errorid"," Data not found");
 			
 			$search = isset($datadecode['search']) ? $datadecode['search'] : '';
 			
 			if($quantitytypedata->where('id', $selectid)->delete()){
 				if($search != '')
-					return redirect('inventory/configuration/quantitytype/search/' . $search)->with("info","Quantity Type " . $checkquantitytype['type'] . " Deleted Successfully!!");
+					return redirect('inventory/setting/quantitytype/search/' . $search)->with("info","Quantity Type " . $checkquantitytype['type'] . " Deleted Successfully!!");
 				else
-					return redirect('inventory/configuration/quantitytype')->with("info","Quantity Type " . $checkquantitytype['type'] . "  Deleted Successfully!!");
+					return redirect('inventory/setting/quantitytype')->with("info","Quantity Type " . $checkquantitytype['type'] . "  Deleted Successfully!!");
 				
 			}
 		}

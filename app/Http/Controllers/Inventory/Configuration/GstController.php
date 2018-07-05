@@ -19,7 +19,7 @@ class GstController extends Controller{
     }
 	
     public function index(){
-		return redirect('inventory/configuration/gst');
+		return redirect('inventory/setting/gst');
     }
 	
     public function view(){
@@ -99,6 +99,6 @@ class GstController extends Controller{
 			$taxdata->where('code','gst')->update($data);
 		}
 		
-		return redirect('inventory/configuration/gst')->with("info","Success Save Tax GST");
+		return redirect('inventory/setting/gst')->with("info","Success Save Tax GST");
     }
 }

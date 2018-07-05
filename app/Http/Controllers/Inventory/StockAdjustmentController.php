@@ -10,6 +10,7 @@ use Session;
 
 use App\Models\Product;
 use App\Models\StockadjustmentType;
+use App\Models\StockItem;
 
 
 class StockAdjustmentController extends Controller
@@ -24,7 +25,21 @@ class StockAdjustmentController extends Controller
         $stockadjustment_type = StockadjustmentType::all();
         
         return view('inventory.stocks.stock-adjustment-index',compact('products','stockadjustment_type'));
-    }
+	}
+
+	public function stockProduct(Request $request){
+		$product_id = $request->get('product_id');
+
+		if(!$product_id){
+			$product = StockItem::all()->sum('quantity');	
+		}else{
+			$product = Product::find($product_id);	
+			$product = $product->StockItems()->sum('quantity');
+		}
+		return $product;
+	}
+	
+
 
     public function create(){		
         return view('inventory.suppliers.create');
