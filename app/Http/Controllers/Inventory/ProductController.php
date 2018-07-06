@@ -78,7 +78,7 @@ class ProductController extends Controller{
 			'statusArr' => $this->statusArr,
 			'categoryArr' => $categoryArr,
 		);
-        return view('Inventory/product_listing',$data);
+        return view('inventory/product_listing',$data);
     }
 	
 	public function search($x = ''){
@@ -174,7 +174,7 @@ class ProductController extends Controller{
 			'tabgallery' => '',
 		);
 		
-		return view('Inventory/product_form',$data);
+		return view('inventory/product_form',$data);
     }
 	
 	public function edit($id = 0, $gallery = 0){
@@ -216,7 +216,7 @@ class ProductController extends Controller{
 			$data['tabgallery'] = $tabgallery;
 			$data['inventorytotal'] = $inventorytotal;
 			
-			return view('Inventory/product_form',$data);
+			return view('inventory/product_form',$data);
 		}
 		return redirect("inventory/product/listing");
     }
@@ -329,7 +329,7 @@ class ProductController extends Controller{
 			$data['monthArr'] = $this->monthArr;
 			$data['inventorytotal'] = $inventorytotal;
 			
-			return view('Inventory/product_view',$data);
+			return view('inventory/product_view',$data);
 		}
 		return redirect("inventory/product/listing");
     }
@@ -465,7 +465,7 @@ class ProductController extends Controller{
 			'tabgallery' => '',
 			'productArr' => $productArr, # not package product
 		);
-		return view('Inventory/product_package_form',$data);
+		return view('inventory/product_package_form',$data);
     }
 	
 	public function package_edit($id = 0, $gallery = 0){
@@ -572,7 +572,7 @@ class ProductController extends Controller{
 			$data['monthArr'] = $this->monthArr;
 			$data['product_list'] = $product_list;
 			$data['productArr'] = $productArr; # not package product
-			return view('Inventory/product_package_view',$data);
+			return view('inventory/product_package_view',$data);
 		}
 		return redirect("inventory/product/listing");
     }
@@ -824,7 +824,7 @@ class ProductController extends Controller{
 			$data['imageArr'] = $imagedata->where('product_id',$id)->orderBy('status', 'desc')->orderBy('id', 'desc')->get();
 			$data['productId'] = $id;
 			$data['productName'] = $checkproduct['code'] . ' (' . $checkproduct['description'] . ') '; 
-			return view('Inventory/product_reload_image',$data);
+			return view('inventory/product_reload_image',$data);
 		}
 		return "Not Valid";
 	}
