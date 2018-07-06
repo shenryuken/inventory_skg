@@ -6,21 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    
-	protected $fillable = ['name','price'];
-
-	// public function stocks()
-	// {
-	// 	return $this->hasMany('App\Stock');
-	// }
-
-	// public function returnGoods()
-	// {
-	// 	return $this->hasMany('App\ReturnGoods');
-	// }
-
-	// public function productSales()
-	// {
-	// 	return $this->hasMany('App\ProductSale');
-	// }
+	protected $fillable = ['code','price'];
+   
+    public function StockItems()
+    {
+        return $this->hasMany('App\Models\StockItem', 'product_id');
+    }
 }
