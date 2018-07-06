@@ -17,6 +17,9 @@
         
         <!-- CSS INCLUDE -->        
         <link rel="stylesheet" type="text/css" id="theme" href="{{ asset('themes/Joli/css/theme-default.css') }}"/>
+        <!-- JS INCLUDE -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+        <script src="Https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
         <!-- EOF CSS INCLUDE -->
         <style type='text/css'>
         iframe.goog-te-banner-frame{ display: none !important;}
@@ -122,7 +125,7 @@
         <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins.js') }}"></script>        
         <script type="text/javascript" src="{{ asset('themes/Joli/js/actions.js') }}"></script>        
         <script type="text/javascript" src="{{ asset('themes/Joli/js/dashboard_chart.js') }}"></script> 
-        <script type="text/javascript" src="{{ asset('js/proajax.js')}}"></script></s>
+        <script type="text/javascript" src="{{ asset('js/proajax.js')}}"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->         
     </body>
