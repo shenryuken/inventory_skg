@@ -956,7 +956,9 @@ class ProductController extends Controller{
 	#pass to Amin
 	public function all_data_product(){
 	//date_default_timezone_set("Asia/Kuala_Lumpur");
-		$nowdatetime =  date('Y-m-d H:i:s');
+		$dt = new \DateTime();
+		$dt->setTimezone(new \DateTimeZone('Asia/Kuala_Lumpur'));
+		$nowdatetime =  date_format($dt,'Y-m-d H:i:s');
 		// echo 'date.timezone: ' . ini_get('date.timezone');
 		// echo "<br /> Y-m-d H:i:s" . date('Y-m-d H:i:s');
 		$productdata = New Product;
@@ -973,6 +975,7 @@ class ProductController extends Controller{
 			'Product' => array(),
 			'Package' => array(),
 			'Promotion' => array(),
+			'Package_Promotion' => array()
 		);
 		if(count($productQuery) > 0){
 			foreach($productQuery->all() as $key => $row){
@@ -1035,9 +1038,31 @@ class ProductController extends Controller{
 											->where('end','>=',$nowdatetime)
 											->where('status',1)
 											->orderBy('id', 'desc')->first();
+											// dd($promotion,$nowdatetime,$productid);
 				if($promotion){
-					$type = "Promotion";
+					if($row->type == 2){
+						$type = "Package_Promotion";
+					}else{
+						$type = "Promotion";
+					}
 					
+					$ori_price_wm = $row->price_wm;
+					$ori_price_em = $row->price_em;
+					$ori_price_staff = $row->price_staff;
+					$ori_wm_gst = $ori_wm_aftergst = $ori_em_gst = $ori_em_aftergst = $ori_staff_gst = $ori_staff_aftergst = 0;
+					if($ori_price_wm > 0){
+						$ori_wm_gst = ($ori_price_wm / 100) * $gstpercentage;
+						$ori_wm_aftergst = $ori_price_wm + $ori_wm_gst;
+					}
+					if($ori_price_em > 0){
+						$ori_em_gst = ($ori_price_em / 100) * $gstpercentage;
+						$ori_em_aftergst = $ori_price_em + $ori_em_gst;
+					}
+					if($ori_price_staff > 0){
+						$ori_staff_gst = ($ori_price_staff / 100) * $gstpercentage;
+						$ori_staff_aftergst = $ori_price_staff + $ori_staff_gst;
+					}
+
 					#price after gst
 					$price_wm = $promotion['price_wm'];
 					$price_em = $promotion['price_em'];
@@ -1066,6 +1091,9 @@ class ProductController extends Controller{
 					$data['staff_aftergst'] = number_format($staff_aftergst, 2, '.', '');
 					$data['promotion_id'] = $promotion['id'];
 					$data['promotion_description'] = $promotion['description'];
+					$data['ori_wm_aftergst'] = number_format($ori_wm_aftergst, 2, '.', '');
+					$data['ori_em_aftergst'] = number_format($ori_em_aftergst, 2, '.', '');
+					$data['ori_staff_aftergst'] = number_format($ori_staff_aftergst, 2, '.', '');
 					
 				}
 				
@@ -1083,7 +1111,10 @@ class ProductController extends Controller{
 	
 	public function single_data_product($id = 0){
 		# Bhaihaqi modify 2018-04-09 10:27 PM
-		$nowdatetime =  date('Y-m-d H:i:s');
+		$dt = new \DateTime();
+		$dt->setTimezone(new \DateTimeZone('Asia/Kuala_Lumpur'));
+		$nowdatetime =  date_format($dt,'Y-m-d H:i:s');
+		// $nowdatetime =  date('Y-m-d H:i:s');
 		$data = array();
 		$productArr = array();
 		if($id > 0){

@@ -7,4 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class AgentOrderItem extends Model
 {
     //
+    protected $table = 'agent_order_items';
 }

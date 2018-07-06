@@ -138,6 +138,19 @@ Route::post('/change-email', 'UserController@postChangeEmail');
 ======================================================================================
 */
 Route::get('shop/skg-mall', 'ShopController@skgMall');
+Route::post('shop/add-cart-items','ShopController@addCartItems');
+Route::get('shop/get-cart-items/{agent_id?}','ShopController@getCartItems');
+Route::post('shop/delete-cart-item','ShopController@deleteCartItem');
+Route::post('shop/update-quantity-items','ShopController@updateCartItems');
+Route::get('shop/checkout-items/{agent_id?}/{delivery_type?}','ShopController@checkoutItems');
+Route::get('shop/get-address','ShopController@getAddress');
+Route::post('shop/save-address','ShopController@saveAddress');
+Route::get('shop/get-product-package','ShopController@getProductPackage');
+Route::post('shop/place-order','ShopController@placeOrder');
+Route::get('shop/get-delivery-status','ShopController@getDeliveryStatus');
+
+
+
 Route::get('shop/agents', 'ShopController@agentsStoreList');
 Route::get('shop/agent-store/{id}', 'ShopController@agentStore');
 
