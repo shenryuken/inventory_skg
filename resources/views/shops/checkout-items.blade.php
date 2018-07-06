@@ -192,6 +192,7 @@
     var gv_address = [];
     var gv_type = "";
     var agent_id = "{{ $returnData['agent_id'] }}";
+    var baseUrl = window.location.origin;
 
     $(document).ready(function(){
 
@@ -295,7 +296,7 @@
 
         $.ajax({
 
-            url : "/shop/place-order",
+            url : baseUrl+"/shop/place-order",
             dataType : "json",
             type : "POST",
             data: JSON.stringify(data),
@@ -401,7 +402,7 @@
 
         $.ajax({
 
-            url     : "/shop/save-address",
+            url     : baseUrl+"/shop/save-address",
             type    : "POST",
             data    : JSON.stringify(data),
             dataType: "json",
@@ -459,7 +460,7 @@
 
         $.ajax({
 
-            url : "/shop/get-address",
+            url : baseUrl+"/shop/get-address",
             dataType : "json",
             type : "GET",
             data: data,

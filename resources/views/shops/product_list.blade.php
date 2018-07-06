@@ -79,6 +79,13 @@
 								        <div class="panel-footer">
 								        	<div class="col-md-12" style="">
 								        		<!-- <div class="row"> -->
+								        			@if(Auth::guard('admin')->check() == true)
+								        			@if(isset($value['ori_staff_aftergst']))
+							        				<span class="ori-price">
+								       				<del>RM{{ $value['ori_staff_aftergst'] }}</del>
+									       			</span>
+									       			@endif
+								        			@else
 								        			@if(isset($value['ori_wm_aftergst']) && isset($value['ori_em_aftergst']))
 									       			<span class="ori-price">
 									       				WM :<del>RM{{ $value['ori_wm_aftergst'] }}</del>
@@ -86,11 +93,17 @@
 									       				EM :<del>RM{{ $value['ori_em_aftergst'] }}</del>
 									       			</span>
 									       			@endif
+									       			@endif
 								        		<!-- </div> -->	
 								        		<div class="row">
 													<div class="col-md-7" style="">
 														<div class="info">
 											                <table style="margin-top: 20px; margin-left:-10px;">
+											                	@if(Auth::guard('admin')->check() == true)
+											                	<tr>
+												    				<td><h4 class="font-bold price-text-color">RM{{ $value['staff_aftergst'] }}</h4></td>
+												       			</tr>
+											                	@else
 												       			<tr>
 												       				<td><h4 class="font-bold price-text-color">WM </h4></td>
 												    				<td><h4 class="font-bold price-text-color">: RM{{ $value['wm_aftergst'] }}</h4></td>
@@ -99,6 +112,7 @@
 											       					<td><h4 class="font-bold price-text-color">EM</h4></td>
 											       					<td><h4 class="font-bold price-text-color">: RM{{ $value['em_aftergst'] }}</h4></td>
 												       			</tr>
+												       			@endif
 												       		</table>
 												       	</div>
 											       	</div>
@@ -164,6 +178,7 @@
 
 <script type="text/javascript">
 
+	var baseUrl = window.location.origin;
 
 	$(document).ready(function(){
 
@@ -241,7 +256,7 @@
 
 		$.ajax({
 
-			url 	: "/shop/get-product-package",
+			url 	: baseUrl+"/shop/get-product-package",
 			type 	: "GET",
 			data 	: data,
 			dataType: "json",
@@ -330,7 +345,7 @@
 
 			$.ajax({
 
-				url 	: "/shop/add-cart-items",
+				url 	: baseUrl+"/shop/add-cart-items",
 				type 	: "POST",
 				data 	: JSON.stringify(data),
 				dataType: "json",

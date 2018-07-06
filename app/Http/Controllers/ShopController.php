@@ -68,6 +68,7 @@ class ShopController extends Controller
             // echo "</pre>";
             // die();
             // dd($data);
+            // dd(Auth::guard('admin')->check());
 
             $product = array_merge($data['productArr']['Product'],$data['productArr']['Package'],$data['productArr']['Promotion'],$data['productArr']['Package_Promotion']);
 
@@ -124,7 +125,7 @@ class ShopController extends Controller
 
             }
 
-            $count = OrderTransection::count();
+            $count = OrderTransection::where('agent_id',$data['agent_id'])->count();
             $return['message'] = "succssfuly inserted";
             $return['status'] = "01";            
             

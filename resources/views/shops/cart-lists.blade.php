@@ -145,6 +145,8 @@
 
 <script type="text/javascript">
 
+    var baseUrl = window.location.origin;
+
     $(".btn-minus").on("click",function(){
         console.log($(this).closest('.qty').find('input.quantity').val())
         var now = $(this).closest('.qty').find('input.quantity').val();
@@ -233,7 +235,7 @@
 
         $.ajax({
 
-            url : "/shop/delete-cart-item",
+            url : baseUrl+"/shop/delete-cart-item",
             dataType : "json",
             type : "POST",
             data: JSON.stringify(data),
@@ -331,7 +333,7 @@
     });
 
     function fn_update_quantity(quantity,id,callback){
-
+        console.log(baseUrl)
         var data = {
 
             _token : "{!! csrf_token() !!}",
@@ -341,7 +343,7 @@
 
         $.ajax({
 
-            url : "/shop/update-quantity-items",
+            url : baseUrl+"/shop/update-quantity-items",
             dataType : "json",
             type : "POST",
             data: JSON.stringify(data),
