@@ -87,6 +87,8 @@ trait RegisterMember
         {
             $root = Referral::create(['user_id' => $user->id, 'username' => $user->username, 'rank' => $code_rank]);
         }
+
+        return $user;
     }
 
     public function registerDo($id)

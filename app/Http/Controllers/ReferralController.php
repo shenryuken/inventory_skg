@@ -29,13 +29,13 @@ class ReferralController extends Controller
        
         foreach ($elements as $element) {
 
-            $element['name']     = User::find($element['id'])->username;
-            $element['title']    = $this->getRankName($element['id']);
+            $element['name']     = User::find($element['user_id'])->username;
+            $element['title']    = $this->getRankName($element['user_id']);
             $element['className']= strtolower($element['rank']);
 
             if ($element['parent_id'] == $parentId) {
 
-                $children = $this->buildTree($elements, $element['id']);
+                $children = $this->buildTree($elements, $element['user_id']);
 
                 if ($children) {
                     $element['children'] = $children;       

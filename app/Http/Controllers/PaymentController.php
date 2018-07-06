@@ -177,6 +177,10 @@ class PaymentController extends Controller
             if($newUser)
             {
                 $user = $this->saveMemberToDb($newUser);
+                $newUser->newProfile()->delete();
+                $newUser->delete();
+
+                $input['user_id'] = $user->id;
             }
         }
 
@@ -255,7 +259,7 @@ class PaymentController extends Controller
 
     public function createInvoice($user_id, $agent_id = null, $data)
     {
-        if($agent_id != NULL || $agent_id != '')
+        if($agent_id > 0)
         {
             $invoice = new AgentInvoice;
             $invoice->agent_id      = $agent_id;
@@ -302,7 +306,7 @@ class PaymentController extends Controller
     public function addNewOrder($user_id, $agent_id = null, $prev_url, $invoice, $order_status)
     {
         $new_order_no = $this->getNewOrderNo($user_id, $agent_id);
-        $model_name = ($agent_id != NULL || $agent_id != '') ? 'AgentOrder':'Order';
+        $model_name = ($agent_id > 0) ? 'AgentOrder':'Order';
         $model = 'App\\Models\\'.$model_name;
 
         $order = new $model;
@@ -320,7 +324,7 @@ class PaymentController extends Controller
 
     public function getNewOrderNo($user_id, $agent_id = null)
     {
-        $model_name = ($agent_id != NULL || $agent_id != '') ? 'AgentOrder':'Order';
+        $model_name = ($agent_id > 0) ? 'AgentOrder':'Order';
         $model = 'App\\Models\\'.$model_name;
 
         $order_no = $model::latest()->value('do_no');

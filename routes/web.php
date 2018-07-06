@@ -196,3 +196,46 @@ Route::get('invoices', 'InvoiceController@index');
  End Invoices  
 ======================================================================================
 */
+
+/*
+======================================================================================
+ Bonus
+======================================================================================
+*/
+Route::get('bonus', 'BonusController@index');
+Route::get('bonus/bonus-types', 'BonusController@bonusType');
+Route::get('bonus/add-bonus-types', 'BonusController@addBonusType');
+Route::get('bonus/history', 'BonusController@history');
+Route::get('bonus/my-bonus-history/{id}', 'BonusController@my_bonus_history');
+Route::get('bonus/show-bonus-summary/{id}', 'BonusController@showBonusSummary');
+Route::get('bonus/{id}/edit-bonus-type', 'BonusController@editBonusType');
+Route::put('bonus_types/{id}', ['as' => 'bonus_types.update', 'uses' => 'BonusController@updateBonusType']);
+
+Route::get('bonus/statement/{id}', 'BonusController@bonusStatement');
+Route::get('bonus/details/{id}', 'BonusController@bonusDetails');
+Route::get('bonus/calculate-end-month-bonus', 'BonusController@calculate_end_month_bonus');
+/*
+======================================================================================
+ End Bonus
+======================================================================================
+*/
+
+/*
+======================================================================================
+ Orders  
+======================================================================================
+*/
+//Courier Page
+Route::get('orders/process/{id}', 'OrderController@processOrder');
+Route::get('orders/my-orders', 'OrderController@myOrders');
+Route::post('orders/postProcessOrder', 'OrderController@postProcessOrder');
+Route::get('orders/{id}', 'OrderController@show');
+Route::get('orders', 'OrderController@index');
+//Route::put('shop/{id}', ['as' => 'shop.update', 'uses' => 'ShopController@update']);
+
+
+/*
+======================================================================================
+ End Orders  
+======================================================================================
+*/
