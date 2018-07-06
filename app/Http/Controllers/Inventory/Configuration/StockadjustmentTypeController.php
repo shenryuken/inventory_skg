@@ -8,13 +8,13 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Config_stockadjustment;
+use App\Models\StockadjustmentType;
 
 use App\Admin;
 use App\User;
 use App\Models\Role;
 
-class StockadjustmentController extends Controller
+class StockadjustmentTypeController extends Controller
 {
 	private $statusArr = array( 
 		'1' => '<span class="text-success bold"> Active </span>',
@@ -32,11 +32,11 @@ class StockadjustmentController extends Controller
     }
 	
 	public function index(){
-        return redirect('inventory/configuration/stockadjustment');
+        return redirect('inventory/setting/stockadjustment');
     }
 	
 	public function listing(){
-		$stockadjustmentdata = New Config_stockadjustment;
+		$stockadjustmentdata = New StockadjustmentType;
 		$data = array(
 			'countadjustment' => $stockadjustmentdata->count(),
 			'startcount' => 0,
@@ -49,15 +49,15 @@ class StockadjustmentController extends Controller
 	
 	public function search($x = ''){
 		if($x == '' || @unserialize(base64_decode($x)) == false)
-			return redirect('inventory/configuration/stockadjustment');
+			return redirect('inventory/setting/stockadjustment');
 			
 		$datadecode = unserialize(base64_decode($x));
 		$search = isset($datadecode['search']) ? $datadecode['search'] : '';
 		$search_status = isset($datadecode['search_status']) ? $datadecode['search_status'] : '';
 		if($search == '' && $search_status == '')
-			return redirect('inventory/configuration/stockadjustment');
+			return redirect('inventory/setting/stockadjustment');
 		
-		$stockadjustmentdata = New Config_stockadjustment;
+		$stockadjustmentdata = New StockadjustmentType;
 		if($search != '' && $search_status != ''){
 			$countadjustment = $stockadjustmentdata->where(function ($q) use($search){
 											$q->where('adjustment','LIKE','%'. $search .'%')
@@ -101,7 +101,7 @@ class StockadjustmentController extends Controller
 		$search_status = trim($postdata->input("search_status"));
 		
 		if($search == '' && $search_status == '')
-			return redirect('inventory/configuration/stockadjustment');
+			return redirect('inventory/setting/stockadjustment');
 			
 		$rowdata = array(
 			'search' => $search,
@@ -110,11 +110,11 @@ class StockadjustmentController extends Controller
 		
 		$base64data = trim(base64_encode(serialize($rowdata)), "=.");
 		
-        return redirect('inventory/configuration/stockadjustment/search/' . $base64data);
+        return redirect('inventory/setting/stockadjustment/search/' . $base64data);
     }
 	
     public function save(Request $postdata){
-		$stockadjustmentdata = New Config_stockadjustment;
+		$stockadjustmentdata = New StockadjustmentType;
 		$data = array(
 			'adjustment' => $postdata->input("adjustment"),
 			'remarks' => $postdata->input("remarks") != null ? $postdata->input("remarks") : '',
@@ -131,7 +131,7 @@ class StockadjustmentController extends Controller
 			$data['created_at'] = date('Y-m-d H:i:s');
 			$stockadjustmentdata->insert($data);
 			
-			return redirect('inventory/configuration/stockadjustment')->with("info","Success Submit " . $postdata->input("adjustment") . "");
+			return redirect('inventory/setting/stockadjustment')->with("info","Success Submit " . $postdata->input("adjustment") . "");
 		}
 		else{
 			# update stock stockadjustment
@@ -141,21 +141,21 @@ class StockadjustmentController extends Controller
 			
 			$stockadjustmentdata->where('id',$selectid)->update($data);
 			if($search != '')
-				return redirect('inventory/configuration/stockadjustment/search/' . $search)->with("info","Success Save " . $postdata->input("adjustment") . "");
+				return redirect('inventory/setting/stockadjustment/search/' . $search)->with("info","Success Save " . $postdata->input("adjustment") . "");
 			else
-				return redirect('inventory/configuration/stockadjustment')->with("info","Success Save " . $postdata->input("adjustment") . "");
+				return redirect('inventory/setting/stockadjustment')->with("info","Success Save " . $postdata->input("adjustment") . "");
 		}
 	}
 
     public function delete($data = ''){
 		if(@unserialize(base64_decode($data)) == true){
-			$stockadjustmentdata = New Config_stockadjustment;
+			$stockadjustmentdata = New StockadjustmentType;
 			$datadecode = unserialize(base64_decode($data));
 			$selectid = isset($datadecode['selectid']) ? $datadecode['selectid'] : 0;
 			
 			$checkstockadjustment = $stockadjustmentdata->where('id', $selectid)->first();
 			if($checkstockadjustment == false)
-				return redirect('inventory/configuration/stockadjustment')->with("errorid"," Data not found");
+				return redirect('inventory/setting/stockadjustment')->with("errorid"," Data not found");
 			
 			$search = isset($datadecode['search']) ? $datadecode['search'] : '';
 			
@@ -166,9 +166,9 @@ class StockadjustmentController extends Controller
 			
 			if($stockadjustmentdata->where('id', $selectid)->delete()){
 				if($search != '')
-					return redirect('inventory/configuration/stockadjustment/search/' . $search)->with("info","Stock Adjustment " . $checkstockadjustment['adjustment'] . " Deleted Successfully!!");
+					return redirect('inventory/setting/stockadjustment/search/' . $search)->with("info","Stock Adjustment " . $checkstockadjustment['adjustment'] . " Deleted Successfully!!");
 				else
-					return redirect('inventory/configuration/stockadjustment')->with("info","Stock stockadjustment " . $checkstockadjustment['adjustment'] . "  Deleted Successfully!!");
+					return redirect('inventory/setting/stockadjustment')->with("info","Stock stockadjustment " . $checkstockadjustment['adjustment'] . "  Deleted Successfully!!");
 				
 			}
 		}

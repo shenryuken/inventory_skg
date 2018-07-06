@@ -21,20 +21,85 @@ use App\Models\Supplier;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\StockItem;
+use App\Models\StockAdjustment;
 
-class StockInController extends Controller
+class StockReportController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth:admin');
     }
 
-    public function index()
+    public function index(){
+        $products = Product::all();  
+
+        return view('inventory.stocks.stock-report',compact('products'));
+    }
+
+    public function indexCurrentStock()
     {
-        $suppliers = Supplier::all();
-        $products = Product::all();
+        $data = [];
+        $totalActiveStock = 0;
+        $totalLessStock = 0;
+        $lastAdjustment = '';
+        $totalProduct = 0;
+        $minStock = 5;
+        #Model
+        $products = new Product;  
+        $stock_adjustments = new StockAdjustment;
+        $stock_item = new StockItem;
+
+        //minidashboard
+		#1 Total Product in stock
+		$totalActiveStock = $stock_item->where('status','01')->sum('quantity');
+
+		#2 Total Less Stock
+        $totalLessStock = $stock_item->selectRaw('SUM(quantity) as qty,product_id')->groupBy('product_id')->havingRaw('SUM(quantity) <= '.$minStock )->first();
         
-        return view('inventory.stocks.stock-in-new',compact('suppliers','products'));
+        
+        // ->get();
+
+        #3 Last Adjustment
+        // $stock_adjustments = $stockadjustment_m->selectRaw('MAX(created_at) as last_adjust')->value('last_adjust');
+
+		#4 Total product
+        $totalProduct = $products->count();
+
+        // $stocks = $product_m->totalProductCount()->get();         
+        //     foreach($stocks as $key=>$value){
+        //         $productId = $value->product_id;
+        //         $totalserial_number = $value->stocksCount;
+        //         $adjustment = stockadjustment_m::join('config_stockadjustment','stockadjustment.adjustment_id','=','config_stockadjustment.id')
+        //                                         ->where('stockadjustment.product_id',$productId)
+        //                                         ->get();
+        //         if($adjustment){
+        //             foreach($adjustment as $k => $v){
+        //                 $quantity = $v->quantity;
+        //                 $operation = $v->operation;
+                        
+        //                 $totalserial_number = $this->calcAdjustment($totalserial_number,$quantity,$operation);
+                        
+        //             }
+        //             $data[] = [
+        //                 'product_name' => $value->product_name,
+        //                 'product_code' => $value->product_code,
+        //                 'stocksCount' => $totalserial_number,
+        //                 'product_id' => $value->product_id,
+        //             ];
+        //         }             
+
+        //     }
+        $dashboards = [            
+            'totalActiveStock' => $totalActiveStock,
+            'totalLessStock' => $totalLessStock ? $totalLessStock->qty : 0,
+            'lastAdjustment' => Carbon::parse($lastAdjustment)->format('Y-m-d'),
+            'totalProduct' => $totalProduct
+        ];
+
+            // return  compact('data','dashboards');
+            return view('inventory.stocks.stock-current-list', compact('data','dashboards'));
+
+            
     }
 
     public function list(){

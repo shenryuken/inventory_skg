@@ -1,10 +1,10 @@
 @extends('layouts.joli.app')
-@section('title','New Stock In')
+@section('title','New Stock Adjustment')
 @section('content')
 <!-- START BREADCRUMB -->
     <ul class="breadcrumb">
         <li><a href="{{ url('home') }}">Home</a></li>                    
-        <li><a href="{{ url('stock/listing') }}">New Stock In</a></li>
+        <li><a href="{{ url('stock/adjustment') }}">New Stock Adjustment</a></li>
     </ul>
 <!-- END BREADCRUMB -->   
     
@@ -42,9 +42,8 @@
         <div class="col-md-12">
                 <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h2>Stock In Form</h2>
-                                    <button class="btn btn-info pull-right">New Supplier</button>
-                                    <button class="btn btn-default pull-right">New Product</button>
+                                    <h2>Stock Adjustment Form</h2>
+                                    
                                 </div>
                             <form  id="create_stock" method="POST" class="form-horizontal" action="{{url('inventory/stock/in/store')}}">
                         <div class="panel-body">
@@ -54,8 +53,8 @@
                                     
                                         <div class="form-group">
                                             <div class="col-md-4">
-                                                    <label for="stock_in_date">Stock Date</label>                        
-                                                    <input type="date" name="stock_date" class="form-control"> 
+                                                    <label for="stock_in_date">Adjustment Date</label>                        
+                                                    <input type="date" name="adjustment_date" class="form-control"> 
                                             </div>
                         
                                             <div class="col-md-4">
@@ -69,11 +68,11 @@
                                             </div>
                         
                                             <div class="col-md-4">
-                                                    <label for="stock_in_date">Supplier</label>                        
+                                                    <label for="stock_in_date">Adjustment Type</label>                        
                                                     <select class="form-control" name="supplier" id="supplier">
                                                             <option value=""></option>
-                                                            @foreach($suppliers as $supplier)
-                                                                    <option  value="{{ $supplier->id }}">{{$supplier->supplier_code}}</option>
+                                                            @foreach($stockadjustment_type as $adjustment)
+                                                                    <option  value="{{ $adjustment->id }}">{{$adjustment->adjustment}}</option>
                                                                 @endforeach
                                                         </select>
                                             </div>
@@ -123,6 +122,26 @@
                                 </table>
                             </div>
                     </div>
+                    <div class="panel-body">  
+                        <div class="col-md-6">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>In Stocks</th>
+                                    <th>Adjusting</th>
+                                    <th>Will Remain</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="instock_table"></td>
+                                    <td id="adjusting_table"></td>
+                                    <td id="remain_table"></td>
+                                </tr>
+                            </tbody>
+                        </table>  
+                    </div>
+                    </div>
                     <div class="panel-footer">
                             <input type="button" id="clearBtn" class="btn btn-default" value="Clear Form">
                             <input type="button" id="save"class="btn btn-primary pull-right" value="Save">
@@ -140,6 +159,7 @@
  <script type='text/javascript' src="{{ asset('themes/Joli/js/plugins/icheck/icheck.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js') }}"></script>
     
+    <script type="text/javascript" src="//cdn.datatables.net/plug-ins/1.10.19/api/sum().js"></script>
     <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/tableexport/tableExport.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/tableexport/jquery.base64.js"') }}"></script>
@@ -180,7 +200,9 @@ $(document).ready(function() {
                             alert('Input cannot be empty')
                         }
                         $('#input_quantity').val('');             
-                    }                     
+                    }
+
+                    calcTotal()                     
                 });
     //barcode
     $("#input_barcode").keyup(function(event) {
@@ -203,9 +225,59 @@ $(document).ready(function() {
                             alert('Input cannot be empty')
                         }
                         $('#input_barcode').val('');             
-                    }                     
+                    }   
+
+                    calcTotal()                  
                 }); 
+
+
+    
+    $( "#product" ).change(function() {
+        var product_input;
+        $( "#product option:selected" ).each(function() {
+        product_input = $( this ).val();
+        console.log(product_input)
+        
+        });
+
+        var data = {
+			product_id : product_input
+		};
+
+        $.ajax({
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+		data:data,	
+		url: "adjustment/stock_product"
+		}).done(function(result){
+            console.log(result)
+            $('#instock_table').text(result)
+
+		});
+
+        });
             });
+
+    function calcTotal(){
+        var qty = t
+                        .columns( 2 )
+                        .data()
+                        .eq( 0 )      // Reduce the 2D array into a 1D array of data
+                        .sort()       // Sort data alphabetically
+                        // .unique()     // Reduce to unique values
+                        .join( '\n' )
+        var qty = qty.split("\n")
+        total = 0;
+        qty.forEach(function(value){
+            total += parseInt(value);
+        });
+        $('#adjusting_table').text(total);   
+
+        // 
+        let stock = $('#instock_table').text();
+        let remain = stock - total;
+
+        $('#remain_table').text(remain || 0) 
+    }
 
     function checkIfArrayIsUnique(input) {        
         var myArray = getSerialNumber();
@@ -234,14 +306,19 @@ $(document).ready(function() {
         var barcode_arr = data.split("\n")
         var qty = qty.split("\n")
         var post_array = [];
+       
         
         //sort to each qty
         for(let x = 0; x < barcode_arr.length;x++){
+
             post_array.push({
                 barcode : barcode_arr[x],
                 quantity : qty[x]
             })
+            total += qty[x];
         }
+        
+                 
 		// var temp = [];
 
 		// for(let i of barcode_arr)

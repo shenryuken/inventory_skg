@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Config_productcategories;
+use App\Models\ProductCategory;
 
 use App\Admin;
 use App\User;
@@ -26,11 +26,11 @@ class ProductcategoryController extends Controller
     }
 	
 	public function index(){
-        return redirect('inventory/configuration/productcategory');
+        return redirect('inventory/setting/productcategory');
     }
 	
 	public function listing(){
-		$productcategorydata = New Config_productcategories;
+		$productcategorydata = New ProductCategory;
 		$data = array(
 			'countcategory' => $productcategorydata->count(),
 			'startcount' => 0,
@@ -42,15 +42,15 @@ class ProductcategoryController extends Controller
 	
 	public function search($x = ''){
 		if($x == '' || @unserialize(base64_decode($x)) == false)
-			return redirect('inventory/configuration/productcategory');
+			return redirect('inventory/setting/productcategory');
 			
 		$datadecode = unserialize(base64_decode($x));
 		$search = isset($datadecode['search']) ? $datadecode['search'] : '';
 		$search_status = isset($datadecode['search_status']) ? $datadecode['search_status'] : '';
 		if($search == '' && $search_status == '')
-			return redirect('inventory/configuration/productcategory');
+			return redirect('inventory/setting/productcategory');
 		
-		$productcategorydata = New Config_productcategories;
+		$productcategorydata = New ProductCategory;
 		if($search != ''){
 			$productcategorydata = $productcategorydata->where(function ($q) use($search){
 											$q->where('category','LIKE','%'. $search .'%')
@@ -80,7 +80,7 @@ class ProductcategoryController extends Controller
 		$search_status = trim($postdata->input("search_status"));
 		
 		if($search == '' && $search_status == '')
-			return redirect('inventory/configuration/productcategory');
+			return redirect('inventory/setting/productcategory');
 			
 		$rowdata = array(
 			'search' => $search,
@@ -89,11 +89,11 @@ class ProductcategoryController extends Controller
 		
 		$base64data = trim(base64_encode(serialize($rowdata)), "=.");
 		
-        return redirect('inventory/configuration/productcategory/search/' . $base64data);
+        return redirect('inventory/setting/productcategory/search/' . $base64data);
     }
 	
     public function save(Request $postdata){
-		$productcategorydata = New Config_productcategories;
+		$productcategorydata = New ProductCategory;
 		$data = array(
 			'category' => strtoupper(trim($postdata->input("category"))),
 			'remarks' => $postdata->input("remarks") != null ? $postdata->input("remarks") : '',
@@ -109,7 +109,7 @@ class ProductcategoryController extends Controller
 			$data['created_at'] = date('Y-m-d H:i:s');
 			$productcategorydata->insert($data);
 			
-			return redirect('inventory/configuration/productcategory')->with("info","Success Submit " . strtoupper(trim($postdata->input("category"))) . "");
+			return redirect('inventory/setting/productcategory')->with("info","Success Submit " . strtoupper(trim($postdata->input("category"))) . "");
 		}
 		else{
 			# update Product Category
@@ -119,28 +119,28 @@ class ProductcategoryController extends Controller
 			
 			$productcategorydata->where('id',$selectid)->update($data);
 			if($search != '')
-				return redirect('inventory/configuration/productcategory/search/' . $search)->with("info","Success Save " . strtoupper(trim($postdata->input("category"))) . "");
+				return redirect('inventory/setting/productcategory/search/' . $search)->with("info","Success Save " . strtoupper(trim($postdata->input("category"))) . "");
 			else
-				return redirect('inventory/configuration/productcategory')->with("info","Success Save " . $postdata->input("category") . "");
+				return redirect('inventory/setting/productcategory')->with("info","Success Save " . $postdata->input("category") . "");
 		}
 	}
 
     public function delete($data = ''){
 		if(@unserialize(base64_decode($data)) == true){
-			$productcategorydata = New Config_productcategories;
+			$productcategorydata = New ProductCategory;
 			$datadecode = unserialize(base64_decode($data));
 			$selectid = isset($datadecode['selectid']) ? $datadecode['selectid'] : 0;
 			
 			$checkproductcategory = $productcategorydata->where('id', $selectid)->first();
 			if($checkproductcategory == false)
-				return redirect('inventory/configuration/productcategory')->with("errorid"," Data not found");
+				return redirect('inventory/setting/productcategory')->with("errorid"," Data not found");
 			
 			$search = isset($datadecode['search']) ? $datadecode['search'] : '';
 			if($productcategorydata->where('id', $selectid)->delete()){
 				if($search != '')
-					return redirect('inventory/configuration/productcategory/search/' . $search)->with("info","Product Category " . $checkproductcategory['category'] . " Deleted Successfully!!");
+					return redirect('inventory/setting/productcategory/search/' . $search)->with("info","Product Category " . $checkproductcategory['category'] . " Deleted Successfully!!");
 				else
-					return redirect('inventory/configuration/productcategory')->with("info","Product Category " . $checkproductcategory['category'] . "  Deleted Successfully!!");
+					return redirect('inventory/setting/productcategory')->with("info","Product Category " . $checkproductcategory['category'] . "  Deleted Successfully!!");
 				
 			}
 		}
