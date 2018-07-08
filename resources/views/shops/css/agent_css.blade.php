@@ -111,6 +111,14 @@
 		margin-right: 5px;
 	}
 
+	.pack-list{
+		background-color: transparent; 
+	}
+
+	.gift-list{
+		background-color: transparent;
+	}
+
 /*********************************************
     			Call Bootstrap
 *********************************************/
@@ -430,7 +438,7 @@ div.section > div > input {margin:0;padding-left:5px;font-size:10px;padding-righ
 	border-color: transparent #5bc0de transparent transparent;
 }
 
-/*package ui*/
+/*package dialog*/
 
 table.table-package {
   display: flex;
@@ -481,8 +489,64 @@ tbody.tbody-package td.td-package {
   /*background: #d5d5d5;*/
 }
 
-
 .package-list {
+  width: 100%;
+  height: 350px;
+}
+
+
+/*gift dialog*/
+
+table.table-gift, table.table-gift {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 1px;
+}
+
+table.table-gift thead.thead-gift {
+  flex: 0 0 auto;
+  width: calc(100% - 0.9em);
+}
+
+table.table-gift tbody.tbody-gift {
+  flex: 1 1 auto;
+  display: block;
+  overflow-y: scroll;
+}
+
+table.table-gift tbody.tbody-gift tr.tr-gift {
+  width: 100%;
+}
+
+table.table-gift thead.thead-gift,
+table.table-gift tbody.tbody-gift tr.tr-gift {
+  display: table;
+  table-layout: fixed;
+}
+
+tbody.tbody-gift td.td-gift,
+thead.thead-gift th.th-gift {
+  border-right: 1px solid transparent;
+  vertical-align: top;
+}
+
+thead.thead-gift th.th-gift {
+  height: 35px;
+  font-size: 16px;
+  text-align: left;
+  text-transform: uppercase;
+}
+
+tbody.tbody-gift td.td-gift {
+  text-align: left;
+  height: 30px;
+  /*background: #d5d5d5;*/
+}
+
+.promotion-gift-list {
   width: 100%;
   height: 350px;
 }
