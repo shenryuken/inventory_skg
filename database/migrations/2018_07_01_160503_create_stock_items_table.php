@@ -20,6 +20,7 @@ class CreateStockItemsTable extends Migration
             $table->integer('stock_id');
             $table->integer('supplier_id');
             $table->string('barcode',32)->nullable();
+            $table->integer('stock_adjustment_id')->nullable();
             $table->integer('quantity');
             $table->string('status',2);
             $table->integer('created_by')->nullable();

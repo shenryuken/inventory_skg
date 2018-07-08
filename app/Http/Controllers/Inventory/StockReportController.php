@@ -22,6 +22,7 @@ use App\Models\Product;
 use App\Models\Stock;
 use App\Models\StockItem;
 use App\Models\StockAdjustment;
+use Datatables;
 
 class StockReportController extends Controller
 {
@@ -33,8 +34,11 @@ class StockReportController extends Controller
     public function index(){
         $products = Product::all();  
 
+
+
         return view('inventory.stocks.stock-report',compact('products'));
     }
+
 
     public function indexCurrentStock()
     {
@@ -46,7 +50,7 @@ class StockReportController extends Controller
         $minStock = 5;
         #Model
         $products = new Product;  
-        $stock_adjustments = new StockAdjustment;
+        $StockAdjustment = new StockAdjustment;
         $stock_item = new StockItem;
 
         //minidashboard
@@ -54,45 +58,47 @@ class StockReportController extends Controller
 		$totalActiveStock = $stock_item->where('status','01')->sum('quantity');
 
 		#2 Total Less Stock
-        $totalLessStock = $stock_item->selectRaw('SUM(quantity) as qty,product_id')->groupBy('product_id')->havingRaw('SUM(quantity) <= '.$minStock )->first();
-        
-        
-        // ->get();
+        $totalLessStock = $stock_item->selectRaw('SUM(quantity) as qty,product_id')
+                        ->groupBy('product_id')
+                        ->havingRaw('SUM(quantity) <= '.$minStock )
+                        ->first();
 
         #3 Last Adjustment
-        // $stock_adjustments = $stockadjustment_m->selectRaw('MAX(created_at) as last_adjust')->value('last_adjust');
+        $stock_adjustments = $StockAdjustment->selectRaw('MAX(created_at) as last_adjust')->value('last_adjust');
 
 		#4 Total product
         $totalProduct = $products->count();
 
-        // $stocks = $product_m->totalProductCount()->get();         
-        //     foreach($stocks as $key=>$value){
-        //         $productId = $value->product_id;
-        //         $totalserial_number = $value->stocksCount;
-        //         $adjustment = stockadjustment_m::join('config_stockadjustment','stockadjustment.adjustment_id','=','config_stockadjustment.id')
-        //                                         ->where('stockadjustment.product_id',$productId)
-        //                                         ->get();
-        //         if($adjustment){
-        //             foreach($adjustment as $k => $v){
-        //                 $quantity = $v->quantity;
-        //                 $operation = $v->operation;
-                        
-        //                 $totalserial_number = $this->calcAdjustment($totalserial_number,$quantity,$operation);
-                        
-        //             }
-        //             $data[] = [
-        //                 'product_name' => $value->product_name,
-        //                 'product_code' => $value->product_code,
-        //                 'stocksCount' => $totalserial_number,
-        //                 'product_id' => $value->product_id,
-        //             ];
-        //         }             
+        $stocks = $products->get();   
 
-        //     }
+            foreach($stocks as $key=>$value){
+                $productId = $value->id;
+                $totalserial_number = $stock_item->where('product_id',$productId)->where('status','01')->sum('quantity');
+                $adjustment = $StockAdjustment->stockItem()->where('product_id',$productId)
+                                                ->get();
+                if($adjustment){
+                    foreach($adjustment as $k => $v){
+                        $quantity = $v->quantity;
+                        $operation = $v->stockAdjustmentType()->operation;
+                        
+                        $totalserial_number = $this->calcAdjustment($totalserial_number,$quantity,$operation);
+                        
+                    }
+                    $data[] = [
+                        'product_name' => $value->name,
+                        'product_code' => $value->code,
+                        'stocksCount' => $totalserial_number,
+                        'product_id' => $value->id,
+                    ];
+                }             
+
+            }
+
+        
         $dashboards = [            
             'totalActiveStock' => $totalActiveStock,
             'totalLessStock' => $totalLessStock ? $totalLessStock->qty : 0,
-            'lastAdjustment' => Carbon::parse($lastAdjustment)->format('Y-m-d'),
+            'lastAdjustment' => Carbon::parse($stock_adjustments)->format('Y-m-d'),
             'totalProduct' => $totalProduct
         ];
 
@@ -169,6 +175,17 @@ class StockReportController extends Controller
             }
             $generatedNo =  str_pad($numberOnly+1, 5, '0', STR_PAD_LEFT);
             return "SR".($generatedNo);      
+    }
+
+    private function calcAdjustment($totalserial_number,$quantity,$operation){
+        if($operation == '-'){
+            return $totalserial_number - $quantity;
+        }elseif($operation == '+'){
+            return $totalserial_number + $quantity;
+        }
+        else{
+            return;
+        }
     }
 
  

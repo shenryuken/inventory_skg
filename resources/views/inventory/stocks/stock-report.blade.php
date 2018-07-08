@@ -33,7 +33,9 @@
                                         <label class="col-md-3 col-xs-12 control-label">Products</label>
                                         <div class="col-md-6 col-xs-12">                                            
                                                 <select class="form-control">
-                                                        <option>1</option>
+                                                        @foreach($products as $product)
+                                                        <option name="product" id="product" value="{{$product->id}}">{{$product->name}}</option>
+                                                        @endforeach
                                                     </select>                                            
                                             <span class="help-block">This is sample of text field</span>
                                         </div>
@@ -69,10 +71,10 @@
                                                 
                                                 <tr>
                                                   <td id="blank">&nbsp;</td>
-                                                  @php $period = Carbon\CarbonPeriod::create('2018-06-14', '2018-06-20'); @endphp
+                                                  @php $period = Carbon\CarbonPeriod::create(Carbon\Carbon::parse('first day of last month'), Carbon\Carbon::parse('last day of last month')); @endphp
 
                                                     @foreach ($period as $date) 
-                                                    <th id="co1" headers="blank">{{ $date->format('d/m/Y') }}</th>
+                                                    <th id="co1" headers="blank">{{ $date->format('d') }}</th>
                                                     @endforeach
                                                     <th id="co1" headers="blank">Stock In</th>
                                                     <th id="co1" headers="blank">Stock Out</th>
