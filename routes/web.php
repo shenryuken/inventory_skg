@@ -275,6 +275,8 @@ Route::get('inventory/stock/list', 'Inventory\StockInController@list');
 #Stock Adjustment
 Route::get('inventory/stock/adjustment/', 'Inventory\StockAdjustmentController@index');
 Route::get('inventory/stock/adjustment/stock_product', 'Inventory\StockAdjustmentController@stockProduct');
+Route::get('inventory/stock/adjustment/check_barcode', 'Inventory\StockAdjustmentController@checkBarcode');
+Route::post('inventory/stock/adjustment/store', 'Inventory\StockAdjustmentController@store');
 #Stock Reports
 Route::get('inventory/stock/current/', 'Inventory\StockReportController@indexCurrentStock');
 Route::get('inventory/stock/report/', 'Inventory\StockReportController@index');
