@@ -281,6 +281,9 @@ Route::post('inventory/stock/adjustment/store', 'Inventory\StockAdjustmentContro
 Route::get('inventory/stock/current/', 'Inventory\StockReportController@indexCurrentStock');
 Route::get('inventory/stock/report/', 'Inventory\StockReportController@index');
 
+#Order Delivery
+Route::get('inventory/order/delivery', 'Inventory\OrderController@index');
+
 #Product
 Route::get('inventory/product', function () {  return redirect("inventory/product/listing"); });
 Route::get('inventory/product/listing', 'Inventory\ProductController@listing');
