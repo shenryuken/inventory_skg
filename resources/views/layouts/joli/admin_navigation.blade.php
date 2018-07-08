@@ -161,7 +161,7 @@
         <a href="javascript:;"><span class="glyphicon glyphicon-shopping-cart"></span> Order Management </a>
         <ul>
             <li class="<?php echo in_array(Request::segment(1) . '/' . Request::segment(2), array("inventory/order/delivery")) ? "active" : "" ; ?>">
-                <a href="{{ url('inventory/stock/current') }}"><span class="glyphicon glyphicon-list-alt"></span> Delivery Order </a>
+                <a href="{{ url('inventory/order/delivery') }}"><span class="glyphicon glyphicon-list-alt"></span> Delivery Order </a>
             </li>
             
         </ul>
