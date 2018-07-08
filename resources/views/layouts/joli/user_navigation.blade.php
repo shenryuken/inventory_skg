@@ -26,7 +26,7 @@
     </li>                                                                     
     <li class="xn-title">Navigation</li>
     <li>
-        <a href="{{ url('user/dashboard')}}">
+        <a href="{{ url('users/dashboard')}}">
         	<span class="fa fa-desktop"></span> 
         	<span class="xn-text">Dashboard</span>
        	</a>

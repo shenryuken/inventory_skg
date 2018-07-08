@@ -16,9 +16,9 @@ use App\Models\Product_image;
 use App\Models\Product_package;
 use App\Models\Product_promotion_gift;
 
-use App\Models\Config_productcategories;
-use App\Models\Config_quantitytype;
-use App\Models\Config_tax;
+use App\Models\ProductCategory;
+use App\Models\QuantityType;
+use App\Models\Tax;
 use App\Admin;
 use App\User;
 use App\Models\Role;
@@ -42,7 +42,7 @@ class ProductUserController extends Controller{
 		$imagedata = New Product_image;
 		$productQuery = $productdata->orderBy('id', 'desc')->where('status',1)->where('notforsale', 0)->get();
 		# get Tax GST percentage		
-		$taxgst = Config_tax::where('code', 'gst')->first();
+		$taxgst = Tax::where('code', 'gst')->first();
 		if($taxgst == false)
 			$gstpercentage = 6;
 		else
@@ -175,7 +175,7 @@ class ProductUserController extends Controller{
 			$datap = $productdata->where('id', $id)->where('notforsale', 0)->first();
 			if($datap){
 				# get Tax GST percentage		
-				$taxgst = Config_tax::where('code', 'gst')->first();
+				$taxgst = Tax::where('code', 'gst')->first();
 				if($taxgst == false)
 					$gstpercentage = 6;
 				else
@@ -283,7 +283,7 @@ class ProductUserController extends Controller{
 					$data['typename'] = 'Product';
 				}
 				# get Quantity Type
-				$configquantitytypedata = New Config_quantitytype;
+				$configquantitytypedata = New QuantityType;
 				$quantitytype = $configquantitytypedata->where('id', $datap['qtytype_id'])->first();
 				
 				$data['data'] = $datap;

@@ -15,11 +15,11 @@ use App\User;
 use App\Admin;
 use App\Models\Profile;
 use App\Models\Rank;
-use App\Referral;
-use App\ActiveDo;
-use App\ActiveSdo;
-use App\Wallet;
-use App\AgentPayment;
+use App\Models\Referral;
+use App\Models\ActiveDo;
+use App\Models\ActiveSdo;
+use App\Models\Wallet;
+use App\Models\AgentPayment;
 
 use Validator;
 use Session;
@@ -63,17 +63,18 @@ class UserController extends Controller
 
     public function dashboard()
     {
-        $user       = Auth::user();
-        $wallet     = $user->wallet;
-        $total_sales = AgentPayment::where('agent_id', $user->id)->sum('amount');
-        $uplines     = Referral::where('user_id', $user->id)->first()->getAncestors();
-        $dowlines    = Referral::where('user_id', $user->id)->first()->getImmediateDescendants();
+        $user           = Auth::user();
+        $wallet         = $user->wallet;
+        $total_sales    = AgentPayment::where('agent_id', $user->id)->sum('amount');
+        $uplines        = Referral::where('user_id', $user->id)->first()->getAncestors();
+        $downlines      = Referral::where('user_id', $user->id)->first()->getImmediateDescendants();
      //    $evoucher   = $user->wallet ? $user->wallet->evoucher: 0;
      //    $root       = Referral::where('user_id', $user->id)->first();
      //    $referrals  = $root->getDescendants();
      //    $direct_sponsor = $root->getImmediateDescendants();
     	// return view('user.dashboard', compact('evoucher', 'referrals','direct_sponsor'));
-    	return view('user.dashboard', compact('user', 'wallet', 'total_sales', 'uplines', 'dowlines'));
+    	return view('users.dashboard', compact('user', 'wallet', 'total_sales', 'uplines', 'downlines'));
+        // dd($downlines);
     }
 
     public function registrationMemberForm()
@@ -142,7 +143,7 @@ class UserController extends Controller
                 $root = Referral::create(['user_id' => $user->id, 'username' => $user->username, 'rank' => 'C']);
             }
 
-            return redirect('user/register-member')->with('success', 'Successfully register this account:'.$user->email);
+            return redirect('users/register-member')->with('success', 'Successfully register this account:'.$user->email);
         }
         
         return back()->with('fail', 'Failed to register! Please Check Your Security Code Is Correct Or Try Again. ');

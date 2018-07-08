@@ -11,14 +11,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Product;
 use App\Models\Product_promotion;
-use App\Models\Product_serial_number;
+use App\Models\stock;
 use App\Models\Product_image;
 use App\Models\Product_package;
 use App\Models\Product_promotion_gift;
 
-use App\Models\Config_productcategories;
-use App\Models\Config_quantitytype;
-use App\Models\Config_tax;
+use App\Models\ProductCategory;
+use App\Models\QuantityType;
+use App\Models\Tax;
 use App\Admin;
 use App\User;
 use App\Models\Role;
@@ -64,7 +64,7 @@ class ProductController extends Controller{
 	
 	public function listing(){
 		$productdata = New Product;
-		$configproductcategorydata = New Config_productcategories;
+		$configproductcategorydata = New ProductCategory;
 		$dataproductcategory = $configproductcategorydata->orderBy('category', 'asc')->get();
 		$categoryArr = array();
 		if(count($dataproductcategory) > 0){
@@ -78,7 +78,7 @@ class ProductController extends Controller{
 			'statusArr' => $this->statusArr,
 			'categoryArr' => $categoryArr,
 		);
-        return view('Inventory/product_listing',$data);
+        return view('inventory/product_listing',$data);
     }
 	
 	public function search($x = ''){
@@ -111,7 +111,7 @@ class ProductController extends Controller{
 		$productArr = $productArr->orderBy('id', 'desc')->paginate(20);
 		
 		
-		$configproductcategorydata = New Config_productcategories;
+		$configproductcategorydata = New ProductCategory;
 		$dataproductcategory = $configproductcategorydata->orderBy('category', 'asc')->get();
 		$categoryArr = array();
 		if(count($dataproductcategory) > 0){
@@ -153,13 +153,13 @@ class ProductController extends Controller{
 	
 	public function form(){
 		# get Quantity Type
-		$configquantitytypedata = New Config_quantitytype;
+		$configquantitytypedata = New QuantityType;
 		$dataquantitytype = $configquantitytypedata->orderBy('type', 'asc')->get();
 		# get Product Category
-		$configproductcategorydata = New Config_productcategories;
+		$configproductcategorydata = New ProductCategory;
 		$dataproductcategory = $configproductcategorydata->orderBy('category', 'asc')->get();
 		# get Tax GST percentage
-		$taxgst = Config_tax::where('code', 'gst')->first();
+		$taxgst = Tax::where('code', 'gst')->first();
 		if($taxgst == false)
 			$gstpercentage = 6;
 		else
@@ -174,7 +174,7 @@ class ProductController extends Controller{
 			'tabgallery' => '',
 		);
 		
-		return view('Inventory/product_form',$data);
+		return view('inventory/product_form',$data);
     }
 	
 	public function edit($id = 0, $gallery = 0){
@@ -186,13 +186,13 @@ class ProductController extends Controller{
 				return redirect("inventory/product/package_edit/" . $id . ($gallery > 0 ? '/1' : ''));
 			
 			# get Quantity Type
-			$configquantitytypedata = New Config_quantitytype;
+			$configquantitytypedata = New QuantityType;
 			$dataquantitytype = $configquantitytypedata->orderBy('type', 'asc')->get();
 			# get Product Category
-			$configproductcategorydata = New Config_productcategories;
+			$configproductcategorydata = New ProductCategory;
 			$dataproductcategory = $configproductcategorydata->orderBy('category', 'asc')->get();
 			# get Tax GST percentage		
-			$taxgst = Config_tax::where('code', 'gst')->first();
+			$taxgst = Tax::where('code', 'gst')->first();
 			if($taxgst == false)
 				$gstpercentage = 6;
 			else
@@ -205,8 +205,8 @@ class ProductController extends Controller{
 				$tabgallery = 'active';
 			}
 			# Total Product Stock
-			$productserialnumberdata = New Product_serial_number;
-			$inventorytotal = $productserialnumberdata->where('product_id',$id)->where('status','01')->count();
+			$productserialnumberdata = New stock;
+			$inventorytotal = $productserialnumberdata->products()->where('products_id',$id)->where('products.status','01')->count();
 			
 			$data['dataquantitytype'] = $dataquantitytype;
 			$data['dataproductcategory'] = $dataproductcategory;
@@ -216,7 +216,7 @@ class ProductController extends Controller{
 			$data['tabgallery'] = $tabgallery;
 			$data['inventorytotal'] = $inventorytotal;
 			
-			return view('Inventory/product_form',$data);
+			return view('inventory/product_form',$data);
 		}
 		return redirect("inventory/product/listing");
     }
@@ -234,14 +234,14 @@ class ProductController extends Controller{
 			$data['typestr'] =  array( '0' => '', '1' => 'Item','2' => 'Package');
 			
 			# get Quantity Type
-			$configquantitytypedata = New Config_quantitytype;
+			$configquantitytypedata = New QuantityType;
 			$data['quantitytype'] = $configquantitytypedata->where('id', $data['qtytype_id'])->first();
 			# get Product Category
-			$configproductcategorydata = New Config_productcategories;
+			$configproductcategorydata = New ProductCategory;
 			$data['productcategory'] = $configproductcategorydata->where('id', $data['category'])->first();
 			
 			# get Tax GST percentage		
-			$taxgst = Config_tax::where('code', 'gst')->first();
+			$taxgst = Tax::where('code', 'gst')->first();
 			if($taxgst == false)
 				$gstpercentage = 6;
 			else
@@ -316,8 +316,8 @@ class ProductController extends Controller{
 			}
 			
 			# Total Product Stock
-			$productserialnumberdata = New Product_serial_number;
-			$inventorytotal = $productserialnumberdata->where('product_id',$id)->where('status','01')->count();
+			$productserialnumberdata = New stock;
+			$inventorytotal = $productserialnumberdata->products()->where('products.products_id',$id)->where('products.status','01')->count();
 			
 			$data['created_by_name'] = $created_by_name;
 			$data['updated_by_name'] = $updated_by_name;
@@ -329,7 +329,7 @@ class ProductController extends Controller{
 			$data['monthArr'] = $this->monthArr;
 			$data['inventorytotal'] = $inventorytotal;
 			
-			return view('Inventory/product_view',$data);
+			return view('inventory/product_view',$data);
 		}
 		return redirect("inventory/product/listing");
     }
@@ -435,13 +435,13 @@ class ProductController extends Controller{
 	
 	public function package_form(){
 		# get Quantity Type
-		$configquantitytypedata = New Config_quantitytype;
+		$configquantitytypedata = New QuantityType;
 		$dataquantitytype = $configquantitytypedata->orderBy('type', 'asc')->get();
 		# get Product Category
-		$configproductcategorydata = New Config_productcategories;
+		$configproductcategorydata = New ProductCategory;
 		$dataproductcategory = $configproductcategorydata->orderBy('category', 'asc')->get();
 		# get Tax GST percentage
-		$taxgst = Config_tax::where('code', 'gst')->first();
+		$taxgst = Tax::where('code', 'gst')->first();
 		if($taxgst == false)
 			$gstpercentage = 6;
 		else
@@ -465,7 +465,7 @@ class ProductController extends Controller{
 			'tabgallery' => '',
 			'productArr' => $productArr, # not package product
 		);
-		return view('Inventory/product_package_form',$data);
+		return view('inventory/product_package_form',$data);
     }
 	
 	public function package_edit($id = 0, $gallery = 0){
@@ -476,7 +476,7 @@ class ProductController extends Controller{
 				return redirect("inventory/product/listing")->with("errorid"," Not Found ");
 				
 			# get Tax GST percentage		
-			$taxgst = Config_tax::where('code', 'gst')->first();
+			$taxgst = Tax::where('code', 'gst')->first();
 			if($taxgst == false)
 				$gstpercentage = 6;
 			else
@@ -498,8 +498,8 @@ class ProductController extends Controller{
 				$tabgallery = 'active';
 			}
 			
-			$configquantitytypedata = New Config_quantitytype;
-			$configproductcategorydata = New Config_productcategories;
+			$configquantitytypedata = New QuantityType;
+			$configproductcategorydata = New ProductCategory;
 			$packagedata = New Product_package;
 			$data['dataquantitytype'] = $configquantitytypedata->orderBy('type', 'asc')->get();
 			$data['dataproductcategory'] = $configproductcategorydata->orderBy('category', 'asc')->get();
@@ -527,14 +527,14 @@ class ProductController extends Controller{
 			$data['typestr'] =  array( '0' => '', '1' => 'Item','2' => 'Package');
 			
 			# get Quantity Type
-			$configquantitytypedata = New Config_quantitytype;
+			$configquantitytypedata = New QuantityType;
 			$data['quantitytype'] = $configquantitytypedata->where('id', $data['qtytype_id'])->first();
 			# get Product Category
-			$configproductcategorydata = New Config_productcategories;
+			$configproductcategorydata = New ProductCategory;
 			$data['productcategory'] = $configproductcategorydata->where('id', $data['category'])->first();
 			
 			# get Tax GST percentage		
-			$taxgst = Config_tax::where('code', 'gst')->first();
+			$taxgst = Tax::where('code', 'gst')->first();
 			if($taxgst == false)
 				$gstpercentage = 6;
 			else
@@ -572,7 +572,7 @@ class ProductController extends Controller{
 			$data['monthArr'] = $this->monthArr;
 			$data['product_list'] = $product_list;
 			$data['productArr'] = $productArr; # not package product
-			return view('Inventory/product_package_view',$data);
+			return view('inventory/product_package_view',$data);
 		}
 		return redirect("inventory/product/listing");
     }
@@ -824,7 +824,7 @@ class ProductController extends Controller{
 			$data['imageArr'] = $imagedata->where('product_id',$id)->orderBy('status', 'desc')->orderBy('id', 'desc')->get();
 			$data['productId'] = $id;
 			$data['productName'] = $checkproduct['code'] . ' (' . $checkproduct['description'] . ') '; 
-			return view('Inventory/product_reload_image',$data);
+			return view('inventory/product_reload_image',$data);
 		}
 		return "Not Valid";
 	}
@@ -966,7 +966,7 @@ class ProductController extends Controller{
 		$imagedata = New Product_image;
 		$productQuery = $productdata->orderBy('id', 'desc')->where('status',1)->where('notforsale', 0)->get();
 		# get Tax GST percentage		
-		$taxgst = Config_tax::where('code', 'gst')->first();
+		$taxgst = Tax::where('code', 'gst')->first();
 		if($taxgst == false)
 			$gstpercentage = 6;
 		else
@@ -1123,7 +1123,7 @@ class ProductController extends Controller{
 			$datap = $productdata->where('id', $id)->where('notforsale', 0)->first();
 			if($datap){
 				# get Tax GST percentage		
-				$taxgst = Config_tax::where('code', 'gst')->first();
+				$taxgst = Tax::where('code', 'gst')->first();
 				if($taxgst == false)
 					$gstpercentage = 6;
 				else
@@ -1231,7 +1231,7 @@ class ProductController extends Controller{
 					$data['typename'] = 'Product';
 				}
 				# get Quantity Type
-				$configquantitytypedata = New Config_quantitytype;
+				$configquantitytypedata = New QuantityType;
 				$quantitytype = $configquantitytypedata->where('id', $datap['qtytype_id'])->first();
 				
 				$data['data'] = $datap;

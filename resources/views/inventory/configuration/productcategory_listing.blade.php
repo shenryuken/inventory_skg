@@ -13,7 +13,7 @@ select{cursor:pointer;}
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb">
 	<li><a href="{{ url('home') }}">Home</a></li>                    
-	<li><a href="{{ url('inventory/configuration/productcategory') }}">Config - Product Category</a></li>
+	<li><a href="{{ url('inventory/setting/productcategory') }}">Config - Product Category</a></li>
 </ul>
 <!-- END BREADCRUMB -->                       
 
@@ -41,14 +41,14 @@ select{cursor:pointer;}
 			<div class="panel panel-default">
 
 				<div class="panel-heading">
-					<h3 class="panel-title">Configuration - Product Category Listing</h3>
+					<h3 class="panel-title">setting - Product Category Listing</h3>
 					<div class="actions pull-right">
 						<a href="javascript:;" class="btn btn-default  btn-sm btn-circle addnewcategory" title="Add New Product Category" >
 					<i class="fa fa-plus"></i> New Product Category </a>
 					</div>
 				</div>
 				<div class="panel-body panel-body-table">
-					<form id="form_search" class="form-horizontal" method="POST" action="{{ url('inventory/configuration/productcategory/form_search') }}" >
+					<form id="form_search" class="form-horizontal" method="POST" action="{{ url('inventory/setting/productcategory/form_search') }}" >
 						{{ csrf_field() }}
 						<div class="panel-body">
 							<div class="row">
@@ -77,7 +77,7 @@ select{cursor:pointer;}
 									<button type="submit" class="btn btn-primary">Search</button>
 								</div>
 								<div class="col-md-1">
-									<a href="{{ url('inventory/configuration/productcategory') }}" class="btn btn-danger">Reset</a>
+									<a href="{{ url('inventory/setting/productcategory') }}" class="btn btn-danger">Reset</a>
 								</div>
 							</div>
 						</div>
@@ -151,12 +151,12 @@ select{cursor:pointer;}
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Configuration - Product Category Form</h4>
+					<h4 class="modal-title">setting - Product Category Form</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-md-12">
-							<form id="submit_form" class="form-horizontal" method="POST" action="{{ url('inventory/configuration/productcategory/save') }}" >
+							<form id="submit_form" class="form-horizontal" method="POST" action="{{ url('inventory/setting/productcategory/save') }}" >
 								{{ csrf_field() }}
 								<input type="hidden" class="form-control base64" name="base64" value="" />
 								<div class="col-md-12">
@@ -235,7 +235,7 @@ $(function() {
 			buttons: [
 					{addClass: 'btn btn-success btn-clean', text: 'Ok', onClick: function($noty) {
 						$noty.close();
-						window.location.href = "{{ url('inventory/configuration/productcategory/delete') }}/" + base64data;
+						window.location.href = "{{ url('inventory/setting/productcategory/delete') }}/" + base64data;
 					}
 					},
 					{addClass: 'btn btn-danger btn-clean', text: 'Cancel', onClick: function($noty) {

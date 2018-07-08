@@ -10,7 +10,7 @@ select{cursor:pointer;}
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb">
 	<li><a href="{{ url('home') }}">Home</a></li>                    
-	<li><a href="{{ url('configuration/deliverytype') }}">Config - Delivery Type</a></li>
+	<li><a href="{{ url('setting/deliverytype') }}">Config - Delivery Type</a></li>
 </ul>
 <!-- END BREADCRUMB -->                       
 
@@ -38,14 +38,14 @@ select{cursor:pointer;}
 			<div class="panel panel-default">
 
 				<div class="panel-heading">
-					<h3 class="panel-title">Configuration - Delivery Type Listing</h3>
+					<h3 class="panel-title">setting - Delivery Type Listing</h3>
 					<div class="actions pull-right">
 						<a href="javascript:;" class="btn btn-default  btn-sm btn-circle addnew_deliverytype" title="Add New deliverytype" >
 					<i class="fa fa-plus"></i> New Delivery Type </a>
 					</div>
 				</div>
 				<div class="panel-body panel-body-table">
-					<form id="form_search" class="form-horizontal" method="POST" action="{{ url('configuration/deliverytype/form_search') }}" >
+					<form id="form_search" class="form-horizontal" method="POST" action="{{ url('setting/deliverytype/form_search') }}" >
 						{{ csrf_field() }}
 						<div class="panel-body">
 							<div class="row">
@@ -62,7 +62,7 @@ select{cursor:pointer;}
 									<button type="submit" class="btn btn-primary">Search</button>
 								</div>
 								<div class="col-md-1">
-									<a href="{{ url('configuration/deliverytype') }}" class="btn btn-danger">Reset</a>
+									<a href="{{ url('setting/deliverytype') }}" class="btn btn-danger">Reset</a>
 								</div>
 							</div>
 						</div>
@@ -137,12 +137,12 @@ select{cursor:pointer;}
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Configuration - Delivery Type Form</h4>
+					<h4 class="modal-title">setting - Delivery Type Form</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-md-12">
-							<form id="submit_form" class="form-horizontal" method="POST" action="{{ url('configuration/deliverytype/save') }}" >
+							<form id="submit_form" class="form-horizontal" method="POST" action="{{ url('setting/deliverytype/save') }}" >
 								{{ csrf_field() }}
 								<div class="alert alert-danger alert-dismissable alert_modal" hidden>
 									already exists
@@ -208,7 +208,7 @@ $(function() {
 		base64 = $(".base64").val().trim();
 		code_exist = 0;
 		$.ajax({
-			url: baseurl + '/configuration/deliverytype/check_existcode',
+			url: baseurl + '/setting/deliverytype/check_existcode',
 			method: "POST",
 			data: {'code': delivery_code,'base64': base64, '_token': '{{ csrf_token() }}',} ,
 			async: false,
@@ -241,7 +241,7 @@ $(function() {
 			buttons: [
 					{addClass: 'btn btn-success btn-clean', text: 'Ok', onClick: function($noty) {
 						$noty.close();
-						window.location.href = "{{ url('configuration/deliverytype/delete') }}/" + base64data;
+						window.location.href = "{{ url('setting/deliverytype/delete') }}/" + base64data;
 					}
 					},
 					{addClass: 'btn btn-danger btn-clean', text: 'Cancel', onClick: function($noty) {

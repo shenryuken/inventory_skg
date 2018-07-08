@@ -16,7 +16,6 @@ class CreateStocks extends Migration
         Schema::dropIfExists('stocks');
         Schema::create('stocks', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('supplier_id');
             $table->date('stock_date');
             $table->string('stock_in_no',32)->unique();
             $table->text('description')->nullable();

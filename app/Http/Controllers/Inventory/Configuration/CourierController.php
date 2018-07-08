@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Config_courier;
+use App\Models\Courier;
 
 use App\Admin;
 use App\User;
@@ -21,11 +21,11 @@ class CourierController extends Controller
     }
 	
 	public function index(){
-        return redirect('inventory/configuration/courier');
+        return redirect('inventory/setting/courier');
     }
 	
 	public function listing(){
-		$courierdata = New Config_courier;
+		$courierdata = New Courier;
 		$data = array(
 			'counttype' => $courierdata->count(),
 			'startcount' => 0,
@@ -36,14 +36,14 @@ class CourierController extends Controller
 	
 	public function search($x = ''){
 		if($x == '' || @unserialize(base64_decode($x)) == false)
-			return redirect('inventory/configuration/courier');
+			return redirect('inventory/setting/courier');
 			
 		$datadecode = unserialize(base64_decode($x));
 		$search = isset($datadecode['search']) ? $datadecode['search'] : '';
 		if($search == '')
-			return redirect('inventory/configuration/courier');
+			return redirect('inventory/setting/courier');
 		
-		$courierdata = New Config_courier;
+		$courierdata = New Courier;
 		if($search != ''){
 			$courierdata = $courierdata->where(function ($q) use($search){
 											$q->where('courier_code','LIKE','%'. $search .'%')
@@ -69,7 +69,7 @@ class CourierController extends Controller
 		$search = trim($postdata->input("search"));
 		
 		if($search == '')
-			return redirect('inventory/configuration/courier');
+			return redirect('inventory/setting/courier');
 			
 		$rowdata = array(
 			'search' => $search,
@@ -77,11 +77,11 @@ class CourierController extends Controller
 		
 		$base64data = trim(base64_encode(serialize($rowdata)), "=.");
 		
-        return redirect('inventory/configuration/courier/search/' . $base64data);
+        return redirect('inventory/setting/courier/search/' . $base64data);
     }
 	
     public function save(Request $postdata){
-		$courierdata = New Config_courier;
+		$courierdata = New Courier;
 		$data = array(
 			'courier_code' => strtoupper(trim($postdata->input("courier_code"))),
 			'courier_name' => strtoupper(trim($postdata->input("courier_name"))),
@@ -100,7 +100,7 @@ class CourierController extends Controller
 			$data['created_at'] = date('Y-m-d H:i:s');
 			$courierdata->insert($data);
 			
-			return redirect('inventory/configuration/courier')->with("info","Success Submit " . $data["courier_name"] . " (" . $data["courier_code"] . ")");
+			return redirect('inventory/setting/courier')->with("info","Success Submit " . $data["courier_name"] . " (" . $data["courier_code"] . ")");
 		}
 		else{
 			# update Courier
@@ -110,9 +110,9 @@ class CourierController extends Controller
 			
 			$courierdata->where('id',$selectid)->update($data);
 			if($search != '')
-				return redirect('inventory/configuration/courier/search/' . $search)->with("info","Success Save " . strtoupper(trim($postdata->input("type"))) . "");
+				return redirect('inventory/setting/courier/search/' . $search)->with("info","Success Save " . strtoupper(trim($postdata->input("type"))) . "");
 			else
-				return redirect('inventory/configuration/courier')->with("info","Success Save " . $postdata->input("type") . "");
+				return redirect('inventory/setting/courier')->with("info","Success Save " . $postdata->input("type") . "");
 		}
 	}
 	
@@ -127,7 +127,7 @@ class CourierController extends Controller
 		
 		#uppercase & Replacing multiple spaces with a single space
 		$code = trim(preg_replace('!\s+!', ' ', strtoupper($postdata->input("code"))));
-		$courierdata = New Config_courier;
+		$courierdata = New Courier;
 		$countcode = $courierdata->where('courier_code','=',$code)->where('id','<>', $id)->count();
 		if($countcode > 0)
 			return 1;
@@ -137,21 +137,21 @@ class CourierController extends Controller
 
     public function delete($data = ''){
 		if(@unserialize(base64_decode($data)) == true){
-			$courierdata = New Config_courier;
+			$courierdata = New Courier;
 			$datadecode = unserialize(base64_decode($data));
 			$selectid = isset($datadecode['selectid']) ? $datadecode['selectid'] : 0;
 			
 			$checkcourier = $courierdata->where('id', $selectid)->first();
 			if($checkcourier == false)
-				return redirect('inventory/configuration/courier')->with("errorid"," Data not found");
+				return redirect('inventory/setting/courier')->with("errorid"," Data not found");
 			
 			$search = isset($datadecode['search']) ? $datadecode['search'] : '';
 			
 			if($courierdata->where('id', $selectid)->delete()){
 				if($search != '')
-					return redirect('inventory/configuration/courier/search/' . $search)->with("info","Courier " . $checkcourier['courier_name'] . " (" . $checkcourier['courier_code'] . ") Deleted Successfully!!");
+					return redirect('inventory/setting/courier/search/' . $search)->with("info","Courier " . $checkcourier['courier_name'] . " (" . $checkcourier['courier_code'] . ") Deleted Successfully!!");
 				else
-					return redirect('inventory/configuration/courier')->with("info","Courier " . $checkcourier['courier_name'] . " (" . $checkcourier['courier_code'] . ")  Deleted Successfully!!");
+					return redirect('inventory/setting/courier')->with("info","Courier " . $checkcourier['courier_name'] . " (" . $checkcourier['courier_code'] . ")  Deleted Successfully!!");
 				
 			}
 		}
