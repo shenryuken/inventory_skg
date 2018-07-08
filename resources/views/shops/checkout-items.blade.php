@@ -305,12 +305,11 @@
         }).done(function(response){
             console.log(response)
             if(response.return.status == "01"){
+                console.log(response)
                 // document.location.reload();
-                window.location.href = "{{ url('shop/get-delivery-status') }}"+"/"+response.order_no['data'];
+                window.location.href = "{{ url('shop/get-delivery-status') }}"+"/"+response.order_no['data']
 
             }
-
-            console.log(response)
 
         }).fail(function(){
 

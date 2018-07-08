@@ -67,8 +67,12 @@
                                                         </span>
                                                     </div>
                                                 </td>
+                                                @if(Auth::guard('admin')->check() == true)
+                                                <td class="col-sm-1 col-md-1"><strong>RM{{ $value['price_staff'] }}</strong></td>
+                                                @else
                                                 <td class="col-sm-1 col-md-1"><strong>WM RM{{ $value['price_wm'] }}<br>EM RM{{ $value['price_em'] }}</strong></td>
                                                 <td class="col-sm-1 col-md-1 column-tot-price"><strong>WM RM{{ $value['total_price_wm'] }}<br>EM RM{{ $value['total_price_em'] }}</strong></td>
+                                                @endif
                                                 <td class="col-sm-1 col-md-1">
                                                     <button type="button" class="btn btn-danger remove-item">
                                                         <i class="glyphicon glyphicon-trash"></i>
@@ -104,21 +108,25 @@
                                     <hr>
                                     <table class="col-md-12" id="total-price">
                                         <tbody>
-                                            <tr id="row-shipping">
+                                           <!--  <tr id="row-shipping">
                                                 <td><h5>Shipping Fee</h5></td>
                                                 <td id="col-shipping"><h5>RM{{ $returnData['shippingPrice'] }}</h5></td>
-                                            </tr>
+                                            </tr> -->
                                             <tr id="row-total-price">
                                                 <td><h5>Total Price</h5></td>
+                                                @if(Auth::guard('admin')->check() == true)
+                                                <td id="col-total-price">RM{{ $returnData['totalPrice_staff'] }}</h5></td>
+                                                @else
                                                 <td id="col-total-price"><h5>WM RM{{ $returnData['totalPrice_wm'] }}<br>EM RM{{ $returnData['totalPrice_em'] }}</h5></td>
+                                                @endif
                                             </tr>
                                             <tr>
                                                 <td colspan="2"><hr></td>
                                             </tr>
-                                            <tr id="row-grand-total">
+                                            <!-- <tr id="row-grand-total">
                                                 <td><h4>Grand Total</h4></td>
                                                 <td id="col-grand-total"><h4>WM RM{{ $returnData['grandTotalPrice_wm'] }}<br>EM RM{{ $returnData['grandTotalPrice_em'] }}</h4></td>
-                                            </tr>
+                                            </tr> -->
                                             <tr>
                                                 <td>
                                                     <button type="button" class="btn btn-default continue-shopping">
@@ -332,12 +340,12 @@
 
     });
 
-    function fn_update_quantity(quantity,id,callback){
+    function fn_update_quantity(quantity,agent_id,callback){
         console.log(baseUrl)
         var data = {
 
             _token : "{!! csrf_token() !!}",
-            id   :  id,
+            agent_id   :  agent_id,
             quantity : quantity
         };
 

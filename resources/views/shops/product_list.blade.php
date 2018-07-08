@@ -1,9 +1,12 @@
 @extends('layouts.joli.app')
 @include('shops.css.agent_css')
 @include('shops.modal_dialog_package_list')
+@include('shops.modal_dialog_gift_list')
 @section('title','Product Listing')
 @section('content')
 
+
+<span hidden="">{{ $id }}</span>
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb">
 	<li><a href="javascript:;">Home</a></li>                    
@@ -20,7 +23,7 @@
 					<div class="panel-heading">
 						<h3 class="panel-title"><strong>Shopping Cart</strong></h3>
 						<ul class="panel-controls pull-right">
-							<a href="{{ url('shop/get-cart-items') }}/{{ Auth::user()->id }}" style="font-size: 30px;" title="Cart List">
+							<a href="{{ url('shop/get-cart-items') }}/{{ $id }}" style="font-size: 30px;" title="Cart List">
 								<i class="glyphicon glyphicon-shopping-cart cart"></i>
 							</a>
 							<span class="informer informer-danger" id="itemCount"></span>
@@ -78,23 +81,35 @@
 										</div>		
 								        <div class="panel-footer">
 								        	<div class="col-md-12" style="">
-								        		<!-- <div class="row"> -->
-								        			@if(Auth::guard('admin')->check() == true)
-								        			@if(isset($value['ori_staff_aftergst']))
-							        				<span class="ori-price">
-								       				<del>RM{{ $value['ori_staff_aftergst'] }}</del>
-									       			</span>
-									       			@endif
-								        			@else
-								        			@if(isset($value['ori_wm_aftergst']) && isset($value['ori_em_aftergst']))
-									       			<span class="ori-price">
-									       				WM :<del>RM{{ $value['ori_wm_aftergst'] }}</del>
-									       				<br>
-									       				EM :<del>RM{{ $value['ori_em_aftergst'] }}</del>
-									       			</span>
-									       			@endif
-									       			@endif
-								        		<!-- </div> -->	
+								        		<div class="row">
+								        			<div class="col-md-7" style="">
+								        				<input type="hidden" name="promotion_id" id="promotion_id" value="{{ isset($value['promotion_id']) ? $value['promotion_id'] : '' }}">
+									        			@if(Auth::guard('admin')->check() == true)
+									        			@if(isset($value['ori_staff_aftergst']))
+								        				<span class="ori-price">
+									       				<del>RM{{ $value['ori_staff_aftergst'] }}</del>
+										       			</span>
+										       			@endif
+									        			@else
+									        			@if(isset($value['ori_wm_aftergst']) && isset($value['ori_em_aftergst']))
+										       			<span class="ori-price">
+										       				WM :<del>RM{{ $value['ori_wm_aftergst'] }}</del>
+										       				<br>
+										       				EM :<del>RM{{ $value['ori_em_aftergst'] }}</del>
+										       			</span>
+										       			@endif
+										       			@endif
+										       		</div>
+										       		<div class="col-md-5">
+										       			<div style="margin-top: 20px;">
+											       			<span {{ $value['gift_status'] }}>
+												       			<button class="btn btn-secondary gift-list" type="button" style="font-size: 10px;">
+												       				<font font size="3" color="orange">Gift</font>
+												       			</button>
+												       		</span>
+											       		</div>
+										       		</div>
+								        		</div>	
 								        		<div class="row">
 													<div class="col-md-7" style="">
 														<div class="info">
@@ -119,7 +134,8 @@
 											       	<div class="col-md-5">
 											       		<div style="margin-top: 20px;">
 											       			<span {{ $value['package_status'] }}>
-												       			<button class="btn btn-secondary pack-list" type="button" style="font-size: 10px;">Package
+												       			<button class="btn btn-secondary pack-list" type="button" style="font-size: 10px;">
+												       				<font font size="3" color="orange">Package</font>
 												       			</button>
 												       		</span>
 											       		</div>
@@ -175,6 +191,12 @@
         </div>
     </div>
 </div>
+
+@if(Auth::guard('admin')->check())
+@php $order_type = 'staff' @endphp
+@else
+@php $order_type = 'agent' @endphp
+@endif
 
 <script type="text/javascript">
 
@@ -324,14 +346,18 @@
 		var quantity = $(this).closest('form.save-item').children('.item-row').children('.info').children('.info-detail').children('div.qty').find('input.quantity').val();
 		// var agent_id = $(this).closest('form.save-item').find('input#agent_id').val();
 		// var _token = $(this).closest('form.save-item').find('input#_token').val();
-		var agent_id = "{{ Auth::user()->id }}";
-
+		var agent_id = "{{ $id }}";
+		var order_type = "{{ $order_type }}";
+		// console.log(id)
 		var item = [];
-		console.log(quantity)
+		console.log(order_type)
+
 
 		if(quantity > 0 || quantity != ""){
+
 			item ={
 
+				order_type : order_type,
 				product_id : product_id,
 				agent_id : agent_id,
 				quantity : quantity
@@ -442,6 +468,78 @@ function fn_get_cart_items(product_id,agent_id){
 
 	});
 }
+
+$('button.gift-list').on('click',function(){
+
+	var product_id = $(this).closest('.item-content').find('input#id').val();
+	var promotion_id = $(this).closest('.item-content').find('input#promotion_id').val();
+	console.log(product_id,promotion_id)
+	// window.location.href = "{{ url('agent/get_product_package') }}"+"/"+product_id;
+	var data = {
+
+		_token : "{!! csrf_token() !!}",
+		product_id : product_id,
+		promotion_id : promotion_id
+	};
+
+	$.ajax({
+
+		url 	: baseUrl+"/shop/get-promotion-gift",
+		type 	: "GET",
+		data 	: data,
+		dataType: "json",
+		contentType: "application/json",
+
+	}).done(function(respone){
+
+		if(respone.return.status == "01"){
+
+			var gift = respone.gift;
+			var tag = "";	
+			console.log(gift);
+
+			tag += "<table class='col-md-12 table-package'>";
+			tag += "<thead class='thead-package'>";
+			tag += "<tr class='tr-package'>";
+			tag += "<th colspan='2' class='th-package'>";
+			tag += "Product";
+			tag += "</th>";
+			tag += "<th class='th-package'>";
+			tag += "Quantity";
+			tag += "</th>";
+			tag += "</tr>";
+			tag += "</thead>";
+			tag += "<tbody class='tbody-package'>";
+			Object.keys(gift).forEach(function(el){
+				// console.log("el",el);
+				var urlimg = "{!!asset('')!!}";
+				var img = gift[el].image;
+				tag += "<tr class='tr-package'>";
+				tag += "<td style='width:150px;' class='td-package'>";
+				tag += "<img class='media-object' src='"+urlimg+"storage/"+img+"' style='height: 150px; margin-bottom:10px;'>";
+				tag += "</td>";
+				tag += "<td style='' class='td-package'>";
+				tag += "<h4 style='margin-left:5px;'>"+gift[el].description+"</h4>";
+				tag += "</td>";
+				tag += "<td style='width:150px;' class='td-package'>";
+				tag += "<h4 style='margin-left:5px;'>"+gift[el].quantity+"</h4>";
+				tag += "</td>";
+				tag += "</tr>";
+			});
+			tag += "</tbody>";
+			tag += "</table>";
+
+			console.log(tag)
+			$('div.promotion-gift-list').html(tag);
+		}
+		setTimeout(function(){
+            $("#GiftList").modal();
+        },500);
+
+	}).fail(function(respone){
+
+	});
+});
 </script>
 
 @endsection

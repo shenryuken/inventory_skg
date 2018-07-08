@@ -146,8 +146,9 @@ Route::get('shop/checkout-items/{agent_id?}/{delivery_type?}','ShopController@ch
 Route::get('shop/get-address','ShopController@getAddress');
 Route::post('shop/save-address','ShopController@saveAddress');
 Route::get('shop/get-product-package','ShopController@getProductPackage');
+Route::get('shop/get-promotion-gift','ShopController@getPromotionGift');
 Route::post('shop/place-order','ShopController@placeOrder');
-Route::get('shop/get-delivery-status','ShopController@getDeliveryStatus');
+Route::get('shop/get-delivery-status/{order_no?}','ShopController@getDeliveryStatus');
 
 
 
