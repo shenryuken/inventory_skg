@@ -111,6 +111,7 @@ class ShopController extends Controller
         }
         // dd($return);
         return view('shops.product_list',compact('product','count','id'));
+
     }
 
     public function addCartItems(Request $request){
