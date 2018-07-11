@@ -157,6 +157,16 @@
         </ul>
     </li>
 
+    <li class="xn-openable <?php echo in_array(Request::segment(1), array("inventory/order")) ? "active" : "" ; ?>"" >
+        <a href="javascript:;"><span class="glyphicon glyphicon-shopping-cart"></span> Order Management </a>
+        <ul>
+            <li class="<?php echo in_array(Request::segment(1) . '/' . Request::segment(2), array("inventory/order/delivery")) ? "active" : "" ; ?>">
+                <a href="{{ url('inventory/order/delivery') }}"><span class="glyphicon glyphicon-list-alt"></span> Delivery Order </a>
+            </li>
+            
+        </ul>
+    </li>
+
 
 
     <li class="xn-openable <?php echo in_array(Request::segment(1).'/'.Request::segment(2), array("inventory/setting")) ? "active" : "" ; ?>">

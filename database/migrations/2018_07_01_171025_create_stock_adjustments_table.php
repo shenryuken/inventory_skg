@@ -17,6 +17,7 @@ class CreateStockAdjustmentsTable extends Migration
             $table->increments('id');
             $table->integer('stockadjustment_type_id');
             $table->string('description',100)->nullable();
+            $table->date('adjustment_date');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->timestamps();

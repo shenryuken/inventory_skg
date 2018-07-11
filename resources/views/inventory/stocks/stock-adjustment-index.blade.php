@@ -45,7 +45,7 @@
                                     <h2>Stock Adjustment Form</h2>
                                     
                                 </div>
-                            <form  id="create_stock" method="POST" class="form-horizontal" action="{{url('inventory/stock/in/store')}}">
+                            <form  id="create_adjustment" method="POST" class="form-horizontal" action="{{url('inventory/stock/adjustment/store')}}">
                         <div class="panel-body">
                             
                                 {{ csrf_field() }}
@@ -69,10 +69,10 @@
                         
                                             <div class="col-md-4">
                                                     <label for="stock_in_date">Adjustment Type</label>                        
-                                                    <select class="form-control" name="supplier" id="supplier">
+                                                    <select class="form-control" name = "adjustment_type" id="adjustment_type">
                                                             <option value=""></option>
                                                             @foreach($stockadjustment_type as $adjustment)
-                                                                    <option  value="{{ $adjustment->id }}">{{$adjustment->adjustment}}</option>
+                                                                    <option   value="{{ $adjustment->id }}">{{$adjustment->adjustment}}</option>
                                                                 @endforeach
                                                         </select>
                                             </div>
@@ -100,7 +100,7 @@
                                                 <label for="Quantity">Quantity</label>                        
                                                 <input type="number" class="form-control" id="input_quantity">
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-4 hide">
                                                 <label for="Barcode">Upload</label>                        
                                                 <input type="file" class="btn-danger" name="csv" id="inputCsv" data-filename-placement="inside" title="File name goes inside" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
                                         </div>    
@@ -143,7 +143,7 @@
                     </div>
                     </div>
                     <div class="panel-footer">
-                            <input type="button" id="clearBtn" class="btn btn-default" value="Clear Form">
+                            <input type="button" id="clearBtn" class="btn btn-default hide" value="Clear Form">
                             <input type="button" id="save"class="btn btn-primary pull-right" value="Save">
                     </div>
                         </form>
@@ -177,7 +177,7 @@ $(document).ready(function() {
 
     $(document).on('click','#save',function(){
         getSerialNumber();
-        $('#create_stock').submit();
+        $('#create_adjustment').submit();
         
     })
     
@@ -210,7 +210,15 @@ $(document).ready(function() {
                         var input = $('#input_barcode').val();
 
                         if(input!=''){
-                            if(checkIfArrayIsUnique(input) == true){
+                            //Check Barcode exist
+                            $.ajax({
+                            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            data:{barcode:input},	
+                            url: "adjustment/check_barcode"
+                            }).done(function(result){
+                                console.log(result)
+                                if(result.status == "01"){
+                                    if(checkIfArrayIsUnique(input) == true){
                                 t.row.add( [
                                     counter,
                                     input,
@@ -218,16 +226,24 @@ $(document).ready(function() {
                                 ] ).draw( false );
                                 counter++;
                                 $("#input_quantity").prop('disabled', true);
-                            }else{
-                                alert('Duplicate Serial Number')
-                            }
+                                }else{
+                                    alert('Duplicate Barcode')
+                                }
+                                }else{
+                                    alert('Barcode Not Exist')
+                                }
+                                calcTotal()     
+                                
+
+                            });
+                            
                         }else{
                             alert('Input cannot be empty')
                         }
                         $('#input_barcode').val('');             
                     }   
 
-                    calcTotal()                  
+                                 
                 }); 
 
 
@@ -307,7 +323,7 @@ $(document).ready(function() {
         var qty = qty.split("\n")
         var post_array = [];
        
-        
+        total = 0;
         //sort to each qty
         for(let x = 0; x < barcode_arr.length;x++){
 

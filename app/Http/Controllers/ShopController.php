@@ -17,20 +17,22 @@ use App\Models\OrderTransection;
 use App\Models\Config_tax;
 use App\Models\Product_image;
 use App\Models\Product_package;
+use App\Models\Product_promotion_gift;
 use App\Models\DeliveryType;
 use App\Models\Address;
 use App\Models\AgentOrderHdr;
 use App\Models\AgentOrderItem;
 use App\Models\GlobalStatus;
-use App\Models\GlobalNr;
-
+// use App\Models\GlobalNr;
+use App\Classes\GlobalNumberRange;
 
 use Validator;
 use Session;
 use Cart;
 
 class ShopController extends Controller
-{
+{   
+
     public function skgMall(){
         $product = Array();
         $count = 0;
@@ -64,17 +66,40 @@ class ShopController extends Controller
                 $data['productArr']['Package_Promotion'][$key4]['package_status'] = "";
             }
 
-            // echo "<pre>";
-            // echo print_r($data);
-            // echo "</pre>";
-            // die();
             // dd($data);
+            // dd(Auth::guard('admin')->check());
+            
+            if(Auth::guard('admin')->check() == true){
+                $id = Auth::guard('admin')->user()->id;
+                $order_type = "staff";
+            }
+            else{
+                $id = Auth::user()->id;
+                $order_type = "agent";
+            }
 
             $product = array_merge($data['productArr']['Product'],$data['productArr']['Package'],$data['productArr']['Promotion'],$data['productArr']['Package_Promotion']);
 
-            // dd($data,$product);
+            // dd($product);
+            foreach ($product as $k => $v) {
 
-            $count = OrderTransection::where('agent_id',Auth::user()->id)->count();
+                if(isset($v['promotion_id'])){
+
+                    $gift = Product_promotion_gift::where('promotion_id',$v['promotion_id'])->first();
+
+                    if($gift != null){
+
+                        $product[$k]['gift_status'] = '';
+
+                    }
+                }
+                else{
+                    $product[$k]['gift_status'] = 'hidden';
+                }
+            }
+
+            // dd($data,$product);
+            $count = OrderTransection::where('agent_id',$id)->where('order_type',$order_type)->count();
 
             $return['message'] = 'succssfuly';
             $return['status'] = '01';
@@ -84,8 +109,9 @@ class ShopController extends Controller
             $return['status'] = '02';
             $image = "";
         }
-        // return $e->getMessage();
-        return view('shops.product_list',compact('product','count'));
+        // dd($return);
+        return view('shops.product_list',compact('product','count','id'));
+
     }
 
     public function addCartItems(Request $request){
@@ -94,7 +120,17 @@ class ShopController extends Controller
 
         try{
 
-            $cartItem = OrderTransection::select('id','product_id','agent_id','quantity')
+             if(Auth::guard('admin')->check() == true){
+                $id = Auth::guard('admin')->user()->id;
+                $order_type = "staff";
+            }
+            else{
+                $id = Auth::user()->id;
+                $order_type = "agent";
+            }
+
+            $cartItem = OrderTransection::select('id','order_type','product_id','agent_id','quantity')
+                                        ->where('order_type',$data['order_type'])
                                         ->where('product_id',$data['product_id'])
                                         ->where('agent_id',$data['agent_id'])
                                         ->first();
@@ -102,10 +138,11 @@ class ShopController extends Controller
                 
                 $addToCart = Array(
 
+                    'order_type' => $data['order_type'],
                     'agent_id' => $data['agent_id'],
                     'product_id' => $data['product_id'],
                     'quantity' => $data['quantity'], 
-                    'created_by' => Auth::user()->id,
+                    'created_by' => $id,
                     'created_at' => \Carbon\Carbon::now(new \DateTimeZone('Asia/Kuala_Lumpur'))
                 );
 
@@ -113,19 +150,20 @@ class ShopController extends Controller
             }
             else{
                 $updateQuantity = $cartItem['quantity'] + $data['quantity'];
-                OrderTransection::where('product_id',$data['product_id'])
+                OrderTransection::where('order_type',$data['order_type'])
+                                ->where('product_id',$data['product_id'])
                                 ->where('agent_id',$data['agent_id'])
                                 ->update([
 
                                     'quantity' => $updateQuantity,
-                                    'updated_by' =>  Auth::user()->id,
+                                    'updated_by' =>  $id,
                                     'updated_at' => \Carbon\Carbon::now()
 
                                 ]);
 
             }
 
-            $count = OrderTransection::count();
+            $count = OrderTransection::where('agent_id',$data['agent_id'])->where('order_type',$data['order_type'])->count();
             $return['message'] = "succssfuly inserted";
             $return['status'] = "01";            
             
@@ -142,29 +180,44 @@ class ShopController extends Controller
 
     public function getCartItems($agent_id = null){
 
+        if(Auth::guard('admin')->check() == true){
+            $id = Auth::guard('admin')->user()->id;
+            $order_type = "staff";
+        }
+        else{
+            $id = Auth::user()->id;
+            $order_type = "agent";
+        }
+
         try{
 
             $cartItems = OrderTransection::leftJoin('products','products.id','=','orders_transection.product_id')
-                                        ->select('orders_transection.id','products.id as product_id','products.name','products.description','products.price_wm','products.price_em','products.quantity_min'
+                                        ->select('orders_transection.id','products.id as product_id','products.name','products.description','products.price_wm','products.price_em','products.price_staff','products.quantity_min'
                                             ,'products.quantity as stock_quantity','orders_transection.quantity as total_quantity')
+                                        ->where('order_type',$order_type)
                                         ->where('orders_transection.agent_id','=',$agent_id)
                                         ->get()->toArray();
 
             $totalPrice_wm = 0.00;
             $totalPrice_em = 0.00;
+            $totalPrice_staff = 0.00;
             $grandTotalPrice_wm = 0.00;
             $grandTotalPrice_em = 0.00;
+            $grandTotalPrice_staff = 0.00;
             $shipping_fee = 0.00;
             foreach ($cartItems as $key => $value){
 
                 $cartItems[$key]['price_wm'] = $this->fn_calc_gst_price($cartItems[$key]['price_wm']);
                 $cartItems[$key]['price_em'] = $this->fn_calc_gst_price($cartItems[$key]['price_em']);
+                $cartItems[$key]['price_staff'] = $this->fn_calc_gst_price($cartItems[$key]['price_staff']);
 
                 $total_price_wm = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price_wm']);
                 $total_price_em = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price_em']);
+                $total_price_staff = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price_staff']);
 
                 $cartItems[$key]['total_price_wm'] = $total_price_wm;
                 $cartItems[$key]['total_price_em'] = $total_price_em;
+                $cartItems[$key]['total_price_staff'] = $total_price_em;
 
                 $image = product_image::select('type','description','file_name','path')
                                         ->where('product_id',$cartItems[$key]['product_id'])
@@ -175,35 +228,40 @@ class ShopController extends Controller
 
                 $totalPrice_wm = $totalPrice_wm + (float)str_replace(",", "", $cartItems[$key]['total_price_wm']);
                 $totalPrice_em = $totalPrice_em + (float)str_replace(",", "", $cartItems[$key]['total_price_em']);
+                $totalPrice_staff = $totalPrice_staff + (float)str_replace(",", "", $cartItems[$key]['total_price_em']);
 
             }
 
-            if($totalPrice_wm != 0.00 && $totalPrice_em != 0.00){
-                if($totalPrice_wm < 300.00 || $totalPrice_em < 300.00){
+            // if($totalPrice_wm != 0.00 && $totalPrice_em != 0.00){
+            //     if($totalPrice_wm < 300.00 || $totalPrice_em < 300.00){
 
-                    $shipping_fee = number_format(10.00,2);
-                }
-                else{
+            //         $shipping_fee = number_format(10.00,2);
+            //     }
+            //     else{
 
-                    $shipping_fee = number_format(0.00,2);
-                }
-            }
-            else{
+            //         $shipping_fee = number_format(0.00,2);
+            //     }
+            // }
+            // else{
 
-                 $shipping_fee = number_format(0.00,2);
-            }
+            //      $shipping_fee = number_format(0.00,2);
+            // }
 
             $totalPrice_wm = round($totalPrice_wm,2);
             $totalPrice_em = round($totalPrice_em,2);
+            $totalPrice_staff = round($totalPrice_staff,2);
 
             $grandTotalPrice_wm = (float)$totalPrice_wm + (float)$shipping_fee;
             $grandTotalPrice_em = (float)$totalPrice_em + (float)$shipping_fee;
+            $grandTotalPrice_staff = (float)$totalPrice_staff + (float)$shipping_fee;
 
             $totalPrice_wm = number_format($totalPrice_wm,2);
             $totalPrice_em = number_format($totalPrice_em,2);
+            $totalPrice_staff = number_format($totalPrice_staff,2);
 
             $grandTotalPrice_wm = number_format(round($grandTotalPrice_wm,2),2);
             $grandTotalPrice_em = number_format(round($grandTotalPrice_em,2),2);
+            $grandTotalPrice_staff = number_format(round($grandTotalPrice_staff,2),2);
 
 
 
@@ -212,9 +270,11 @@ class ShopController extends Controller
                 'agent_id'        => $agent_id,
                 'grandTotalPrice_wm' => $grandTotalPrice_wm,
                 'grandTotalPrice_em' => $grandTotalPrice_em,
+                'grandTotalPrice_staff' => $grandTotalPrice_staff,
                 'shippingPrice'  => $shipping_fee,
                 'totalPrice_wm' => $totalPrice_wm,
-                'totalPrice_em' => $totalPrice_em
+                'totalPrice_em' => $totalPrice_em,
+                'totalPrice_staff' => $totalPrice_staff
             ];
 
             $deliveryType = DeliveryType::select('id','delivery_code as code','type_description as description')
@@ -259,19 +319,27 @@ class ShopController extends Controller
 
     public function updateCartitems(Request $request){
 
-        $id = $request->get('id');
+        $agent_id = $request->get('agent_id');
         $quantity = $request->get('quantity');
         // dd($quantity);
+
+        if(Auth::guard('admin')->check()){
+
+            $id = Auth::guard('admin')->user()->id;
+        }
+        else{
+            $id = Auth::user()->id;
+        }
 
         try {
 
             foreach($quantity as $key => $value) {
 
-                OrderTransection::where('agent_id',$id)   
+                OrderTransection::where('agent_id',$agent_id)   
                                     ->where('product_id',$value['product_id'])
                                     ->update([
                                         'quantity' => $value['quantity'],
-                                        'updated_by' => Auth::user()->id,
+                                        'updated_by' => $id,
                                         'updated_at' => \Carbon\Carbon::now()
                                     ]);
             }
@@ -293,22 +361,35 @@ class ShopController extends Controller
     public function checkoutItems($agent_id = null,$deliveryType = null){
 
         // dd($delivery_type);
+
+            if(Auth::guard('admin')->check()){
+
+                $address_code = $agent_id."_staff";
+                $order_type = "staff";
+
+            }
+            else{
+                $address_code = $agent_id."_agent";
+                $order_type = "agent";
+            }
+
         try{
 
             $addressData = Address::select('id','name','address_code','street1','street2','poscode','city','state','country')
-                                    ->where('address_code','=',$agent_id."_AGENT")
+                                    ->where('address_code','=',$address_code)
                                     ->where('reminder_flag','=','x')
                                     ->first();
                                     
             if($addressData == null){
                 $addressData = Address::select('id','name','address_code','street1','street2','poscode','city','state','country')
-                                    ->where('address_code','=',$agent_id."_AGENT")
+                                    ->where('address_code','=',$address_code)
                                     ->first();
             }
             // dd($addressData);
             $cartItems = OrderTransection::leftJoin('products','products.id','=','orders_transection.product_id')
-                                            ->select('orders_transection.id','products.id as product_id','products.name','products.description','products.price_wm','products.price_em','products.quantity_min'
+                                            ->select('orders_transection.id','products.id as product_id','products.name','products.description','products.price_wm','products.price_em','products.price_staff','products.quantity_min'
                                                 ,'products.quantity as stock_quantity','orders_transection.quantity as total_quantity')
+                                            ->where('order_type',$order_type)
                                             ->where('orders_transection.agent_id','=',$agent_id)
                                             ->get()->toArray();
 
@@ -318,18 +399,25 @@ class ShopController extends Controller
             $shipping_fee = 0.00;
             foreach ($cartItems as $key => $value){
 
-                if(strtolower($addressData->state) == strtolower("Sabah") || strtolower($addressData->state) ==  strtolower("Sarawak")){
+                if(Auth::guard('admin')->check()){
 
-                    $cartItems[$key]['price'] = $this->fn_calc_gst_price($cartItems[$key]['price_em']);
+                    $cartItems[$key]['price'] = $this->fn_calc_gst_price($cartItems[$key]['price_staff']);
                     $total_price = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price']);
                     $cartItems[$key]['total_price'] = $total_price;
                 }
                 else{
-                    $cartItems[$key]['price'] = $this->fn_calc_gst_price($cartItems[$key]['price_wm']);
-                    $total_price = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price']);
-                    $cartItems[$key]['total_price'] = $total_price;
+                    if(strtolower($addressData->state) == strtolower("Sabah") || strtolower($addressData->state) ==  strtolower("Sarawak")){
+
+                        $cartItems[$key]['price'] = $this->fn_calc_gst_price($cartItems[$key]['price_em']);
+                        $total_price = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price']);
+                        $cartItems[$key]['total_price'] = $total_price;
+                    }
+                    else{
+                        $cartItems[$key]['price'] = $this->fn_calc_gst_price($cartItems[$key]['price_wm']);
+                        $total_price = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price']);
+                        $cartItems[$key]['total_price'] = $total_price;
+                    }
                 }
-                
 
                 $prdimage = Product_image::select('type','description','file_name','path')
                                         ->where('product_id',$cartItems[$key]['product_id'])
@@ -612,6 +700,46 @@ class ShopController extends Controller
         return compact('return','package','data');
     }
 
+    public function getPromotionGift(Request $request){
+
+        $product_id = $request->get('product_id');
+        $promotion_id = $request->get('promotion_id');
+
+        try {
+
+            $gift = [];
+            $gift = Product_promotion_gift::where('promotion_id',$promotion_id)
+                                        ->where('product_id',$product_id)
+                                        ->get();
+
+            if(!empty($gift)){
+
+                foreach ($gift as $key => $value) { 
+                    
+                    $image = Product_image::select('type','description','file_name','path')
+                                        ->where('product_id',$value['product_id'])
+                                        ->orderBy('status','desc')
+                                        ->first();
+
+                    $gift[$key]['image'] = ($image['path'] == null ? '' : $image['path']);
+                }
+            }
+
+            // dd($data);
+
+            $return['message'] = "succssfuly retrived";
+            $return['status'] = "01";
+        }
+        catch(\Exception $e){
+            
+            $return['message'] = $e->getMessage();
+            $return['status'] = "02";
+        }
+
+        // dd($return,$gift);
+        return compact('return','gift');
+    }
+
     public function placeOrder(Request $request){
 
             $agent_id = (!empty($request->get('agent_id')) ? $request->get('agent_id') : '');
@@ -621,20 +749,32 @@ class ShopController extends Controller
             $shipping_fee = (!empty($request->get('shipping_fee')) ? $request->get('shipping_fee') : '');
             $delivery_type = (!empty($request->get('delivery_type')) ? $request->get('delivery_type') : '');
 
+            if(Auth::guard('admin')->check()){
+
+                // $address_code = $agent_id."_staff";
+                $order_type = "staff";
+
+            }
+            else{
+                // $address_code = $agent_id."_agent";
+                $order_type = "agent";
+            }
+
             // dd($$request->get('billing_id'),$request->get('shipping_id'));
         try{
 
-            $cartItems = OrderTransection::leftJoin('product','product.id','=','agent_select_product.product_id')
-                                            ->select('agent_select_product.id','product.id as product_id','product.name','product.description'
-                                                ,'product.price_wm','product.price_em','product.quantity_min'
-                                                ,'product.quantity as stock_quantity','agent_select_product.quantity as total_quantity')
-                                            ->where('agent_select_product.agent_id','=',$agent_id)
+            $cartItems = OrderTransection::leftJoin('products','products.id','=','orders_transection.product_id')
+                                            ->select('orders_transection.id','products.id as product_id','products.name','products.description'
+                                                ,'products.price_wm','products.price_em','products.price_staff','products.quantity_min'
+                                                ,'products.quantity as stock_quantity','orders_transection.quantity as total_quantity')
+                                            ->where('order_type',$order_type)
+                                            ->where('orders_transection.agent_id','=',$agent_id)
                                             ->get();
 
             // dd($cartItems);
             if(count($cartItems) > 0){
 
-                $order_no = (new DeliveryOrderController)->generate_orderno("SO");
+                $order_no = (new GlobalNumberRange)->generate_orderno("SO");
                 // dd($order_no);
                 $order_item = [];
                 $total_product_quantity = 0;
@@ -688,7 +828,8 @@ class ShopController extends Controller
                 }
 
                 if($x && $y){
-                    OrderTransection::where('agent_id',$agent_id)
+                    OrderTransection::where('order_type',$order_type)
+                                    ->where('agent_id',$agent_id)
                                     ->delete();
 
                     Address::where('id',$shipping_id)
@@ -719,7 +860,7 @@ class ShopController extends Controller
     }
 
     public function getDeliveryStatus($order_no = null){
-        // echo $order_no;
+        // echo $order_no;die();
         try{
 
             $orderHdr = AgentOrderHdr::leftJoin('delivery_type','delivery_type.delivery_code','=','agent_order_hdr.delivery_type')
