@@ -33,6 +33,7 @@ class ShopController extends Controller
 {
     public function skgMall(){
         $product = Array();
+        $count = 0;
 
         try{
 
@@ -83,7 +84,7 @@ class ShopController extends Controller
             $return['status'] = '02';
             $image = "";
         }
-        // dd($return);
+        // return $e->getMessage();
         return view('shops.product_list',compact('product','count'));
     }
 
