@@ -18,4 +18,9 @@ class Address extends Model
     {
     	return $this->belongsTo('App\User');
     }
+
+    public function AgentOrderHdr()
+    {
+        return $this->belongsTo('App\Models\AgentOrderHdr');
+    }
 }
