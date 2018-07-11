@@ -116,17 +116,6 @@ trait CountAndRecordBonus
     //Bonus Personal Rebate
     public function getPersonalRebate($data)
     {
-        $data   = [
-                    'user_id'     => $id,
-                    'rank'        => $rank,
-                    'total_pv'    => $pv;
-                    'product_id'  => $product_id, 
-                    'from_user_id'=> $id,
-                    'bonus'       => 0.20,
-                    'bonus_type'  => 3,
-                    'description' => 'Personal Rebate'
-                 ];
-        
         if($data['rank'] >= 3)
         {
             // $prsnl_rebate  = $this->getPersonalRebate($id);
@@ -141,9 +130,7 @@ trait CountAndRecordBonus
                 $wallet->personal_rebate = $wallet->personal_rebate + $bonus_personal_rebate;
                 $wallet->save();
 
-                
-                $bonus->amount          = $bonus_personal_rebate;
-                $bonus->description     = "Personal Rebate Purchase For Product: ".$product->name." Bonus: ". $bonus_personal_rebate ."%";
+                $data['description']     = "Personal Rebate Purchase For Product: ".$product->name." Bonus: ". $bonus_personal_rebate ."%";
                
                 $this->recordBonusToDb($data, $bonus_personal_rebate);
             }
@@ -208,6 +195,214 @@ trait CountAndRecordBonus
         }
     }
     //END Bonus Personal Rebate
+
+    //START Direct Sponsor
+    public function getDirectSponsorBonus($data)
+    {
+        // $data   = [
+        //             'user_id'     => $id,
+        //             'rank'        => $rank,
+        //             'total_pv'    => $pv;
+        //             'product_id'  => $product_id, 
+        //             'from_user_id'=> $id,
+        //             'bonus'       => 0.20,
+        //             'bonus_type'  => 5,
+        //             'description' => 'Direct Sponsor'
+        //          ];
+        //for reference only
+
+        $node           = Referral::where('user_id', $data['user_id'])->first();
+        $node_rank      = $this->getUserRankId($data['user_id']);
+        $node_wallet    = Wallet::where('user_id', $data['user_id'])->first();
+        $first_pv       = $node_wallet->first_purchased;
+        $second_pv      = $node_wallet->pv - $first_pv ; 
+
+        $parent         = $this->getUpline($data['user_id']);
+
+         //if($node_rank > 2 && ($node_rank <= $parent_rank) )
+        if(!is_null($parent) )
+        {
+            $parent_rank    = $this->getUserRankId(is_null($parent) ? 0 : $parent->user_id );
+            $parent_wallet  = Wallet::where('user_id', $parent->user_id)->first();
+           
+            if($parent_rank > 2 && ($node_rank <= $parent_rank) )
+            {
+                
+                // $bonus         
+                $first_bonus    = $first_pv * number_format(0.5, 2);
+                $second_bonus   = $second_pv * number_format(0.2, 2);
+                $total_bonus    = $first_bonus + $second_bonus;
+
+                if($parent_wallet->pv >= 100)
+                {
+                    $parent_wallet->direct_sponsor = $parent_wallet->direct_sponsor + $total_bonus; 
+                    $parent_wallet->save();
+
+                    $data['user_id']    = $parent->user_id;
+
+                    $this->recordBonusToDb($data, $total_bonus);
+                } 
+                else
+                {
+                    $data['user_id']    = $parent->user_id;
+
+                    $first_bonus    = $first_pv * number_format(0.5, 2);
+                    $second_bonus   = $second_pv * number_format(0.2, 2);
+                    $total_bonus    = $first_bonus + $second_bonus;
+
+                    $this->getIndirectSponsorBonus($data, $total_bonus);
+
+                }
+            }
+            elseif($parent_rank > 2 && ($node_rank > $parent_rank) )
+            {
+                // $bonus       = number_format(0.5, 2);
+                $first_bonus    = $first_pv * number_format(0.3, 2);
+                $second_bonus   = $second_pv * number_format(0.1, 2);
+                $total_bonus    = $first_bonus + $second_bonus;
+
+                if($parent_wallet->pv >= 100)
+                {
+                    $parent_wallet->direct_sponsor = $parent_wallet->direct_sponsor + ($first_bonus + $second_bonus);
+                    $parent_wallet->save();
+
+                    $data['user_id']         = $parent->user_id;
+                    $this->recordBonusToDb($data, $total_bonus);
+                }
+
+                // $balance_first_bonus  = number_format(0.2, 2);
+                // $balance_second_bonus = number_format(0.1, 2);
+
+                $data['user_id']= $parent->user_id;
+                $first_bonus    = $first_pv * number_format(0.2, 2);
+                $second_bonus   = $second_pv * number_format(0.1, 2);
+                $total_bonus    = $first_bonus + $second_bonus;
+
+                $this->getIndirectSponsorBonus($data, $total_bonus);
+
+            }
+            elseif($parent_rank <= 2)
+            {
+                $first_bonus    = $first_pv * number_format(0.5, 2);
+                $second_bonus   = $second_pv * number_format(0.2, 2);
+                $total_bonus    = $first_bonus + $second_bonus;
+
+                $this->getIndirectSponsorBonus($data, $total_bonus);
+            }
+        }
+    } 
+
+    public function getIndirectSponsorBonus($data, $total_bonus)
+    {
+        $upline = $this->getUpline($data['user_id']);
+
+        if(!is_null($upline))
+        {
+            $upline_rank    = $this->getUserRankId($upline->user_id);
+            $upline_wallet  = Wallet::where('user_id', $upline->user_id )->first();
+
+            if($upline_rank >= 3 && $upline_wallet->pv >= 100)
+            {
+                $upline_wallet  = Wallet::where('user_id', $upline->user_id )->first();
+                $upline_wallet->direct_sponsor = $upline_wallet->direct_sponsor + $total_bonus;
+                $upline_wallet->save();
+
+                $data['user_id']         = $upline->user_id;
+                $data['bonus_type_id']   = 6;
+                $data['description']     = "Indirect Sponsor";
+
+                $this->recordBonusToDb($data, $total_bonus);
+            }
+            else
+            {
+                $data['user_id'] = $upline->user_id;
+                $this->getIndirectSponsorBonus($data, $total_bonus);
+            }
+        }  
+    }
+
+    //END Direct Sponsor
+
+
+    //Calculate Personal GPV with personal PV
+    public function calculate_active_do_personal_gpv($user_id)
+    {
+        $root = Referral::where('user_id', $user_id)->first();
+        $root_wallet = Wallet::where('user_id', $user_id)->first();
+ 
+        $descendants = $root->getDescendants();
+        $first_pv_purchased = 0;
+        $personal_gpv = 0;
+        $first_gpv_purchased = $root_wallet ? $root_wallet->first_purchased:0;
+        $right        = 0;
+        $qualified    = array();
+
+        foreach ($descendants as $descendant)
+        {
+            $rank = $this->getUserRankId($descendant->user_id);
+
+            if($rank < 4 && $descendant->rgt > $right)
+            {
+                $wallet = Wallet::where('user_id', $descendant->user_id)->first();
+
+                $first_gpv_purchased = $first_gpv_purchased + ($wallet ? $wallet->first_purchased:0) ;
+                $personal_gpv = $personal_gpv + ($wallet ? $wallet->pv:0);//without root personal pv
+                $qualified[]  = $descendant->toArray();
+            }
+            elseif ($rank >= 4 )
+            {
+                if($right < $descendant->rgt)
+                {
+                    $right = $descendant->rgt;
+                }
+            }
+        }
+
+        $root_wallet = Wallet::where('user_id', $user_id)->first();//root personl pv
+
+        $active_do = ActiveDo::where('user_id', $user_id)->first();
+        $active_do->personal_gpv = $personal_gpv + ($root_wallet ? $root_wallet->pv:0);
+        $active_do->first_gpv_purchased = $first_gpv_purchased;
+        $active_do->save();
+
+        // echo '<pre>';
+        // print_r($qualified);
+        // echo '</pre>';
+        // echo '</br>';
+        // echo $personal_gpv;
+        // echo '</br>';
+        // echo $right;
+
+        //return $active_do;
+    }
+    //Calculate Personal GPV without personal PV
+    //END
+
+    public function calculate_total_group_pv()
+    {
+        $users = User::all();
+
+        foreach($users as $user)
+        {
+            $total_pv = 0;
+
+            if($user->rank_id >= 4)
+            {
+                $node        = Referral::where('user_id', $user->id)->first();
+                $descendants = $node->getDescendantsAndSelf(); 
+                
+                foreach($descendants as $descendant)
+                {
+                    $wallet = Wallet::where('user_id', $descendant->user_id)->first();
+                    $total_pv = $total_pv + (is_null($wallet) ? 0:$wallet->pv);
+                }
+
+                $active_do = ActiveDo::where('user_id', $user->id)->first();
+                $active_do->total_group_pv = $total_pv;
+                $active_do->save();
+            }
+        }
+    }
 
     public function recordBonusToDb($data, $total_bonus)
     {
