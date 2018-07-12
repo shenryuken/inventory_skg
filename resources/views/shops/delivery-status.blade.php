@@ -1,13 +1,13 @@
-@extends('header')
-@section('title','Config')
+@extends('layouts.joli.app')
+@section('title','Delivery Status')
 @section('content')
 
  <script src="{!! asset('joli/js/plugins/smartwizard/jquery.smartWizard-2.0.min.js') !!}"></script>
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb">
     <li><a href="javascript:;">Home</a></li>                    
-    <li class="{{ url('agent') }}">Agent</li>
-    <li class="{{ url('agent') }}">Select Product</li>
+    <li class="{{ url('agent') }}">Mall</li>
+    <li class="{{ url('agent') }}">Delivery Status</li>
 </ul>
 <!-- END BREADCRUMB -->
 <!-- PAGE CONTENT WRAPPER -->

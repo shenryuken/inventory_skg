@@ -11,6 +11,7 @@ use Session;
 use App\Models\Product;
 use App\Models\StockadjustmentType;
 use App\Models\StockItem;
+use App\Models\StockAdjustment;
 
 
 class StockAdjustmentController extends Controller
@@ -34,118 +35,89 @@ class StockAdjustmentController extends Controller
 			$product = StockItem::all()->sum('quantity');	
 		}else{
 			$product = Product::find($product_id);	
-			$product = $product->StockItems()->sum('quantity');
+			$product = $product->StockItems()->where('stock_items.status','01')->sum('quantity');
 		}
 		return $product;
 	}
-	
 
+	public function checkBarcode(Request $request){
+		$barcode = $request->get('barcode');
 
-    public function create(){		
-        return view('inventory.suppliers.create');
-    }
-
-    public function list(){		
-		try{			
-			$supplier = supplier::all();
-
-			
-		}catch(\Exception $e){
-			return 'Error: '.$e->getMessage();
-		}		
 		
-		return view('inventory.suppliers.list', compact('supplier'));
-    }
+		$StockItem = StockItem::where('barcode',$barcode)->first();	
 
-    public function show($id){		
-		try{			
-            $supplier = supplier::find($id);
-			
-		}catch(\Exception $e){
-			return 'Error: '.$e->getMessage();
+		if($StockItem){
+			return ['status' => "01"];
+		}else{
+			return ['status' => "02"];
 		}
-		
-        return view('inventory.suppliers.show',compact('supplier'));
-    }
-    
-    public function edit($id){
-		
-		try{
-			
-            $supplier = supplier::find($id);
-			
-		}catch(\Exception $e){
-			return 'Error: '.$e->getMessage();
-        }
-        return view('inventory.suppliers.edit',compact('supplier'));
-    }
-    
-    public function update(Request $request){
-        $postData = $this->validate($request,[
-            'telephone' => 'required',                
-        ]);
-
-            $id = $request->get('id');
-
-			$supplier = [
-				'supplier_code'	=> $request->get('supplier_code'),
-				'company_name'	=> $request->get('company_name'),
-				'street' 		=> $request->get('street'),
-				'street2'		=> $request->get('street2'),
-				'postcode' 		=> $request->get('postcode'),
-				'city'	 		=> $request->get('city'),
-				'state' 		=> $request->get('state'),
-				'country'	 	=> $request->get('country'),
-				'telephone_no'	=> $request->get('telephone'),
-				'fax_no'	 	=> $request->get('fax'),
-				'attn_no' 		=> $request->get('attn_no'),
-				'email' 		=> $request->get('email'),
-				'updated_by'	=> Auth::user()->id,
-				'updated_at'	=> Carbon::now(new \DateTimeZone('Asia/Kuala_Lumpur'))
-			];
-            
-            
-			supplier::where('id',$id)->update($supplier);
-        
-        Session::flash('message', 'Successfully updated supplier!');
-		return redirect('inventory/supplier/view/'.$id);
-    }
+	}
 
     public function store(Request $request){
-        $postData = $this->validate($request,[
-            'telephone' => 'required',                
+
+        $this->validate($request,[
+            'adjustment_date' => 'required',
+            'product' => 'required',
+            'adjustment_type' => 'required',
         ]);
-			$data = [
-				'supplier_code'	=> $request->get('supplier_code'),
-				'company_name'	=> $request->get('company_name'),
-				'street' 		=> $request->get('street'),
-				'street2'		=> $request->get('street2'),
-				'postcode' 		=> $request->get('postcode'),
-				'city'	 		=> $request->get('city'),
-				'state' 		=> $request->get('state'),
-				'country'	 	=> $request->get('country'),
-				'telephone_no'	=> $request->get('telephone'),
-				'fax_no'	 	=> $request->get('fax'),
-				'attn_no' 		=> $request->get('attn_no'),
-				'email' 		=> $request->get('email'),
-				'created_by'	=> Auth::user()->id,
-				'created_at'	=> Carbon::now(new \DateTimeZone('Asia/Kuala_Lumpur'))
-			];
-            
-            $supplier = new supplier($data);
-            $supplier->save();
-			$new_id = $supplier->id;
         
-        Session::flash('message', 'Successfully saved supplier!');
-		return redirect('inventory/supplier/view/'.$new_id);
+        $serialNumberArray = json_decode($request->input('serial_number_scan_json'));
+        $stock = new StockAdjustment;
+        $stock->adjustment_date  	= $request->adjustment_date;
+        $stock->stockadjustment_type_id   = $request->adjustment_type;
+        $stock->description = $request->description;
+        $stock->created_by = Auth::user()->id;
+        $stock->save();
+        
+        $product_stock_array = [
+            'stock_adjustment_id'   => $stock->id,
+            'barcode'               => $serialNumberArray
+        ];
+
+        $this->storeProductStocks($product_stock_array);
+
+        return back()->with('success', 'Successfully saved!');
+
     }
 
+    public function storeProductStocks($product_stock_array){
+        
+        foreach($product_stock_array['barcode'] as $product_supplier){
+            
+            $stock_item = StockItem::where('barcode',$product_supplier->barcode)->first();
 
+            if($stock_item){
+                StockItem::where('barcode',$product_supplier->barcode)->update([
+                    "stock_adjustment_id" => $product_stock_array['stock_adjustment_id'],
+                    "status" => "02",
+                    'updated_by'    => Auth::user()->id,
+                ]);
+            }else{
 
-    public function destroy($id){
-        $supplier = supplier::find($id)->delete();
-        return redirect('inventory/supplier')->with('success','Information has been  deleted');
+                $product_stock_array = [
+                    'stock_adjustment_id'   => $product_stock_array['stock_adjustment_id'],
+                    'adjustment_quantity'       => $product_supplier->quantity,
+                    'status'        => '02',
+                    'created_by'    => Auth::user()->id,
+                    'updated_at'    => Carbon::now()    
+                ];
+    
+                StockItem::insert($product_stock_array);
+            }           
+        }
     }
+
+        //Generate SR
+    private function generate_docno(){
+        $LatestDocNo = stock::max('id');    
+            $numberOnly = preg_replace("/[^0-9]/", '', $LatestDocNo);
+            if(!$numberOnly){
+                $numberOnly = "00000";
+            }
+            $generatedNo =  str_pad($numberOnly+1, 5, '0', STR_PAD_LEFT);
+            return "SR".($generatedNo);      
+    }
+
 	
 
 }

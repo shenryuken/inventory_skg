@@ -146,8 +146,9 @@ Route::get('shop/checkout-items/{agent_id?}/{delivery_type?}','ShopController@ch
 Route::get('shop/get-address','ShopController@getAddress');
 Route::post('shop/save-address','ShopController@saveAddress');
 Route::get('shop/get-product-package','ShopController@getProductPackage');
+Route::get('shop/get-promotion-gift','ShopController@getPromotionGift');
 Route::post('shop/place-order','ShopController@placeOrder');
-Route::get('shop/get-delivery-status','ShopController@getDeliveryStatus');
+Route::get('shop/get-delivery-status/{order_no?}','ShopController@getDeliveryStatus');
 
 
 
@@ -275,9 +276,17 @@ Route::get('inventory/stock/list', 'Inventory\StockInController@list');
 #Stock Adjustment
 Route::get('inventory/stock/adjustment/', 'Inventory\StockAdjustmentController@index');
 Route::get('inventory/stock/adjustment/stock_product', 'Inventory\StockAdjustmentController@stockProduct');
+Route::get('inventory/stock/adjustment/check_barcode', 'Inventory\StockAdjustmentController@checkBarcode');
+Route::post('inventory/stock/adjustment/store', 'Inventory\StockAdjustmentController@store');
 #Stock Reports
 Route::get('inventory/stock/current/', 'Inventory\StockReportController@indexCurrentStock');
 Route::get('inventory/stock/report/', 'Inventory\StockReportController@index');
+Route::get('inventory/stock/barcode/{x?}', 'Inventory\StockReportController@barcode');
+
+#Order Delivery
+Route::get('inventory/order/sales', 'Inventory\OrderController@salesIndex');
+Route::get('inventory/order/delivery/{order_no?}', 'Inventory\OrderController@deliveryIndex');
+Route::get('inventory/order/view/{order_no?}', 'Inventory\OrderController@salesDetail');
 
 #Product
 Route::get('inventory/product', function () {  return redirect("inventory/product/listing"); });

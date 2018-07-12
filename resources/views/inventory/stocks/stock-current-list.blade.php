@@ -44,11 +44,11 @@ textarea {
                             <div class="panel-heading">
                                     <h3 class="panel-title">Current Stock Listing</h3>
                                     <div class="actions pull-right">
-                                            <a href="{{ url('stock/in/new') }}" class="btn btn-default  btn-sm btn-circle" title="Stock In" >
+                                            <a href="{{ url('inventory/stock/in') }}" class="btn btn-default  btn-sm btn-circle" title="Stock In" >
                                                 <i class="fa fa-plus"></i> Stock In </a>
                                     </div>
                                     <div class="actions pull-right">
-                                        <a href="{{ url('stock/adjustment') }}" class="btn btn-default  btn-sm btn-circle" title="Adjust Stock" >
+                                        <a href="{{ url('inventory/stock/adjustment') }}" class="btn btn-default  btn-sm btn-circle" title="Adjust Stock" >
                                             <i class="fa fa-plus"></i> Stock Adjustment </a>
                                     </div>
                                     <div class="actions pull-right">
