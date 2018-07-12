@@ -14,17 +14,22 @@ use App\Models\Wallet;
 use App\Models\Store;
 use App\Http\Controllers\Inventory\ProductController;
 use App\Models\OrderTransection;
-use App\Models\Config_tax;
+use App\Models\Tax;
 use App\Models\Product_image;
 use App\Models\Product_package;
 use App\Models\Product_promotion_gift;
 use App\Models\DeliveryType;
 use App\Models\Address;
+use App\Models\AgentAddress;
+use App\Models\OrderHdr;
+use App\Models\OrderItem;
 use App\Models\AgentOrderHdr;
 use App\Models\AgentOrderItem;
 use App\Models\GlobalStatus;
-// use App\Models\GlobalNr;
+use App\Models\Rank;
 use App\Classes\GlobalNumberRange;
+use App\Models\UserPurchase;
+// use App\Models\Store;
 
 use Validator;
 use Session;
@@ -36,6 +41,8 @@ class ShopController extends Controller
     public function skgMall(){
         $product = Array();
         $count = 0;
+
+        $session = session(["STORE"=>"SKG_STORE"]);
 
         try{
 
@@ -628,7 +635,7 @@ class ShopController extends Controller
 
             $AfterGst = 0.00;
             $price = (float)$price;
-            $gstRate = config_tax::select('percent')
+            $gstRate = Tax::select('percent')
                                 ->where('code',"gst")
                                 ->first();
 
@@ -748,15 +755,20 @@ class ShopController extends Controller
             $shipping_fee = (!empty($request->get('shipping_fee')) ? $request->get('shipping_fee') : '');
             $delivery_type = (!empty($request->get('delivery_type')) ? $request->get('delivery_type') : '');
 
+            $sessionData = session("STORE","default");
+
+            // dd($sessionData);
             if(Auth::guard('admin')->check()){
 
                 // $address_code = $agent_id."_staff";
                 $order_type = "staff";
+                $id = Auth::guard('admin')->user()->id;
 
             }
             else{
                 // $address_code = $agent_id."_agent";
                 $order_type = "agent";
+                $id = Auth::user()->id;
             }
 
             // dd($$request->get('billing_id'),$request->get('shipping_id'));
@@ -788,7 +800,7 @@ class ShopController extends Controller
                         'product_qty' => $v['total_quantity'],
                         'product_typ' => "",
                         'product_status' => "01",
-                        'created_by' =>  Auth::user()->id,
+                        'created_by' =>  $id,
                         'created_at' => \Carbon\Carbon::now()
                     );
 
@@ -813,16 +825,75 @@ class ShopController extends Controller
                     'status' => "01",
                     'bill_address' => (int)$billing_id,
                     'ship_address' => (int)$shipping_id,
-                    'created_by' =>  Auth::user()->id,
+                    'created_by' =>  $id,
                     'created_at' => \Carbon\Carbon::now()
 
                 ];
 
-                $x = AgentOrderHdr::insert($orderHdr);
-                // dd($orderHdr,$order_item);
-                if($x){
-                    foreach ($order_item as $key => $value){
-                        $y = AgentOrderItem::insert($order_item[$key]);
+                if($sessionData == "SKG_STORE"){
+
+                    $x = OrderHdr::insert($orderHdr);
+                    // dd($orderHdr,$order_item);
+                    if($x){
+                        foreach ($order_item as $key => $value){
+                            $y = OrderItem::insert($order_item[$key]);
+                        }
+                    }
+                }
+                else if($sessionData == "AGENT_STORE"){
+
+                    $x = AgentOrderHdr::insert($orderHdr);
+                    // dd($orderHdr,$order_item);
+                    if($x){
+                        foreach ($order_item as $key => $value){
+                            $y = AgentOrderItem::insert($order_item[$key]);
+                        }
+                    }
+
+                    $user = User::find($id);
+                    $rank = $user->rank()->first();
+
+                    if($rank->code_name == "C" && $rank->code_name == "LC"){
+
+                        foreach($cartItems as $k => $v){
+
+                            $lv_product = [
+
+                                'user_id' => $id,
+                                'product_id' => $v['product_id'],
+                                'product_name' => $v['name'],
+                                'serial_no' => "",
+                                'price' => "",
+                                'pv' => "",
+                                'status' => "",
+                                'created_at' => \Carbon\Carbon::now()
+                            ];
+
+                            UserPurchase::insert($lv_product);
+
+                        }
+
+                    }
+                    else{
+
+                        foreach($cartItems as $k => $v){
+
+                            $lv_product = [
+
+                                'user_id' => $id,
+                                'product_id' => $v['product_id'],
+                                'product_name' => $v['name'],
+                                'serial_no' => "",
+                                'price' => "",
+                                'pv' => "",
+                                'status' => "",
+                                'lock_status' => "",
+                                'created_at' => \Carbon\Carbon::now()
+                            ];
+
+                            Store::insert($lv_product);
+
+                        }
                     }
                 }
 
@@ -855,7 +926,7 @@ class ShopController extends Controller
             $return['status'] = "02";
         }
 
-        return compact('return','order_no');
+        return compact('return','order_no','rank');
     }
 
     public function getDeliveryStatus($order_no = null){
@@ -916,6 +987,7 @@ class ShopController extends Controller
     		elseif($count == 5) break;
     	}
 
+        // dd($qualified_agents);
         return view('shops.agents-store-list', compact('qualified_agents'));
         // echo '<pre>';
         // var_dump($agents->toArray());
@@ -924,6 +996,8 @@ class ShopController extends Controller
 
     public function agentStore($id)
     {
+
+        $session = session(["STORE"=>"AGENT_STORE"]);
         $user     = User::find($id);
         $products = Store::where('user_id', $id)->groupBy('product_id')->get();
 
