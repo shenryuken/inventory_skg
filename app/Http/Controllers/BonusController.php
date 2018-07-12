@@ -301,8 +301,6 @@ class BonusController extends Controller
     }
 
 
-    
-
     //calculate 3 generations active do group bonus
     public function group_bonus($user_id)
     {
