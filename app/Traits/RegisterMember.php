@@ -12,6 +12,11 @@ use App\Models\NewProfile;
 use App\Admin;
 use App\User;
 
+use Validator;
+use Session;
+use Cart;
+use DateTime;
+
 trait RegisterMember
 {
     public function saveMemberToDb($newUser)
@@ -42,6 +47,7 @@ trait RegisterMember
 
         $user->save();
         $user->profile()->save($profile);
+        $wallet = $this->updateOrCreateWallet();
 
         $rank_id = $user->rank_id;
 
@@ -127,6 +133,56 @@ trait RegisterMember
         {
             $active_sdo->delete();
         }
+    }
+
+    public function updateOrCreateWallet($user_id)
+    {
+        $total_pv         = $this->getTotalPv();
+        $total_rmvp       = $this->getTotalRmvp();
+
+        $wallet = Wallet::firstOrNew(['user_id'  => $user_id]);
+       
+        if(!$wallet->exists || $wallet->purchased == 0)
+        {
+            $wallet->rmvp            = $wallet->rmvp + $total_rmvp;
+            $wallet->pv              = $wallet->pv + $total_pv;
+            $wallet->first_purchased = $total_pv; 
+            $wallet->purchased       = 1;
+        }
+        else
+        {
+            $wallet->rmvp            = $wallet->rmvp + $total_rmvp;
+            $wallet->pv              = $wallet->pv + $total_pv;
+            $wallet->purchased       = $wallet->purchased + 1;
+        }
+        
+        $wallet->save();
+
+        $updateUserRank = $this->updateUserRank($user_id);
+    }
+
+    public function getTotalPv()
+    {
+        $pv = 0;
+
+        foreach (Cart::content() as $item) {
+            $product = Product::find($item->id);
+            $pv      = $pv + ($item->qty * $product->pv);
+        }
+
+        return $pv;
+    }
+
+    public function getTotalRmvp()
+    {
+        $rmvp = 0;
+
+        foreach (Cart::content() as $item) {
+            $product = Product::find($item->id);
+            $rmvp     = $rmvp + ($item->qty * $product->wm_price);
+        }
+
+        return $rmvp;
     }
 
 }

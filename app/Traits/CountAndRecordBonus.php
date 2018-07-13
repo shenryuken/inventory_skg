@@ -1,8 +1,20 @@
 <?php namespace App\Traits;
 
+use App\Models\ActiveDo;
+use App\Models\ActiveSdo;
 use App\Models\Bonus;
 use App\Models\Referral;
 use App\Models\Wallet;
+use App\Models\Product;
+use App\Models\Rank;
+use App\Models\UserPurchase;
+use App\Models\Store;
+use App\Models\Sale;
+use App\Models\SdoLicense;
+use App\Models\SdoMerit;
+use App\Models\UserBonus;
+
+use App\User;
 
 trait CountAndRecordBonus
 {
@@ -13,13 +25,13 @@ trait CountAndRecordBonus
         {
             $this->getOverrideRetailProfitBonus($data);
         }
-        elseif($data['rank_id'] == 2)
+        elseif($data['rank'] == 2)
         {
             $wallet = Wallet::where('user_id', $data['user_id'])->first();
             if($wallet && $wallet->purchased >= 2)
             {
                 //count retails profit and update data
-                $bonus_retail_profit   = (number_format(0.05, 2) * $total_price);
+                $bonus_retail_profit   = (number_format(0.05, 2) * $data['total_price']);
                 $wallet->retail_profit = $wallet->retail_profit + $bonus_retail_profit;
                 $wallet->save();
                 //save bonus record to db
@@ -37,7 +49,7 @@ trait CountAndRecordBonus
         }
         elseif($data['rank'] >= 3)
         {
-            $bonus_retail_profit   = (number_format(0.20, 2) * $total_price);
+            $bonus_retail_profit   = (number_format(0.20, 2) * $data['total_price']);
             //count retail profit 
             $wallet = Wallet::where('user_id', $data['user_id'])->first();
             $wallet->retail_profit = $wallet->retail_profit + $bonus_retail_profit;
@@ -55,11 +67,9 @@ trait CountAndRecordBonus
         {
             $upline_rank = $this->getUserRankId($upline->user_id);
             
-            $data   = [
-                'user_id'     => $upline->user_id,
-                'rank'        => $upline_rank,
-            ];
-
+            
+            $data['user_id']     = $upline->user_id;
+            $data['rank']        = $upline_rank;
             $data['bonus_type']  = 2;
             $data['description'] = 'Override Retail Profit';
 
@@ -78,7 +88,7 @@ trait CountAndRecordBonus
                 }
                 elseif($data['rank'] == 2)
                 {
-                    $bonus_override_retail_profit = (number_format(0.05, 2)) * $data['total_price']);
+                    $bonus_override_retail_profit = (number_format(0.05, 2)) * $data['total_price'];
 
                     $wallet->retail_profit = $wallet->retail_profit + $bonus_override_retail_profit;
                     $wallet->save();
@@ -96,7 +106,7 @@ trait CountAndRecordBonus
             {
                 if($data['rank'] >= 3)
                 {
-                    $bonus_override_retail_profit = (number_format(0.15, 2)) * $data['total_price']);
+                    $bonus_override_retail_profit = (number_format(0.15, 2)) * $data['total_price'];
                     
                     $wallet->retail_profit = $wallet->retail_profit + $bonus_override_retail_profit;
                     $wallet->save();
@@ -119,10 +129,10 @@ trait CountAndRecordBonus
         if($data['rank'] >= 3)
         {
             // $prsnl_rebate  = $this->getPersonalRebate($id);
-            $bonus_personal_rebate = number_format(0.2, 2) * $pv;
-            $product               = Product::find($product_id);
+            $bonus_personal_rebate = number_format(0.2, 2) * $data['total_pv'];
+            $product               = Product::find($data['product_id']);
 
-            $wallet = Wallet::firstOrNew(['user_id'  => $id] );
+            $wallet = Wallet::firstOrNew(['user_id'  => $data['user_id']]);
 
             if( $wallet && $wallet->pv >= 100)
             {
@@ -171,7 +181,7 @@ trait CountAndRecordBonus
                     // $parent_rebate      = $this->getPersonalRebate($parent->user_id);
                     // $balance_rebate     = $parent_rebate - $last_rebate;
 
-                    $evoucher   = (0.20) * $data['total_pv'];
+                    $override_bonus_personal_rebate   = (0.20) * $data['total_pv'];
 
                     $wallet = Wallet::firstOrNew(['user_id'  => $parent->user_id] );
 
@@ -180,9 +190,9 @@ trait CountAndRecordBonus
                         $wallet->personal_rebate = $wallet->personal_rebate + $evoucher;
                         $wallet->save();
 
-                        $data['user_id'] = $parent->user_id
+                        $data['user_id'] = $parent->user_id;
 
-                        $this->recordBonusToDb($data, $bonus_personal_rebate);
+                        $this->recordBonusToDb($data, $override_bonus_personal_rebate);
                     }
 
                     $x = 0;

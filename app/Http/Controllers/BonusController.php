@@ -33,6 +33,8 @@ use DB;
 
 class BonusController extends Controller
 {
+    use CountAndRecordBonus;
+
     public function index()
     {
         return view('bonus.index');
@@ -256,7 +258,7 @@ class BonusController extends Controller
                     'description' => 'Personal Retail Profit'
                  ];
 
-        $this->getRetailProfitBonus($data)
+        $this->getRetailProfitBonus($data);
       
     }
 
@@ -274,7 +276,7 @@ class BonusController extends Controller
         $data   = [
                     'user_id'     => $id,
                     'rank'        => $rank,
-                    'total_pv'    => $pv;
+                    'total_pv'    => $pv,
                     'product_id'  => $product_id, 
                     'from_user_id'=> $id,
                     'bonus'       => 0.20,
@@ -287,10 +289,12 @@ class BonusController extends Controller
 
     public function direct_sponsor_bonus($user_id, $pv)
     {
+        $rank   = $this->getUserRankId($user_id);
+
         $data   = [
                     'user_id'     => $user_id,
                     'rank'        => $rank,
-                    'total_pv'    => $pv;
+                    'total_pv'    => $pv,
                     'from_user_id'=> $user_id,
                     'bonus'       => 0.20,
                     'bonus_type'  => 5,
@@ -437,36 +441,36 @@ class BonusController extends Controller
 
     
 
-    public function getPersonalRebate($user_id)
-    {
-        $user  = User::find($user_id);
-        $rank = $user->rank->name;
+    // public function getPersonalRebate($user_id)
+    // {
+    //     $user  = User::find($user_id);
+    //     $rank = $user->rank->name;
 
-        if($rank == 'Loyal Customer')
-        {
-            $bonustype  = BonusType::where('name', 'Personal Rebate LC')->first();
-            $rebate     = $bonustype->value;
-        }
-        elseif( $rank == 'Marketing Officer')
-        {
-            $bonustype  = BonusType::where('name', 'Personal Rebate MO')->first();
-            $rebate     = $bonustype->value;
-        }
-        elseif( $rank == 'District Officer')
-        {
-            $bonustype  = BonusType::where('name', 'Personal Rebate DO')->first();
-            $rebate     = $bonustype->value;
-        }
-        elseif ($rank == 'Senior District Officer')
-        {
-            $bonustype  = BonusType::where('name', 'Personal Rebate SDO')->first();
-            $rebate     = $bonustype->value;
-        } else {
-            $rebate = 0;
-        }
+    //     if($rank == 'Loyal Customer')
+    //     {
+    //         $bonustype  = BonusType::where('name', 'Personal Rebate LC')->first();
+    //         $rebate     = $bonustype->value;
+    //     }
+    //     elseif( $rank == 'Marketing Officer')
+    //     {
+    //         $bonustype  = BonusType::where('name', 'Personal Rebate MO')->first();
+    //         $rebate     = $bonustype->value;
+    //     }
+    //     elseif( $rank == 'District Officer')
+    //     {
+    //         $bonustype  = BonusType::where('name', 'Personal Rebate DO')->first();
+    //         $rebate     = $bonustype->value;
+    //     }
+    //     elseif ($rank == 'Senior District Officer')
+    //     {
+    //         $bonustype  = BonusType::where('name', 'Personal Rebate SDO')->first();
+    //         $rebate     = $bonustype->value;
+    //     } else {
+    //         $rebate = 0;
+    //     }
 
-        return $rebate;
-    }
+    //     return $rebate;
+    // }
 
     
     public function countTotalBonus($user)
