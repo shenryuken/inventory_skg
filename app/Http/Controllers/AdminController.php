@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests;
 use App\Mail\VerifyEmail;
 
-use App\Traits\RegisterStaff;
-
 use App\Admin;
 use App\User;
 use App\Models\Role;
