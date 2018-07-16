@@ -188,5 +188,20 @@ class StockReportController extends Controller
         }
     }
 
+    public function barcode($product_id){
+        if(strtoupper($product_id) == "ALL"){
+            $product = (object)[];
+            $product->name = "All";
+            $barcodes = StockItem::where('quantity','1')->get();
+
+        }else{
+            $product = Product::find($product_id);
+            $barcodes = StockItem::where('product_id',$product_id)->where('quantity','1')->get();
+        }
+        
+
+        return view('inventory.stocks.barcode-index',['barcodes' => $barcodes, 'product' => $product]);
+    }
+
  
 }

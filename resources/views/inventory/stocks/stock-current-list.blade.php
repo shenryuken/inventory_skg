@@ -58,12 +58,12 @@ textarea {
                             </div>
                             <div class="panel-body"> 
                                     <div class="col-md-3">
-                                            <div class="widget widget widget-danger widget-item-icon">
+                                            <div class="widget widget-danger widget-item-icon widget-no-subtitle">
                                                     <div class="widget-item-left">
                                                         <span class="glyphicon glyphicon-warning-sign"></span>
                                                     </div>                             
                                                     <div class="widget-data">
-                                                        <div class="widget-int num-count">{{$dashboards['totalLessStock']}}</div>
+                                                        <div class="widget-big-int num-count">{{$dashboards['totalLessStock']}}</div>
                                                         <div class="widget-title">Product low in stocks</div>
                                                         <div class="widget-subtitle"></div>
                                                     </div>      
@@ -74,14 +74,14 @@ textarea {
                                     </div>
 
                                     <div class="col-md-3">
-                                            <div class="widget widget-info widget-item-icon">
+                                            <div class="widget widget-info widget-item-icon widget-no-subtitle">
                                                     <div class="widget-item-left">
                                                         <span class="fa fa-adjust"></span>
                                                     </div>                             
                                                     <div class="widget-data">
-                                                        <div class="widget-int num-count">{{\Carbon\Carbon::parse($dashboards['lastAdjustment'])->diffForHumans()}}</div>
+                                                        <div class="widget-big-int num-count">{{\Carbon\Carbon::parse($dashboards['lastAdjustment'])->diffForHumans()}}</div>
+                                                        {{-- <div class="widget-title">Last Adjustment</div> --}}
                                                         <div class="widget-title">Last Adjustment</div>
-                                                        <div class="widget-subtitle"></div>
                                                     </div>      
                                                     {{--  <div class="widget-controls">                                
                                                         <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="top" title="Remove Widget"><span class="fa fa-times"></span></a>
@@ -90,12 +90,12 @@ textarea {
                                     </div>
 
                                     <div class="col-md-3">
-                                            <div class="widget widget-success widget-item-icon">
+                                            <div class="widget widget-success widget-item-icon widget-no-subtitle">
                                                     <div class="widget-item-left">
                                                         <span class="fa fa-truck"></span>
                                                     </div>                             
                                                     <div class="widget-data">
-                                                        <div class="widget-int num-count">{{$dashboards['totalActiveStock']}}</div>
+                                                        <div class="widget-big-int num-count">{{$dashboards['totalActiveStock']}}</div>
                                                         <div class="widget-title">Available in stock</div>
                                                         {{--  <div class="widget-subtitle">In your mailbox</div>  --}}
                                                     </div>      
@@ -107,12 +107,12 @@ textarea {
                                     
                                     
                                     <div class="col-md-3">
-                                            <div class="widget widget-default widget-item-icon">
+                                            <div class="widget widget-primary widget-item-icon widget-no-subtitle">
                                                     <div class="widget-item-left">
                                                         <span class="fa fa-shopping-cart"></span>
                                                     </div>                             
                                                     <div class="widget-data">
-                                                        <div class="widget-int num-count">{{$dashboards['totalProduct']}}</div>
+                                                        <div class="widget-big-int num-count">{{$dashboards['totalProduct']}}</div>
                                                         <div class="widget-title">Products</div>
                                                         <div class="widget-subtitle"></div>
                                                     </div>      
@@ -147,10 +147,10 @@ textarea {
                                                             <td>{{ $stock['product_name'] }} </td>
                                                             <td>{{ $stock['stocksCount']}} </td>
                                                             <td>
-                                                                <a href="{{url('product/view/'.$stock['product_id'])}}" class="" data-toggle="tooltip" data-placement="bottom" title="Product Details"><span class="fa fa-eye"></span></a>
+                                                                <a href="{{url('inventory/product/view/'.$stock['product_id'])}}" class="" data-toggle="tooltip" data-placement="bottom" title="Product Details"><span class="fa fa-eye"></span></a>
                                                             </td>
                                                             <td>    
-                                                                <a href="{{url('stock/barcode/'.$stock['product_id'])}}" class="" data-toggle="tooltip" data-placement="bottom" title="Barcode"><span class="fa fa-barcode"></span></a>
+                                                                <a href="{{url('inventory/stock/barcode/'.$stock['product_id'])}}" class="" data-toggle="tooltip" data-placement="bottom" title="Barcode"><span class="fa fa-barcode"></span></a>
                                                             </td>
                                                         </tr>
                                                     @endforeach
