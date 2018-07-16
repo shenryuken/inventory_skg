@@ -273,6 +273,7 @@ Route::get('inventory/supplier/delete/{id?}', 'Inventory\SupplierController@dest
 Route::get('inventory/stock/in/', 'Inventory\StockInController@index');
 Route::post('inventory/stock/in/store', 'Inventory\StockInController@store');
 Route::get('inventory/stock/list', 'Inventory\StockInController@list');
+Route::get('inventory/stock/in/view/{x?}', 'Inventory\StockInController@show');
 #Stock Adjustment
 Route::get('inventory/stock/adjustment/', 'Inventory\StockAdjustmentController@index');
 Route::get('inventory/stock/adjustment/stock_product', 'Inventory\StockAdjustmentController@stockProduct');

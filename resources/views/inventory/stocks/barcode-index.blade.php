@@ -44,31 +44,30 @@ textarea {
 
                     <div class="panel panel-default">
                             <div class="panel-heading">
-                            <h3 class="panel-title">Barcode Listing for <strong>{{$product_name['name']}}</strong></h3>
+                            <h3 class="panel-title">Barcode Listing for <strong>{{$product->name}}</strong></h3>
                             </div>
                             
                             <div class="panel-body">              
-                                            <p>Total listing: <b>{{ count($data) }}</b></p>
+                                            <p>Total listing: <b>{{ count($barcodes) }}</b></p>
                                         <div class="table-responsive">
                                             <table class="table table-striped datatable" id="table_listing">
                                                 <thead>
                                                     <tr>
                                                         <th width="5px" class="no-sort">No.</th>                                                        
-                                                        <th>Stock In Serial Number</th>
+                                                        <th>Stock In Number</th>
                                                         <th>Stock In Date</th>                  
                                                         <th>Barcode</th>                            
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                @if(count($data) > 0)
-                                                    <?php $i = 1; ?>
-                                                    @foreach($data as $stock)       
-                                                                              
+                                                @if(count($barcodes) > 0)
+                                                    @php $i = 1; @endphp
+                                                    @foreach($barcodes as $barcode)          
                                                         <tr>
                                                             <td><?php echo $i++; ?></td>                                                            
-                                                            <td>{{ $stock['stock_received_number'] }} </td>
-                                                            <td data-order="{{ Carbon\Carbon::parse($stock['in_stock_date'])}}">{{ Carbon\Carbon::parse($stock['in_stock_date'])->format('d/m/Y') }} </td>
-                                                            <td>{{ $stock['serial_number'] }} </td>
+                                                            <td>{{ $barcode->stocks->stock_in_no }} </td>
+                                                            <td data-order="{{ Carbon\Carbon::parse($barcode->stocks->stock_date)}}">{{ Carbon\Carbon::parse($barcode->stocks->stock_date)->format('d/m/Y') }} </td>
+                                                            <td>{{ $barcode->barcode }} </td>
                                                            
                                                             
                                                         </tr>

@@ -11,17 +11,17 @@ class StockItem extends Model
 
     public function stocks()
     {
-        return $this->belongsTo('App\Models\Stock');
+        return $this->belongsTo('App\Models\Stock','stock_id','id');
     }
 
     public function products()
     {
-        return $this->hasMany('App\Models\Product');
+        return $this->belongsTo('App\Models\Product','product_id','id');
     }
 
     public function suppliers()
     {
-        return $this->belongsTo('App\Models\Supplier');
+        return $this->belongsTo('App\Models\Supplier','supplier_id','id');
     }
    
 }

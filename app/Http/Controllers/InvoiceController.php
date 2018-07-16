@@ -19,7 +19,7 @@ class InvoiceController extends Controller
     {
         // if(Auth::guard('admin')->check())
         // {
-            $invoices  = Invoice::all();
+        $invoices  = Invoice::all();
             // $invoices2 = null, 
         // }
         // else 

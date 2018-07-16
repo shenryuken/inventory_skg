@@ -2,16 +2,38 @@
 
 @section('content')
 <div class="page-content-wrap">
+        <div class="row">
+                <div class="col-sm-12">
+         @if(session("message"))        
+                    <div class="alert alert-success">
+                        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        {{ session("message") }}
+                    </div>
+                </div>
+         @endif
+         @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        </div>
 <div class="row">
+
 	<div class="col-md-6">
 
         <div class="panel panel-success push-up-20">
                 <div class="panel-heading">
                     <button class="btn pull-right" onclick="printElem('printed_area')"><i class="fa fa-print"></i> Print </a></button>
                 </div>
-            <div id="printed_area" class="panel-body panel-body-pricing">
-                    <img style="width:100%" src="data:image/png;base64,{{ DNS1D::getBarcodePNG($order->order_no, "C39+") }}" alt="barcode"   />
-                <h1>Order : <strong style="text-transform: uppercase;">#{{ $order->order_no}}</strong></h1>  
+                @if($order)
+            <div id="printed_area" class="panel-body panel-body-pricing">               
+                    <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($order->order_no, "C93") }}" alt="barcode"   />
+                    {{-- {!! DNS1D::getBarcodeSVG($order->order_no, "C93") !!} --}}
+                    <h1>Order : <strong style="text-transform: uppercase;">#{{ $order->order_no}}</strong></h1>  
                 
 
                 <p><span class="fa fa-caret-right"></span> <strong>Customer:</strong> {{ $order->user->username }}</p>
@@ -55,6 +77,13 @@
                 <p><span class="fa fa-caret-right"></span> <strong>Delivery Price: MYR {{ $order->invoice->delivery_cost }}</strong></p> --}}
 
             </div>
+            @else
+            <div class="alert alert-danger">
+                    <ul>
+                        <h1>Order not found</h1>
+                    </ul>
+                </div>
+                @endif
         </div>
 
     </div>

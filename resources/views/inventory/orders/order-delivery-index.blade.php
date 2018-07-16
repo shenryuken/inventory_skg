@@ -29,46 +29,87 @@
 	<div class="col-md-12">
 		<div class="panel panel-default">
 		    <div class="panel-heading ui-draggable-handle">
-		      <h3 class="panel-title"><strong>Items</strong></h3>
-		      <ul class="panel-controls">
-		        <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
-		      </ul>
+		      <h3 class="panel-title"><strong>Delivery Pick-Up</strong></h3>
             </div>
-            <div class="panel-body">
-		    	
+
+            <div class="panel-body">		    	
                     <div class="form-group">
                       <label class="col-xs-2 control-label">Order No.</label>
                       <div class="col-xs-4">
-                          <p class="form-control">{{ $order->order_no }}</p>
+                            <p class="form-control-static">{{ $order->order_no }}</p>
+                          <input type="text"  class="hidden" value="{{ $order->order_no }}" readonly>
                       </div>
                     </div>
     
                     <div class="form-group">
                             <label class="col-xs-2 control-label">Customer</label>
                             <div class="col-xs-4">
-                                <p class="form-control">{{ $order->user->username }}</p>
+                                <p class="form-control-static">{{ $order->user->username }}</p>
+                                <input class="hidden" value="{{ $order->user->id }}" readonly>
                             </div>
-                          </div>
+                    </div>
+
+                    <div class="form-group">
+                            <label class="col-xs-2 control-label">Shipping to</label>
+                            <div class="col-xs-4">
+                                <p class="form-control-static">{{ $order->shipping_address->street1 }},</p>
+                                <p class="form-control-static">{{ $order->shipping_address->street2 }},</p>
+                                <p class="form-control-static">{{ $order->shipping_address->poscode }},</p>
+                                <p class="form-control-static">{{ $order->shipping_address->city }},</p>
+                                <p class="form-control-static">{{ $order->shipping_address->state }}</p>
+
+                                <input class="hidden" value="{{ $order->ship_address }}" readonly>
+                            </div>
+                    </div>
+
+                    <div class="form-group">
+                            <label class="col-xs-2 control-label">Billing to</label>
+                            <div class="col-xs-4">
+                                    <p class="form-control-static">{{ $order->billing_address->street1 }},</p>
+                                    <p class="form-control-static">{{ $order->billing_address->street2 }},</p>
+                                    <p class="form-control-static">{{ $order->billing_address->poscode }},</p>
+                                    <p class="form-control-static">{{ $order->billing_address->city }},</p>
+                                    <p class="form-control-static">{{ $order->billing_address->state }}</p>
+                                <input class="hidden" value="{{ $order->bill_address }}" readonly>
+                            </div>
+                    </div>
     
-                  </div>
+             </div>
 		    <div class="panel-body">
-	        
-	          <div class="row">
-	          	<div class="box-body">
-			    @foreach($items as $item)    
-	            <div class="col-xs-6 col-md-6">
-	              <label class="control-label">Item Name</label>
-	              <input class="form-control" name="item_name[]" value="{{ $item->products->name }}" type="text">
-	              {{-- <input type="hidden" name="item_id[]" value="{{ $item->product->id }}"> --}}
-                </div>
-                <div class="col-xs-6 col-md-6">
-                        <label class="control-label">Serial No.</label>
-                        <input class="form-control" name="serial_no[]" value="" type="text">
-                        {{-- <input type="hidden" name="item_id[]" value="{{ $item->product->id }}"> --}}
-                 </div>
-	            @endforeach
-	          </div>
-	        </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Item
+                            </th>
+                            <th>
+                                Barcode
+                            </th>
+                            <th>
+                                Quantity
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            @foreach($items as $item)    
+                            @for($x = 0; $x<$item->product_qty; $x++)
+                        <tr>
+                            <td>
+                                    {{ $item->products->name }}
+                                <input type="hidden" name="item_id[]" value="{{ $item->products->id }}">
+                            </td>
+                            <td>
+                                    <input class="form-control" name="serial_no[]" value="" type="text">
+                            </td>
+                            <td>
+                                    <input class="form-control" name="quantity[]" value="1" type="text">
+                            </td>
+                        </tr>
+                        @endfor
+                        @endforeach
+                    </tbody>
+                </table>
 	        <!-- /.box-body -->
 	    	</div>
    		</div>
