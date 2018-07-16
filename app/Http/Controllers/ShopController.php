@@ -18,6 +18,7 @@ use App\Models\Tax;
 use App\Models\Product_image;
 use App\Models\Product_package;
 use App\Models\Product_promotion_gift;
+use App\Models\Product_promotion;
 use App\Models\DeliveryType;
 use App\Models\Address;
 use App\Models\AgentAddress;
@@ -97,7 +98,6 @@ class ShopController extends Controller
                     if($gift != null){
 
                         $product[$k]['gift_status'] = '';
-
                     }
                 }
                 else{
@@ -106,7 +106,7 @@ class ShopController extends Controller
             }
 
             // dd($data,$product);
-            $count = OrderTransection::where('agent_id',$id)->where('order_type',$order_type)->count();
+            $count = OrderTransection::where('agent_id',$id)->where('order_type',$order_type)->where('mall_type','SKG_STORE')->count();
 
             $return['message'] = 'succssfuly';
             $return['status'] = '01';
@@ -127,7 +127,9 @@ class ShopController extends Controller
 
         try{
 
-             if(Auth::guard('admin')->check() == true){
+            $sessionData = session('STORE','default');
+
+            if(Auth::guard('admin')->check() == true){
                 $id = Auth::guard('admin')->user()->id;
                 $order_type = "staff";
             }
@@ -137,7 +139,8 @@ class ShopController extends Controller
             }
 
             $cartItem = OrderTransection::select('id','order_type','product_id','agent_id','quantity')
-                                        ->where('order_type',$data['order_type'])
+                                        ->where('order_type',$order_type)
+                                        ->where('mall_type',$sessionData)
                                         ->where('product_id',$data['product_id'])
                                         ->where('agent_id',$data['agent_id'])
                                         ->first();
@@ -145,7 +148,8 @@ class ShopController extends Controller
                 
                 $addToCart = Array(
 
-                    'order_type' => $data['order_type'],
+                    'order_type' => $order_type,
+                    'mall_type' => $sessionData,
                     'agent_id' => $data['agent_id'],
                     'product_id' => $data['product_id'],
                     'quantity' => $data['quantity'], 
@@ -157,7 +161,8 @@ class ShopController extends Controller
             }
             else{
                 $updateQuantity = $cartItem['quantity'] + $data['quantity'];
-                OrderTransection::where('order_type',$data['order_type'])
+                OrderTransection::where('order_type',$order_type)
+                                ->where('mall_type',$sessionData)
                                 ->where('product_id',$data['product_id'])
                                 ->where('agent_id',$data['agent_id'])
                                 ->update([
@@ -170,7 +175,7 @@ class ShopController extends Controller
 
             }
 
-            $count = OrderTransection::where('agent_id',$data['agent_id'])->where('order_type',$data['order_type'])->count();
+            $count = OrderTransection::where('agent_id',$data['agent_id'])->where('order_type',$order_type)->where('mall_type',$sessionData)->count();
             $return['message'] = "succssfuly inserted";
             $return['status'] = "01";            
             
@@ -187,6 +192,8 @@ class ShopController extends Controller
 
     public function getCartItems($agent_id = null){
 
+        $sessionData = session('STORE','default');
+
         if(Auth::guard('admin')->check() == true){
             $id = Auth::guard('admin')->user()->id;
             $order_type = "staff";
@@ -202,6 +209,7 @@ class ShopController extends Controller
                                         ->select('orders_transection.id','products.id as product_id','products.name','products.description','products.price_wm','products.price_em','products.price_staff','products.quantity_min'
                                             ,'products.quantity as stock_quantity','orders_transection.quantity as total_quantity')
                                         ->where('order_type',$order_type)
+                                        ->where('mall_type',$sessionData)
                                         ->where('orders_transection.agent_id','=',$agent_id)
                                         ->get()->toArray();
 
@@ -214,9 +222,24 @@ class ShopController extends Controller
             $shipping_fee = 0.00;
             foreach ($cartItems as $key => $value){
 
-                $cartItems[$key]['price_wm'] = $this->fn_calc_gst_price($cartItems[$key]['price_wm']);
-                $cartItems[$key]['price_em'] = $this->fn_calc_gst_price($cartItems[$key]['price_em']);
-                $cartItems[$key]['price_staff'] = $this->fn_calc_gst_price($cartItems[$key]['price_staff']);
+                $promotion = $this->checkPromotion($cartItems[$key]['product_id']);
+
+                if($promotion){
+
+                    $price_wm = $promotion->price_wm;
+                    $price_em = $promotion->price_em;
+                    $price_staff = $promotion->price_staff;
+                }
+                else{
+
+                    $price_wm = $cartItems[$key]['price_wm'];
+                    $price_em = $cartItems[$key]['price_em'];
+                    $price_staff = $cartItems[$key]['price_staff'];
+                }
+
+                $cartItems[$key]['price_wm'] = $this->fn_calc_gst_price($price_wm);
+                $cartItems[$key]['price_em'] = $this->fn_calc_gst_price($price_em);
+                $cartItems[$key]['price_staff'] = $this->fn_calc_gst_price($price_staff);
 
                 $total_price_wm = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price_wm']);
                 $total_price_em = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price_em']);
@@ -306,9 +329,20 @@ class ShopController extends Controller
     public function deleteCartItem(Request $request){
 
         $id = $request->get('item');
+        $sessionData = session('STORE','default');
+
+        if(Auth::guard('admin')->check() == true){
+            // $id = Auth::guard('admin')->user()->id;
+            $order_type = "staff";
+        }
+        else{
+            // $id = Auth::user()->id;
+            $order_type = "agent";
+        }
+
         try{
 
-            OrderTransection::where('id',$id)->delete();
+            OrderTransection::where('id',$id)->where('order_type',$order_type)->where('mall_type',$sessionData)->delete();
 
             $return['message'] = "succssfully deleted";
             $return['status'] = "01";
@@ -330,19 +364,24 @@ class ShopController extends Controller
         $quantity = $request->get('quantity');
         // dd($quantity);
 
-        if(Auth::guard('admin')->check()){
+        $sessionData = session('STORE','default');
 
+        if(Auth::guard('admin')->check() == true){
             $id = Auth::guard('admin')->user()->id;
+            $order_type = "staff";
         }
         else{
             $id = Auth::user()->id;
+            $order_type = "agent";
         }
 
         try {
 
             foreach($quantity as $key => $value) {
 
-                OrderTransection::where('agent_id',$agent_id)   
+                OrderTransection::where('agent_id',$agent_id) 
+                                    ->where('order_type',$order_type)
+                                    ->where('mall_type',$sessionData)
                                     ->where('product_id',$value['product_id'])
                                     ->update([
                                         'quantity' => $value['quantity'],
@@ -369,19 +408,21 @@ class ShopController extends Controller
 
         // dd($delivery_type);
 
-            if(Auth::guard('admin')->check()){
+        $sessionData = session('STORE','default');
 
-                $address_code = $agent_id."_staff";
-                $order_type = "staff";
+        if(Auth::guard('admin')->check()){
 
-            }
-            else{
-                $address_code = $agent_id."_agent";
-                $order_type = "agent";
-            }
+            $address_code = $agent_id."_staff";
+            $order_type = "staff";
+
+        }
+        else{
+            $address_code = $agent_id."_agent";
+            $order_type = "agent";
+        }
 
         try{
-
+            $addressData = [];
             $addressData = Address::select('id','name','address_code','street1','street2','poscode','city','state','country')
                                     ->where('address_code','=',$address_code)
                                     ->where('reminder_flag','=','x')
@@ -392,11 +433,17 @@ class ShopController extends Controller
                                     ->where('address_code','=',$address_code)
                                     ->first();
             }
+
+            if(empty($addressData)){
+
+                return redirect()->back()->with('message','No Address');
+            }
             // dd($addressData);
             $cartItems = OrderTransection::leftJoin('products','products.id','=','orders_transection.product_id')
                                             ->select('orders_transection.id','products.id as product_id','products.name','products.description','products.price_wm','products.price_em','products.price_staff','products.quantity_min'
                                                 ,'products.quantity as stock_quantity','orders_transection.quantity as total_quantity')
                                             ->where('order_type',$order_type)
+                                            ->where('mall_type',$sessionData)
                                             ->where('orders_transection.agent_id','=',$agent_id)
                                             ->get()->toArray();
 
@@ -406,21 +453,38 @@ class ShopController extends Controller
             $shipping_fee = 0.00;
             foreach ($cartItems as $key => $value){
 
+                $promotion = $this->checkPromotion($cartItems[$key]['product_id']);
+
+                // dd($promotion);
+                if($promotion){
+
+                    $price_wm = $promotion->price_wm;
+                    $price_em = $promotion->price_em;
+                    $price_staff = $promotion->price_staff;
+                }
+                else{
+
+                    $price_wm = $cartItems[$key]['price_wm'];
+                    $price_em = $cartItems[$key]['price_em'];
+                    $price_staff = $cartItems[$key]['price_staff'];
+                }
+
                 if(Auth::guard('admin')->check()){
 
-                    $cartItems[$key]['price'] = $this->fn_calc_gst_price($cartItems[$key]['price_staff']);
+                    $cartItems[$key]['price'] = $this->fn_calc_gst_price($price_staff);
                     $total_price = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price']);
                     $cartItems[$key]['total_price'] = $total_price;
                 }
                 else{
+
                     if(strtolower($addressData->state) == strtolower("Sabah") || strtolower($addressData->state) ==  strtolower("Sarawak")){
 
-                        $cartItems[$key]['price'] = $this->fn_calc_gst_price($cartItems[$key]['price_em']);
+                        $cartItems[$key]['price'] = $this->fn_calc_gst_price($price_em);
                         $total_price = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price']);
                         $cartItems[$key]['total_price'] = $total_price;
                     }
                     else{
-                        $cartItems[$key]['price'] = $this->fn_calc_gst_price($cartItems[$key]['price_wm']);
+                        $cartItems[$key]['price'] = $this->fn_calc_gst_price($price_wm);
                         $total_price = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price']);
                         $cartItems[$key]['total_price'] = $total_price;
                     }
@@ -531,6 +595,32 @@ class ShopController extends Controller
         // dd($return);
         return view('shops.checkout-items',compact('cartItems','returnData','address','deliveryType'));
     }
+
+
+    private function checkPromotion($productid){
+
+        try{
+
+            $dt = new \DateTime();
+            $dt->setTimezone(new \DateTimeZone('Asia/Kuala_Lumpur'));
+            $nowdatetime =  date_format($dt,'Y-m-d H:i:s');
+
+            $Productpromotion = Product_promotion::where('product_id',$productid)
+                                                    ->where('start','<=',$nowdatetime)
+                                                    ->where('end','>=',$nowdatetime)
+                                                    ->first();
+
+            $return['message'] = "Succssfuly";
+        }
+        catch(Exception $e){
+
+            $return['message'] = $e->getMessage();
+        }
+
+        // dd($return,$Productpromotion);
+        return $Productpromotion;
+    }
+
 
     public function getAddress(Request $request){
 
@@ -761,13 +851,13 @@ class ShopController extends Controller
             // dd($sessionData);
             if(Auth::guard('admin')->check()){
 
-                // $address_code = $agent_id."_staff";
+                $address_code = $agent_id."_staff";
                 $order_type = "staff";
                 $id = Auth::guard('admin')->user()->id;
 
             }
             else{
-                // $address_code = $agent_id."_agent";
+                $address_code = $agent_id."_agent";
                 $order_type = "agent";
                 $id = Auth::user()->id;
             }
@@ -777,9 +867,10 @@ class ShopController extends Controller
 
             $cartItems = OrderTransection::leftJoin('products','products.id','=','orders_transection.product_id')
                                             ->select('orders_transection.id','products.id as product_id','products.name','products.description'
-                                                ,'products.price_wm','products.price_em','products.price_staff','products.quantity_min'
+                                                ,'products.price_wm','products.price_em','products.price_staff','products.point','products.quantity_min'
                                                 ,'products.quantity as stock_quantity','orders_transection.quantity as total_quantity')
                                             ->where('order_type',$order_type)
+                                            ->where('mall_type',$sessionData)
                                             ->where('orders_transection.agent_id','=',$agent_id)
                                             ->get();
 
@@ -858,26 +949,72 @@ class ShopController extends Controller
 
                         foreach($cartItems as $k => $v){
 
+                            $promotion = $this->checkPromotion($v['product_id']);
+
+                            if($promotion){
+
+                                $price_wm = $promotion->price_wm;
+                                $price_em = $promotion->price_em;
+                            }
+                            else{
+
+                                $price_wm = $v['price_wm'];
+                                $price_em = $v['price_em'];
+                            }
+
+                            $address = Address::where('id',$shipping_id)->where('address_code',$address_code)->first();
+
+                            if(strtolower($address->state) == strtolower("Sabah") 
+                                || strtolower($address->state) ==  strtolower("Sarawak")){
+
+                                $price = $price_em;
+                            }
+                            else{
+                                $price = $price_wm;
+                            }
+
                             $lv_product = [
 
                                 'user_id' => $id,
                                 'product_id' => $v['product_id'],
                                 'product_name' => $v['name'],
                                 'serial_no' => "",
-                                'price' => "",
-                                'pv' => "",
-                                'status' => "",
+                                'price' => $price,
+                                'pv' => $v['point'],
+                                'status' => "Shiping",
                                 'created_at' => \Carbon\Carbon::now()
                             ];
 
                             UserPurchase::insert($lv_product);
-
                         }
-
                     }
                     else{
-
+                        // dd($cartItems);
                         foreach($cartItems as $k => $v){
+
+                            $promotion = $this->checkPromotion($v['product_id']);
+
+                            if($promotion){
+
+                                $price_wm = $promotion->price_wm;
+                                $price_em = $promotion->price_em;
+                            }
+                            else{
+
+                                $price_wm = $v['price_wm'];
+                                $price_em = $v['price_em'];
+                            }
+
+                            $address = Address::where('id',$shipping_id)->where('address_code',$address_code)->first();
+
+                            if(strtolower($address->state) == strtolower("Sabah") 
+                                || strtolower($address->state) ==  strtolower("Sarawak")){
+
+                                $price = $price_em;
+                            }
+                            else{
+                                $price = $price_wm;
+                            }
 
                             $lv_product = [
 
@@ -885,27 +1022,26 @@ class ShopController extends Controller
                                 'product_id' => $v['product_id'],
                                 'product_name' => $v['name'],
                                 'serial_no' => "",
-                                'price' => "",
-                                'pv' => "",
-                                'status' => "",
-                                'lock_status' => "",
+                                'price' => $price,
+                                'pv' => $v['point'],
+                                'status' => "Stocking",
+                                'lock_status' => "unlock",
                                 'created_at' => \Carbon\Carbon::now()
                             ];
 
                             Store::insert($lv_product);
-
                         }
                     }
                 }
 
-                if($x && $y){
-                    OrderTransection::where('order_type',$order_type)
-                                    ->where('agent_id',$agent_id)
-                                    ->delete();
+                // if($x && $y){
+                //     OrderTransection::where('order_type',$order_type)
+                //                     ->where('agent_id',$agent_id)
+                //                     ->delete();
 
-                    Address::where('id',$shipping_id)
-                                ->update(['reminder_flag' => 'x']);
-                }
+                //     Address::where('id',$shipping_id)->where('address_code',$address_code)
+                //                 ->update(['reminder_flag' => 'x']);
+                // }
 
                 $return['message'] = "Succssfuly placed the order";
                 $return['status'] = "01";
@@ -932,13 +1068,26 @@ class ShopController extends Controller
 
     public function getDeliveryStatus($order_no = null){
         // echo $order_no;die();
+
+        $sessionData = session('STORE','default');
+        // dd($sessionData);
         try{
 
-            $orderHdr = AgentOrderHdr::leftJoin('delivery_type','delivery_type.delivery_code','=','agent_order_hdr.delivery_type')
+            if($sessionData == "SKG_STORE"){
+                $orderHdr = OrderHdr::leftJoin('delivery_type','delivery_type.delivery_code','=','orders_hdr.delivery_type')
+                            ->leftJoin('global_status','global_status.status','=','orders_hdr.status')
+                            ->select('orders_hdr.order_no','orders_hdr.agent_id','orders_hdr.agent_id','orders_hdr.invoice_no','orders_hdr.total_items','orders_hdr.total_price','orders_hdr.delivery_type','orders_hdr.purchase_date','orders_hdr.status','delivery_type.type_description','global_status.description')
+                            ->where('order_no','=',$order_no)
+                            ->first();
+            }
+            else if($sessionData == "AGENT_STORE"){
+                $orderHdr = AgentOrderHdr::leftJoin('delivery_type','delivery_type.delivery_code','=','agent_order_hdr.delivery_type')
                             ->leftJoin('global_status','global_status.status','=','agent_order_hdr.status')
                             ->select('agent_order_hdr.order_no','agent_order_hdr.agent_id','agent_order_hdr.agent_id','agent_order_hdr.invoice_no','agent_order_hdr.total_items','agent_order_hdr.total_price','agent_order_hdr.delivery_type','agent_order_hdr.purchase_date','agent_order_hdr.status','delivery_type.type_description','global_status.description')
                             ->where('order_no','=',$order_no)
                             ->first();
+            }
+
             // dd($orderHdr);
 
             $date = new \DateTime($orderHdr->purchase_date);
@@ -958,7 +1107,7 @@ class ShopController extends Controller
             $return['status'] = "02";
         }
 
-        // dd($orderHdr,$return);
+        // dd($return);
         return view('shops.delivery-status',compact('return','data','orderHdr'));
     }
 
@@ -995,14 +1144,94 @@ class ShopController extends Controller
         // echo '</pre>';
     }
 
-    public function agentStore($id)
-    {
+    public function agentStore($id){
 
-        $session = session(["STORE"=>"AGENT_STORE"]);
-        $user     = User::find($id);
-        $products = Store::where('user_id', $id)->groupBy('product_id')->get();
 
-        return view('shops.agent-store', compact('user', 'products'));
+        try{
+            
+            $session = session(["STORE"=>"AGENT_STORE"]);
+
+            $user     = User::find($id);
+            $products = Store::where('user_id', $id)->groupBy('product_id')->get();
+
+            $data = (new ProductController)->all_data_product();
+
+            foreach ($data['productArr']['Product'] as $key1 => $value) {
+                
+                $data['productArr']['Product'][$key1]['product_type'] = "product";
+                $data['productArr']['Product'][$key1]['promotion_status'] = "hidden";
+                $data['productArr']['Product'][$key1]['package_status'] = "hidden";
+            }
+            foreach ($data['productArr']['Package'] as $key2 => $value) {
+                
+                $data['productArr']['Package'][$key2]['product_type'] = "package";
+                $data['productArr']['Package'][$key2]['promotion_status'] = "hidden";
+                $data['productArr']['Package'][$key2]['package_status'] = "";
+            }
+            foreach ($data['productArr']['Promotion'] as $key3 => $value) {
+                
+                $data['productArr']['Promotion'][$key3]['product_type'] = "promotion";
+                $data['productArr']['Promotion'][$key3]['promotion_status'] = "";
+                $data['productArr']['Promotion'][$key3]['package_status'] = "hidden";
+            }
+            foreach ($data['productArr']['Package_Promotion'] as $key4 => $value) {
+                
+                $data['productArr']['Package_Promotion'][$key4]['product_type'] = "package_promotion";
+                $data['productArr']['Package_Promotion'][$key4]['promotion_status'] = "";
+                $data['productArr']['Package_Promotion'][$key4]['package_status'] = "";
+            }
+
+            $DataProduct = array_merge($data['productArr']['Product'],$data['productArr']['Package'],$data['productArr']['Promotion'],$data['productArr']['Package_Promotion']);
+
+            $product = [];
+
+            foreach ($products as $k => $v){
+                foreach ($DataProduct as $kv => $vv){
+                    if($v['product_id'] == $vv['id']){
+
+                        $product[] = $DataProduct[$kv];
+                    }
+                }
+            }
+
+
+            if(Auth::guard('admin')->check() == true){
+                $id = Auth::guard('admin')->user()->id;
+                $order_type = "staff";
+            }
+            else{
+                $id = Auth::user()->id;
+                $order_type = "agent";
+            }
+
+            // dd($product);
+            foreach ($product as $k => $v) {
+
+                if(isset($v['promotion_id'])){
+
+                    $gift = Product_promotion_gift::where('promotion_id',$v['promotion_id'])->first();
+
+                    if($gift != null){
+
+                        $product[$k]['gift_status'] = '';
+                    }
+                }
+                else{
+                    $product[$k]['gift_status'] = 'hidden';
+                }
+            }
+
+            $count = 0;
+            $count = OrderTransection::where('agent_id',$id)->where('order_type',$order_type)->where('mall_type','AGENT_STORE')->count();
+        }
+        catch(Exception $e){
+
+            $return['message'] = $e->getMessage();
+        }
+
+        // dd($products,$DataProduct);
+        // dd($user,$product,$id,$count);
+        return view('shops.product_list', compact('user','product','id','count'));
     }
 
     //Cart

@@ -2,7 +2,7 @@
 @section('title','Delivery Status')
 @section('content')
 
- <script src="{!! asset('joli/js/plugins/smartwizard/jquery.smartWizard-2.0.min.js') !!}"></script>
+<!-- <script src="{!! asset('joli/js/plugins/smartwizard/jquery.smartWizard-2.0.min.js') !!}"></script>  -->
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb">
     <li><a href="javascript:;">Home</a></li>                    
@@ -17,9 +17,8 @@
             <div class="panel panel-default">
                 <div class="horizontal">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><strong>Cart List</strong> </h3>
+                        <h3 class="panel-title"><strong>Delivery Status</strong> </h3>
                         <ul class="panel-controls">
-
                         </ul>
                     </div>
                 </div>

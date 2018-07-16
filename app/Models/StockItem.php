@@ -16,7 +16,7 @@ class StockItem extends Model
 
     public function products()
     {
-        return $this->belongsTo('App\Models\Product');
+        return $this->hasMany('App\Models\Product');
     }
 
     public function suppliers()
