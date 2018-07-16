@@ -21,6 +21,7 @@ use App\Models\Supplier;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\StockItem;
+use Session;
 
 class StockInController extends Controller
 {
@@ -104,6 +105,20 @@ class StockInController extends Controller
             }
             $generatedNo =  str_pad($numberOnly+1, 5, '0', STR_PAD_LEFT);
             return "SR".($generatedNo);      
+    }
+
+    public function show($id = ""){
+        try{
+                $stock = Stock::where('stock_in_no',$id)->first();
+                $stock_item = StockItem::where('stock_id',$stock->id)->get();
+
+            
+			
+		}catch(\Exception $e){
+            return back()->withError($e->getMessage());
+		}
+        
+        return view('inventory.stocks.stock-in-show',['stock' => $stock,'stock_item'=>$stock_item]);
     }
 
  
