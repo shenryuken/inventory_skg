@@ -161,7 +161,10 @@
         <a href="javascript:;"><span class="glyphicon glyphicon-shopping-cart"></span> Order Management </a>
         <ul>
             <li class="<?php echo in_array(Request::segment(1) . '/' . Request::segment(2). '/' .Request::segment(3), array("inventory/order/sales")) ? "active" : "" ; ?>">
-                <a href="{{ url('inventory/order/sales') }}"><span class="glyphicon glyphicon-list-alt"></span> Sales Order </a>
+                <a href="{{ url('inventory/order/sales') }}"><span class="glyphicon glyphicon-list-alt"></span> Sales Order List</a>
+            </li>
+            <li class="<?php echo in_array(Request::segment(1) . '/' . Request::segment(2). '/' .Request::segment(3), array("inventory/order/delivery")) ? "active" : "" ; ?>">
+                <a href="{{ url('inventory/order/delivery') }}"><span class="glyphicon glyphicon-list-alt"></span> Delivery Order List </a>
             </li>
             
         </ul>
