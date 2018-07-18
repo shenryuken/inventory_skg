@@ -286,8 +286,12 @@ Route::get('inventory/stock/barcode/{x?}', 'Inventory\StockReportController@barc
 
 #Order Delivery
 Route::get('inventory/order/sales', 'Inventory\OrderController@salesIndex');
-Route::get('inventory/order/delivery/{order_no?}', 'Inventory\OrderController@deliveryIndex');
+Route::get('inventory/order/delivery', 'Inventory\OrderController@deliveryIndex');
+Route::get('inventory/order/delivery/create/{order_no?}', 'Inventory\OrderController@deliveryCreate');
 Route::get('inventory/order/view/{order_no?}', 'Inventory\OrderController@salesDetail');
+Route::post('inventory/order/deliver/store', 'Inventory\OrderController@deliveryStore');
+
+
 
 #Product
 Route::get('inventory/product', function () {  return redirect("inventory/product/listing"); });

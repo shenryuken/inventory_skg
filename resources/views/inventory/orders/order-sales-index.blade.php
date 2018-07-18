@@ -88,7 +88,7 @@ textarea {
                                                 <td>{{ $order->deliveryType->type_description }}</td>
                                                 <td>{{ $order->user->username }}</td>
                                                 <td>{{ $order->globalstatus->description }}</td>
-                                                <td><a href="{{ url('inventory/order/delivery/'.$order->order_no) }}" class="btn btn-info">Delivery pick-up</a>
+                                                <td><a href="{{ url('inventory/order/delivery/create/'.$order->order_no) }}" class="btn btn-info">Delivery pick-up</a>
                                                     <a href="{{ url('inventory/order/view/'.$order->order_no) }}" class="btn btn-default">View Order</a></td>
                                             @endforeach
                                         </tbody>
