@@ -155,9 +155,11 @@
 		<div class="form-group">
 			<label class="col-md-3  control-label">Introducer *</label>
 			<div class="col-md-2">
-			
+				@if(Auth::guard('admin')->check())
 				<input class="form-control" type="text" name="introducer" value="{{ Auth::guard('admin')->user()->username }}">
-				
+				@elseif(Auth::guard('web')->check())
+				<input class="form-control" type="text" name="introducer" value="{{ Auth::guard('web')->user()->username }}">
+				@endif
 				{{-- <span class="help-block">This is sample of text field</span> --}}
 			</div>
 		</div>

@@ -13,6 +13,7 @@ use App\Models\Tax;
 use App\Admin;
 use App\User;
 use App\Models\Role;
+
 class GstController extends Controller{
 	public function __construct(){
         $this->middleware('auth:admin');

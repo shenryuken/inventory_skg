@@ -36,7 +36,7 @@
         <a href="tables.html"><span class="fa fa-table"></span> <span class="xn-text">Member</span></a>
         <ul>        
             @if(Auth::user()->rank_id > 2)                    
-            <li><a href="{{ url('user/register-member')}}">Register New Member</a></li>
+            <li><a href="{{ url('registers/member')}}">Register New Member</a></li>
             @endif
             <li><a href="{{ url('referrals/hierarchy/'.Auth::user()->id)}}">Org Chart</a></li>
             <li><a href="{{ url('referrals/my-downline')}}">Referrals</a></li>                

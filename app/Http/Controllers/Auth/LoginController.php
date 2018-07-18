@@ -43,7 +43,7 @@ class LoginController extends Controller
     {
         //vallidate the form data
         $this->validate($request, [
-            'email' => 'required|email',
+            'email' => 'required|exists:users,email|email',
             'password' => 'required|min:6',
             //'g-recaptcha-response' => 'required|captcha'
             ]);
