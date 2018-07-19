@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Product;
 use App\Models\Product_promotion;
-use App\Models\stock;
+use App\Models\Stock;
 use App\Models\Product_image;
 use App\Models\Product_package;
 use App\Models\Product_promotion_gift;
@@ -205,7 +205,7 @@ class ProductController extends Controller{
 				$tabgallery = 'active';
 			}
 			# Total Product Stock
-			$productserialnumberdata = New stock;
+			$productserialnumberdata = New Stock;
 			$inventorytotal = $productserialnumberdata->products()->where('products_id',$id)->where('products.status','01')->count();
 			
 			$data['dataquantitytype'] = $dataquantitytype;
