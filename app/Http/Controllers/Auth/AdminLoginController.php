@@ -22,7 +22,7 @@ class AdminLoginController extends Controller
     {
     	//vallidate the form data
         $this->validate($request, [
-        	'email' => 'required|exists:users,email|email',
+        	'email' => 'required|exists:admins,email|email',
         	'password' => 'required|min:6'
         	]);
         //Attempt to log the user in
