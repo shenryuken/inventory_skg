@@ -29,14 +29,15 @@ textarea {
             </div>
         </div>
  @endif
- @if(session("errorid"))
-     <div class="col-sm-12">
-         <div class="alert alert-danger">
-             <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-             {{ session("errorid") }}
-         </div>
-     </div>
- @endif
+ @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
     </div>
 
     <div class="row">
@@ -89,7 +90,7 @@ textarea {
                                                 <td>{{ $order->user->username }}</td>
                                                 <td>{{ $order->globalstatus->description }}</td>
                                                 <td><a href="{{ url('inventory/order/delivery/create/'.$order->order_no) }}" class="btn btn-info">Delivery pick-up</a>
-                                                    <a href="{{ url('inventory/order/view/'.$order->order_no) }}" class="btn btn-default">View Order</a></td>
+                                                    <a href="{{ url('inventory/order/sales/view/'.$order->order_no) }}" class="btn btn-default">View Order</a></td>
                                             @endforeach
                                         </tbody>
                                 </table>
