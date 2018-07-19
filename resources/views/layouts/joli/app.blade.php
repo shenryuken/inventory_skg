@@ -115,7 +115,8 @@
         <!-- START PLUGINS -->
         <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/jquery/jquery.min.js') }}"></script>
         <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/jquery/jquery-ui.min.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/bootstrap/bootstrap.min.js') }}"></script>        
+        <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/bootstrap/bootstrap.min.js') }}"></script>
+        <script src="{!! asset('themes/Joli/js/plugins/smartwizard/jquery.smartWizard-2.0.min.js') !!}"></script>    
         <!-- END PLUGINS -->
         <!-- begin page level js -->
         @yield('footer_scripts')

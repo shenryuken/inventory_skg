@@ -29,6 +29,14 @@
                                 <p><span id="form-title"> </span></p>
                             </div>
                         </div>
+                        @if(session('message'))
+                        <div class="alert alert-danger" role="alert">
+                            <button type="button" class="close" data-dismiss="alert">
+                                <span aria-hidden="true">×</span><span class="sr-only">Close</span>
+                            </button>
+                            <strong>{!! session('message') !!}</strong>
+                        </div>
+                        @endif
                         <div class="container cart-list" style="margin-top:0px;">
                             <div class="row cart-row">
                                 <div class="col-sm-12 col-md-8">
@@ -370,6 +378,8 @@
 
         });
     }
+
+    $('.alert').delay(3000).fadeOut(300).hide(0); 
 
 </script>
 @endsection

@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Product;
 use App\Models\Product_promotion;
 use App\Models\Stock;
+
+use App\Models\StockItem;
+
 use App\Models\Product_image;
 use App\Models\Product_package;
 use App\Models\Product_promotion_gift;
@@ -205,8 +208,10 @@ class ProductController extends Controller{
 				$tabgallery = 'active';
 			}
 			# Total Product Stock
-			$productserialnumberdata = New Stock;
-			$inventorytotal = $productserialnumberdata->products()->where('products_id',$id)->where('products.status','01')->count();
+
+			$productserialnumberdata = New StockItem;
+			$inventorytotal = $productserialnumberdata->products()->where('products.id',$id)->where('products.status','01')->count();
+
 			
 			$data['dataquantitytype'] = $dataquantitytype;
 			$data['dataproductcategory'] = $dataproductcategory;
@@ -316,8 +321,8 @@ class ProductController extends Controller{
 			}
 			
 			# Total Product Stock
-			$productserialnumberdata = New stock;
-			$inventorytotal = $productserialnumberdata->products()->where('products.products_id',$id)->where('products.status','01')->count();
+			$productserialnumberdata = New StockItem;
+			$inventorytotal = $productserialnumberdata->products()->where('products.id',$id)->where('products.status','01')->count();
 			
 			$data['created_by_name'] = $created_by_name;
 			$data['updated_by_name'] = $updated_by_name;

@@ -19,7 +19,7 @@
                         <div class="panel-heading">
                         <h3 class="panel-title">Stock In Listing as {{date('d/m/Y')}}</h3>
                         <div class="actions pull-right">
-                                <a href="{{ url('stock/barcode/all') }}" class="btn btn-default  btn-sm btn-circle" title="Show All Barcode">
+                                <a href="{{ url('inventory/stock/barcode/all') }}" class="btn btn-default  btn-sm btn-circle" title="Show All Barcode">
                                     <i class="fa fa-list"></i> Show All Barcode </a>
                         </div>
                         </div>
@@ -37,9 +37,9 @@
                                     <tbody>
                                     @if(count($stocks) > 0)
                                         @foreach($stocks as $stock)
-                                        <tr class='click' data-href='{{ url('stock/in/detail/'.$stock->stock_in_no) }}'>
+                                        <tr class='click' data-href='{{ url('inventory/stock/in/view/'.$stock->stock_in_no) }}'>
                                             <td  data-order="{{ Carbon\Carbon::parse($stock->stock_date)}}">{{ Carbon\Carbon::parse($stock->stock_date)->format('d/m/Y') }}</td>
-                                        <td> <a href="{{ url('stock/in/detail/'.$stock->stock_in_no) }}">{{$stock->stock_in_no}}</a> </td>
+                                        <td> <a href="{{ url('inventory/stock/in/view/'.$stock->stock_in_no) }}">{{$stock->stock_in_no}}</a> </td>
                                             <td>{{$stock->description}}</td>
                                             <td>{{$stock->StockItem->where('stock_id',$stock->id)->sum('quantity')}}</td>
                                         </tr>
