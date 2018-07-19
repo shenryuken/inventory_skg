@@ -58,6 +58,8 @@ class OrderController extends Controller
 
     public function deliveryDetail($order_no = "")
     {
+        $delivery = [];
+        $items = [];
 
         try{
             $delivery = Delivery::where('delivery_number',$order_no)->first();
@@ -66,9 +68,10 @@ class OrderController extends Controller
         
         
     }catch(\Exception $e){
-        return back()->withError($e->getMessage());
+        // return back()->withError($e->getMessage());
+        echo $e->getMessage();
     }
-        return view('inventory.orders.order-sales-view',[ 'delivery' => $delivery, 'items' => $items]);
+        return view('inventory.orders.order-delivery-view',[ 'delivery' => $delivery, 'items' => $items]);
     }
 
     

@@ -29,7 +29,7 @@
                 <div class="panel-heading">
                     <button class="btn pull-right" onclick="printElem('printed_area')"><i class="fa fa-print"></i> Print </a></button>
                 </div>
-                @if($order)
+                @if($delivery)
             <div id="printed_area" class="panel-body panel-body-pricing">               
                     <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($delivery->delivery_number, "C93") }}" alt="barcode"   />
                     {{-- {!! DNS1D::getBarcodeSVG($order->order_no, "C93") !!} --}}

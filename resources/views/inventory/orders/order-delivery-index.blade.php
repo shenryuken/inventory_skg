@@ -88,8 +88,10 @@ textarea {
                                                 <td>{{ $delivery->salesOrder->shipping_address->state }}</td>
                                                 <td>{{ $delivery->courier->courier_name }}</td>
                                                 {{-- <td>{{ $order->globalstatus->description }}</td> --}}
-                                                <td><a href="{{ url('inventory/order/delivery/edit/'.$delivery->delivery_number) }}" class="btn btn-info">Update</a>
-                                                    <a href="{{ url('inventory/order/view/'.$delivery->delivery_number) }}" class="btn btn-default">View Order</a></td>
+                                                <td>
+                                                    {{-- <a href="{{ url('inventory/order/delivery/edit/'.$delivery->delivery_number) }}" class="btn btn-info">Update</a> --}}
+                                                    <a href="{{ url('inventory/order/delivery/view/'.$delivery->delivery_number) }}" class="btn btn-default">View Order</a>
+                                                </td>
                                             @endforeach
                                         </tbody>
                                 </table>
