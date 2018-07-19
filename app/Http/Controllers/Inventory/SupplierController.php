@@ -8,7 +8,7 @@ use Auth;
 use Carbon\Carbon;
 use Session;
 
-use App\Models\supplier;
+use App\Models\Supplier;
 
 
 class SupplierController extends Controller
@@ -27,7 +27,7 @@ class SupplierController extends Controller
 
     public function list(){		
 		try{			
-			$supplier = supplier::all();
+			$supplier = Supplier::all();
 
 			
 		}catch(\Exception $e){
@@ -39,7 +39,7 @@ class SupplierController extends Controller
 
     public function show($id){		
 		try{			
-            $supplier = supplier::find($id);
+            $supplier = Supplier::find($id);
 			
 		}catch(\Exception $e){
 			return 'Error: '.$e->getMessage();
@@ -52,7 +52,7 @@ class SupplierController extends Controller
 		
 		try{
 			
-            $supplier = supplier::find($id);
+            $supplier = Supplier::find($id);
 			
 		}catch(\Exception $e){
 			return 'Error: '.$e->getMessage();
@@ -85,7 +85,7 @@ class SupplierController extends Controller
 			];
             
             
-			supplier::where('id',$id)->update($supplier);
+			Supplier::where('id',$id)->update($supplier);
         
         Session::flash('message', 'Successfully updated supplier!');
 		return redirect('inventory/supplier/view/'.$id);
@@ -112,7 +112,7 @@ class SupplierController extends Controller
 				'created_at'	=> Carbon::now(new \DateTimeZone('Asia/Kuala_Lumpur'))
 			];
             
-            $supplier = new supplier($data);
+            $supplier = new Supplier($data);
             $supplier->save();
 			$new_id = $supplier->id;
         
@@ -123,7 +123,7 @@ class SupplierController extends Controller
 
 
     public function destroy($id){
-        $supplier = supplier::find($id)->delete();
+        $supplier = Supplier::find($id)->delete();
         return redirect('inventory/supplier')->with('success','Information has been  deleted');
     }
 	
