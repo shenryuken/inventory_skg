@@ -29,29 +29,29 @@
                 <div class="panel-heading">
                     <button class="btn pull-right" onclick="printElem('printed_area')"><i class="fa fa-print"></i> Print </a></button>
                 </div>
-                @if($order)
+                @if($delivery)
             <div id="printed_area" class="panel-body panel-body-pricing">               
-                    <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($order->order_no, "C93") }}" alt="barcode"   />
+                    <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($delivery->delivery_number, "C93") }}" alt="barcode"   />
                     {{-- {!! DNS1D::getBarcodeSVG($order->order_no, "C93") !!} --}}
-                    <h1>Order : <strong style="text-transform: uppercase;">#{{ $order->order_no}}</strong></h1>  
+                    <h1>Order : <strong style="text-transform: uppercase;">#{{ $delivery->delivery_number}}</strong></h1>  
                 
 
-                <p><span class="fa fa-caret-right"></span> <strong>Customer:</strong> {{ $order->user->username }}</p>
-                <p><span class="fa fa-caret-right"></span> <strong>Status:</strong> {{ $order->globalstatus->description }}</p>
-                <p><span class="fa fa-caret-right"></span> <strong>Purchase Date:</strong> {{ Carbon\Carbon::parse($order->purchase_date)->format('d/m/Y') }}</p>
+                <p><span class="fa fa-caret-right"></span> <strong>Customer:</strong> {{ $delivery->salesOrder->user->username }}</p>
+                <p><span class="fa fa-caret-right"></span> <strong>Status:</strong> {{ $delivery->salesOrder->globalstatus->description }}</p>
+                <p><span class="fa fa-caret-right"></span> <strong>Purchase Date:</strong> {{ Carbon\Carbon::parse($delivery->salesOrder->purchase_date)->format('d/m/Y') }}</p>
                 
-                <p><span class="fa fa-caret-right"></span> <strong>Bill To:</strong> {{ $order->billing_address->street1 }}{{ $order->billing_address->street2 }},
-                    {{ $order->billing_address->poscode }},
-                    {{ $order->billing_address->city }},
-                    {{ $order->billing_address->state }},
-                    {{ $order->billing_address->country }}                                                                    
+                <p><span class="fa fa-caret-right"></span> <strong>Bill To:</strong> {{ $delivery->salesOrder->billing_address->street1 }}{{ $delivery->salesOrder->billing_address->street2 }},
+                    {{ $delivery->salesOrder->billing_address->poscode }},
+                    {{ $delivery->salesOrder->billing_address->city }},
+                    {{ $delivery->salesOrder->billing_address->state }},
+                    {{ $delivery->salesOrder->billing_address->country }}                                                                    
                 </p>
 
-                <p><span class="fa fa-caret-right"></span> <strong>Ship To:</strong> {{ $order->shipping_address->street1 }}{{ $order->billing_address->street2 }},
-                    {{ $order->shipping_address->poscode }},
-                    {{ $order->shipping_address->city }},
-                    {{ $order->shipping_address->state }},
-                    {{ $order->shipping_address->country }}                                                                    
+                <p><span class="fa fa-caret-right"></span> <strong>Ship To:</strong> {{ $delivery->salesOrder->shipping_address->street1 }}{{ $delivery->salesOrder->billing_address->street2 }},
+                    {{ $delivery->salesOrder->shipping_address->poscode }},
+                    {{ $delivery->salesOrder->shipping_address->city }},
+                    {{ $delivery->salesOrder->shipping_address->state }},
+                    {{ $delivery->salesOrder->shipping_address->country }}                                                                    
                 </p>
 
                 <table class="table">

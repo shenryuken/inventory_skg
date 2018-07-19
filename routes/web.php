@@ -273,6 +273,7 @@ Route::get('inventory/supplier/delete/{id?}', 'Inventory\SupplierController@dest
 Route::get('inventory/stock/in/', 'Inventory\StockInController@index');
 Route::post('inventory/stock/in/store', 'Inventory\StockInController@store');
 Route::get('inventory/stock/list', 'Inventory\StockInController@list');
+Route::get('inventory/stock/in/view/{x?}', 'Inventory\StockInController@show');
 #Stock Adjustment
 Route::get('inventory/stock/adjustment/', 'Inventory\StockAdjustmentController@index');
 Route::get('inventory/stock/adjustment/stock_product', 'Inventory\StockAdjustmentController@stockProduct');
@@ -285,8 +286,13 @@ Route::get('inventory/stock/barcode/{x?}', 'Inventory\StockReportController@barc
 
 #Order Delivery
 Route::get('inventory/order/sales', 'Inventory\OrderController@salesIndex');
-Route::get('inventory/order/delivery/{order_no?}', 'Inventory\OrderController@deliveryIndex');
-Route::get('inventory/order/view/{order_no?}', 'Inventory\OrderController@salesDetail');
+Route::get('inventory/order/delivery', 'Inventory\OrderController@deliveryIndex');
+Route::get('inventory/order/delivery/create/{order_no?}', 'Inventory\OrderController@deliveryCreate');
+Route::get('inventory/order/sales/view/{order_no?}', 'Inventory\OrderController@salesDetail');
+Route::get('inventory/order/delivery/view/{order_no?}', 'Inventory\OrderController@deliveryDetail');
+Route::post('inventory/order/delivery/store', 'Inventory\OrderController@deliveryStore');
+
+
 
 #Product
 Route::get('inventory/product', function () {  return redirect("inventory/product/listing"); });

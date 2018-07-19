@@ -11,5 +11,6 @@ class Stock extends Model
         return $this->hasMany('App\Models\StockItem','stock_id');
     }
 
+
     
 }
