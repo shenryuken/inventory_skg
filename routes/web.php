@@ -288,8 +288,9 @@ Route::get('inventory/stock/barcode/{x?}', 'Inventory\StockReportController@barc
 Route::get('inventory/order/sales', 'Inventory\OrderController@salesIndex');
 Route::get('inventory/order/delivery', 'Inventory\OrderController@deliveryIndex');
 Route::get('inventory/order/delivery/create/{order_no?}', 'Inventory\OrderController@deliveryCreate');
-Route::get('inventory/order/view/{order_no?}', 'Inventory\OrderController@salesDetail');
-Route::post('inventory/order/deliver/store', 'Inventory\OrderController@deliveryStore');
+Route::get('inventory/order/sales/view/{order_no?}', 'Inventory\OrderController@salesDetail');
+Route::get('inventory/order/delivery/view/{order_no?}', 'Inventory\OrderController@deliveryDetail');
+Route::post('inventory/order/delivery/store', 'Inventory\OrderController@deliveryStore');
 
 
 

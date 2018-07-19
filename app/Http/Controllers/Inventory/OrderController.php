@@ -9,6 +9,7 @@ use App\Models\OrderItem;
 use App\Models\Courier;
 use App\Models\Delivery;
 use App\Models\DeliveryItem;
+use App\Models\StockItem;
 use Auth;
 use Carbon\Carbon;
 use Session;
@@ -53,6 +54,21 @@ class OrderController extends Controller
         return back()->withError($e->getMessage());
     }
         return view('inventory.orders.order-sales-view',[ 'order' => $order, 'items' => $items]);
+    }
+
+    public function deliveryDetail($order_no = "")
+    {
+
+        try{
+            $delivery = Delivery::where('delivery_number',$order_no)->first();
+            $items = DeliveryItem::where('delivery_id',$order->id)->get();
+            // var_dump($items->products->name);
+        
+        
+    }catch(\Exception $e){
+        return back()->withError($e->getMessage());
+    }
+        return view('inventory.orders.order-sales-view',[ 'delivery' => $delivery, 'items' => $items]);
     }
 
     
@@ -102,6 +118,16 @@ class OrderController extends Controller
                         'barcode'  => $request->get('serial_no')[$x],
                         'quantity' => $request->get('quantity')[$x],
                 ];
+                //update to stock
+                try{
+                    $stock_item = new StockItem;
+
+                    $stock_item->where('barcode',$request->get('serial_no')[$x])->update(['status' => '05']);
+                }catch(Exception $e){
+
+                }
+                
+                
 
                 $delivery_item = new DeliveryItem($data_item);
                 $delivery_item->save();

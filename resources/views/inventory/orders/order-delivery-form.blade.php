@@ -22,7 +22,7 @@
         <p>{{ $message }}</p>
     </div
 @endif
-<form class="form-horizontal" id="form" method="post" action="{{ url('inventory/order/deliver/store')}}">
+<form class="form-horizontal" id="form" method="post" action="{{ url('inventory/order/delivery/store')}}">
 {{ csrf_field() }}
 <input type="hidden" name="order_id" value="{{ $order->id }}">
 <div class="row">
