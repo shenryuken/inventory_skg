@@ -1107,7 +1107,7 @@ class ShopController extends Controller
             $return['status'] = "02";
         }
 
-        // dd($return);
+        // dd($return,$data,$orderHdr);
         return view('shops.delivery-status',compact('return','data','orderHdr'));
     }
 
