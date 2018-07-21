@@ -95,47 +95,54 @@
         </div>
     </div>
 </div>
-
+@endsection
+{{-- page level scripts --}}
+@section('footer_scripts')
 <script type="text/javascript">
     
     $(document).ready(function(){
 
         var orderHdr = {!! $orderHdr !!};
         var status = {!! $data !!};
-        // console.log(orderHdr,status)
+        console.log(orderHdr,status)
 
         // $('a.orderstatus').each(function(i){
         //     console.log(i)
         //     $(this).addClass()
         // });
+        setTimeout(function(){
+             for(var j=0;j<status.length;j++){
 
-        for(var j=0;j<status.length;j++){
-            if(status[j].status <= orderHdr.status){
-                if(status[j].status == "01"){
+                if(status[j].status <= orderHdr.status){
+                    if(status[j].status == "01"){
 
-                    $('#status-one').addClass('selected');
-                    // $('a.orderstatus').addClass('selected');
+                        $('#status-one').addClass('selected');
+                        // $('a.orderstatus').addClass('selected');
+                    }
+                    if(status[j].status == "02"){
+                        console.log(status[j].status)
+                        console.log(orderHdr.status)
+                        $('#status-two').addClass('selected');
+                        // $('a.orderstatus').addClass('disabled');
+                    }
+                    if(status[j].status == "03"){
+
+                        $('#status-three').addClass('selected');
+                        // $('a.orderstatus').addClass('disabled');
+                    }
+                    if(status[j].status == "04"){
+
+                        $('#status-four').addClass('selected');
+                        // $('a.orderstatus').addClass('disabled');
+                    }
                 }
-                if(status[j].status == "02"){
-
-                    $('#status-two').addClass('selected');
-                    // $('a.orderstatus').addClass('disabled');
-                }
-                if(status[j].status == "03"){
-
-                    $('#status-three').addClass('selected');
-                    // $('a.orderstatus').addClass('disabled');
-                }
-                if(status[j].status == "04"){
-
-                    $('#status-four').addClass('selected');
-                    // $('a.orderstatus').addClass('disabled');
+                else{
+                    break;
                 }
             }
-            else{
-                break;
-            }
-        }
+        },10);
+
+       
     });
 
 </script>
