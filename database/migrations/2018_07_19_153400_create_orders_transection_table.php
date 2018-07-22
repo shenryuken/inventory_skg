@@ -16,7 +16,7 @@ class CreateOrdersTransectionTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('order_type', 45);
-			$table->string('mall_type',45)
+			$table->string('mall_type',45);
 			$table->string('agent_id', 45);
 			$table->string('product_id', 45);
 			$table->string('quantity', 45);
