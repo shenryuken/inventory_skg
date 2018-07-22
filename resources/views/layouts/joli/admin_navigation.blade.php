@@ -177,11 +177,13 @@
 
     <li class="xn-openable <?php echo in_array(Request::segment(1).'/'.Request::segment(2), array("inventory/setting")) ? "active" : "" ; ?>">
         <a href="javascript:;"><span class="fa fa-cogs"></span> <span class="xn-text"> Settings </span></a>
-        <ul>
+        <?php /* Remove GST on  2018-07-22
+		<ul>
             <li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2). '/' .Request::segment(3), array("inventory/setting/gst")) ? "active" : "" ; ?>">
                 <a href="{{ url('inventory/setting/gst') }}"><span class="fa fa-gear"></span> Tax GST </a>
             </li>
         </ul>
+		*/ ?>
         <ul >
             <li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2). '/' .Request::segment(3), array("inventory/setting/productcategory")) ? "active" : "" ; ?>">
                 <a href="{{ url('inventory/setting/productcategory') }}"><span class="fa fa-gear"></span> Product Category </a>

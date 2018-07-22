@@ -12,19 +12,19 @@ if(isset($id) && $id > 0){
 	$clearurl = "edit/" . $id;
 	$titlehead = "Edit Promotion";
 	
-	$wm_gst = $wm_aftergst = $em_gst = $em_aftergst = $staff_gst = $staff_aftergst = 0;
-	if($price_wm > 0){
-		$wm_gst = ($price_wm / 100) * $gstpercentage;
-		$wm_aftergst = $price_wm + $wm_gst;
-	}
-	if($price_em > 0){
-		$em_gst = ($price_em / 100) * $gstpercentage;
-		$em_aftergst = $price_em + $em_gst;
-	}
-	if($price_staff > 0){
-		$staff_gst = ($price_staff / 100) * $gstpercentage;
-		$staff_aftergst = $price_staff + $staff_gst;
-	}
+	// $wm_gst = $wm_aftergst = $em_gst = $em_aftergst = $staff_gst = $staff_aftergst = 0;
+	// if($price_wm > 0){
+		// $wm_gst = ($price_wm / 100) * $gstpercentage;
+		// $wm_aftergst = $price_wm + $wm_gst;
+	// }
+	// if($price_em > 0){
+		// $em_gst = ($price_em / 100) * $gstpercentage;
+		// $em_aftergst = $price_em + $em_gst;
+	// }
+	// if($price_staff > 0){
+		// $staff_gst = ($price_staff / 100) * $gstpercentage;
+		// $staff_aftergst = $price_staff + $staff_gst;
+	// }
 }
 ?>
 
@@ -219,7 +219,7 @@ select{cursor:pointer;}
 						</div>
 						<div class="col-md-12">
 							<div class="form-group">
-								<label class="col-md-3 control-label"><br /> West Malaysia <span class="required">*</span></label>
+								<label class="col-md-2 control-label"><br /> West Malaysia <span class="required">*</span></label>
 								<div class="col-md-2">
 									<span class="help-block"> Price </span>
 									<div class="input-group">
@@ -227,6 +227,24 @@ select{cursor:pointer;}
 										<input type="text" class="sales-info form-control product-price_wm mask_decimal" placeholder="0.00" name="price_wm" value="{{ isset($price_wm) ? number_format($price_wm, 2, '.', '') : '' }}" />
 									</div>
 								</div>
+								<label class="col-md-2 control-label"><br /> East Malaysia <span class="required">*</span></label>
+								<div class="col-md-2">
+									<span class="help-block"> Price </span>
+									<div class="input-group">
+										<span class="input-group-addon">RM</span>
+										<input type="text" class="sales-info form-control product-price_em mask_decimal" placeholder="0.00" name="price_em" value="{{ isset($price_em) ? number_format($price_em, 2, '.', '') : '' }}" />
+									</div>
+								</div>
+								<label class="col-md-2 control-label"><br /> Staff Price </label>
+								<div class="col-md-2">
+									<span class="help-block"> Price </span>
+									<div class="input-group">
+										<span class="input-group-addon">RM</span>
+										<input type="text" class="sales-info form-control product-price_staff mask_decimal" placeholder="0.00" 
+										name="price_staff" value="{{ isset($price_staff) ? number_format($price_staff, 2, '.', '') : '' }}" />
+									</div>
+								</div>
+								<?php /* Remove GST on  2018-07-22
 								<div class="col-md-2">
 									<span class="help-block"> GST {{ $gstpercentage }} %</span>
 									<div class="input-group">
@@ -244,10 +262,12 @@ select{cursor:pointer;}
 										value="{{ isset($wm_aftergst) ? number_format($wm_aftergst, 2, '.', '') : '' }}" />
 									</div>
 								</div>
+								*/ ?>
 							</div>
+							<?php /* Remove GST on  2018-07-22
 							<div class="form-group">
-								<label class="col-md-3 control-label"><br /> East Malaysia <span class="required">*</span></label>
-								<div class="col-md-2">
+								<label class="col-md-4 control-label"><br /> East Malaysia <span class="required">*</span></label>
+								<div class="col-md-4">
 									<span class="help-block"> Price </span>
 									<div class="input-group">
 										<span class="input-group-addon">RM</span>
@@ -273,8 +293,8 @@ select{cursor:pointer;}
 								</div>
 							</div>
 							<div class="form-group">
-								<label class="col-md-3 control-label"><br /> Staff Price </label>
-								<div class="col-md-2">
+								<label class="col-md-4 control-label"><br /> Staff Price </label>
+								<div class="col-md-4">
 									<span class="help-block"> Price </span>
 									<div class="input-group">
 										<span class="input-group-addon">RM</span>
@@ -300,6 +320,7 @@ select{cursor:pointer;}
 									</div>
 								</div>
 							</div>
+							*/ ?>
 						</div>
 					</div>
 				</div>

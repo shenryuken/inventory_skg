@@ -7,19 +7,19 @@
 
 $wm_gst = $wm_aftergst = $em_gst = $em_aftergst = $staff_gst = $staff_aftergst = 0;
 if(isset($id) && $id > 0){
-	$wm_gst = $wm_aftergst = $em_gst = $em_aftergst = $staff_gst = $staff_aftergst = 0;
-	if($price_wm > 0){
-		$wm_gst = ($price_wm / 100) * $gstpercentage;
-		$wm_aftergst = $price_wm + $wm_gst;
-	}
-	if($price_em > 0){
-		$em_gst = ($price_em / 100) * $gstpercentage;
-		$em_aftergst = $price_em + $em_gst;
-	}
-	if($price_staff > 0){
-		$staff_gst = ($price_staff / 100) * $gstpercentage;
-		$staff_aftergst = $price_staff + $staff_gst;
-	}
+	// $wm_gst = $wm_aftergst = $em_gst = $em_aftergst = $staff_gst = $staff_aftergst = 0;
+	// if($price_wm > 0){
+		// $wm_gst = ($price_wm / 100) * $gstpercentage;
+		// $wm_aftergst = $price_wm + $wm_gst;
+	// }
+	// if($price_em > 0){
+		// $em_gst = ($price_em / 100) * $gstpercentage;
+		// $em_aftergst = $price_em + $em_gst;
+	// }
+	// if($price_staff > 0){
+		// $staff_gst = ($price_staff / 100) * $gstpercentage;
+		// $staff_aftergst = $price_staff + $staff_gst;
+	// }
 }
 ?>
 @section('content')
@@ -112,7 +112,7 @@ if(isset($id) && $id > 0){
 					</div>
 					<br /> &nbsp;
 					<div class="row">
-						<div class="col-md-7">
+						<div class="col-md-6">
 							<h3> Sales Info </h3>
 							<hr />
 							<div class="panel-body">
@@ -125,35 +125,43 @@ if(isset($id) && $id > 0){
 											<tr>
 												<th class="col-md-2 text-right" ></th>
 												<th class="col-md-2 text-right" >Price</th>
+												<?php /* Remove GST on  2018-07-22
 												<th class="col-md-2 text-right" >GST ({{ isset($gstpercentage) ? number_format($gstpercentage) : '0' }}%)</th>
-												<th class="col-md-2 text-right" >After GST</th>
+												<th class="col-md-2 text-right" >Price</th>
+												*/ ?>
 											</tr>
 										</thead>
 										<tbody>
 											<tr>
 												<th class="text-right"> West Malaysia </th>
 												<td class="text-right"> {{ isset($price_wm) && $price_wm > 0 ? 'RM ' . number_format($price_wm, 2, '.', '') : '-' }} </td>
+												<?php /* Remove GST on  2018-07-22
 												<td class="text-right"> {{ isset($wm_gst) && $wm_gst > 0 ? 'RM ' . number_format($wm_gst, 2, '.', '') : '-' }} </td>
 												<td class="text-right"> {{ isset($wm_aftergst) && $wm_aftergst > 0 ? 'RM ' . number_format($wm_aftergst, 2, '.', '') : '-' }} </td>
+												*/ ?>
 											</tr>
 											<tr>
 												<th class="text-right"> East Malaysia </th>
 												<td class="text-right"> {{ isset($price_em) && $price_em > 0 ? 'RM ' . number_format($price_em, 2, '.', '') : '-' }} </td>
+												<?php /* Remove GST on  2018-07-22
 												<td class="text-right"> {{ isset($em_gst) && $em_gst > 0 ? 'RM ' . number_format($em_gst, 2, '.', '') : '-' }} </td>
 												<td class="text-right"> {{ isset($em_aftergst) && $em_aftergst > 0 ? 'RM ' . number_format($em_aftergst, 2, '.', '') : '-' }} </td>
+												*/ ?>
 											</tr>
 											<tr>
 												<th class="text-right"> Staff Price </th>
 												<td class="text-right"> {{ isset($price_staff) && $price_staff > 0 ? 'RM ' . number_format($price_staff, 2, '.', '') : '-' }} </td>
+												<?php /* Remove GST on  2018-07-22
 												<td class="text-right"> {{ isset($staff_gst) && $staff_gst > 0 ? 'RM ' . number_format($staff_gst, 2, '.', '') : '-' }} </td>
 												<td class="text-right"> {{ isset($staff_aftergst) && $staff_aftergst > 0 ? 'RM ' . number_format($staff_aftergst, 2, '.', '') : '-' }} </td>
+												*/ ?>
 											</tr>
 										</tbody>
 									</table>
 								</div>
 							</div>	
 						</div>
-						<div class="col-md-5">
+						<div class="col-md-6">
 							<div class="col-md-12">
 								<h3> Purchasing Info </h3>
 								<hr />
@@ -260,9 +268,9 @@ if(isset($id) && $id > 0){
 									<tr>
 										<th ></th>
 										<th class="col-md-6"> Product Package </th>
-										<th class="col-md-2" title="After GST" > West Malaysia </th>
-										<th class="col-md-2" title="After GST" > East Malaysia </th>
-										<th class="col-md-2" title="After GST" > Staff </th>
+										<th class="col-md-2" title="Price" > West Malaysia </th>
+										<th class="col-md-2" title="Price" > East Malaysia </th>
+										<th class="col-md-2" title="Price" > Staff </th>
 									</tr>
 								</thead>
 								<tbody class="tbody-product">
@@ -274,9 +282,9 @@ if(isset($id) && $id > 0){
 											<td><a href="{{ url('inventory/product/package_view/' . $package['id']) }}" 
 												title=" View {{ $package['code'].' ('.$package['name'].')' }}"
 												class="">{{ $package['code'] . ' (' . $package['name'] . ')' }}</a></td>
-											<td title="After GST">RM {{ number_format($package['wm_aftergst'],2) }}</td>
-											<td title="After GST">RM {{ number_format($package['em_aftergst'],2) }}</td>
-											<td title="After GST">RM {{ number_format($package['staff_aftergst'],2) }}</td>
+											<td title="Price">RM {{ number_format($package['price_wm'],2) }}</td>
+											<td title="Price">RM {{ number_format($package['price_em'],2) }}</td>
+											<td title="Price">RM {{ number_format($package['price_staff'],2) }}</td>
 										</tr>
 										@endforeach
 									@else

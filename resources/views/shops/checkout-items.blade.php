@@ -155,7 +155,8 @@
     </div>
 </div>
 
-
+@endsection
+@section('footer_scripts')
 <!-- Modal -->
 <div class="modal fade" id="ModalAddress" role="dialog">
     <div class="modal-dialog">

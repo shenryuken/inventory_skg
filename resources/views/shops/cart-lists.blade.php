@@ -159,6 +159,8 @@
     </div>
 </div>
 
+@endsection
+@section('footer_scripts')
 <script type="text/javascript">
 
     var baseUrl = window.location.origin;
