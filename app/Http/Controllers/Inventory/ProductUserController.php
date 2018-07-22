@@ -51,6 +51,7 @@ class ProductUserController extends Controller{
 			'Product' => array(),
 			'Package' => array(),
 			'Promotion' => array(),
+			'Package_Promotion' => array(),
 		);
 		if(count($productQuery) > 0){
 			foreach($productQuery->all() as $key => $row){
@@ -116,10 +117,27 @@ class ProductUserController extends Controller{
 				if($promotion){
 					// $type = "Promotion";
 					
-					$type = "Product Promotion";
+					$type = "Promotion";
 					if($row->type == 2)
-						$type = "Package Promotion";
-					
+						$type = "Package_Promotion";
+
+					$ori_price_wm = $row->price_wm;
+					$ori_price_em = $row->price_em;
+					$ori_price_staff = $row->price_staff;
+					$ori_wm_gst = $ori_wm_aftergst = $ori_em_gst = $ori_em_aftergst = $ori_staff_gst = $ori_staff_aftergst = 0;
+					if($ori_price_wm > 0){
+						$ori_wm_gst = ($ori_price_wm / 100) * $gstpercentage;
+						$ori_wm_aftergst = $ori_price_wm + $ori_wm_gst;
+					}
+					if($ori_price_em > 0){
+						$ori_em_gst = ($ori_price_em / 100) * $gstpercentage;
+						$ori_em_aftergst = $ori_price_em + $ori_em_gst;
+					}
+					if($ori_price_staff > 0){
+						$ori_staff_gst = ($ori_price_staff / 100) * $gstpercentage;
+						$ori_staff_aftergst = $ori_price_staff + $ori_staff_gst;
+					}
+
 					#price after gst
 					$price_wm = $promotion['price_wm'];
 					$price_em = $promotion['price_em'];
@@ -148,6 +166,9 @@ class ProductUserController extends Controller{
 					$data['staff_aftergst'] = number_format($staff_aftergst, 2, '.', '');
 					$data['promotion_id'] = $promotion['id'];
 					$data['promotion_description'] = $promotion['description'];
+					$data['ori_wm_aftergst'] = number_format($ori_wm_aftergst, 2, '.', '');
+					$data['ori_em_aftergst'] = number_format($ori_em_aftergst, 2, '.', '');
+					$data['ori_staff_aftergst'] = number_format($ori_staff_aftergst, 2, '.', '');
 					
 				}
 				
