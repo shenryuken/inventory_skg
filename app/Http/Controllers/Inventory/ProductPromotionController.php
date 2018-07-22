@@ -45,7 +45,7 @@ class ProductPromotionController extends Controller
 			'productArr' => $productArr,
 			'statusArr' => $this->statusOnOff,
 		);
-        return view('Inventory/promotion_listing',$data);
+        return view('inventory/promotion_listing',$data);
     }
 	
 	public function search($x = ''){
@@ -83,7 +83,7 @@ class ProductPromotionController extends Controller
 			'search_product' => $search_product,
 			'search_status' => $search_status,
 		);
-        return view('Inventory/promotion_listing',$data);
+        return view('inventory/promotion_listing',$data);
     }
 	
 
@@ -134,7 +134,7 @@ class ProductPromotionController extends Controller
 		$data['gstpercentage'] = $gstpercentage;
 		$data['productArr'] = $productArr;
 		$data['productGiftArr'] = $productGiftArr;
-		return view('Inventory/product_promotion_form',$data);
+		return view('inventory/product_promotion_form',$data);
     }
 	
 	public function edit($id = 0){
@@ -168,7 +168,7 @@ class ProductPromotionController extends Controller
 			$data['productArr'] = $productArr;
 			$data['gift_list'] = $giftdata->where('promotion_id', $id)->get();
 			$data['productGiftArr'] = $productGiftArr;
-			return view('Inventory/product_promotion_form',$data);
+			return view('inventory/product_promotion_form',$data);
 		}
 		return redirect("inventory/product/promotion/listing");
     }
@@ -222,7 +222,7 @@ class ProductPromotionController extends Controller
 			$data['gift_list'] = $gift_list;
 			$data['productGiftArr'] = $productGiftArr;
 			$data['statusArr'] = $this->statusOnOff;
-			return view('Inventory/product_promotion_view',$data);
+			return view('inventory/product_promotion_view',$data);
 		}
 		return redirect("inventory/product/promotion/listing");
     }
