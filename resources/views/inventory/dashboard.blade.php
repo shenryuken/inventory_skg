@@ -14,7 +14,7 @@
     
     <!-- START WIDGETS -->
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-">
             <!-- START SALES BLOCK -->
             <div class="panel panel-default">
                     <div class="panel-heading">
@@ -36,14 +36,14 @@
                         <div class="row stacked">
                             <div class="col-md-4">                                            
                                 <div class="progress-list">                                               
-                                    <div class="pull-left"><strong>In Queue</strong></div>
+                                    <div class="pull-left"><strong>Pending Delivery</strong></div>
                                     <div class="pull-right">75%</div>                                                
                                     <div class="progress progress-small progress-striped active">
                                         <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 75%;">75%</div>
                                     </div>
                                 </div>
                                 <div class="progress-list">                                               
-                                    <div class="pull-left"><strong>Shipped Products</strong></div>
+                                    <div class="pull-left"><strong>Products Delivered</strong></div>
                                     <div class="pull-right">450/500</div>                                                
                                     <div class="progress progress-small progress-striped active">
                                         <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 90%;">90%</div>
@@ -57,7 +57,7 @@
                                     </div>
                                 </div>
                                 <div class="progress-list">                                               
-                                    <div class="pull-left"><strong class="text-warning">Progress Today</strong></div>
+                                    <div class="pull-left"><strong class="text-warning">Created Product</strong></div>
                                     <div class="pull-right">75/150</div>                                                
                                     <div class="progress progress-small progress-striped active">
                                         <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">50%</div>
@@ -96,15 +96,15 @@
                 </ul>                                     -->
             </div>                                
             <div class="panel-body  list-group list-group-contacts">
-              <a href="supplier/supplierDetail" class="list-group-item">                
+              <a href="inventory/supplier/list" class="list-group-item">                
                 <i class="fa fa-circle-o pull-left fa-lg"></i>
                 <span class="contacts-title">Supplier</span>
             </a>
-                          <a href="product/listing" class="list-group-item"> 
+                          <a href="inventory/product/listing" class="list-group-item"> 
                 <i class="fa fa-circle-o pull-left fa-lg"></i>
                 <span class="contacts-title">Product</span>
             </a>      
-                          <a href="stock/listing" class="list-group-item"> 
+                          <a href="inventory/stock/list" class="list-group-item"> 
                 <i class="fa fa-circle-o pull-left fa-lg"></i>
                 <span class="contacts-title">Stock</span>
             </a>            
@@ -134,7 +134,7 @@
                 </ul>                                     -->
             </div>                                
             <div class="panel-body  list-group list-group-contacts">
-            <a href="agent/get_product_list/all" class="list-group-item">                
+            <a href="shop/skg-mall" class="list-group-item">                
                 <i class="fa fa-circle pull-left fa-lg"></i>
                 <span class="contacts-title">Product List</span>
             </a>
@@ -172,18 +172,15 @@
                 </ul>                                     -->
             </div>                                
             <div class="panel-body  list-group list-group-contacts">
-              <a href="deliver_order/" class="list-group-item">                
+              <a href="'inventory/order/sales'" class="list-group-item">                
                 <i class="fa fa-check pull-left fa-lg"></i>
                 <span class="contacts-title">Create DO</span>
             </a>
-                          <a href="deliver_order/listing" class="list-group-item"> 
+                          <a href="'inventory/order/delivery'" class="list-group-item"> 
                 <i class="fa fa-check pull-left fa-lg"></i>
                 <span class="contacts-title">Listing</span>
             </a>      
-                          <a href="stock/listing" class="list-group-item"> 
-                <i class="fa fa-check pull-left fa-lg"></i>
-                <span class="contacts-title">Delivery Status</span>
-            </a>            
+                                    
 
             </div>                                    
         </div>
