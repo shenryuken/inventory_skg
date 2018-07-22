@@ -5,6 +5,11 @@
 @section('title','Product Listing')
 @section('content')
 
+@if(Auth::guard('admin')->check())
+@php $height = '183px' @endphp
+@else
+@php $height = '230px' @endphp
+@endif
 
 <span hidden="">{{ $id }}</span>
 <!-- START BREADCRUMB -->
@@ -79,7 +84,7 @@
 								       			</tr>
 								       		</table> -->
 										</div>		
-								        <div class="panel-footer">
+								        <div class="panel-footer" style="height: {{ $height }};">
 								        	<div class="col-md-12" style="">
 								        		<div class="row">
 								        			<div class="col-md-7" style="margin-left:-10px;">
@@ -342,10 +347,11 @@
 					var img = package1[el].image;
 					tag += "<tr class='tr-package'>";
 					tag += "<td style='width:150px;' class='td-package'>";
-					tag += "<img class='media-object' src='"+urlimg+"storage/"+img+"' style='height: 150px; margin-bottom:10px;'>";
+					tag += "<img class='thumbnail' src='"+urlimg+"storage/"+img+"' style='height: 150px; width:150px; margin-bottom:10px;'><br>";
+					tag += "<h4 style='margin-left:5px;'>"+package1[el].name+"</h4>";
 					tag += "</td>";
 					tag += "<td style='' class='td-package'>";
-					tag += "<h4 style='margin-left:5px;'>"+package1[el].name+"</h4>";
+					// tag += "<h4 style='margin-left:5px;'>"+package1[el].name+"</h4>";
 					tag += "</td>";
 					tag += "<td style='width:150px;' class='td-package'>";
 					tag += "<h4 style='margin-left:5px;'>"+package1[el].package_quantity+"</h4>";
@@ -552,10 +558,11 @@ $('a.gift-list').on('click',function(){
 				var img = gift[el].image;
 				tag += "<tr class='tr-gift'>";
 				tag += "<td style='width:150px;' class='td-gift'>";
-				tag += "<img class='media-object' src='"+urlimg+"storage/"+img+"' style='height: 150px; margin-bottom:10px;'>";
+				tag += "<img class='thumbnail' src='"+urlimg+"storage/"+img+"' style='height: 150px; width:150px; margin-bottom:10px;'><br>";
+				tag += "<h4 style='margin-left:5px;'>"+gift[el].product_name+"</h4>";
 				tag += "</td>";
 				tag += "<td style='' class='td-gift'>";
-				tag += "<h4 style='margin-left:5px;'>"+gift[el].description+"</h4>";
+				// tag += "<h4 style='margin-left:5px;'>"+gift[el].product_name+"</h4>";
 				tag += "</td>";
 				tag += "<td style='width:150px;' class='td-gift'>";
 				tag += "<h4 style='margin-left:5px;'>"+gift[el].quantity+"</h4>";
@@ -704,7 +711,7 @@ function fn_get_gift_desc(product_id,promotion_id,callback){
 				var img = gift[el].image;
 				tag += "<tr>";
 				tag += "<td>";
-				tag += "<h4>"+gift[el].description+"</h4>";
+				tag += "<h4>"+gift[el].product_name+"</h4>";
 				tag += "</td>";
 				tag += "<td style='width:150px;'>";
 				tag += "<h4>"+gift[el].quantity+"</h4>";

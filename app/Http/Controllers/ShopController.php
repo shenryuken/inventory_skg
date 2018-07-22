@@ -808,26 +808,23 @@ class ShopController extends Controller
         try {
 
             $gift = [];
-            $gift = Product_promotion_gift::select('product_id as product','promotion_id as promotion','description','quantity')
-                                        ->where('promotion_id',$promotion_id)
-                                        ->where('product_id',$product_id)
+            $gift = Product_promotion_gift::where('promotion_id',$promotion_id)
+                                        // ->where('product_id',$product_id)
                                         ->get();
 
             if(!empty($gift)){
+                foreach ($gift as $key => $value) {
 
-                foreach ($gift as $key => $value) { 
-                    
+                    $data = (new ProductUserController)->single_data_product($value['product_id']);
                     $image = Product_image::select('type','description','file_name','path')
-                                        ->where('product_id',$value['product'])
+                                        ->where('product_id',$value['product_id'])
                                         ->orderBy('status','desc')
                                         ->first();
 
+                    $gift[$key]['product_name'] = ($data['data']['name'] == null ? '' : $data['data']['name']);
                     $gift[$key]['image'] = ($image['path'] == null ? '' : $image['path']);
                 }
             }
-
-            // dd($data);
-
             $return['message'] = "succssfuly retrived";
             $return['status'] = "01";
         }
