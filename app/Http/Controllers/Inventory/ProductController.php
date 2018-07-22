@@ -514,7 +514,7 @@ class ProductController extends Controller{
 			$data['tabform'] = $tabform;
 			$data['tabgallery'] = $tabgallery;
 			$data['productArr'] = $productArr; # not package product
-			return view('Inventory/product_package_form',$data);
+			return view('inventory/product_package_form',$data);
 		}
 		return redirect("inventory/product/listing");
     }
