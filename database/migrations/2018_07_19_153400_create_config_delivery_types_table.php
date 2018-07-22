@@ -14,7 +14,7 @@ class CreateConfigDeliveryTypesTable extends Migration {
 	{
 		Schema::create('config_delivery_types', function(Blueprint $table)
 		{
-			$table->integer('id')->unsigned()->primary();
+			$table->increments('id');
 			$table->string('delivery_code', 5)->unique('delivery_type_delivery_code_unique');
 			$table->string('type_description', 20);
 			$table->string('created_by', 45)->nullable();

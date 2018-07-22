@@ -14,7 +14,7 @@ class CreateProductPromotionGiftsTable extends Migration {
 	{
 		Schema::create('product_promotion_gifts', function(Blueprint $table)
 		{
-			$table->integer('id')->unsigned()->unique('product_promotion_gift_id_unique');
+			$table->increments('id');
 			$table->integer('promotion_id')->default(0)->comment('promotion id');
 			$table->integer('product_id')->default(0)->comment('product id');
 			$table->integer('quantity')->default(0)->comment('quantity');

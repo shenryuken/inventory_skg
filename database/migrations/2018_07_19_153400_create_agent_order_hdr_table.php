@@ -14,7 +14,8 @@ class CreateAgentOrderHdrTable extends Migration {
 	{
 		Schema::create('agent_order_hdr', function(Blueprint $table)
 		{
-			$table->string('order_no', 15)->primary();
+			$table->increments('id');
+			$table->string('order_no', 15)->unique();
 			$table->integer('agent_id');
 			$table->string('invoice_no', 15);
 			$table->integer('total_items');
@@ -22,7 +23,7 @@ class CreateAgentOrderHdrTable extends Migration {
 			$table->decimal('shipping_fee');
 			$table->decimal('total_price');
 			$table->integer('delivery_type');
-			$table->string('purchase_date', 10);
+			$table->date('purchase_date');
 			$table->string('status', 2);
 			$table->integer('bill_address');
 			$table->integer('ship_address');

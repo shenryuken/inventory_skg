@@ -14,7 +14,7 @@ class CreateProfilesTable extends Migration {
 	{
 		Schema::create('profiles', function(Blueprint $table)
 		{
-			$table->integer('id', true);
+			$table->increments('id');
 			$table->integer('profileable_id');
 			$table->string('profileable_type', 100);
 			$table->string('full_name', 150)->nullable();

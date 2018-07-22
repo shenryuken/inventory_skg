@@ -14,7 +14,7 @@ class CreateAgentPaymentsTable extends Migration {
 	{
 		Schema::create('agent_payments', function(Blueprint $table)
 		{
-			$table->integer('id', true);
+			$table->increments('id');
 			$table->integer('agent_id');
 			$table->integer('invoice_id');
 			$table->integer('amount')->nullable();
