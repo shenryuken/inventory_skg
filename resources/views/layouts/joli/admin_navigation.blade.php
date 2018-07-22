@@ -205,9 +205,9 @@
 			</li>
 		</ul>
 		<ul >
-			<li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2). '/' .Request::segment(3), array("inventory/setting/deliverytype")) ? "active" : "" ; ?>">
+			<!-- <li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2). '/' .Request::segment(3), array("inventory/setting/deliverytype")) ? "active" : "" ; ?>">
 				<a href="{{ url('inventory/setting/deliverytype') }}"><span class="fa fa-gear"></span> Delivery Type </a>
-			</li>
+			</li> -->
 		</ul>
     </li>
 </ul>
