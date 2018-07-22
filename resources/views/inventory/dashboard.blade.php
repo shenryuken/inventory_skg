@@ -14,13 +14,13 @@
     
     <!-- START WIDGETS -->
     <div class="row">
-        <div class="col-md-">
+        <div class="col-md-8">
             <!-- START SALES BLOCK -->
             <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="panel-title-box">
                             <h3>Sales</h3>
-                            <span>Sales activity by period you selected</span>
+                            <span>Sales activities</span>
                         </div>                                     
                         <ul class="panel-controls panel-controls-title">                                        
                             <li>
@@ -29,51 +29,91 @@
                                 </div>                                     
                             </li>                                
                             <li><a href="#" class="panel-fullscreen rounded"><span class="fa fa-expand"></span></a></li>
-                        </ul>                                    
-                        
+                        </ul> 
+                    </div>
+                    <div class="panel-body">                                    
+                        <div class="col-md-3">                        
+                            <a href="#" class="tile tile-danger">
+                                {{ $to_be_processed }}
+                                <p>To be Processed</p>                            
+                                
+                            </a>                        
+                        </div>
+
+                        <div class="col-md-3">                        
+                            <a href="#" class="tile tile-success">
+                                {{ $to_be_shipped }}
+                                <p>To be Shipped</p>                            
+                                
+                            </a>                        
+                        </div>
+
+                        <div class="col-md-3">                        
+                            <a href="#" class="tile tile-warning">
+                               {{ $to_be_delivered }}
+                                <p>To be Delivered</p>                            
+                                
+                            </a>                        
+                        </div>
+
+                        <div class="col-md-3">                        
+                            <a href="#" class="tile tile-default">
+                                {{ $sales_created }}
+                                <p>Sales Created</p>                            
+                                
+                            </a>                        
+                        </div>
+                                   
+                    </div>
+                </div>
+                <!-- END SALES BLOCK -->
+
+                
+        </div>
+
+        <div class="col-md-4">
+            <!-- START SALES BLOCK -->
+            <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="panel-title-box">
+                            <h3>Inventory</h3>
+                        </div>                                     
+                        <ul class="panel-controls panel-controls-title">                                        
+                            <li>
+                                <div id="reportrange" class="dtrange">                                            
+                                    <span></span><b class="caret"></b>
+                                </div>                                     
+                            </li>                                
+                            <li><a href="#" class="panel-fullscreen rounded"><span class="fa fa-expand"></span></a></li>
+                        </ul> 
                     </div>
                     <div class="panel-body">                                    
                         <div class="row stacked">
-                            <div class="col-md-4">                                            
+                            <div class="col-md-12">                                            
                                 <div class="progress-list">                                               
-                                    <div class="pull-left"><strong>Pending Delivery</strong></div>
-                                    <div class="pull-right">75%</div>                                                
+                                    <div class="pull-left"><strong>Stock In</strong></div>
+                                    <div class="pull-right">{{ $stock_in_today }} / {{ $total_stock }}</div>                                                
                                     <div class="progress progress-small progress-striped active">
-                                        <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 75%;">75%</div>
+                                        <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: {{ ($stock_in_today / $total_stock)*100 }}%;">{{ ($stock_in_today / $total_stock)*100 }}%</div>
                                     </div>
                                 </div>
                                 <div class="progress-list">                                               
-                                    <div class="pull-left"><strong>Products Delivered</strong></div>
-                                    <div class="pull-right">450/500</div>                                                
+                                    <div class="pull-left"><strong>Stock Out</strong></div>
+                                    <div class="pull-right">{{ $stock_out_today }} / {{ $total_stock }}</div>                                                
                                     <div class="progress progress-small progress-striped active">
-                                        <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 90%;">90%</div>
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: {{ ($stock_out_today / $total_stock)*100 }}%;">{{ ($stock_out_today / $total_stock)*100 }}%</div>
                                     </div>
                                 </div>
-                                <div class="progress-list">                                               
-                                    <div class="pull-left"><strong class="text-danger">Returned Products</strong></div>
-                                    <div class="pull-right">25/500</div>                                                
-                                    <div class="progress progress-small progress-striped active">
-                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 5%;">5%</div>
-                                    </div>
-                                </div>
-                                <div class="progress-list">                                               
-                                    <div class="pull-left"><strong class="text-warning">Created Product</strong></div>
-                                    <div class="pull-right">75/150</div>                                                
-                                    <div class="progress progress-small progress-striped active">
-                                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: 50%;">50%</div>
-                                    </div>
-                                </div>
-                                <p><span class="fa fa-warning"></span> Data update in end of each hour. You can update it manual by pressign update button</p>
-                            </div>
-                            <div class="col-md-8">
-                                <div id="dashboard-map-seles" style="width: 100%; height: 200px"></div>
+                                
+                                <p><span class="fa fa-warning hide"></span> Data update in end of each hour. You can update it manual by pressign update button</p>
                             </div>
                         </div>                                    
                     </div>
                 </div>
                 <!-- END SALES BLOCK -->
         </div>
-    </div>                    
+    </div>    
+                   
     <div class="row">
         <div class="col-md-4">
         <!-- START USERS ACTIVITY BLOCK -->
@@ -134,15 +174,15 @@
                 </ul>                                     -->
             </div>                                
             <div class="panel-body  list-group list-group-contacts">
-            <a href="shop/skg-mall" class="list-group-item">                
+            <a href="{{ url('shop/skg-mall') }}" class="list-group-item">                
                 <i class="fa fa-circle pull-left fa-lg"></i>
                 <span class="contacts-title">Product List</span>
             </a>
-            <a href="agent/get_order_list/{{ Auth::user()->id }}" class="list-group-item"> 
+            <a href="{{ url('agent/get_order_list/'.Auth::user()->id) }}" class="list-group-item"> 
                 <i class="fa fa-circle pull-left fa-lg"></i>
                 <span class="contacts-title">Order List</span>
             </a>      
-            <a href="agent/get_address/display" class="list-group-item"> 
+            <a href="{{ url('agent/get_address/display') }}" class="list-group-item"> 
                 <i class="fa fa-circle pull-left fa-lg"></i>
                 <span class="contacts-title">Address Configuration</span>
             </a>            
