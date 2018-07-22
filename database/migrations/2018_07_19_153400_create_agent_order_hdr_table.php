@@ -23,7 +23,7 @@ class CreateAgentOrderHdrTable extends Migration {
 			$table->decimal('shipping_fee');
 			$table->decimal('total_price');
 			$table->integer('delivery_type');
-			$table->string('purchase_date', 10);
+			$table->date('purchase_date');
 			$table->string('status', 2);
 			$table->integer('bill_address');
 			$table->integer('ship_address');
