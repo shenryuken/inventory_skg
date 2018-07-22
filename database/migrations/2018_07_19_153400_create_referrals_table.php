@@ -14,7 +14,7 @@ class CreateReferralsTable extends Migration {
 	{
 		Schema::create('referrals', function(Blueprint $table)
 		{
-			$$table->increments('id');
+			$table->increments('id');
 			$table->integer('parent_id')->nullable();
 			$table->integer('lft');
 			$table->integer('rgt');
