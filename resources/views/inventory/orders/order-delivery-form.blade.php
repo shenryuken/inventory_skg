@@ -100,7 +100,7 @@
                                 <input type="hidden" name="item_id[]" value="{{ $item->products->id }}">
                             </td>
                             <td>
-                                    <textarea class="form-control input_barcode" name="serial_no[]" ></textarea>
+                                    <textarea class="form-control input_barcode" name="serial_no[]" >{{ old('serial_no[]') }}</textarea>
                             </td>
                             <td>
                                     <input class="form-control" name="quantity[]" value="{{ $item->product_qty }}" type="text">
@@ -174,20 +174,43 @@
 <script  type="text/javascript" >
 $(document).ready(function() {
 
-    $('#form').on('keyup keypress', function(e) {
-        var keyCode = e.keyCode || e.which;
-        if (keyCode === 13) { 
-            e.preventDefault();
-            return false;
-        }
-    });
-//barcode
-$(".input_barcode").keyup(function(event) {
-                if (event.keyCode === 13 || event.keyCode === 116) {
-                    
-          
+
+            $(".input_barcode").keyup(function(event) {
+                if (event.keyCode === 13 || event.keyCode === 116) { 
+                var inputcode = $(this);                   
+                var value = $(this).val()
+                //ajax
+                let split_value = value.split(/\n/);
+                let input = split_value[split_value.length-2]
+                if(input != ''){
+                    $.ajax({
+                            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                            data:{barcode:input},	
+                            url: "{{url('inventory/stock/adjustment/check_barcode')}}"
+                            }).done(function(result){
+                                console.log(result)
+                                if(result.status == "01"){
+                                   
+                                }else{
+                                    alert('Barcode Not Exist')
+                                    if(split_value.length >= 3){
+                                        inputcode.val(split_value[split_value.length-3])
+                                    }else{
+                                        inputcode.val("");
+                                    }
+                                    
+                                }                                
+
+                            });
+                }
+                
+                console.log(split_value)
+                event.preventDefault();
                 }                     
             });
+
+
+
 });
 
 </script>

@@ -94,7 +94,9 @@ class OrderController extends Controller
 
     public function deliveryStore(Request $request){
         $postData = $this->validate($request,[
-            'order_no' => 'required',                
+            'order_no' => 'required',
+            'courier_id' => 'required',
+            'consignment_note' =>  'required'            
         ]);
 
         $order_no = $request->get('order_no');
@@ -115,25 +117,38 @@ class OrderController extends Controller
 			$delivery_id = $delivery->id;
             
             for($x = 0; $x < count($request->get('serial_no')); $x++){
-                $data_item = [
-                        'delivery_id' => $delivery_id,
-                        'product_id'  => $request->get('item_id')[$x],
-                        'barcode'  => $request->get('serial_no')[$x],
-                        'quantity' => $request->get('quantity')[$x],
-                ];
-                //update to stock
-                try{
-                    $stock_item = new StockItem;
+                //trim serial
+                $trimmed_serial = explode("\n",$request->get('serial_no')[$x]);
 
-                    $stock_item->where('barcode',$request->get('serial_no')[$x])->update(['status' => '05']);
-                }catch(Exception $e){
+                foreach($trimmed_serial as $serial_number){
+                    $serial_number = preg_replace('/\s+/', '', $serial_number);
+                    if($serial_number != ""){
+                        $data_item = [
+                            'delivery_id' => $delivery_id,
+                            'product_id'  => $request->get('item_id')[$x],
+                            'barcode'  => $serial_number,
+                            'quantity' => $request->get('quantity')[$x],
+                    ];
+                    //update to stock
+                    try{
+                        $stock_item = new StockItem;    
+    
+                        $stock_item->where('barcode',$serial_number)->update(['status' => '05']);
+                    }catch(Exception $e){
+    
+                    }
+                    $delivery_item = new DeliveryItem($data_item);
+                    $delivery_item->save();
+                    }
 
                 }
+
+
+                
                 
                 
 
-                $delivery_item = new DeliveryItem($data_item);
-                $delivery_item->save();
+                
 
             }
             
