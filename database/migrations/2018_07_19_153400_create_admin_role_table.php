@@ -14,7 +14,7 @@ class CreateAdminRoleTable extends Migration {
 	{
 		Schema::create('admin_role', function(Blueprint $table)
 		{
-			$table->integer('id', true);
+			$table->increments('id');
 			$table->integer('admin_id');
 			$table->integer('role_id');
 		});

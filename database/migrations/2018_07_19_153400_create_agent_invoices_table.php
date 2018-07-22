@@ -14,7 +14,7 @@ class CreateAgentInvoicesTable extends Migration {
 	{
 		Schema::create('agent_invoices', function(Blueprint $table)
 		{
-			$table->integer('id', true);
+			$table->increments('id');
 			$table->integer('agent_id');
 			$table->string('invoice_no', 100);
 			$table->integer('user_id');

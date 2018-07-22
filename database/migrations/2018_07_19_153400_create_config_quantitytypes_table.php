@@ -14,7 +14,7 @@ class CreateConfigQuantitytypesTable extends Migration {
 	{
 		Schema::create('config_quantitytypes', function(Blueprint $table)
 		{
-			$table->integer('id')->unsigned()->primary();
+			$table->increments('id');
 			$table->string('type', 191)->comment('Quantity Type');
 			$table->text('remarks');
 			$table->integer('status')->default(1)->comment('0: inactive, 1: active');

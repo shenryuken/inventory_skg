@@ -14,7 +14,7 @@ class CreateWalletsTable extends Migration {
 	{
 		Schema::create('wallets', function(Blueprint $table)
 		{
-			$table->integer('id', true);
+			$table->increments('id');
 			$table->integer('user_id');
 			$table->integer('p_wallet');
 			$table->float('rmvp', 10, 0);

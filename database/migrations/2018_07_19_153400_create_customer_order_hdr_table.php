@@ -12,9 +12,10 @@ class CreateCustomerOrderHdrTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('customer_order_hdr', function(Blueprint $table)
+		Schema::create('order_hdr', function(Blueprint $table)
 		{
-			$table->string('order_no', 15)->primary();
+			$table->increments('id');
+			$table->string('order_no', 15);
 			$table->integer('agent_id');
 			$table->string('invoice_no', 15);
 			$table->integer('total_items');

@@ -14,7 +14,8 @@ class CreateAgentOrderHdrTable extends Migration {
 	{
 		Schema::create('agent_order_hdr', function(Blueprint $table)
 		{
-			$table->string('order_no', 15)->primary();
+			$table->increments('id');
+			$table->string('order_no', 15)->unique();
 			$table->integer('agent_id');
 			$table->string('invoice_no', 15);
 			$table->integer('total_items');

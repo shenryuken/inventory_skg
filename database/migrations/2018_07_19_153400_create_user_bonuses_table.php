@@ -14,7 +14,7 @@ class CreateUserBonusesTable extends Migration {
 	{
 		Schema::create('user_bonuses', function(Blueprint $table)
 		{
-			$table->integer('id', true);
+			$table->increments('id');
 			$table->integer('user_id');
 			$table->float('retail_profit', 10, 0);
 			$table->float('personal_rebate', 10, 0);
