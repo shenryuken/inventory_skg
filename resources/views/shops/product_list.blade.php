@@ -228,7 +228,8 @@
 @else
 @php $order_type = 'agent' @endphp
 @endif -->
-
+@endsection
+@section('footer_scripts')
 <script type="text/javascript">
 
 	var baseUrl = window.location.origin;
