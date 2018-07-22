@@ -53,7 +53,7 @@ class ProductUserController extends Controller{
 			'Promotion' => array(),
 			'Package_Promotion' => array(),
 		);
-		
+
 		if(count($productQuery) > 0){
 			foreach($productQuery->all() as $key => $row){
 				$type = "Product";
@@ -296,7 +296,7 @@ class ProductUserController extends Controller{
 							$productArr[$package['id']]['price_staff'] = number_format($price_staff2, 2, '.', '');
 							$productArr[$package['id']]['staff_gst'] = number_format($staff_gst2, 2, '.', '');
 							$productArr[$package['id']]['staff_aftergst'] = number_format($staff_aftergst2, 2, '.', '');
-							$productArr[$package_item['id']]['package_quantity'] = $row->quantity;
+							$productArr[$package['id']]['package_quantity'] = $row->quantity;
 						}
 					}
 							
