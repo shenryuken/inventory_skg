@@ -808,7 +808,8 @@ class ShopController extends Controller
         try {
 
             $gift = [];
-            $gift = Product_promotion_gift::where('promotion_id',$promotion_id)
+            $gift = Product_promotion_gift::select('product_id as product','promotion_id as promotion','description','quantity')
+                                        ->where('promotion_id',$promotion_id)
                                         ->where('product_id',$product_id)
                                         ->get();
 
@@ -817,7 +818,7 @@ class ShopController extends Controller
                 foreach ($gift as $key => $value) { 
                     
                     $image = Product_image::select('type','description','file_name','path')
-                                        ->where('product_id',$value['product_id'])
+                                        ->where('product_id',$value['product'])
                                         ->orderBy('status','desc')
                                         ->first();
 

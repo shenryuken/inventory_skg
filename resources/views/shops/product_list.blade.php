@@ -665,7 +665,7 @@ function fn_get_gift_desc(product_id,promotion_id,callback){
 
 	var data = {
 
-		_token : "{!! csrf_token() !!}",
+		// _token : "{!! csrf_token() !!}",
 		product_id : product_id,
 		promotion_id : promotion_id
 	};
@@ -728,7 +728,7 @@ function fn_get_promotion_desc(product_id){
 
 	var data = {
 
-		_token : "{!! csrf_token() !!}",
+		// _token : "{!! csrf_token() !!}",
 		product_id : product_id
 	};
 
