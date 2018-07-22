@@ -53,6 +53,7 @@ class ProductUserController extends Controller{
 			'Promotion' => array(),
 			'Package_Promotion' => array(),
 		);
+		
 		if(count($productQuery) > 0){
 			foreach($productQuery->all() as $key => $row){
 				$type = "Product";

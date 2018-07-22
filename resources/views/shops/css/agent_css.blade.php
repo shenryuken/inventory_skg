@@ -361,7 +361,7 @@
 
 .detail{
 
-	cursor: pointer;
+	cursor: default;
 }
 
 

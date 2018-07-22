@@ -175,35 +175,35 @@
 
 
 
-    <li class="xn-openable <?php echo in_array(Request::segment(1).'/'.Request::segment(2). '/' .Request::segment(3), array("inventory/setting")) ? "active" : "" ; ?>">
+    <li class="xn-openable <?php echo in_array(Request::segment(1).'/'.Request::segment(2), array("inventory/setting")) ? "active" : "" ; ?>">
         <a href="javascript:;"><span class="fa fa-cogs"></span> <span class="xn-text"> Settings </span></a>
         <ul>
-            <li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2). '/' .Request::segment(3) . '/' .Request::segment(3), array("inventory/setting/gst")) ? "active" : "" ; ?>">
+            <li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2). '/' .Request::segment(3), array("inventory/setting/gst")) ? "active" : "" ; ?>">
                 <a href="{{ url('inventory/setting/gst') }}"><span class="fa fa-gear"></span> Tax GST </a>
             </li>
         </ul>
         <ul >
-            <li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2). '/' .Request::segment(3) . '/' .Request::segment(3), array("inventory/setting/productcategory")) ? "active" : "" ; ?>">
+            <li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2). '/' .Request::segment(3), array("inventory/setting/productcategory")) ? "active" : "" ; ?>">
                 <a href="{{ url('inventory/setting/productcategory') }}"><span class="fa fa-gear"></span> Product Category </a>
             </li>
         </ul>
         <ul >
-            <li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2). '/' .Request::segment(3) . '/' .Request::segment(3), array("inventory/setting/quantitytype")) ? "active" : "" ; ?>">
+            <li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2). '/' .Request::segment(3) , array("inventory/setting/quantitytype")) ? "active" : "" ; ?>">
                 <a href="{{ url('inventory/setting/quantitytype') }}"><span class="fa fa-gear"></span> Quantity Type </a>
             </li>
         </ul>
         <ul >
-            <li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2). '/' .Request::segment(3) . '/' .Request::segment(3), array("inventory/setting/stockadjustment")) ? "active" : "" ; ?>">
+            <li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2). '/' .Request::segment(3), array("inventory/setting/stockadjustment")) ? "active" : "" ; ?>">
                 <a href="{{ url('inventory/setting/stockadjustment') }}"><span class="fa fa-gear"></span> Stock Adjustment </a>
             </li>
         </ul>
 		<ul >
-			<li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2). '/' .Request::segment(3) . '/' .Request::segment(3), array("inventory/setting/courier")) ? "active" : "" ; ?>">
+			<li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2). '/' .Request::segment(3), array("inventory/setting/courier")) ? "active" : "" ; ?>">
 				<a href="{{ url('inventory/setting/courier') }}"><span class="fa fa-gear"></span> Courier </a>
 			</li>
 		</ul>
 		<ul >
-			<li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2). '/' .Request::segment(3) . '/' .Request::segment(3), array("inventory/setting/deliverytype")) ? "active" : "" ; ?>">
+			<li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2). '/' .Request::segment(3), array("inventory/setting/deliverytype")) ? "active" : "" ; ?>">
 				<a href="{{ url('inventory/setting/deliverytype') }}"><span class="fa fa-gear"></span> Delivery Type </a>
 			</li>
 		</ul>

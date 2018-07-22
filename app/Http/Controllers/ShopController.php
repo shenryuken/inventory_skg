@@ -12,7 +12,7 @@ use App\Models\Package;
 use App\Models\Referral;
 use App\Models\Wallet;
 use App\Models\Store;
-use App\Http\Controllers\Inventory\ProductController;
+use App\Http\Controllers\Inventory\ProductUserController;
 use App\Models\OrderTransection;
 use App\Models\Tax;
 use App\Models\Product_image;
@@ -47,7 +47,7 @@ class ShopController extends Controller
 
         try{
 
-            $data = (new ProductController)->all_data_product();
+            $data = (new ProductUserController)->all_data_product();
 
             foreach ($data['productArr']['Product'] as $key1 => $value) {
                 
@@ -98,6 +98,9 @@ class ShopController extends Controller
                     if($gift != null){
 
                         $product[$k]['gift_status'] = '';
+                    }
+                    else{
+                        $product[$k]['gift_status'] = 'hidden';
                     }
                 }
                 else{
@@ -765,7 +768,7 @@ class ShopController extends Controller
 
         try {
             
-            $data = (new ProductController)->single_data_product($product_id);
+            $data = (new ProductUserController)->single_data_product($product_id);
             $package = [];
             if(!empty($data)){
 
@@ -1154,7 +1157,7 @@ class ShopController extends Controller
             $user     = User::find($id);
             $products = Store::where('user_id', $id)->groupBy('product_id')->get();
 
-            $data = (new ProductController)->all_data_product();
+            $data = (new ProductUserController)->all_data_product();
 
             foreach ($data['productArr']['Product'] as $key1 => $value) {
                 
