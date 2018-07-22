@@ -82,7 +82,7 @@
 								        <div class="panel-footer">
 								        	<div class="col-md-12" style="">
 								        		<div class="row">
-								        			<div class="col-md-7" style="">
+								        			<div class="col-md-7" style="margin-left:-10px;">
 								        				<input type="hidden" name="promotion_id" id="promotion_id" value="{{ isset($value['promotion_id']) ? $value['promotion_id'] : '' }}">
 									        			@if(Auth::guard('admin')->check() == true)
 									        			@if(isset($value['ori_staff_aftergst']))
@@ -101,20 +101,20 @@
 										       			@endif
 										       		</div>
 										       		<div class="col-md-5">
-										       			<div style="margin-top: 20px;" id="popup">
+										       			<div style="margin-top: 0px;" id="popup">
 											       			<span {{ $value['gift_status'] }}>
 												       			<a class="popper btn btn-secondary gift-list" data-popbox="pop1" style="font-size: 10px;">
-												       				<font font size="3" color="orange">Gift</font>
+												       				<font font size="3" color="green">Gift</font>
 												       			</a>
 												       		</span>
 												       		
 											       		</div>
 										       		</div>
-								        		</div>	
+								        		</div>
 								        		<div class="row">
-													<div class="col-md-7" style="">
+													<!-- <div class="col-md-7" style="">
 														<div class="info">
-											                <table style="margin-top: 20px; margin-left:-10px;">
+											                <table style="/*margin-top: 20px;*/ margin-left:-10px;">
 											                	@if(Auth::guard('admin')->check() == true)
 											                	<tr>
 												    				<td><h4 class="font-bold price-text-color">RM{{ $value['staff_aftergst'] }}</h4></td>
@@ -131,12 +131,30 @@
 												       			@endif
 												       		</table>
 												       	</div>
-											       	</div>
+											       	</div> -->
+											       	<div class="col-md-7" style="margin-left:-10px;">
+								        				<input type="hidden" name="promotion_id" id="promotion_id" value="{{ isset($value['promotion_id']) ? $value['promotion_id'] : '' }}">
+									        			@if(Auth::guard('admin')->check() == true)
+									        			@if(isset($value['staff_aftergst']))
+								        				<span class="ori-price">
+									       				<text class="font-bold price-text-color">RM{{ $value['staff_aftergst'] }}</text>
+										       			</span>
+										       			@endif
+									        			@else
+									        			@if(isset($value['wm_aftergst']) && isset($value['em_aftergst']))
+										       			<span class="ori-price">
+										       				WM :<text class="font-bold price-text-color">RM{{ $value['wm_aftergst'] }}</text>
+										       				<br>
+										       				EM :<text class="font-bold price-text-color">RM{{ $value['em_aftergst'] }}</text>
+										       			</span>
+										       			@endif
+										       			@endif
+										       		</div>
 											       	<div class="col-md-5">
-											       		<div style="margin-top: 20px;">
+											       		<div style="margin-top: 0px;">
 											       			<span {{ $value['package_status'] }}>
 												       			<a class="popper btn btn-secondary pack-list" data-popbox="pop2" style="font-size: 10px;">
-												       				<font font size="3" color="orange">Package</font>
+												       				<font font size="3" color="red">Package</font>
 												       			</a>
 												       		</span>
 											       		</div>
@@ -275,7 +293,7 @@
 
 		var product_id = $(this).closest('.item-content').find('input#id').val();
 		console.log(product_id)
-		window.location.href = "{{ url('agent/get_product_details') }}"+"/"+product_id;
+		// window.location.href = "{{ url('agent/get_product_details') }}"+"/"+product_id;
 	});
 
 	$(document).on('click','a.pack-list', function(){
