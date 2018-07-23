@@ -33,10 +33,12 @@ class StockReportController extends Controller
 
     public function index(){
         $products = Product::all();  
+        $stocks = Stock::all();
+        $stock_items = StockItem::all(); 
 
 
 
-        return view('inventory.stocks.stock-report',compact('products'));
+        return view('inventory.stocks.stock-report',compact('products','stocks','stock_items'));
     }
 
 
