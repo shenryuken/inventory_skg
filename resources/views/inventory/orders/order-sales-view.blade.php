@@ -67,7 +67,7 @@
                             <tr>
                                 <td>{{ $item->products->name }}</td>
                                 <td>{{ $item->products->price_wm }}</td>
-                                <td>1</td>
+                                <td>{{ $item->product_qty }}</td>
                             </tr>
                             @endforeach
                     </tbody>

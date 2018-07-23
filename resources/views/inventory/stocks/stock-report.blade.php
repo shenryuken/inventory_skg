@@ -35,12 +35,14 @@
                                                              </tr>
                                                          </thead>
                                                          <tbody>
+                                                             @foreach($stock_items as $items )
                                                                 <tr>
-                                                                    <td>Date</td>
-                                                                    <td>Description</td>
-                                                                    <td>Stock In</td>
-                                                                    <td>Stock Out</td>
+                                                                    <td>{{ $items->stocks->stock_date }}</td>
+                                                                    <td>{{ $items->stocks->description }}</td>
+                                                                    <td></td>
+                                                                    <td></td>
                                                                 </tr>
+                                                             @endforeach
                                                             </tbody>
                                                      </table>
                                                  </div>  
