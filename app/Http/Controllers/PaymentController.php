@@ -395,79 +395,79 @@ class PaymentController extends Controller
         
     }
 
-    public function updateOrCreateWallet($user_id)
-    {
-        $total_pv         = $this->getTotalPv();
-        $total_rmvp       = $this->getTotalRmvp();
+    // public function updateOrCreateWallet($user_id)
+    // {
+    //     $total_pv         = $this->getTotalPv();
+    //     $total_rmvp       = $this->getTotalRmvp();
 
-        $wallet = Wallet::firstOrNew(['user_id'  => $user_id]);
+    //     $wallet = Wallet::firstOrNew(['user_id'  => $user_id]);
        
-        if(!$wallet->exists || $wallet->purchased == 0)
-        {
-            $wallet->rmvp            = $wallet->rmvp + $total_rmvp;
-            $wallet->pv              = $wallet->pv + $total_pv;
-            $wallet->first_purchased = $total_pv; 
-            $wallet->purchased       = 1;
-        }
-        else
-        {
-            $wallet->rmvp            = $wallet->rmvp + $total_rmvp;
-            $wallet->pv              = $wallet->pv + $total_pv;
-            $wallet->purchased       = $wallet->purchased + 1;
-        }
+    //     if(!$wallet->exists || $wallet->purchased == 0)
+    //     {
+    //         $wallet->rmvp            = $wallet->rmvp + $total_rmvp;
+    //         $wallet->pv              = $wallet->pv + $total_pv;
+    //         $wallet->first_purchased = $total_pv; 
+    //         $wallet->purchased       = 1;
+    //     }
+    //     else
+    //     {
+    //         $wallet->rmvp            = $wallet->rmvp + $total_rmvp;
+    //         $wallet->pv              = $wallet->pv + $total_pv;
+    //         $wallet->purchased       = $wallet->purchased + 1;
+    //     }
         
-        $wallet->save();
+    //     $wallet->save();
 
-        $updateUserRank = $this->updateUserRank($user_id);
-    }
+    //     $updateUserRank = $this->updateUserRank($user_id);
+    // }
 
-    public function updateUserRank($user_id)
-    {
-        $total_pv      = $this->getTotalPv();
-        $qualifiedRank = $this->getQualifiedRank($user_id);
+    // public function updateUserRank($user_id)
+    // {
+    //     $total_pv      = $this->getTotalPv();
+    //     $qualifiedRank = $this->getQualifiedRank($user_id);
         
-        $user = User::find($user_id);
+    //     $user = User::find($user_id);
 
-        if($qualifiedRank > $user->rank_id)
-        {
-            $user->rank()->associate($qualifiedRank);
-            $user->save(); 
+    //     if($qualifiedRank > $user->rank_id)
+    //     {
+    //         $user->rank()->associate($qualifiedRank);
+    //         $user->save(); 
 
-            $referral = Referral::where('user_id', $user->id)->first();
-            $referral->rank = $user->rank->code_name;
-            $referral->save();
+    //         $referral = Referral::where('user_id', $user->id)->first();
+    //         $referral->rank = $user->rank->code_name;
+    //         $referral->save();
             
-            if($qualifiedRank == 4)
-            {
-                $active_do = new ActiveDo;
-                $active_do->user_id = $user->id;
-                $active_do->rank    = $request->rank;
-                $active_do->save();
-            }
-        }
-    }
+    //         if($qualifiedRank == 4)
+    //         {
+    //             $active_do = new ActiveDo;
+    //             $active_do->user_id = $user->id;
+    //             $active_do->rank    = $request->rank;
+    //             $active_do->save();
+    //         }
+    //     }
+    // }
 
-    public function getQualifiedRank($user_id)
-    {
-        $total_pv = $this->getTotalPv();
+    // public function getQualifiedRank($user_id)
+    // {
+    //     $total_pv = $this->getTotalPv();
 
-        switch ($total_pv) {
-            case ($total_pv >= 200 && $total_pv < 1000):
-                $rank_id = 2;
-                break;
-            case ($total_pv >= 1000 && $total_pv < 5000):
-                $rank_id = 3;
-                break;
-            case ($total_pv >= 5000):
-                $rank_id = 4;
-                break;
-            default:
-                $rank_id = 1;
-                break;
-        }
+    //     switch ($total_pv) {
+    //         case ($total_pv >= 200 && $total_pv < 1000):
+    //             $rank_id = 2;
+    //             break;
+    //         case ($total_pv >= 1000 && $total_pv < 5000):
+    //             $rank_id = 3;
+    //             break;
+    //         case ($total_pv >= 5000):
+    //             $rank_id = 4;
+    //             break;
+    //         default:
+    //             $rank_id = 1;
+    //             break;
+    //     }
 
-        return $rank_id;
-    }
+    //     return $rank_id;
+    // }
 
 }
 
