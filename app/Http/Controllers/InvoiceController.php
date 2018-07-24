@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Invoice;
 use App\Models\AgentInvoice;
-use App\Models\Order;
+use App\Models\OrderHdr;
 use App\Models\AgentOrder;
 use App\Models\Payment;
 use App\Models\Shipment;
@@ -35,8 +35,8 @@ class InvoiceController extends Controller
     public function show($id)
     {
 		$invoice     = Invoice::find($id);
-    	$order 	     = Order::where('invoice_id', $id)->first();
-        $order_items = $order->orderItems;
+    	$order 	     = OrderHdr::where('invoice_no', $invoice->invoice_no)->first();
+        $order_items = $order->OrderItems;
     	$payments    = Payment::where('invoice_id', $invoice->id)->get();
         $shipment    = $order->shipment;
     	

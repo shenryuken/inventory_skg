@@ -39,4 +39,9 @@ class OrderHdr extends Model
     {
     	return $this->hasOne('App\Models\Address','id','ship_address');
     }
+
+    public function invoice()
+    {
+        return $this->belongsTo('App\Invoice','invoice_no','invoice_no');
+    }
 }
