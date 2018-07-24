@@ -178,8 +178,8 @@ class PaymentController extends Controller
                 if($newUser)
                 {
                     $user = $this->saveMemberToDb($newUser);
-                    $newUser->newProfile()->delete();
-                    $newUser->delete();
+                    // $newUser->newProfile()->delete();
+                    // $newUser->delete();
 
                     $input['user_id'] = $user->id;
                 }
