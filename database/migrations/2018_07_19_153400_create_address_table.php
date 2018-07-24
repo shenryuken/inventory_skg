@@ -11,11 +11,13 @@ class CreateAddressTable extends Migration {
 	 * @return void
 	 */
 	public function up()
-	{
+	{	
+		Schema::dropIfExists('address');
 		Schema::create('address', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->string('address_code', 20);
+			$table->string('applicable_id', 20);
+			$table->string('applicable_type', 20);
 			$table->string('name', 50);
 			$table->string('street1');
 			$table->string('street2')->nullable();

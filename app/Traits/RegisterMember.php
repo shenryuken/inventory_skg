@@ -45,8 +45,22 @@ trait RegisterMember
         $profile->country   = $newUser->newProfile->country;
         $profile->contact_no    = $newUser->newProfile->mobile_no;
 
+        $address = new Address;
+        $address->name = $newUser->newProfile->name;
+        $address->street1 = $newUser->newProfile->street;
+        $address->street2 = "";
+        $address->poscode = $newUser->newProfile->postcode;
+        $address->city = $newUser->newProfile->city;
+        $address->state = $newUser->newProfile->state;
+        $address->country = $newUser->newProfile->country;
+        $address->reminder_flag = "x";
+        $address->created_by = Auth::user()->id;
+        $address->created_at = \Carbon\Carbon::now();
+
         $user->save();
         $user->profile()->save($profile);
+        $user->address()->save($address);
+
         $wallet = $this->updateOrCreateWallet();
 
         $rank_id = $user->rank_id;

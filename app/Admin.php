@@ -76,6 +76,11 @@ class Admin extends Authenticatable
         return false;
     }
 
+    public function address()
+    {
+        return $this->morphMany('App\Models\Address', 'applicable');
+    }
+
     //==========================================================
     // END ACL
     //==========================================================

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 use App\User;
+use App\Admin;
 use App\Models\Invoice;
 use App\Models\Product;
 use App\Models\Package;
@@ -412,30 +413,23 @@ class ShopController extends Controller
         // dd($delivery_type);
 
         $sessionData = session('STORE','default');
-
+        $addressData = [];
         if(Auth::guard('admin')->check()){
 
             $address_code = $agent_id."_staff";
             $order_type = "staff";
+            $user = Admin::find($agent_id);
+            $addressData = $user->address->where('reminder_flag','x')->first();
 
         }
         else{
             $address_code = $agent_id."_agent";
             $order_type = "agent";
+            $user = User::find($agent_id);
+            $addressData = $user->address->where('reminder_flag','x')->first();
         }
 
         try{
-            $addressData = [];
-            $addressData = Address::select('id','name','address_code','street1','street2','poscode','city','state','country')
-                                    ->where('address_code','=',$address_code)
-                                    ->where('reminder_flag','=','x')
-                                    ->first();
-                                    
-            if($addressData == null){
-                $addressData = Address::select('id','name','address_code','street1','street2','poscode','city','state','country')
-                                    ->where('address_code','=',$address_code)
-                                    ->first();
-            }
 
             if(empty($addressData)){
 
@@ -543,7 +537,7 @@ class ShopController extends Controller
                         'address' => $addressData->street1.",".$addressData->street2.",".$addressData->poscode.",".$addressData->city.",".$addressData->state.",".$addressData->country,
                         'btnstatus' => "",
                         'id' => $addressData->id,
-                        'code' => $addressData->address_code
+                        'code' => $addressData->applicable_id
                     ];
                 }
                 elseif($deliveryType == "02"){
@@ -632,23 +626,31 @@ class ShopController extends Controller
 
         try{
 
-        $adds = Address::select('id','name','address_code','street1','street2','poscode','city','state','country')
-                                    ->where('address_code','=',$agent_id."_AGENT")
-                                    ->get();
+            $address = [];
 
-        $address = [];
-        foreach ($adds as $key => $value) {
-            
-            $addressData = Array(
+            if(Auth::guard('admin')->check() == true){
+                $id = Auth::guard('admin')->user()->id;
+                $user = Admin::find($id);
+            }
+            else{
+                $id = Auth::user()->id;
+                $user = User::find($id);
+            }
 
-                'id' => $value['id'],
-                'address_code' => $value['address_code'],
-                'name' => $value->name,
-                'address' => $value['street1'].",".$value['street2'].",".$value['poscode'].",".$value['city'].",".$value['state'].",".$value['country'],
-            );
+            $adds = $user->address;
+        
+            foreach ($adds as $key => $value) {
+                
+                $addressData = Array(
 
-            $address[] = $addressData;
-        }
+                    'id' => $value['id'],
+                    'code' => $value['applicable_id'],
+                    'name' => $value->name,
+                    'address' => $value['street1'].",".$value['street2'].",".$value['poscode'].",".$value['city'].",".$value['state'].",".$value['country'],
+                );
+
+                $address[] = $addressData;
+            }
 
             $return['message'] = "succssfuly retrived";
             $return['status'] = "01";
@@ -665,53 +667,81 @@ class ShopController extends Controller
     public function saveAddress(Request $request){
 
         // dd($request->get('item'));
-        $newAddress = $request->get('item');
-
+        $data = $request->get('item');
+        // dd($data);
         try{
 
-            $address = Address::where('address_code',$newAddress['address_code'])
-                                ->get();
-            if(empty($address)){
+            // $address = Address::where('address_code',$newAddress['address_code'])
+            //                     ->get();
+            // if(empty($address)){
 
-                $newAddress['address_code'] = Auth::user()->id."_AGENT";
-                $newAddress['reminder_flag'] = "x";
-                $newAddress ['created_by'] =  Auth::user()->id;
-                $newAddress['created_at'] = \Carbon\Carbon::now();
+            //     $newAddress['address_code'] = Auth::user()->id."_AGENT";
+            //     $newAddress['reminder_flag'] = "x";
+            //     $newAddress ['created_by'] =  Auth::user()->id;
+            //     $newAddress['created_at'] = \Carbon\Carbon::now();
 
-                // dd($newAddress);
-                address::insert($newAddress);
+            //     // dd($newAddress);
+            //     address::insert($newAddress);
 
-                $return['message'] = "succssfuly saved";
-                $return['status'] = "01";
+            //     $return['message'] = "succssfuly saved";
+            //     $return['status'] = "01";
+            // }
+            // else{
+            //      if($newAddress['id'] != "" && $newAddress['address_code'] != ""){
+
+            //         $newAddress['updated_by'] =  Auth::user()->id;
+            //         $newAddress['updated_at'] = \Carbon\Carbon::now();
+
+            //         Address::where('id',$newAddress['id'])
+            //                 ->where('address_code', $newAddress['address_code'])
+            //                 ->update($newAddress);
+
+            //         $return['message'] = "succssfuly updated";
+            //         $return['status'] = "01";
+
+            //     }
+            //     else{
+
+            //         $newAddress['address_code'] = Auth::user()->id."_AGENT";
+            //         $newAddress['reminder_flag'] = "";
+            //         $newAddress ['created_by'] =  Auth::user()->id;
+            //         $newAddress['created_at'] = \Carbon\Carbon::now();
+
+            //         // dd($newAddress);
+            //         Address::insert($newAddress);
+
+            //         $return['message'] = "succssfuly saved";
+            //         $return['status'] = "01";
+            //     }
+            // }
+
+             if(Auth::guard('admin')->check() == true){
+                $id = Auth::guard('admin')->user()->id;
+                $order_type = "staff";
+                $user = Admin::find($id);
             }
             else{
-                 if($newAddress['id'] != "" && $newAddress['address_code'] != ""){
-
-                    $newAddress['updated_by'] =  Auth::user()->id;
-                    $newAddress['updated_at'] = \Carbon\Carbon::now();
-
-                    Address::where('id',$newAddress['id'])
-                            ->where('address_code', $newAddress['address_code'])
-                            ->update($newAddress);
-
-                    $return['message'] = "succssfuly updated";
-                    $return['status'] = "01";
-
-                }
-                else{
-
-                    $newAddress['address_code'] = Auth::user()->id."_AGENT";
-                    $newAddress['reminder_flag'] = "";
-                    $newAddress ['created_by'] =  Auth::user()->id;
-                    $newAddress['created_at'] = \Carbon\Carbon::now();
-
-                    // dd($newAddress);
-                    Address::insert($newAddress);
-
-                    $return['message'] = "succssfuly saved";
-                    $return['status'] = "01";
-                }
+                $id = Auth::user()->id;
+                $order_type = "agent";
+                $user = User::find($id);
             }
+
+            $address = new Address;
+            $address->name = $data['name'];
+            $address->street1 = $data['street1'];
+            $address->street2 = $data['street2'];
+            $address->poscode = $data['poscode'];
+            $address->city = $data['city'];
+            $address->state = $data['state'];
+            $address->country = $data['country'];
+            $address->reminder_flag = "";
+            $address->created_by = $id;
+            $address->created_at = \Carbon\Carbon::now();
+            
+            $user->address()->save($address);
+
+            $return['message'] = "succssfuly saved";
+            $return['status'] = "01";
         }
         catch(\Exception $e){
 
@@ -850,17 +880,23 @@ class ShopController extends Controller
             $sessionData = session("STORE","default");
 
             // dd($sessionData);
+            $address = [];
             if(Auth::guard('admin')->check()){
 
                 $address_code = $agent_id."_staff";
                 $order_type = "staff";
                 $id = Auth::guard('admin')->user()->id;
+                $user = Admin::find($agent_id);
+                $address = $user->address->where('id',$billing_id)->first();
+
 
             }
             else{
                 $address_code = $agent_id."_agent";
                 $order_type = "agent";
                 $id = Auth::user()->id;
+                $user = User::find($agent_id);
+                $address = $user->address->where('id',$billing_id)->first();
             }
 
             // dd($$request->get('billing_id'),$request->get('shipping_id'));
@@ -943,8 +979,8 @@ class ShopController extends Controller
                         }
                     }
 
-                    $user = User::find($id);
-                    $rank = $user->rank()->first();
+                    $userRank = User::find($id);
+                    $rank = $userRank->rank()->first();
 
                     if($rank->code_name == "C" && $rank->code_name == "LC"){
 
@@ -963,7 +999,7 @@ class ShopController extends Controller
                                 $price_em = $v['price_em'];
                             }
 
-                            $address = Address::where('id',$shipping_id)->where('address_code',$address_code)->first();
+                            // $address = Address::where('id',$shipping_id)->where('address_code',$address_code)->first();
 
                             if(strtolower($address->state) == strtolower("Sabah") 
                                 || strtolower($address->state) ==  strtolower("Sarawak")){
@@ -1006,7 +1042,7 @@ class ShopController extends Controller
                                 $price_em = $v['price_em'];
                             }
 
-                            $address = Address::where('id',$shipping_id)->where('address_code',$address_code)->first();
+                            // $address = Address::where('id',$shipping_id)->where('address_code',$address_code)->first();
 
                             if(strtolower($address->state) == strtolower("Sabah") 
                                 || strtolower($address->state) ==  strtolower("Sarawak")){
@@ -1035,14 +1071,28 @@ class ShopController extends Controller
                     }
                 }
 
-                // if($x && $y){
-                //     OrderTransection::where('order_type',$order_type)
-                //                     ->where('agent_id',$agent_id)
-                //                     ->delete();
+                if($x && $y){
 
-                //     Address::where('id',$shipping_id)->where('address_code',$address_code)
-                //                 ->update(['reminder_flag' => 'x']);
-                // }
+                    OrderTransection::where('order_type',$order_type)
+                                    ->where('mall_type',$sessionData)
+                                    ->where('agent_id',$agent_id)
+                                    ->delete();
+
+                     $user->address()->update([
+
+                        'reminder_flag' => "",
+                        'updated_by' => $id,
+                        'updated_at' => \Carbon\Carbon::now()
+                    ]);
+
+                    $user->address()->where('id',$shipping_id)->update([
+
+                        'reminder_flag' => "x",
+                        'updated_by' => $id,
+                        'updated_at' => \Carbon\Carbon::now()
+                    ]);
+                   
+                }
 
                 $return['message'] = "Succssfuly placed the order";
                 $return['status'] = "01";
