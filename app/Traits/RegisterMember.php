@@ -18,6 +18,7 @@ use Validator;
 use Session;
 use Cart;
 use DateTime;
+use Auth;
 
 trait RegisterMember
 {
@@ -59,7 +60,7 @@ trait RegisterMember
             $address->state = $newUser->newProfile->state;
             $address->country = $newUser->newProfile->country;
             $address->reminder_flag = "x";
-            $address->created_by = Auth::user()->id;
+            $address->created_by = Auth::guard('admin')->user()->id;
             $address->created_at = \Carbon\Carbon::now();
 
             $user->save();
