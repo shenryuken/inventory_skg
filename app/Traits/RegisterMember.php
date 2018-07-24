@@ -65,7 +65,15 @@ trait RegisterMember
             $user->save();
             $user->profile()->save($profile);
             $user->address()->save($address);
-           
+
+            if($user && $profile && $address)
+            {
+                $nUser = NewUser::find($newUser->id);
+                $nUser->delete();
+
+                $nProfile = NewProfile::find($newUser->newProfile->id);
+                $nProfile->delete();
+            }
 
             $rank_id = $user->rank_id;
 
