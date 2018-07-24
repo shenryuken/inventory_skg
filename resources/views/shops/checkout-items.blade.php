@@ -345,19 +345,19 @@
         var address_code = $(this).find('.address-code').val();
 
         for(var i=0;i<gv_address.length;i++){
-            if(gv_address[i].id == address_id && gv_address[i].address_code == address_code){
+            if(gv_address[i].id == address_id && gv_address[i].code == address_code){
 
                 if(gv_type == "shipping"){
 
                     $('.shipping-id').val(gv_address[i].id);
-                    $('.shipping-code').val(gv_address[i].address_code);
+                    $('.shipping-code').val(gv_address[i].code);
                     $('.shipping-name').text(gv_address[i].name)
                     $('.shipping-address').text(gv_address[i].address)
                 }
                 else if(gv_type == "billing"){
 
                     $('.billing-id').val(gv_address[i].id);
-                    $('.billing-code').val(gv_address[i].address_code);
+                    $('.billing-code').val(gv_address[i].code);
                     $('.billing-name').text(gv_address[i].name)
                     $('.billing-address').text(gv_address[i].address)
                 }
@@ -370,8 +370,8 @@
 
     $('.save-address').click(function(){
     
-        var id = $('#id').val();
-        var address_code = $('#address-code').val();
+        // var id = $('#id').val();
+        // var address_code = $('#address-code').val();
         var name = $('#name').val();
         var street1 = $('#street1').val();
         var street2 = $('#street2').val();
@@ -382,8 +382,8 @@
 
         var item = {
 
-            id          : id,
-            address_code: address_code,
+            // id          : id,
+            // address_code: address_code,
             name        : name,
             street1     : street1,
             street2     : street2,
@@ -436,7 +436,7 @@
 
         for(var i=0;i<gv_address.length;i++){
 
-            if(gv_address[i].id == shipping_id && gv_address[i].address_code == shipping_code){
+            if(gv_address[i].id == shipping_id && gv_address[i].code == shipping_code){
 
                 $('.billing-id').val(gv_address[i].id);
                 $('.billing-code').val(gv_address[i].address_code);
@@ -476,7 +476,7 @@
                     tag += "<div class='address-field'>";
                     tag += "<p>"+(i+1)+"#</p>";
                     tag += "<input type='hidden' class='address-id' value="+ response.address[i].id +">";
-                    tag += "<input type='hidden' class='address-code' value="+ response.address[i].address_code +">";
+                    tag += "<input type='hidden' class='address-code' value="+ response.address[i].code +">";
                     tag += "<p class='name'>"+response.address[i].name+"</p>";
                     tag += "<p class='address'>"+response.address[i].address+"</p>";
                     tag += "</diV>";

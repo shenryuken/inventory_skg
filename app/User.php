@@ -92,4 +92,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\UserBonus');
     }
+
+    public function saveAddress()
+    {
+        return $this->hasMany('App\Models\AgentAddress');
+    }
+
+    public function address()
+    {
+        return $this->morphMany('App\Models\Address', 'applicable');
+    }
 }

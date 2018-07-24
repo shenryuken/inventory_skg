@@ -23,4 +23,9 @@ class Address extends Model
     {
         return $this->belongsTo('App\Models\AgentOrderHdr');
     }
+
+    public function applicable()
+    {
+        return $this->morphTo();
+    }
 }
