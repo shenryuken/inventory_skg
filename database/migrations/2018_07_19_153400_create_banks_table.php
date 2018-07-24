@@ -14,7 +14,7 @@ class CreateBanksTable extends Migration {
 	{
 		Schema::create('banks', function(Blueprint $table)
 		{
-			$table->integer('id', true);
+			$table->increments('id');
 			$table->string('name', 100);
 			$table->string('code', 5);
 			$table->string('status', 7);

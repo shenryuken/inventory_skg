@@ -1294,11 +1294,11 @@ class ShopController extends Controller
         if($itemType == 'product')
         {
             $product = Product::find($request->id);
-            $addtocart = Cart::add($product->id, 'Product: '.$product->name, $quantity, $product->wm_price);
+            $addtocart = Cart::add($product->id, 'Product: '.$product->name, $quantity, $product->price_wm);
 
         } else {
             $package = Package::find($request->id);
-            $addtocart = Cart::add($package->id, 'Package: '.$package->name, $quantity, $package->wm_price);
+            $addtocart = Cart::add($package->id, 'Package: '.$package->name, $quantity, $package->price_wm);
         }
 
         return redirect()->back();

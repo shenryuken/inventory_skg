@@ -11,94 +11,46 @@
     <!-- END BREADCRUMB -->     
     
     <!-- PAGE CONTENT WRAPPER -->
+    
     <div class="page-content-wrap">
         <div class="row">
             <div class="col-md-12">
                
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <div class="row">
+
                                     <h3 class="panel-title">Stock Report as {{date('d/m/Y')}}</h3>
-                                    <div class="actions pull-right">
-                                            <a href="@" class="btn btn-default  btn-sm btn-circle" title="Donlod">
-                                                <i class="fa fa-download"></i>Download</a>
-                                    </div>
-                            </div>
-                            <div class="row">
-                        
-                        <form class="form-horizontal">
-                       
-
-                                <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">Products</label>
-                                        <div class="col-md-6 col-xs-12">                                            
-                                                <select class="form-control">
-                                                        @foreach($products as $product)
-                                                        <option name="product" id="product" value="{{$product->id}}">{{$product->name}}</option>
-                                                        @endforeach
-                                                    </select>                                            
-                                            <span class="help-block">This is sample of text field</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                            <label class="col-md-3 col-xs-12 control-label">Date Start</label>
-                                            <div class="col-md-6 col-xs-12">                                            
-                                                <input type="date" class="form-control">                                          
-                                                
-                                            </div>
-                                    </div>
-                                    <div class="form-group">
-                                            <label class="col-md-3 col-xs-12 control-label">Date End</label>
-                                            <div class="col-md-6 col-xs-12">                                            
-                                                <input type="date" class="form-control">                                          
-                                                
-                                            </div>
-                                    </div>
-                        </form>
-                    </div>
-
-                        
-                    </div>
-                    <form class="form-horizontal">
-                        <div class="panel-body panel-body-table">
-                            <div class="table-responsive">
-                           
-                                        <table class="table table-hover table-striped">
-                                                <caption>
-                                                  Supplier contacts
-                                                </caption>
-                                                
-                                                <tr>
-                                                  <td id="blank">&nbsp;</td>
-                                                  @php $period = Carbon\CarbonPeriod::create(Carbon\Carbon::parse('first day of last month'), Carbon\Carbon::parse('last day of last month')); @endphp
-
-                                                    @foreach ($period as $date) 
-                                                    <th id="co1" headers="blank">{{ $date->format('d') }}</th>
-                                                    @endforeach
-                                                    <th id="co1" headers="blank">Stock In</th>
-                                                    <th id="co1" headers="blank">Stock Out</th>
-                                                    <th id="co1" headers="blank">Total</th>
-                                                </tr>
-
-                                                @foreach($products as $product)
-                                                        <tr>
-                                                                <th id="c1" headers="blank">{{ $product['name'] }}</th>
-                                                                @foreach ($period as $date) 
-                                                                <td headers="co1 c1">0</td>
-                                                                @endforeach
-                                                        </tr>
-                                                    
-                                                    @endforeach
-                                               
-                                              </table>
-                               
-                            </div>
+                      
                         </div>
-                    </div>
-                </form>
+
+                        <div class="panel-body">
+                                                 <div class="table">
+                                                     <table class="table">
+                                                         <thead>
+                                                             <tr>
+                                                                 <th>Date</th>
+                                                                 <th>Description</th>
+                                                                 <th>Stock In</th>
+                                                                 <th>Stock Out</th>
+                                                             </tr>
+                                                         </thead>
+                                                         <tbody>
+                                                             @foreach($stock_items as $items )
+                                                                <tr>
+                                                                    <td>{{ $items->stocks->stock_date }}</td>
+                                                                    <td>{{ $items->stocks->description }}</td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                             @endforeach
+                                                            </tbody>
+                                                     </table>
+                                                 </div>  
+                        </div>
+                    
             </div>
         </div>
+    </div>
     </div>
 @endsection
 

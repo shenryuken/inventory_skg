@@ -14,7 +14,7 @@ class CreateConfigTaxesTable extends Migration {
 	{
 		Schema::create('config_taxes', function(Blueprint $table)
 		{
-			$table->integer('id')->unsigned()->unique('config_tax_id_unique');
+			$table->increments('id');
 			$table->string('code', 191)->unique('config_tax_code_unique')->comment('Example: GST');
 			$table->integer('percent')->default(0)->comment('Percent tax: 6 %');
 			$table->string('remarks', 191)->default('');

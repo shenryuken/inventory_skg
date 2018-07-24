@@ -14,7 +14,7 @@ class CreateActiveSdoTable extends Migration {
 	{
 		Schema::create('active_sdo', function(Blueprint $table)
 		{
-			$table->integer('id', true);
+			$table->increments('id');
 			$table->integer('user_id')->unique('user_id');
 			$table->string('rank', 50);
 			$table->integer('personal_gpv');

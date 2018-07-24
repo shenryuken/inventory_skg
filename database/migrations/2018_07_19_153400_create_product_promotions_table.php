@@ -14,7 +14,7 @@ class CreateProductPromotionsTable extends Migration {
 	{
 		Schema::create('product_promotions', function(Blueprint $table)
 		{
-			$table->integer('id')->unsigned()->unique('product_promotion_id_unique');
+			$table->increments('id');
 			$table->integer('product_id')->default(0)->comment('product id');
 			$table->string('description', 191)->default('')->comment('remarks');
 			$table->integer('price_checked')->default(0)->comment('promotion price');

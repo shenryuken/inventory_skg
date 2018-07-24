@@ -44,10 +44,10 @@
                                             <td>{{$stock->StockItem->where('stock_id',$stock->id)->sum('quantity')}}</td>
                                         </tr>
                                         @endforeach
-                                        @else
+                                        {{-- @else
                                         <tr>
                                             <td colspan="9" class="text-center"> No Data Found <br />
-                                        </tr>
+                                        </tr> --}}
                                         @endif
                                     </tbody>
                                 </table>

@@ -12,7 +12,7 @@ class CreateCustomerOrderItemsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('customer_order_items', function(Blueprint $table)
+		Schema::create('order_items', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->string('order_no', 15);

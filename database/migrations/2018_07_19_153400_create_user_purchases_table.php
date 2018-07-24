@@ -14,7 +14,7 @@ class CreateUserPurchasesTable extends Migration {
 	{
 		Schema::create('user_purchases', function(Blueprint $table)
 		{
-			$table->integer('id', true);
+			$table->increments('id');
 			$table->integer('user_id');
 			$table->integer('product_id');
 			$table->string('product_name');

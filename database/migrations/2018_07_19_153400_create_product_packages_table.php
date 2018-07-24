@@ -14,7 +14,7 @@ class CreateProductPackagesTable extends Migration {
 	{
 		Schema::create('product_packages', function(Blueprint $table)
 		{
-			$table->integer('id')->unsigned()->unique('product_package_id_unique');
+			$table->increments('id');
 			$table->integer('package_id')->default(0)->comment('package product id');
 			$table->integer('product_id')->default(0)->comment('product id');
 			$table->integer('quantity')->default(1)->comment('quantity product');

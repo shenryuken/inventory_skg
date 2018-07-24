@@ -14,7 +14,7 @@ class CreateShippedItemsTable extends Migration {
 	{
 		Schema::create('shipped_items', function(Blueprint $table)
 		{
-			$table->integer('id', true);
+			$table->increments('id');
 			$table->integer('shipment_id');
 			$table->integer('product_id');
 			$table->string('serial_no', 30);

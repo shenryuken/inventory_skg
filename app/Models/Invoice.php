@@ -13,7 +13,7 @@ class Invoice extends Model
 
     public function order()
     {
-    	return $this->hasOne('App\Models\Order');
+    	return $this->hasOne('App\Models\Order', 'invoice_no');
     }
 
     public function payments()

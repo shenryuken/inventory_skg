@@ -14,7 +14,7 @@ class CreateSalesTable extends Migration {
 	{
 		Schema::create('sales', function(Blueprint $table)
 		{
-			$table->integer('id', true);
+			$table->increments('id');
 			$table->integer('year');
 			$table->integer('month');
 			$table->float('total_sale', 10, 0);
