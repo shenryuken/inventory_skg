@@ -8,6 +8,7 @@ use App\Models\ActiveSdo;
 use App\Models\Profile;
 use App\Models\NewUser;
 use App\Models\NewProfile;
+use App\Models\Wallet;
 
 use App\Admin;
 use App\User;
@@ -49,7 +50,7 @@ trait RegisterMember
 
             $user->save();
             $user->profile()->save($profile);
-            $wallet = $this->updateOrCreateWallet($user->id);
+           
 
             $rank_id = $user->rank_id;
 
@@ -95,6 +96,8 @@ trait RegisterMember
             {
                 $root = Referral::create(['user_id' => $user->id, 'username' => $user->username, 'rank' => $code_rank]);
             }
+
+            $wallet = $this->updateOrCreateWallet($user->id);
 
             return $user;
         }
@@ -239,5 +242,6 @@ trait RegisterMember
         }
 
         return $rank_id;
+    }
 
 }
