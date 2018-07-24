@@ -92,7 +92,8 @@ class OrderController extends Controller
         return view('inventory.orders.order-delivery-form',[ 'order' => $order, 'items' => $items, 'couriers' => $couriers]);
     }
 
-    public function deliveryStore(Request $request){
+    public function deliveryStore(Request $request)
+    {
         $postData = $this->validate($request,[
             'order_no' => 'required',
             'courier_id' => 'required',
@@ -142,19 +143,9 @@ class OrderController extends Controller
                     }
 
                 }
-
-
-                
-                
-                
-
-                
-
             }
-            
-            
 
         Session::flash('message', 'Successfully saved supplier!');
         return redirect('inventory/order/delivery/');
-        }
+    }
 }

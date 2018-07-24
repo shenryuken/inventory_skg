@@ -252,7 +252,25 @@ Route::get('orders', 'OrderController@index');
 /*
 ======================================================================================
  End Orders  
-=======
+======================================================================================
+*/
+
+
+/*
+======================================================================================
+ Reports
+======================================================================================
+*/
+Route::get('reports/members', 'ReportController@members')->name('members.report');
+Route::get('reports/sales/bymonth/{month}/{year}', 'ReportController@salesByMonthYear');
+Route::get('reports/sales', 'ReportController@sales')->name('sales.report');
+Route::get('reports/bonuses', 'ReportController@bonuses')->name('bonuses.report');
+Route::get('reports/stocks', 'ReportController@stocks')->name('stocks.report');
+/*
+======================================================================================
+ End Reports
+======================================================================================
+*/
 
 /*
 ======================================================================================
