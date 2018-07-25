@@ -190,7 +190,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="panel-title-box">
-                    <h2>Delivery</h2>
+                    <h2>Order</h2>
                     <span>Management </span>
                 </div>                                    
                 <!-- <ul class="panel-controls" style="margin-top: 2px;">
@@ -206,13 +206,13 @@
                 </ul>                                     -->
             </div>                                
             <div class="panel-body  list-group list-group-contacts">
-              <a href="'inventory/order/sales'" class="list-group-item">                
+              <a href="inventory/order/sales" class="list-group-item">                
                 <i class="fa fa-check pull-left fa-lg"></i>
-                <span class="contacts-title">Create DO</span>
+                <span class="contacts-title">Sale Listing</span>
             </a>
-                          <a href="'inventory/order/delivery'" class="list-group-item"> 
+                          <a href="inventory/order/delivery" class="list-group-item"> 
                 <i class="fa fa-check pull-left fa-lg"></i>
-                <span class="contacts-title">Listing</span>
+                <span class="contacts-title">Delivery Listing</span>
             </a>      
                                     
 
