@@ -94,14 +94,14 @@
                                     <div class="pull-left"><strong>Stock In</strong></div>
                                     <div class="pull-right">{{ $stock_in_today }} / {{ $total_stock }}</div>                                                
                                     <div class="progress progress-small progress-striped active">
-                                        <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: {{ ($stock_in_today / $total_stock)*100 }}%;">{{ ($stock_in_today / $total_stock)*100 }}%</div>
+                                        <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: {{ ($stock_in_today / ($total_stock!=0?$total_stock:1))*100 }}%;">{{ ($stock_in_today / ($total_stock!=0?$total_stock:1))*100 }}%</div>
                                     </div>
                                 </div>
                                 <div class="progress-list">                                               
                                     <div class="pull-left"><strong>Stock Out</strong></div>
                                     <div class="pull-right">{{ $stock_out_today }} / {{ $total_stock }}</div>                                                
                                     <div class="progress progress-small progress-striped active">
-                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: {{ ($stock_out_today / $total_stock)*100 }}%;">{{ ($stock_out_today / $total_stock)*100 }}%</div>
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width: {{ ($stock_out_today / ($total_stock!=0?$total_stock:1)*100 }}%;">{{ ($stock_out_today / ($total_stock!=0?$total_stock:1))*100 }}%</div>
                                     </div>
                                 </div>
                                 
@@ -158,7 +158,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="panel-title-box">
-                    <h2>Agent</h2>
+                    <h2>Store</h2>
                     <span>Store </span>
                 </div>                                    
                 <!-- <ul class="panel-controls" style="margin-top: 2px;">
@@ -178,14 +178,8 @@
                 <i class="fa fa-circle pull-left fa-lg"></i>
                 <span class="contacts-title">Product List</span>
             </a>
-            <a href="{{ url('agent/get_order_list/'.Auth::user()->id) }}" class="list-group-item"> 
-                <i class="fa fa-circle pull-left fa-lg"></i>
-                <span class="contacts-title">Order List</span>
-            </a>      
-            <a href="{{ url('agent/get_address/display') }}" class="list-group-item"> 
-                <i class="fa fa-circle pull-left fa-lg"></i>
-                <span class="contacts-title">Address Configuration</span>
-            </a>            
+  
+           
 
             </div>                                    
         </div>
