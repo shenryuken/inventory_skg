@@ -206,11 +206,11 @@
                 </ul>                                     -->
             </div>                                
             <div class="panel-body  list-group list-group-contacts">
-              <a href="inventory/order/sales" class="list-group-item">                
+              <a href="{{ url('inventory/order/sales') }}" class="list-group-item">                
                 <i class="fa fa-check pull-left fa-lg"></i>
                 <span class="contacts-title">Sale Listing</span>
             </a>
-                          <a href="inventory/order/delivery" class="list-group-item"> 
+                          <a href="{{ url('inventory/order/delivery') }} " class="list-group-item"> 
                 <i class="fa fa-check pull-left fa-lg"></i>
                 <span class="contacts-title">Delivery Listing</span>
             </a>      
