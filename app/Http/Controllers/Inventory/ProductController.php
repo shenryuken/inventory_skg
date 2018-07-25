@@ -132,7 +132,7 @@ class ProductController extends Controller{
 			'category' => $category,
 			'categoryArr' => $categoryArr,
 		);
-        return view('Inventory/product_listing',$data);
+        return view('inventory/product_listing',$data);
     }
 	
 	public function form_search(Request $postdata){
