@@ -166,9 +166,9 @@
             <li class="<?php echo in_array(Request::segment(1) . '/' . Request::segment(2). '/' .Request::segment(3), array("inventory/order/delivery")) ? "active" : "" ; ?>">
                 <a href="{{ url('inventory/order/delivery') }}"><span class="glyphicon glyphicon-list-alt"></span> Delivery Order List </a>
             </li>
-            <li class="<?php echo in_array(Request::segment(1) . '/' . Request::segment(2). '/' .Request::segment(3), array("inventory/order/delivery")) ? "active" : "" ; ?>">
+            <!-- li class="<?php echo in_array(Request::segment(1) . '/' . Request::segment(2). '/' .Request::segment(3), array("inventory/order/delivery")) ? "active" : "" ; ?>">
                 <a href="#"><span class="glyphicon glyphicon-list-alt"></span> Print consignment </a>
-            </li>
+            </li --!>
             
         </ul>
     </li>
