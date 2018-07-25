@@ -136,15 +136,15 @@
                 </ul>                                     -->
             </div>                                
             <div class="panel-body  list-group list-group-contacts">
-              <a href="inventory/supplier/list" class="list-group-item">                
+              <a href="supplier/list" class="list-group-item">                
                 <i class="fa fa-circle-o pull-left fa-lg"></i>
                 <span class="contacts-title">Supplier</span>
             </a>
-                          <a href="inventory/product/listing" class="list-group-item"> 
+                          <a href="product/listing" class="list-group-item"> 
                 <i class="fa fa-circle-o pull-left fa-lg"></i>
                 <span class="contacts-title">Product</span>
             </a>      
-                          <a href="inventory/stock/list" class="list-group-item"> 
+                          <a href="stock/list" class="list-group-item"> 
                 <i class="fa fa-circle-o pull-left fa-lg"></i>
                 <span class="contacts-title">Stock</span>
             </a>            
