@@ -164,48 +164,43 @@ class PaymentController extends Controller
 
     public function processPayment($input, $data)
     {
-        try{
-            $total_pv         = $this->getTotalPv();
-            $total_rmvp       = $this->getTotalRmvp(); 
-
-            $order_status = $data['payment_status'] == 'Fully Paid' ? 'New Order':'Pending';
-
-            if($order_status = 'Fully Paid' && $data['prev_url'] == 'shop/first-cart') 
-            {
-                $newUser = NewUser::find($input['user_id']);
-                $newProfile = $newUser->newProfile;
-                
-                if($newUser)
-                {
-                    $user = $this->saveMemberToDb($newUser);
-                    // $newUser->newProfile()->delete();
-                    // $newUser->delete();
-
-                    $input['user_id'] = $user->id;
-                }
-            }
-
-            $invoice    = $this->createInvoice($input['user_id'], $input['agent_user_id'], $data);
-            $order      = $this->addNewOrder($input['user_id'], $input['agent_user_id'], $data['prev_url'], $invoice, $order_status);
-            $orderItem  = $this->addOrderItem($order, $input['agent_user_id']);
-            $updateStore= $this->addTostore($input['user_id']);
-              
-            $year = (new DateTime)->format("Y");
-            $month = (new DateTime)->format("n");
-
-            $sale = Sale::firstOrNew(['year' => $year , 'month' => $month]);
-            $sale->total_pv     = $sale->total_pv + $total_pv;
-            $sale->total_sale   = $sale->total_sale + Cart::total();
-            $sale->save();
-
-            Cart::destroy();
-
-            // return $payment;
-        }
-        catch (\Exception $e) {
-            return $e->getMessage();
-        }
         
+        $total_pv         = $this->getTotalPv();
+        $total_rmvp       = $this->getTotalRmvp(); 
+
+        $order_status = $data['payment_status'] == 'Fully Paid' ? 'New Order':'Pending';
+
+        if($order_status = 'Fully Paid' && $data['prev_url'] == 'shop/first-cart') 
+        {
+            $newUser = NewUser::find($input['user_id']);
+            $newProfile = $newUser->newProfile;
+            
+            if($newUser)
+            {
+                $user = $this->saveMemberToDb($newUser);
+                // $newUser->newProfile()->delete();
+                // $newUser->delete();
+
+                $input['user_id'] = $user->id;
+            }
+        }
+
+        $invoice    = $this->createInvoice($input['user_id'], $input['agent_user_id'], $data);
+        $order      = $this->addNewOrder($input['user_id'], $input['agent_user_id'], $data['prev_url'], $invoice, $order_status);
+        $orderItem  = $this->addOrderItem($order, $input['agent_user_id']);
+        $updateStore= $this->addTostore($input['user_id']);
+          
+        $year = (new DateTime)->format("Y");
+        $month = (new DateTime)->format("n");
+
+        $sale = Sale::firstOrNew(['year' => $year , 'month' => $month]);
+        $sale->total_pv     = $sale->total_pv + $total_pv;
+        $sale->total_sale   = $sale->total_sale + Cart::total();
+        $sale->save();
+
+        Cart::destroy();
+
+        // return $payment;
     }
 
     public function checkBalance($data)
@@ -316,9 +311,10 @@ class PaymentController extends Controller
         $model = 'App\\Models\\'.$model_name;
 
         $order = new $model;
-        $order->user_id     = $user_id;
+        //$order->user_id     = $user_id;
+        $order->agent_id    = $user_id;
         $order->invoice_id  = $invoice->id;
-        $order->do_no       = $new_order_no;
+        $order->order_no    = $new_order_no;
         $order->total_items = Cart::count();
         $order->status      = $order_status;
         $order->save();
@@ -333,7 +329,7 @@ class PaymentController extends Controller
         $model_name = ($agent_id > 0) ? 'AgentOrderHdr':'OrderHdr';
         $model = 'App\\Models\\'.$model_name;
 
-        $order_no = $model::latest()->value('do_no');
+        $order_no = $model::latest()->value('order_no');
 
         $new_order_no = isset($order_no) ? ($order_no + 1) : 100000000;
 
@@ -342,7 +338,7 @@ class PaymentController extends Controller
 
     public function productSale($agent_id = null)
     {
-        if($agent_id == NULL || $agent_id == '')
+        if($agent_id == NULL || $agent_id == '' || $agent_id == 0)
         {
             foreach (Cart::content() as $item) 
             {
@@ -358,14 +354,14 @@ class PaymentController extends Controller
 
     public function addOrderItem($order,  $agent_id = null)
     {
-        $model_name = ($agent_id != NULL || $agent_id != '') ? 'AgentOrderItem':'OrderItem';
+        $model_name = ($agent_id != NULL || $agent_id != '' || $agent_id == 0) ? 'AgentOrderItem':'OrderItem';
         $model = 'App\\Models\\'.$model_name;
 
         foreach (Cart::content() as $item) {
                 $order_item = new $model;
                 $order_item->order_id   = $order->id;
                 $order_item->product_id = $item->id;
-                $order_item->qty        = $item->qty;
+                $order_item->product_qty= $item->qty;
                 $order_item->save();   
             }
     }
@@ -384,7 +380,7 @@ class PaymentController extends Controller
 
         foreach( Cart::content() as $item )
         {
-            $pv = Product::find($item->id)->pv;
+            $point = Product::find($item->id)->point;
 
             for($qty = 0; $qty < $item->qty; $qty++)
             {
@@ -393,7 +389,7 @@ class PaymentController extends Controller
                 $store->product_id  = $item->id;
                 $store->product_name= $item->name;
                 $store->price       = $item->price;
-                $store->pv          = $pv;
+                $store->pv          = $point;
                 $store->status      = 'Stocking';
                 $store->save();
             } 
