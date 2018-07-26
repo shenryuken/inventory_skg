@@ -35,7 +35,7 @@
                         <div class="col-md-3">                        
                             <a href="#" class="tile tile-danger">
                                 {{ $to_be_processed }}
-                                <p>To be Processed</p>                            
+                                <p>Pending</p>                            
                                 
                             </a>                        
                         </div>
@@ -43,7 +43,7 @@
                         <div class="col-md-3">                        
                             <a href="#" class="tile tile-success">
                                 {{ $to_be_shipped }}
-                                <p>To be Shipped</p>                            
+                                <p>Processing</p>                            
                                 
                             </a>                        
                         </div>
@@ -51,7 +51,7 @@
                         <div class="col-md-3">                        
                             <a href="#" class="tile tile-warning">
                                {{ $to_be_delivered }}
-                                <p>To be Delivered</p>                            
+                                <p>Courier</p>                            
                                 
                             </a>                        
                         </div>
@@ -59,7 +59,7 @@
                         <div class="col-md-3">                        
                             <a href="#" class="tile tile-default">
                                 {{ $sales_created }}
-                                <p>Sales Created</p>                            
+                                <p>Completed</p>                            
                                 
                             </a>                        
                         </div>
@@ -136,15 +136,15 @@
                 </ul>                                     -->
             </div>                                
             <div class="panel-body  list-group list-group-contacts">
-              <a href="supplier/list" class="list-group-item">                
+              <a href="{{url('inventory/supplier/list')}}" class="list-group-item">                
                 <i class="fa fa-circle-o pull-left fa-lg"></i>
                 <span class="contacts-title">Supplier</span>
             </a>
-                          <a href="product/listing" class="list-group-item"> 
+                          <a href="{{ url('inventory/product/listing') }}" class="list-group-item"> 
                 <i class="fa fa-circle-o pull-left fa-lg"></i>
                 <span class="contacts-title">Product</span>
             </a>      
-                          <a href="stock/list" class="list-group-item"> 
+                          <a href="{{ url('inventory/stock/list') }}" class="list-group-item"> 
                 <i class="fa fa-circle-o pull-left fa-lg"></i>
                 <span class="contacts-title">Stock</span>
             </a>            

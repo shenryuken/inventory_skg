@@ -26,6 +26,13 @@ use Datatables;
 
 class StockReportController extends Controller
 {
+    /**
+     * Stock Status
+     * 01 = In Stock
+     * 02 = Scanned for buy
+     * 03 = Returned
+     * 04 = Stock Adjustment
+     */
     public function __construct()
     {
         $this->middleware('auth:admin');
@@ -35,10 +42,47 @@ class StockReportController extends Controller
         $products = Product::all();  
         $stocks = Stock::all();
         $stock_items = StockItem::all(); 
+        $stock_adjustments = StockAdjustment::all(); 
+        $stock_in_total = 0;
+        $stock_out_total = 0;
+
+            $reports = array();
+
+            foreach($stocks as $k => $v)
+            {
+                
+                $stock_in =  $v->StockItem->where('status','01')->sum('quantity') != 0 ? $v->StockItem->where('status','01')->sum('quantity') : "";
+                $stock_out = "";
+                $stock_in_total = $stock_in_total + ($v->StockItem->where('status','01')->sum('quantity'));
+                
+
+                $reports[] = [
+                    'date'          => Carbon::parse($v->stock_date)->format('d/m/Y'),
+                    'description'   => $v->description,
+                    'stock_in'      => $stock_in,
+                    'stock_out'     => $stock_out
+                ];
+            }
+
+            foreach($stock_adjustments as $a => $b)
+            {
+                $stock_adj_in = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','03')->sum('quantity') : "";
+                $stock_adj_out = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','04')->sum('quantity') : "";
+
+                $stock_in_total = $stock_in_total + ($b->StockItem->where('status','03')->sum('quantity'));
+                $stock_out_total = $stock_out_total + ($b->StockItem->where('status','04')->sum('quantity'));
+
+                $reports[] = [
+                    'date'          => Carbon::parse($b->stock_date)->format('d/m/Y'),
+                    'description'   => $b->description,
+                    'stock_out'      => $stock_adj_in,
+                    'stock_in'       => $stock_adj_out,
+                ];
+            }
 
 
-
-        return view('inventory.stocks.stock-report',compact('products','stocks','stock_items'));
+            // return compact('reports');
+        return view('inventory.stocks.stock-report',compact('stock_in_total','stock_out_total','reports'));
     }
 
 
