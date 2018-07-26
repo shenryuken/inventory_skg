@@ -134,7 +134,7 @@ class OrderController extends Controller
                     try{
                         $stock_item = new StockItem;    
     
-                        $stock_item->where('barcode',$serial_number)->update(['status' => '05']);
+                        $stock_item->where('barcode',$serial_number)->update(['status' => '02']);
                     }catch(Exception $e){
     
                     }

@@ -30,10 +30,14 @@
                     <button class="btn pull-right" onclick="printElem('printed_area')"><i class="fa fa-print"></i> Print </a></button>
                 </div>
                 @if($order)
-            <div id="printed_area" class="panel-body panel-body-pricing">               
-                    <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG($order->order_no, "C93") }}" alt="barcode"   />
+            <div id="printed_area" class="panel-body panel-body-pricing">
+                <div class="row">
+                <img class="pull-right" src="data:image/png;base64,{{ DNS1D::getBarcodePNG(str_replace("SO","INV",$order->order_no), "C93") }}" alt="barcode"   />
+            </div>
+
+                   
                     {{-- {!! DNS1D::getBarcodeSVG($order->order_no, "C93") !!} --}}
-                    <h1>Order : <strong style="text-transform: uppercase;">#{{ $order->order_no}}</strong></h1>  
+                    <h1>Invoice : <strong style="text-transform: uppercase;">#{{ str_replace("SO","INV",$order->order_no)}}</strong></h1>  
                 
 
                 <p><span class="fa fa-caret-right"></span> <strong>Customer:</strong> {{ $order->user->username }}</p>
@@ -72,9 +76,9 @@
                             @endforeach
                     </tbody>
                 </table>
-                {{-- <p><span class="fa fa-caret-right"></span> <strong>Total Items: {{ $order->total_items }}</strong></p>
-                <p><span class="fa fa-caret-right"></span> <strong>Total Price: MYR {{ $order->invoice->total }}</strong></p>
-                <p><span class="fa fa-caret-right"></span> <strong>Delivery Price: MYR {{ $order->invoice->delivery_cost }}</strong></p> --}}
+                <p><span class="fa fa-caret-right"></span> <strong>Total Items: </strong></p>
+                <p><span class="fa fa-caret-right"></span> <strong>Total Price: MYR  </strong></p>
+                <p><span class="fa fa-caret-right"></span> <strong>Delivery Price: MYR </strong></p>
 
             </div>
             @else

@@ -19,13 +19,13 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
 
-                                    <h3 class="panel-title">Stock Report as {{date('d/m/Y')}}</h3>
+                                    <h1 class="panel-title">Stock Balance Report</h1>
                       
                         </div>
 
                         <div class="panel-body">
-                                                 <div class="table">
-                                                     <table class="table">
+                                                 <div class="table-responsive">
+                                                     <table class="table datatable">
                                                          <thead>
                                                              <tr>
                                                                  <th>Date</th>
@@ -35,15 +35,23 @@
                                                              </tr>
                                                          </thead>
                                                          <tbody>
-                                                             @foreach($stock_items as $items )
+                                                             @foreach($reports as $report )
                                                                 <tr>
-                                                                    <td>{{ $items->stocks->stock_date }}</td>
-                                                                    <td>{{ $items->stocks->description }}</td>
-                                                                    <td></td>
-                                                                    <td></td>
+                                                                    <td>{{ $report['date'] }}</td>
+                                                                    <td>{{ $report['description'] }}</td>
+                                                                    <td>{{ $report['stock_in'] }}</td>
+                                                                    <td>{{ $report['stock_out'] }}</td>
                                                                 </tr>
                                                              @endforeach
                                                             </tbody>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <td><strong>Total</strong></td>
+                                                                <td></td>
+                                                                <td>{{ $stock_in_total }}</td>
+                                                                <td>{{ $stock_out_total }}</td>
+                                                            </tr>
+                                                        </tfoot>
                                                      </table>
                                                  </div>  
                         </div>
@@ -72,6 +80,9 @@
     $(document).ready(function($) {
         var t = $('.datatable').DataTable({
                     "order": [],
+                    // "scrollY":        "200px",
+                    // "scrollCollapse": true,
+                    "paging":false,
                     "columnDefs": [
                                 { targets: 'no-sort', orderable: false }
                                 ]
