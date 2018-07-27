@@ -354,7 +354,7 @@ class PaymentController extends Controller
 
     public function addOrderItem($order,  $agent_id = null)
     {
-        $model_name = ($agent_id != NULL || $agent_id != '' || $agent_id == 0) ? 'AgentOrderItem':'OrderItem';
+        $model_name = ($agent_id != NULL || $agent_id != '' || $agent_id > 0) ? 'AgentOrderItem':'OrderItem';
         $model = 'App\\Models\\'.$model_name;
 
         foreach (Cart::content() as $item) {

@@ -281,47 +281,47 @@ class ShopController extends Controller
             //      $shipping_fee = number_format(0.00,2);
             // }
 
-            $totalPrice_wm = round($totalPrice_wm,2);
-            $totalPrice_em = round($totalPrice_em,2);
-            $totalPrice_staff = round($totalPrice_staff,2);
+            $totalPrice_wm      = round($totalPrice_wm,2);
+            $totalPrice_em      = round($totalPrice_em,2);
+            $totalPrice_staff   = round($totalPrice_staff,2);
 
-            $grandTotalPrice_wm = (float)$totalPrice_wm + (float)$shipping_fee;
-            $grandTotalPrice_em = (float)$totalPrice_em + (float)$shipping_fee;
-            $grandTotalPrice_staff = (float)$totalPrice_staff + (float)$shipping_fee;
+            $grandTotalPrice_wm     = (float)$totalPrice_wm + (float)$shipping_fee;
+            $grandTotalPrice_em     = (float)$totalPrice_em + (float)$shipping_fee;
+            $grandTotalPrice_staff  = (float)$totalPrice_staff + (float)$shipping_fee;
 
-            $totalPrice_wm = number_format($totalPrice_wm,2);
-            $totalPrice_em = number_format($totalPrice_em,2);
-            $totalPrice_staff = number_format($totalPrice_staff,2);
+            $totalPrice_wm      = number_format($totalPrice_wm,2);
+            $totalPrice_em      = number_format($totalPrice_em,2);
+            $totalPrice_staff   = number_format($totalPrice_staff,2);
 
-            $grandTotalPrice_wm = number_format(round($grandTotalPrice_wm,2),2);
-            $grandTotalPrice_em = number_format(round($grandTotalPrice_em,2),2);
-            $grandTotalPrice_staff = number_format(round($grandTotalPrice_staff,2),2);
+            $grandTotalPrice_wm     = number_format(round($grandTotalPrice_wm,2),2);
+            $grandTotalPrice_em     = number_format(round($grandTotalPrice_em,2),2);
+            $grandTotalPrice_staff  = number_format(round($grandTotalPrice_staff,2),2);
 
 
 
             $returnData = [
 
-                'agent_id'        => $agent_id,
-                'grandTotalPrice_wm' => $grandTotalPrice_wm,
-                'grandTotalPrice_em' => $grandTotalPrice_em,
+                'agent_id'              => $agent_id,
+                'grandTotalPrice_wm'    => $grandTotalPrice_wm,
+                'grandTotalPrice_em'    => $grandTotalPrice_em,
                 'grandTotalPrice_staff' => $grandTotalPrice_staff,
-                'shippingPrice'  => $shipping_fee,
-                'totalPrice_wm' => $totalPrice_wm,
-                'totalPrice_em' => $totalPrice_em,
-                'totalPrice_staff' => $totalPrice_staff
+                'shippingPrice'         => $shipping_fee,
+                'totalPrice_wm'         => $totalPrice_wm,
+                'totalPrice_em'         => $totalPrice_em,
+                'totalPrice_staff'      => $totalPrice_staff
             ];
 
             $deliveryType = DeliveryType::select('id','delivery_code as code','type_description as description')
                                         ->get();
 
-            $return['message'] = "succssfuly retrived";
-            $return['status'] = "01";
+            $return['message']  = "succssfuly retrived";
+            $return['status']   = "01";
 
         }
         catch(\Exception $e){
 
-            $return['message'] = $e->getMessage();
-            $return['status'] = "02";
+            $return['message']  = $e->getMessage();
+            $return['status']   = "02";
 
             // dd($return);
         }
@@ -348,14 +348,14 @@ class ShopController extends Controller
 
             OrderTransection::where('id',$id)->where('order_type',$order_type)->where('mall_type',$sessionData)->delete();
 
-            $return['message'] = "succssfully deleted";
-            $return['status'] = "01";
+            $return['message']  = "succssfully deleted";
+            $return['status']   = "01";
 
         }
         catch(\Exception $e){
 
-            $return['message'] = $e->getMessage();
-            $return['status'] = "02";
+            $return['message']  = $e->getMessage();
+            $return['status']   = "02";
 
         }
 
@@ -388,20 +388,20 @@ class ShopController extends Controller
                                     ->where('mall_type',$sessionData)
                                     ->where('product_id',$value['product_id'])
                                     ->update([
-                                        'quantity' => $value['quantity'],
+                                        'quantity'   => $value['quantity'],
                                         'updated_by' => $id,
                                         'updated_at' => \Carbon\Carbon::now()
                                     ]);
             }
 
-            $return['message'] = "succssfully updated";
-            $return['status'] = "01";
+            $return['message']  = "succssfully updated";
+            $return['status']   = "01";
             
         } 
         catch (\Exception $e) {
 
-            $return['message'] = $e->getMessage();
-            $return['status'] = "02";
+            $return['message']  = $e->getMessage();
+            $return['status']   = "02";
             
         }
 
@@ -416,17 +416,18 @@ class ShopController extends Controller
         $addressData = [];
         if(Auth::guard('admin')->check()){
 
-            $address_code = $agent_id."_staff";
-            $order_type = "staff";
-            $user = Admin::find($agent_id);
-            $addressData = $user->address->where('reminder_flag','x')->first();
+            $address_code   = $agent_id."_staff";
+            $order_type     = "staff";
+            $user           = Admin::find($agent_id);
+            $addressData    = $user->address->where('reminder_flag','x')->first();
 
         }
         else{
-            $address_code = $agent_id."_agent";
-            $order_type = "agent";
-            $user = User::find($agent_id);
-            $addressData = $user->address->where('reminder_flag','x')->first();
+
+            $address_code   = $agent_id."_agent";
+            $order_type     = "agent";
+            $user           = User::find($agent_id);
+            $addressData    = $user->address->where('reminder_flag','x')->first();
         }
 
         try{
@@ -445,9 +446,9 @@ class ShopController extends Controller
                                             ->get()->toArray();
 
             // dd($addressData);
-            $totalPrice = 0.00;
-            $grandTotalPrice = 0.00;
-            $shipping_fee = 0.00;
+            $totalPrice         = 0.00;
+            $grandTotalPrice    = 0.00;
+            $shipping_fee       = 0.00;
             foreach ($cartItems as $key => $value){
 
                 $promotion = $this->checkPromotion($cartItems[$key]['product_id']);
@@ -455,34 +456,34 @@ class ShopController extends Controller
                 // dd($promotion);
                 if($promotion){
 
-                    $price_wm = $promotion->price_wm;
-                    $price_em = $promotion->price_em;
-                    $price_staff = $promotion->price_staff;
+                    $price_wm       = $promotion->price_wm;
+                    $price_em       = $promotion->price_em;
+                    $price_staff    = $promotion->price_staff;
                 }
                 else{
 
-                    $price_wm = $cartItems[$key]['price_wm'];
-                    $price_em = $cartItems[$key]['price_em'];
-                    $price_staff = $cartItems[$key]['price_staff'];
+                    $price_wm       = $cartItems[$key]['price_wm'];
+                    $price_em       = $cartItems[$key]['price_em'];
+                    $price_staff    = $cartItems[$key]['price_staff'];
                 }
 
                 if(Auth::guard('admin')->check()){
 
-                    $cartItems[$key]['price'] = $this->fn_calc_gst_price($price_staff);
-                    $total_price = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price']);
+                    $cartItems[$key]['price']       = $this->fn_calc_gst_price($price_staff);
+                    $total_price                    = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price']);
                     $cartItems[$key]['total_price'] = $total_price;
                 }
                 else{
 
                     if(strtolower($addressData->state) == strtolower("Sabah") || strtolower($addressData->state) ==  strtolower("Sarawak")){
 
-                        $cartItems[$key]['price'] = $this->fn_calc_gst_price($price_em);
-                        $total_price = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price']);
+                        $cartItems[$key]['price']       = $this->fn_calc_gst_price($price_em);
+                        $total_price                    = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price']);
                         $cartItems[$key]['total_price'] = $total_price;
                     }
                     else{
-                        $cartItems[$key]['price'] = $this->fn_calc_gst_price($price_wm);
-                        $total_price = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price']);
+                        $cartItems[$key]['price']       = $this->fn_calc_gst_price($price_wm);
+                        $total_price                    = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price']);
                         $cartItems[$key]['total_price'] = $total_price;
                     }
                 }
@@ -534,10 +535,10 @@ class ShopController extends Controller
                     $address = [
 
                         'name'      => $addressData->name,
-                        'address' => $addressData->street1.",".$addressData->street2.",".$addressData->poscode.",".$addressData->city.",".$addressData->state.",".$addressData->country,
+                        'address'   => $addressData->street1.",".$addressData->street2.",".$addressData->poscode.",".$addressData->city.",".$addressData->state.",".$addressData->country,
                         'btnstatus' => "",
-                        'id' => $addressData->id,
-                        'code' => $addressData->applicable_id
+                        'id'        => $addressData->id,
+                        'code'      => $addressData->applicable_id
                     ];
                 }
                 elseif($deliveryType == "02"){
@@ -546,10 +547,10 @@ class ShopController extends Controller
                     $address = [
 
                         'name'      => "",
-                        'address' =>  "Self Pickup",
+                        'address'   =>  "Self Pickup",
                         'btnstatus' => "hidden",
-                        'id' => "",
-                        'code' => ""
+                        'id'        => "",
+                        'code'      => ""
                     ];
                 }
             }
@@ -559,33 +560,33 @@ class ShopController extends Controller
                 $address = [
 
                         'name'      => "",
-                        'address' => "",
+                        'address'   => "",
                         'btnstatus' => "",
-                        'id' => "",
-                        'code' => ""
+                        'id'        => "",
+                        'code'      => ""
                     ];
             }
 
             $returnData = [
 
-                'agent_id'        => $agent_id,
-                'grandTotalPrice' => $grandTotalPrice,
-                'totalPrice' => $totalPrice,
-                'shippingPrice'  => $shipping_fee,
-                'address' => $address,
-                'deliveryType' =>$deliveryType
+                'agent_id'          => $agent_id,
+                'grandTotalPrice'   => $grandTotalPrice,
+                'totalPrice'        => $totalPrice,
+                'shippingPrice'     => $shipping_fee,
+                'address'           => $address,
+                'deliveryType'      =>$deliveryType
             ];
 
 
-            $return['message'] = "succssfuly retrived";
-            $return['status'] = "01";
+            $return['message']  = "succssfuly retrived";
+            $return['status']   = "01";
 
             // dd($address);    
         }
         catch(\Exception $e){
 
-            $return['message'] = $e->getMessage();
-            $return['status'] = "02";
+            $return['message']  = $e->getMessage();
+            $return['status']   = "02";
         }
 
         // dd($cartItems,$returnData);
@@ -643,22 +644,22 @@ class ShopController extends Controller
                 
                 $addressData = Array(
 
-                    'id' => $value['id'],
-                    'code' => $value['applicable_id'],
-                    'name' => $value->name,
-                    'address' => $value['street1'].",".$value['street2'].",".$value['poscode'].",".$value['city'].",".$value['state'].",".$value['country'],
+                    'id'        => $value['id'],
+                    'code'      => $value['applicable_id'],
+                    'name'      => $value->name,
+                    'address'   => $value['street1'].",".$value['street2'].",".$value['poscode'].",".$value['city'].",".$value['state'].",".$value['country'],
                 );
 
                 $address[] = $addressData;
             }
 
-            $return['message'] = "succssfuly retrived";
-            $return['status'] = "01";
+            $return['message']  = "succssfuly retrived";
+            $return['status']   = "01";
         }
         catch(\Exception $e){
 
-            $return['message'] = $e->getMessage();
-            $return['status'] = "02";
+            $return['message']  = $e->getMessage();
+            $return['status']   = "02";
         }
 
         return compact('return','address');
@@ -716,37 +717,37 @@ class ShopController extends Controller
             // }
 
              if(Auth::guard('admin')->check() == true){
-                $id = Auth::guard('admin')->user()->id;
+                $id         = Auth::guard('admin')->user()->id;
                 $order_type = "staff";
-                $user = Admin::find($id);
+                $user       = Admin::find($id);
             }
             else{
-                $id = Auth::user()->id;
+                $id         = Auth::user()->id;
                 $order_type = "agent";
-                $user = User::find($id);
+                $user       = User::find($id);
             }
 
             $address = new Address;
-            $address->name = $data['name'];
-            $address->street1 = $data['street1'];
-            $address->street2 = $data['street2'];
-            $address->poscode = $data['poscode'];
-            $address->city = $data['city'];
-            $address->state = $data['state'];
-            $address->country = $data['country'];
+            $address->name          = $data['name'];
+            $address->street1       = $data['street1'];
+            $address->street2       = $data['street2'];
+            $address->poscode       = $data['poscode'];
+            $address->city          = $data['city'];
+            $address->state         = $data['state'];
+            $address->country       = $data['country'];
             $address->reminder_flag = "";
-            $address->created_by = $id;
-            $address->created_at = \Carbon\Carbon::now();
+            $address->created_by    = $id;
+            $address->created_at    = \Carbon\Carbon::now();
             
             $user->address()->save($address);
 
-            $return['message'] = "succssfuly saved";
-            $return['status'] = "01";
+            $return['message']  = "succssfuly saved";
+            $return['status']   = "01";
         }
         catch(\Exception $e){
 
-            $return['message'] = $e->getMessage();
-            $return['status'] = "02";
+            $return['message']  = $e->getMessage();
+            $return['status']   = "02";
 
         }
 
@@ -757,9 +758,9 @@ class ShopController extends Controller
 
         try{
 
-            $AfterGst = 0.00;
-            $price = (float)$price;
-            $gstRate = Tax::select('percent')
+            $AfterGst   = 0.00;
+            $price      = (float)$price;
+            $gstRate    = Tax::select('percent')
                                 ->where('code',"gst")
                                 ->first();
 
@@ -770,14 +771,14 @@ class ShopController extends Controller
             $AfterGst = round($AfterGst,2);
             $AfterGst = number_format($AfterGst, 2, '.', '');
 
-            $return['message'] = "succssfuly calculate";
-            $return['status'] = "01";
+            $return['message']  = "succssfuly calculate";
+            $return['status']   = "01";
 
         }
         catch(\Exception $e){
 
-            $return['message'] = $e->getMessage();
-            $return['status'] = "02";
+            $return['message']  = $e->getMessage();
+            $return['status']   = "02";
         }
         // dd($AfterGst,$price,$gst);
         return $AfterGst;
@@ -817,13 +818,13 @@ class ShopController extends Controller
 
             // dd($data['productArr']);
 
-            $return['message'] = "succssfuly retrived";
-            $return['status'] = "01";
+            $return['message']  = "succssfuly retrived";
+            $return['status']   = "01";
         }
         catch(\Exception $e){
             
-            $return['message'] = $e->getMessage();
-            $return['status'] = "02";
+            $return['message']  = $e->getMessage();
+            $return['status']   = "02";
         }
 
         // dd($return,$data);
@@ -855,13 +856,13 @@ class ShopController extends Controller
                     $gift[$key]['image'] = ($image['path'] == null ? '' : $image['path']);
                 }
             }
-            $return['message'] = "succssfuly retrived";
-            $return['status'] = "01";
+            $return['message']  = "succssfuly retrived";
+            $return['status']   = "01";
         }
         catch(\Exception $e){
             
-            $return['message'] = $e->getMessage();
-            $return['status'] = "02";
+            $return['message']  = $e->getMessage();
+            $return['status']   = "02";
         }
 
         // dd($return,$gift);
@@ -870,12 +871,12 @@ class ShopController extends Controller
 
     public function placeOrder(Request $request){
 
-            $agent_id = (!empty($request->get('agent_id')) ? $request->get('agent_id') : '');
-            $shipping_id = (!empty($request->get('shipping_id')) ? $request->get('shipping_id') : '');
-            $billing_id = (!empty($request->get('billing_id')) ? $request->get('billing_id') : '');
-            $total_price = (!empty($request->get('total_price')) ? $request->get('total_price') : '');
-            $shipping_fee = (!empty($request->get('shipping_fee')) ? $request->get('shipping_fee') : '');
-            $delivery_type = (!empty($request->get('delivery_type')) ? $request->get('delivery_type') : '');
+            $agent_id       = (!empty($request->get('agent_id')) ? $request->get('agent_id') : '');
+            $shipping_id    = (!empty($request->get('shipping_id')) ? $request->get('shipping_id') : '');
+            $billing_id     = (!empty($request->get('billing_id')) ? $request->get('billing_id') : '');
+            $total_price    = (!empty($request->get('total_price')) ? $request->get('total_price') : '');
+            $shipping_fee   = (!empty($request->get('shipping_fee')) ? $request->get('shipping_fee') : '');
+            $delivery_type  = (!empty($request->get('delivery_type')) ? $request->get('delivery_type') : '');
 
             $sessionData = session("STORE","default");
 
@@ -883,20 +884,20 @@ class ShopController extends Controller
             $address = [];
             if(Auth::guard('admin')->check()){
 
-                $address_code = $agent_id."_staff";
-                $order_type = "staff";
-                $id = Auth::guard('admin')->user()->id;
-                $user = Admin::find($agent_id);
-                $address = $user->address->where('id',$billing_id)->first();
+                $address_code   = $agent_id."_staff";
+                $order_type     = "staff";
+                $id             = Auth::guard('admin')->user()->id;
+                $user           = Admin::find($agent_id);
+                $address        = $user->address->where('id',$billing_id)->first();
 
 
             }
             else{
-                $address_code = $agent_id."_agent";
-                $order_type = "agent";
-                $id = Auth::user()->id;
-                $user = User::find($agent_id);
-                $address = $user->address->where('id',$billing_id)->first();
+                $address_code   = $agent_id."_agent";
+                $order_type     = "agent";
+                $id             = Auth::user()->id;
+                $user           = User::find($agent_id);
+                $address        = $user->address->where('id',$billing_id)->first();
             }
 
             // dd($$request->get('billing_id'),$request->get('shipping_id'));
@@ -914,23 +915,24 @@ class ShopController extends Controller
             // dd($cartItems);
             if(count($cartItems) > 0){
 
-                $order_no = (new GlobalNumberRange)->generate_orderno("SO");
+                $order_no   = (new GlobalNumberRange)->generate_orderno("SO");
                 // dd($order_no);
                 $order_item = [];
                 $total_product_quantity = 0;
                 $date = new \DateTime();
+
                 foreach($cartItems as $k => $v){
 
                     $item = Array(
 
-                        'order_no' => $order_no['data'],
-                        'do_no' => "",
-                        'product_id' => $v['product_id'],
-                        'product_qty' => $v['total_quantity'],
-                        'product_typ' => "",
-                        'product_status' => "01",
-                        'created_by' =>  $id,
-                        'created_at' => \Carbon\Carbon::now()
+                        'order_no'      => $order_no['data'],
+                        'do_no'         => "",
+                        'product_id'    => $v['product_id'],
+                        'product_qty'   => $v['total_quantity'],
+                        'product_typ'   => "",
+                        'product_status'=> "01",
+                        'created_by'    =>  $id,
+                        'created_at'    => \Carbon\Carbon::now()
                     );
 
                     $order_item[] = $item;
@@ -942,20 +944,20 @@ class ShopController extends Controller
 
                 $orderHdr = [
 
-                    'order_no' => $order_no['data'],
-                    'agent_id' => $agent_id,
-                    'invoice_no' => "",
-                    'total_items' => $total_product_quantity,
-                    'gst' => 0,
-                    'shipping_fee' => $shipping_fee,
-                    'total_price' => $total_price,
+                    'order_no'      => $order_no['data'],
+                    'agent_id'      => $agent_id,
+                    'invoice_no'    => "",
+                    'total_items'   => $total_product_quantity,
+                    'gst'           => 0,
+                    'shipping_fee'  => $shipping_fee,
+                    'total_price'   => $total_price,
                     'delivery_type' => (int)$delivery_type,
                     'purchase_date' => $date->format('Y-m-d'),
-                    'status' => "01",
-                    'bill_address' => (int)$billing_id,
-                    'ship_address' => (int)$shipping_id,
-                    'created_by' =>  $id,
-                    'created_at' => \Carbon\Carbon::now()
+                    'status'        => "01",
+                    'bill_address'  => (int)$billing_id,
+                    'ship_address'  => (int)$shipping_id,
+                    'created_by'    =>  $id,
+                    'created_at'    => \Carbon\Carbon::now()
 
                 ];
 
@@ -1012,14 +1014,14 @@ class ShopController extends Controller
 
                             $lv_product = [
 
-                                'user_id' => $id,
-                                'product_id' => $v['product_id'],
-                                'product_name' => $v['name'],
-                                'serial_no' => "",
-                                'price' => $price,
-                                'pv' => $v['point'],
-                                'status' => "Shiping",
-                                'created_at' => \Carbon\Carbon::now()
+                                'user_id'       => $id,
+                                'product_id'    => $v['product_id'],
+                                'product_name'  => $v['name'],
+                                'serial_no'     => "",
+                                'price'         => $price,
+                                'pv'            => $v['point'],
+                                'status'        => "Shiping",
+                                'created_at'    => \Carbon\Carbon::now()
                             ];
 
                             UserPurchase::insert($lv_product);
@@ -1055,15 +1057,15 @@ class ShopController extends Controller
 
                             $lv_product = [
 
-                                'user_id' => $id,
-                                'product_id' => $v['product_id'],
-                                'product_name' => $v['name'],
-                                'serial_no' => "",
-                                'price' => $price,
-                                'pv' => $v['point'],
-                                'status' => "Stocking",
-                                'lock_status' => "unlock",
-                                'created_at' => \Carbon\Carbon::now()
+                                'user_id'       => $id,
+                                'product_id'    => $v['product_id'],
+                                'product_name'  => $v['name'],
+                                'serial_no'     => "",
+                                'price'         => $price,
+                                'pv'            => $v['point'],
+                                'status'        => "Stocking",
+                                'lock_status'   => "unlock",
+                                'created_at'    => \Carbon\Carbon::now()
                             ];
 
                             Store::insert($lv_product);
@@ -1081,21 +1083,21 @@ class ShopController extends Controller
                      $user->address()->update([
 
                         'reminder_flag' => "",
-                        'updated_by' => $id,
-                        'updated_at' => \Carbon\Carbon::now()
+                        'updated_by'    => $id,
+                        'updated_at'    => \Carbon\Carbon::now()
                     ]);
 
                     $user->address()->where('id',$shipping_id)->update([
 
                         'reminder_flag' => "x",
-                        'updated_by' => $id,
-                        'updated_at' => \Carbon\Carbon::now()
+                        'updated_by'    => $id,
+                        'updated_at'    => \Carbon\Carbon::now()
                     ]);
                    
                 }
 
-                $return['message'] = "Succssfuly placed the order";
-                $return['status'] = "01";
+                $return['message']  = "Succssfuly placed the order";
+                $return['status']   = "01";
             }
             else{
 
@@ -1104,14 +1106,14 @@ class ShopController extends Controller
                     'data' => ''
                 ];
 
-                $return['message'] = "No order placed ";
-                $return['status'] = "03";
+                $return['message']  = "No order placed ";
+                $return['status']   = "03";
             }
         }
         catch(\Exception $e){
             
-            $return['message'] = $e->getMessage();
-            $return['status'] = "02";
+            $return['message']  = $e->getMessage();
+            $return['status']   = "02";
         }
 
         return compact('return','order_no','rank');
@@ -1148,14 +1150,14 @@ class ShopController extends Controller
                                     ->where('table','order_hdr')
                                     ->get();
 
-            $return['message'] = "succssfuly retrived";
-            $return['status'] = "01";
+            $return['message']  = "succssfuly retrived";
+            $return['status']   = "01";
 
         }
         catch(\Exception $e){
 
-            $return['message'] = $e->getMessage();
-            $return['status'] = "02";
+            $return['message']  = $e->getMessage();
+            $return['status']   = "02";
         }
 
         // dd($return,$data,$orderHdr);
@@ -1293,12 +1295,12 @@ class ShopController extends Controller
 
         if($itemType == 'product')
         {
-            $product = Product::find($request->id);
-            $addtocart = Cart::add($product->id, 'Product: '.$product->name, $quantity, $product->price_wm);
+            $product    = Product::find($request->id);
+            $addtocart  = Cart::add($product->id, 'Product: '.$product->name, $quantity, $product->price_wm);
 
         } else {
-            $package = Package::find($request->id);
-            $addtocart = Cart::add($package->id, 'Package: '.$package->name, $quantity, $package->price_wm);
+            $package    = Package::find($request->id);
+            $addtocart  = Cart::add($package->id, 'Package: '.$package->name, $quantity, $package->price_wm);
         }
 
         return redirect()->back();
