@@ -57,7 +57,7 @@
             <li><a href="{{ url('profile/ic-status-index')}}"><span class="fa fa-sort-alpha-desc"></span> MyKad/Passport Status Index</a></li>   
         </ul>
     </li> 
-    <li>
+    {{-- <li>
     	<a href="{{ url('invoices/')}}">
     		<span class="fa fa-file-text-o"></span> Invoices
     	</a>
@@ -71,7 +71,7 @@
     	<a href="{{ url('products')}}">
     		<span class="fa fa-file-text-o"></span> Products
     	</a>
-    </li>  
+    </li>   --}}
     <li>
         <a href="{{ url('bonus/calculate-end-month-bonus') }}">
             <span class="fa fa-file-text-o"></span> Count Bonus
