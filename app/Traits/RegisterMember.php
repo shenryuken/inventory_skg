@@ -50,13 +50,13 @@ trait RegisterMember
         $profile->contact_no    = $newUser->newProfile->mobile_no;
       
         $address = new Address;
-        $address->name = $newUser->newProfile->name;
-        $address->street1 = $newUser->newProfile->street;
-        $address->street2 = "";
-        $address->poscode = $newUser->newProfile->postcode;
-        $address->city = $newUser->newProfile->city;
-        $address->state = $newUser->newProfile->state;
-        $address->country = $newUser->newProfile->country;
+        $address->name      = $newUser->newProfile->name;
+        $address->street1   = $newUser->newProfile->street;
+        $address->street2   = "";
+        $address->poscode   = $newUser->newProfile->postcode;
+        $address->city      = $newUser->newProfile->city;
+        $address->state     = $newUser->newProfile->state;
+        $address->country   = $newUser->newProfile->country;
         $address->reminder_flag = "x";
         $address->created_by = Auth::guard('admin')->user()->id;
         $address->created_at = \Carbon\Carbon::now();
