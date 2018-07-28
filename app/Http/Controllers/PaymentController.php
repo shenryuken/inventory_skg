@@ -139,6 +139,7 @@ class PaymentController extends Controller
             if($request->has('voucher_code'))
             {
                 $data = [
+                    'cash'              => $request->cash,
                     'voucher_value'     => $voucher_value,
                     'payment_type'      => 'Cash + Voucher',
                     'payment_status'    => $payment_status,
@@ -149,6 +150,7 @@ class PaymentController extends Controller
 
             }else {
                 $data = [
+                    'cash'              => $request->cash,
                     'voucher_value'     => 0,
                     'payment_type'      => 'Cash',
                     'payment_status'    => $payment_status,
@@ -234,7 +236,7 @@ class PaymentController extends Controller
         $rmvp = 0;
 
         foreach (Cart::content() as $item) {
-            $product = Product::find($item->id);
+            $product  = Product::find($item->id);
             $rmvp     = $rmvp + ($item->qty * $product->wm_price);
         }
 
@@ -275,7 +277,7 @@ class PaymentController extends Controller
             $payment = new AgentPayment;
             $payment->agent_id      = $agent_id;
             $payment->invoice_id    = $invoice->id;
-            $payment->cash          = '100.00';
+            $payment->cash          = $data['cash'];
             $payment->voucher       = $data['voucher_value'];
             $payment->status        = $data['payment_status'];
             $payment->payment_type  = $data['payment_type'];
@@ -294,7 +296,7 @@ class PaymentController extends Controller
 
             $payment = new Payment;
             $payment->invoice_id    = $invoice->id;
-            $payment->cash          = '100.00';
+            $payment->cash          = $data['cash'];
             $payment->voucher       = $data['voucher_value'];
             $payment->status        = $data['payment_status'];
             $payment->payment_type  = $data['payment_type'];
@@ -354,7 +356,8 @@ class PaymentController extends Controller
 
     public function addOrderItem($order,  $agent_id = null)
     {
-        $model_name = ($agent_id != NULL || $agent_id != '' || $agent_id > 0) ? 'AgentOrderItem':'OrderItem';
+        //$model_name = ($agent_id != NULL || $agent_id != '' || $agent_id > 0) ? 'AgentOrderItem':'OrderItem';
+        $model_name = ($agent_id == NULL || $agent_id == '' || $agent_id == 0) ? 'OrderItem':'AgentOrderItem';
         $model = 'App\\Models\\'.$model_name;
 
         foreach (Cart::content() as $item) {

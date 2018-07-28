@@ -52,7 +52,7 @@ Hierachy Chart
 
 		 echo '</pre><br/>';*/
 
-		/* echo '<pre>';
+		 /*echo '<pre>';
 			print_r($output);
 
 		 echo '</pre><br/>';*/
@@ -87,8 +87,7 @@ Hierachy Chart
 
 <!-- Export To Pdf -->
 <!--script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script-->
-<script src="{{ asset('themes/Homer/vendor/pdfmake/build/pdfmake.min.js')}}"></script>
-<script src="{{ asset('themes/Homer/vendor/pdfmake/build/vfs_fonts.js')}}"></script>
+
 <!-- page script -->
 <script>
 var datasource = <?php echo $output;?>
