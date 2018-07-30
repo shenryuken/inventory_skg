@@ -32,6 +32,7 @@ use App\Models\Rank;
 use App\Classes\GlobalNumberRange;
 use App\Models\UserPurchase;
 // use App\Models\Store;
+use App\Models\PaymentType;
 
 use Validator;
 use Session;
@@ -314,6 +315,9 @@ class ShopController extends Controller
             $deliveryType = DeliveryType::select('id','delivery_code as code','type_description as description')
                                         ->get();
 
+            $paymentType = PaymentType::select('id','payment_code as code','payment_description as description')
+                                        ->get();
+
             $return['message'] = "succssfuly retrived";
             $return['status'] = "01";
 
@@ -327,7 +331,7 @@ class ShopController extends Controller
         }
         
         // dd($return,$cartItems,$returnData,$totalPrice_wm,$totalPrice_em);
-        return view('shops.cart-lists',compact('cartItems','returnData','deliveryType'));
+        return view('shops.cart-lists',compact('cartItems','returnData','deliveryType','paymentType'));
     }
 
     public function deleteCartItem(Request $request){
@@ -1125,16 +1129,16 @@ class ShopController extends Controller
         try{
 
             if($sessionData == "SKG_STORE"){
-                $orderHdr = OrderHdr::leftJoin('delivery_type','delivery_type.delivery_code','=','orders_hdr.delivery_type')
+                $orderHdr = OrderHdr::leftJoin('delivery_type','delivery_type.id','=','orders_hdr.delivery_type')
                             ->leftJoin('global_status','global_status.status','=','orders_hdr.status')
-                            ->select('orders_hdr.order_no','orders_hdr.agent_id','orders_hdr.agent_id','orders_hdr.invoice_no','orders_hdr.total_items','orders_hdr.total_price','orders_hdr.delivery_type','orders_hdr.purchase_date','orders_hdr.status','delivery_type.type_description','global_status.description')
+                            ->select('orders_hdr.order_no','orders_hdr.agent_id','orders_hdr.agent_id','orders_hdr.invoice_no','orders_hdr.total_items','orders_hdr.total_price','orders_hdr.delivery_type','orders_hdr.purchase_date','orders_hdr.status','delivery_type.delivery_code','delivery_type.type_description','global_status.description')
                             ->where('order_no','=',$order_no)
                             ->first();
             }
             else if($sessionData == "AGENT_STORE"){
-                $orderHdr = AgentOrderHdr::leftJoin('delivery_type','delivery_type.delivery_code','=','agent_order_hdr.delivery_type')
+                $orderHdr = AgentOrderHdr::leftJoin('delivery_type','delivery_type.delivery_id','=','agent_order_hdr.delivery_type')
                             ->leftJoin('global_status','global_status.status','=','agent_order_hdr.status')
-                            ->select('agent_order_hdr.order_no','agent_order_hdr.agent_id','agent_order_hdr.agent_id','agent_order_hdr.invoice_no','agent_order_hdr.total_items','agent_order_hdr.total_price','agent_order_hdr.delivery_type','agent_order_hdr.purchase_date','agent_order_hdr.status','delivery_type.type_description','global_status.description')
+                            ->select('agent_order_hdr.order_no','agent_order_hdr.agent_id','agent_order_hdr.agent_id','agent_order_hdr.invoice_no','agent_order_hdr.total_items','agent_order_hdr.total_price','agent_order_hdr.delivery_type','agent_order_hdr.purchase_date','agent_order_hdr.status','delivery_type.delivery_code','delivery_type.type_description','global_status.description')
                             ->where('order_no','=',$order_no)
                             ->first();
             }
@@ -1144,8 +1148,11 @@ class ShopController extends Controller
             $date = new \DateTime($orderHdr->purchase_date);
             $orderHdr->purchase_date = $date->format('d M Y');
 
-            $data = GlobalStatus::select('id','status','description')
+            $data = GlobalStatus::leftJoin('delivery_status_assign','delivery_status_assign.delivery_status','=','global_status.status')
+                                    ->select('global_status.id','global_status.status','global_status.description','delivery_status_assign.sequence')
                                     ->where('table','order_hdr')
+                                    ->where('delivery_status_assign.delivery_code',$orderHdr->delivery_code)
+                                    ->orderBy('delivery_status_assign.sequence','ASC')
                                     ->get();
 
             $return['message'] = "succssfuly retrived";
