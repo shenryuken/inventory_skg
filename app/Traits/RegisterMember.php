@@ -18,109 +18,105 @@ use Validator;
 use Session;
 use Cart;
 use DateTime;
+use Auth;
 
 trait RegisterMember
 {
     public function saveMemberToDb($newUser)
     {
-        try
+    
+        $user = new User;
+        $user->username     = $newUser->username;
+        $user->password     = $newUser->password;
+        $user->email        = $newUser->email;
+        $user->mobile_no    = $newUser->mobile_no;
+        $user->introducer   = $newUser->introducer;
+        $user->rank_id      = $newUser->rank_id;
+        $user->security_code = $newUser->security_code;
+        
+        $profile = new Profile;     
+        $profile->full_name = $newUser->newProfile->name;
+        $profile->dob       = $newUser->newProfile->dob;
+        $profile->gender    = $newUser->newProfile->gender;
+        $profile->marital_status = $newUser->newProfile->marital_status;
+        $profile->id_type   = $newUser->newProfile->id_type;
+        $profile->id_no     = $newUser->newProfile->id_no;
+        $profile->id_pic    = $newUser->newProfile->id_pic;
+        $profile->street    = $newUser->newProfile->street;
+        $profile->city      = $newUser->newProfile->city;
+        $profile->postcode  = $newUser->newProfile->postcode;
+        $profile->state     = $newUser->newProfile->state;
+        $profile->country   = $newUser->newProfile->country;
+        $profile->contact_no    = $newUser->newProfile->mobile_no;
+      
+        $address = new Address;
+        $address->name      = $newUser->newProfile->name;
+        $address->street1   = $newUser->newProfile->street;
+        $address->street2   = "";
+        $address->poscode   = $newUser->newProfile->postcode;
+        $address->city      = $newUser->newProfile->city;
+        $address->state     = $newUser->newProfile->state;
+        $address->country   = $newUser->newProfile->country;
+        $address->reminder_flag = "x";
+        $address->created_by = Auth::guard('admin')->user()->id;
+        $address->created_at = \Carbon\Carbon::now();
 
+        $user->save();
+        $user->profile()->save($profile);
+        $user->address()->save($address);
+
+        $newUser->newProfile()->delete();
+        $newUser->delete();
+        
+        $rank_id = $user->rank_id;
+
+        if($rank_id < 4)
         {
-            $user = new User;
-            $user->username     = $newUser->username;
-            $user->password     = $newUser->password;
-            $user->email        = $newUser->email;
-            $user->mobile_no    = $newUser->mobile_no;
-            $user->introducer   = $newUser->introducer;
-            $user->rank_id      = $newUser->rank_id;
-            $user->security_code = $newUser->security_code;
+            $this->removeDo($user->id);
+            $this->removeSdo($user->id);
+        }
+        elseif($rank_id == 4)
+        {
+            $active_do = $this->registerDo($user->id);
+                   
+            $this->removeSdo($user->id);
+        }   
+        elseif ($rank_id == 5) 
+        {
+            $this->registerDo($id);
+            $this->registerSdo($id);
+        }   
+
+        $admin = Admin::where('username', $newUser->introducer)->first();
+
+        if($admin)
+        {
+            $introducer = Admin::where('username', $user->introducer)->first();
+            $introducer->total_referral = $introducer->total_referral + 1;
+            $introducer->save();
+        } else {
+            $introducer = User::where('username', $user->introducer)->first();
+            $introducer->total_referral = $introducer->total_referral + 1;
+            $introducer->save();
+        }   
+
+        $referral = Referral::where('username',$introducer->username)->first();
+        $code_rank = Rank::find($rank_id )->code_name;
             
-            $profile = new Profile;     
-            $profile->full_name = $newUser->newProfile->name;
-            $profile->dob       = $newUser->newProfile->dob;
-            $profile->gender    = $newUser->newProfile->gender;
-            $profile->marital_status = $newUser->newProfile->marital_status;
-            $profile->id_type   = $newUser->newProfile->id_type;
-            $profile->id_no     = $newUser->newProfile->id_no;
-            $profile->id_pic    = $newUser->newProfile->id_pic;
-            $profile->street    = $newUser->newProfile->street;
-            $profile->city      = $newUser->newProfile->city;
-            $profile->postcode  = $newUser->newProfile->postcode;
-            $profile->state     = $newUser->newProfile->state;
-            $profile->country   = $newUser->newProfile->country;
-            $profile->contact_no    = $newUser->newProfile->mobile_no;
-          
-            $address = new Address;
-            $address->name = $newUser->newProfile->name;
-            $address->street1 = $newUser->newProfile->street;
-            $address->street2 = "";
-            $address->poscode = $newUser->newProfile->postcode;
-            $address->city = $newUser->newProfile->city;
-            $address->state = $newUser->newProfile->state;
-            $address->country = $newUser->newProfile->country;
-            $address->reminder_flag = "x";
-            $address->created_by = Auth::user()->id;
-            $address->created_at = \Carbon\Carbon::now();
-
-            $user->save();
-            $user->profile()->save($profile);
-            $user->address()->save($address);
-           
-
-            $rank_id = $user->rank_id;
-
-            if($rank_id < 4)
-            {
-                $this->removeDo($user->id);
-                $this->removeSdo($user->id);
-            }
-            elseif($rank_id == 4)
-            {
-                $active_do = $this->registerDo($user->id);
-                       
-                $this->removeSdo($user->id);
-            }   
-            elseif ($rank_id == 5) 
-            {
-                $this->registerDo($id);
-                $this->registerSdo($id);
-            }   
-
-            $admin = Admin::where('username', $newUser->introducer)->first();
-
-            if($admin)
-            {
-                $introducer = Admin::where('username', $user->introducer)->first();
-                $introducer->total_referral = $introducer->total_referral + 1;
-                $introducer->save();
-            } else {
-                $introducer = User::where('username', $user->introducer)->first();
-                $introducer->total_referral = $introducer->total_referral + 1;
-                $introducer->save();
-            }   
-
-            $referral = Referral::where('username',$introducer->username)->first();
-            $code_rank = Rank::find($rank_id )->code_name;
-                
-            if(!is_null($referral))
-            {
-                $node = Referral::create(['user_id' => $user->id, 'username' => $user->username, 'rank' => $code_rank]);
-                $node->makeChildOf($referral);
-            } 
-            else 
-            {
-                $root = Referral::create(['user_id' => $user->id, 'username' => $user->username, 'rank' => $code_rank]);
-            }
-
-            $wallet = $this->updateOrCreateWallet($user->id);
-
-            return $user;
+        if(!is_null($referral))
+        {
+            $node = Referral::create(['user_id' => $user->id, 'username' => $user->username, 'rank' => $code_rank]);
+            $node->makeChildOf($referral);
+        } 
+        else 
+        {
+            $root = Referral::create(['user_id' => $user->id, 'username' => $user->username, 'rank' => $code_rank]);
         }
-        catch(Exception $e){
 
-            $return['message'] = $e->getMessage();
-        }
-    	
+        $wallet = $this->updateOrCreateWallet($user->id);
+
+        return $user;
+        
     }
 
     public function registerDo($id)

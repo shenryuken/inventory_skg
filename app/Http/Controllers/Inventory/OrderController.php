@@ -92,7 +92,8 @@ class OrderController extends Controller
         return view('inventory.orders.order-delivery-form',[ 'order' => $order, 'items' => $items, 'couriers' => $couriers]);
     }
 
-    public function deliveryStore(Request $request){
+    public function deliveryStore(Request $request)
+    {
         $postData = $this->validate($request,[
             'order_no' => 'required',
             'courier_id' => 'required',
@@ -133,7 +134,7 @@ class OrderController extends Controller
                     try{
                         $stock_item = new StockItem;    
     
-                        $stock_item->where('barcode',$serial_number)->update(['status' => '05']);
+                        $stock_item->where('barcode',$serial_number)->update(['status' => '02']);
                     }catch(Exception $e){
     
                     }
@@ -142,19 +143,9 @@ class OrderController extends Controller
                     }
 
                 }
-
-
-                
-                
-                
-
-                
-
             }
-            
-            
 
         Session::flash('message', 'Successfully saved supplier!');
         return redirect('inventory/order/delivery/');
-        }
+    }
 }

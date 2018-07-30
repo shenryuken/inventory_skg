@@ -11,7 +11,7 @@ class OrderHdr extends Model
 
     public function OrderItems()
     {
-    	return $this->hasMany('App\Models\OrderItem');
+    	return $this->hasMany('App\Models\OrderItem', 'order_no', 'order_no');
     }
 
 
@@ -42,6 +42,6 @@ class OrderHdr extends Model
 
     public function invoice()
     {
-        return $this->belongsTo('App\Invoice','invoice_no','invoice_no');
+        return $this->hasOne('App\Models\Invoice','invoice_no','invoice_no');
     }
 }

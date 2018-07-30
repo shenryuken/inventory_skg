@@ -89,7 +89,7 @@ class StockAdjustmentController extends Controller
             if($stock_item){
                 StockItem::where('barcode',$product_supplier->barcode)->update([
                     "stock_adjustment_id" => $product_stock_array['stock_adjustment_id'],
-                    "status" => "02",
+                    "status" => "04",
                     'updated_by'    => Auth::user()->id,
                 ]);
             }else{
@@ -97,7 +97,7 @@ class StockAdjustmentController extends Controller
                 $product_stock_array = [
                     'stock_adjustment_id'   => $product_stock_array['stock_adjustment_id'],
                     'adjustment_quantity'       => $product_supplier->quantity,
-                    'status'        => '02',
+                    'status'        => '04',
                     'created_by'    => Auth::user()->id,
                     'updated_at'    => Carbon::now()    
                 ];

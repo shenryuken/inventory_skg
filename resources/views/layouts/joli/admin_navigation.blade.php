@@ -57,7 +57,7 @@
             <li><a href="{{ url('profile/ic-status-index')}}"><span class="fa fa-sort-alpha-desc"></span> MyKad/Passport Status Index</a></li>   
         </ul>
     </li> 
-    <li>
+    {{-- <li>
     	<a href="{{ url('invoices/')}}">
     		<span class="fa fa-file-text-o"></span> Invoices
     	</a>
@@ -71,7 +71,7 @@
     	<a href="{{ url('products')}}">
     		<span class="fa fa-file-text-o"></span> Products
     	</a>
-    </li>  
+    </li>   --}}
     <li>
         <a href="{{ url('bonus/calculate-end-month-bonus') }}">
             <span class="fa fa-file-text-o"></span> Count Bonus
@@ -166,9 +166,9 @@
             <li class="<?php echo in_array(Request::segment(1) . '/' . Request::segment(2). '/' .Request::segment(3), array("inventory/order/delivery")) ? "active" : "" ; ?>">
                 <a href="{{ url('inventory/order/delivery') }}"><span class="glyphicon glyphicon-list-alt"></span> Delivery Order List </a>
             </li>
-            <li class="<?php echo in_array(Request::segment(1) . '/' . Request::segment(2). '/' .Request::segment(3), array("inventory/order/delivery")) ? "active" : "" ; ?>">
+            <!-- li class="<?php echo in_array(Request::segment(1) . '/' . Request::segment(2). '/' .Request::segment(3), array("inventory/order/delivery")) ? "active" : "" ; ?>">
                 <a href="#"><span class="glyphicon glyphicon-list-alt"></span> Print consignment </a>
-            </li>
+            </li --!>
             
         </ul>
     </li>
