@@ -113,6 +113,20 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row form-field">
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label"> Name </label>
+                                            <div class="col-md-9">        
+                                                <input type="text" class="form-control agent-name" id="agent_name" value="" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label"> Contect No. </label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control agent-username" id="agent_username" value="" />   
+                                            </div>
+                                        </div>
+                                    </div>
                                     <hr>
                                     <table class="col-md-12">
                                         <tbody>
@@ -130,6 +144,12 @@
                                             <tr>
                                                 <td><h4>Grand Total</h4></td>
                                                 <td><h4>RM{{ $returnData['grandTotalPrice'] }}</h4></td>
+                                            </tr>
+                                            <tr>
+                                                <td><h4>Amount</h4></td>
+                                                <td>
+                                                    <input type="text" class="form-control agent-username" id="agent_username" value="" onkeypress="return isNumberKey(event)"> 
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td hidden="">
@@ -195,6 +215,15 @@
     var agent_id = "{{ $returnData['agent_id'] }}";
     var baseUrl = window.location.origin;
 
+    function isNumberKey(evt)
+    {
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode != 46 && charCode > 31 
+        && (charCode < 48 || charCode > 57))
+        return false;
+        return true;
+    }
+    
     $(document).ready(function(){
 
         $(window).resize(function() {

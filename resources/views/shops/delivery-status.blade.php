@@ -26,6 +26,7 @@
                     <div class="row">
                         <div class="col-md-11">
                             <div class="col-md-6">
+                                <p><span id="form-title"><h4>Delivery Type : {{ $orderHdr->type_description }} </h4></span></p>
                                 <p><span id="form-title">Purchase Order No. : {{ $orderHdr->order_no }} </span></p>
                                 <p><span id="form-title">Purchase Date : {{ $orderHdr->purchase_date }} </span></p>
                             </div>
@@ -35,12 +36,21 @@
                                 <div class="col-sm-12 col-md-12">
                                     <div class="wizard">
                                         <ul class="steps_4 anchor">
+                                            @foreach($data as $k => $v)
                                             <li>
+                                                <a href="#step-1" class="" id="status-{{ $v['status'] }}" isdone="1" rel="{{ $v['sequence'] }}">
+                                                    <span class="stepNumber">1</span>
+                                                    <span class="stepDesc">{{ $v['description'] }}<br><small>{{ $v['sequence'] }} </small></span>
+                                                </a>
+                                            </li>
+                                            @endforeach
+                                            <!-- <li>
                                                 <a href="#step-1" class="" id="status-one" isdone="1" rel="1">
                                                     <span class="stepNumber">1</span>
                                                     <span class="stepDesc">In Process<br><small>Step 1 description</small></span>
                                                 </a>
                                             </li>
+                                            @if($orderHdr->delivery_type == 1)
                                             <li>
                                                 <a href="#step-2" class="" id="status-two" isdone="0" rel="2">
                                                     <span class="stepNumber">2</span>
@@ -53,12 +63,20 @@
                                                     <span class="stepDesc">Delivery<br><small>Step 3 description</small></span>                   
                                                 </a>
                                             </li>
+                                            @elseif($orderHdr->delivery_type == 2)
+                                            <li>
+                                                <a href="#step-3" class="" id="status-three" isdone="0" rel="3">
+                                                    <span class="stepNumber">3</span>
+                                                    <span class="stepDesc">Collect<br><small>Step 3 description</small></span>                   
+                                                </a>
+                                            </li>
+                                            @endif
                                             <li>
                                                 <a href="#step-4" class="" id="status-four" isdone="0" rel="4">
                                                     <span class="stepNumber">4</span>
                                                     <span class="stepDesc">Complete<br><small>Step 4 description</small></span>                   
                                                 </a>
-                                            </li>
+                                            </li> -->
                                         </ul>
                                         
                                         <div class="stepContainer" style="height: 54px;" hidden>
@@ -116,23 +134,28 @@
                 if(status[j].status <= orderHdr.status){
                     if(status[j].status == "01"){
 
-                        $('#status-one').addClass('selected');
+                        $('#status-01').addClass('selected');
                         // $('a.orderstatus').addClass('selected');
                     }
                     if(status[j].status == "02"){
                         console.log(status[j].status)
                         console.log(orderHdr.status)
-                        $('#status-two').addClass('selected');
+                        $('#status-02').addClass('selected');
                         // $('a.orderstatus').addClass('disabled');
                     }
                     if(status[j].status == "03"){
 
-                        $('#status-three').addClass('selected');
+                        $('#status-03').addClass('selected');
                         // $('a.orderstatus').addClass('disabled');
                     }
                     if(status[j].status == "04"){
 
-                        $('#status-four').addClass('selected');
+                        $('#status-04').addClass('selected');
+                        // $('a.orderstatus').addClass('disabled');
+                    }
+                     if(status[j].status == "05"){
+
+                        $('#status-05').addClass('selected');
                         // $('a.orderstatus').addClass('disabled');
                     }
                 }
