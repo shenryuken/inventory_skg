@@ -32,13 +32,13 @@
 	            </p> --}}
 	            
 	            <h4 class="font-bold">
-                    WM : MYR {{ $product->wm_price }}  
+                    WM : MYR {{ $product->price_wm }}  
                 </h4>
                 <h4 class="font-bold">
-                    EM : MYR {{ $product->em_price }}  
+                    EM : MYR {{ $product->price_em }}  
                 </h4>
 	            <p>
-	                ({{ $product->pv}} PV)
+	                ({{ $product->point}} PV)
 	            </p>
 
 			</div>			
