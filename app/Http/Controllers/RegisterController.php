@@ -87,7 +87,7 @@ class RegisterController extends Controller
 
     public function registerMember(Request $request)
     {
-        try{
+        // try{
             $introducer = $request->introducer;
             $admin = Admin::where('username', $introducer)->first();
             $member= User::where('username', $introducer)->first();
@@ -138,34 +138,35 @@ class RegisterController extends Controller
 
             if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode))
             {
-                $user = new NewUser;
-                $user->username   = $request->username;
-                $user->password   = bcrypt($request->password);
-                $user->security_code = bcrypt($request->password); 
-                $user->email      = $request->email;
-                $user->email_token   = Password::getRepository()->createNewToken();
-                $user->mobile_no  = $request->mobile_no;
-                $user->introducer = $request->introducer;
-                $user->rank_id    = $rank->id;
-                $user->save();
+                // $user = new NewUser;
+                // $user->username   = $request->username;
+                // $user->password   = bcrypt($request->password);
+                // $user->security_code = bcrypt($request->password); 
+                // $user->email      = $request->email;
+                // $user->email_token   = Password::getRepository()->createNewToken();
+                // $user->mobile_no  = $request->mobile_no;
+                // $user->introducer = $request->introducer;
+                // $user->rank_id    = $rank->id;
+                // $user->save();
 
-                $id = $user->id;
+                $this->saveToPreregisterTable($request->all(), $rank->id);
+                $id = Auth::guard('admin')->user()->id;
 
-                $profile = new NewProfile;     
-                $profile->full_name = $request->name;
-                $profile->dob       = $request->dob;
-                $profile->gender    = $request->gender;
-                $profile->marital_status = $request->marital_status;
-                $profile->id_type   = $request->id_type;
-                $profile->id_no     = $request->id_no;
-                $profile->id_pic    = $request->id_pic;
-                $profile->street    = $request->street;
-                $profile->city      = $request->city;
-                $profile->postcode  = $request->postcode;
-                $profile->state     = $request->state;
-                $profile->country   = $request->country;
-                $profile->contact_no    = $request->mobile_no;
-                $user->newprofile()->save($profile);
+                // $profile = new NewProfile;     
+                // $profile->full_name = $request->name;
+                // $profile->dob       = $request->dob;
+                // $profile->gender    = $request->gender;
+                // $profile->marital_status = $request->marital_status;
+                // $profile->id_type   = $request->id_type;
+                // $profile->id_no     = $request->id_no;
+                // $profile->id_pic    = $request->id_pic;
+                // $profile->street    = $request->street;
+                // $profile->city      = $request->city;
+                // $profile->postcode  = $request->postcode;
+                // $profile->state     = $request->state;
+                // $profile->country   = $request->country;
+                // $profile->contact_no    = $request->mobile_no;
+                // $user->newprofile()->save($profile);
 
                 // Session::put('profile',$profile);
 
@@ -181,16 +182,23 @@ class RegisterController extends Controller
                 //return view('admin.firstTimePurchaseRegistration', compact('user'));
                 return redirect()->route('firstTimePurchaseRegistration', compact('user', 'id'));
             }
+            elseif (Auth::guard('web')->check() && Hash::check($request->security_code, $hashedCode)) 
+            {    
+                $id = Auth::guard('web')->user()->id;
+
+                return redirect()->route('firstTimePurchaseRegistration', compact('user', 'id'));
+            }
+
             // session()->forget('user');
             // session()->forget('profile');
 
             return back()->withInput()
                          ->with('fail', 'Failed to register! Please Check Your Security Code Is Correct Or Try Again. ');
-        }
-        catch(\Exception $e)
-        {
-            return $e->getMessage();
-        }
+        //}
+        // catch(\Exception $e)
+        // {
+        //     return $e->getMessage();
+        // }
     }
 
     public function firstTimePurchaseRegistration()
@@ -199,6 +207,36 @@ class RegisterController extends Controller
         $packages = Package::all();
 
         return view('firstTimePurchaseRegistration', compact('products', 'packages'));
+    }
+
+    public function saveToPreregisterTable($request, $rank_id)
+    {
+        $user = new NewUser;
+        $user->username   = $request['username'];
+        $user->password   = bcrypt($request['password']);
+        $user->security_code = bcrypt($request['password']); 
+        $user->email      = $request['email'];
+        $user->email_token= Password::getRepository()->createNewToken();
+        $user->mobile_no  = $request['mobile_no'];
+        $user->introducer = $request['introducer'];
+        $user->rank_id    = $rank_id;
+        $user->save();
+
+        $profile = new NewProfile;     
+        $profile->full_name = $request['name'];
+        $profile->dob       = $request['dob'];
+        $profile->gender    = $request['gender'];
+        $profile->marital_status = $request['marital_status'];
+        $profile->id_type   = $request['id_type'];
+        $profile->id_no     = $request['id_no'];
+        $profile->id_pic    = $request['id_pic'];
+        $profile->street    = $request['street'];
+        $profile->city      = $request['city'];
+        $profile->postcode  = $request['postcode'];
+        $profile->state     = $request['state'];
+        $profile->country   = $request['country'];
+        $profile->contact_no= $request['mobile_no'];
+        $user->newprofile()->save($profile);
     }
 
 }

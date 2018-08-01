@@ -225,7 +225,7 @@ class PaymentController extends Controller
 
         foreach (Cart::content() as $item) {
             $product = Product::find($item->id);
-            $pv      = $pv + ($item->qty * $product->pv);
+            $pv      = $pv + ($item->qty * $product->point);
         }
 
         return $pv;
