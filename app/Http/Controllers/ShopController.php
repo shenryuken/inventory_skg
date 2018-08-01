@@ -13,7 +13,6 @@ use App\Models\Package;
 use App\Models\Referral;
 use App\Models\Wallet;
 use App\Models\Store;
-use App\Http\Controllers\Inventory\ProductUserController;
 use App\Models\OrderTransection;
 use App\Models\Tax;
 use App\Models\Product_image;
@@ -33,6 +32,8 @@ use App\Classes\GlobalNumberRange;
 use App\Models\UserPurchase;
 // use App\Models\Store;
 use App\Models\PaymentType;
+
+use App\Http\Controllers\Inventory\ProductUserController;
 
 use Validator;
 use Session;
