@@ -93,11 +93,13 @@ class RegisterController extends Controller
             $member= User::where('username', $introducer)->first();
             $rank  = Rank::where('name', $request->rank)->first();
 
-            if (count($admin) == 1){
-                $table = 'admins';
-            } else {
-                $table = 'users';
-            } 
+            // if (count($admin) == 1){
+            //     $table = 'admins';
+            // } else {
+            //     $table = 'users';
+            // } 
+
+            $table = count($admin) == 1 ? 'admins':'users';
             
             $request->validate([
                 'country'   => 'required',
@@ -146,7 +148,8 @@ class RegisterController extends Controller
                 $user->introducer = $request->introducer;
                 $user->rank_id    = $rank->id;
                 $user->save();
-                Session::put('uid',$user->id);
+
+                $id = $user->id;
 
                 $profile = new NewProfile;     
                 $profile->full_name = $request->name;
@@ -176,7 +179,7 @@ class RegisterController extends Controller
                 // }
 
                 //return view('admin.firstTimePurchaseRegistration', compact('user'));
-                return redirect()->route('firstTimePurchaseRegistration', compact('user'));
+                return redirect()->route('firstTimePurchaseRegistration', compact('user', 'id'));
             }
             // session()->forget('user');
             // session()->forget('profile');
