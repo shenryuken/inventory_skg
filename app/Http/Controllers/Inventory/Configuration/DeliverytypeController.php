@@ -30,7 +30,7 @@ class DeliverytypeController extends Controller
 			'startcount' => 0,
 			'deliverytypeArr' => $deliverytype_data->orderBy('id', 'desc')->paginate(20),
 		);
-		return view('inventory/setting/deliverytype_listing',$data);
+		return view('inventory/configuration/deliverytype_listing',$data);
     }
 	
 	public function search($x = ''){
