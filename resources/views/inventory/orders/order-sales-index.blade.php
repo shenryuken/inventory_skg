@@ -82,11 +82,12 @@ textarea {
                                             </thead>
 
                                         <tbody>
+                                            
                                             @foreach($agent_order as $order)
                                             <tr>
                                                 <td>{{ $order->order_no }}</td>
                                                 <td>{{ Carbon\Carbon::parse($order->purchase_date)->format('d/m/Y') }}</td>
-                                                <td>{{ $order->deliveryType->type_description }}</td>
+                                                <td>{{ isset($order->deliveryType->type_description) ? $order->deliveryType->type_description:"" }}</td>
                                                 <td>{{ $order->user->username }}</td>
                                                 <td>{{ $order->globalstatus->description }}</td>
                                                 <td><a href="{{ url('inventory/order/delivery/create/'.$order->order_no) }}" class="btn btn-info">Delivery pick-up</a>
