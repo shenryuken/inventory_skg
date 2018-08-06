@@ -222,6 +222,8 @@ class RegisterController extends Controller
         $user->rank_id    = $rank_id;
         $user->save();
 
+        Session::put('uid',$user->id);
+
         $profile = new NewProfile;     
         $profile->full_name = $request['name'];
         $profile->dob       = $request['dob'];

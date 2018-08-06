@@ -9,9 +9,14 @@ class OrderHdr extends Model
     //
     protected $table = 'orders_hdr';
 
-    public function OrderItems()
+    // public function OrderItems()
+    // {
+    // 	return $this->hasMany('App\Models\OrderItem', 'order_no', 'order_no');
+    // }
+
+    public function orderItems()
     {
-    	return $this->hasMany('App\Models\OrderItem', 'order_no', 'order_no');
+        return $this->hasMany('App\Models\OrderItem');
     }
 
 

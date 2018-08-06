@@ -64,7 +64,7 @@ Invoices List
 								{{ $item->product->name}}
 							</td>
 							<td>
-								{{ $item->qty }}
+								{{ $item->product_qty }}
 							</td>
 						</tr>
 						@endforeach()
