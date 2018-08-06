@@ -35,8 +35,8 @@ class InvoiceController extends Controller
     public function show($id)
     {
 		$invoice     = Invoice::find($id);
-    	$order 	     = OrderHdr::where('invoice_no', $invoice->invoice_no)->first();
-        $order_items = $order->OrderItems;
+    	$order 	     = OrderHdr::where('invoice_id', $invoice->id)->first();
+        $order_items = $order->orderItems;
     	$payments    = Payment::where('invoice_id', $invoice->id)->get();
         $shipment    = $order->shipment;
     	

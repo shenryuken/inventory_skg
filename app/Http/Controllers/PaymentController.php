@@ -64,7 +64,7 @@ class PaymentController extends Controller
         $last_invoice_no    = Invoice::latest()->value('invoice_no');
         $new_invoice_no     = isset($last_invoice_no) ? $last_invoice_no + 1: 10000;
 
-        $id = isset($request->agent_user_id) ? $request->agent_user_id:0;//agent_id
+        $id   = isset($request->agent_user_id) ? $request->agent_user_id:0;//agent_id
         $user = User::find($id);//agent info
 
         if(isset($id) && $id >0 ){
@@ -106,7 +106,7 @@ class PaymentController extends Controller
         {
             $last_invoice_no    = Invoice::latest()->value('invoice_no');
             $new_invoice_no     = isset($last_invoice_no) ? $last_invoice_no + 1: 10000;
-            $customer           = NewUser::find('user_id');
+            $customer           = NewUser::find($request->uid);
         }
         else
         {
