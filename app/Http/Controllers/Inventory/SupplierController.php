@@ -93,7 +93,20 @@ class SupplierController extends Controller
 
     public function store(Request $request){
         $postData = $this->validate($request,[
-            'telephone' => 'required',                
+			'telephone' => 'required',
+			'supplier_code'	=> 'required',
+			'company_name'	=> 'required',
+			'street' 		=> 'required',
+			'street2'		=> 'required',
+			'postcode' 		=> 'required',
+			'city'	 		=> 'required',
+			'state' 		=> 'required',
+			'country'	 	=> 'required',
+			'telephone'	=> 'required',
+			'fax'	 	=> 'required',
+			'attn_no' 		=> 'required',
+			'email' 		=> 'required',
+			              
         ]);
 			$data = [
 				'supplier_code'	=> $request->get('supplier_code'),
