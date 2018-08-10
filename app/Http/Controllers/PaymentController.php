@@ -360,13 +360,14 @@ class PaymentController extends Controller
         $model_name = ($agent_id == NULL || $agent_id == '' || $agent_id == 0) ? 'OrderItem':'AgentOrderItem';
         $model = 'App\\Models\\'.$model_name;
 
-        foreach (Cart::content() as $item) {
-                $order_item = new $model;
-                $order_item->order_id   = $order->id;
-                $order_item->product_id = $item->id;
-                $order_item->product_qty= $item->qty;
-                $order_item->save();   
-            }
+        foreach (Cart::content() as $item) 
+        {
+            $order_item = new $model;
+            $order_item->order_hdr_id   = $order->id;
+            $order_item->product_id     = $item->id;
+            $order_item->product_qty    = $item->qty;
+            $order_item->save();   
+        }
     }
 
     public function generateInvoiceNo()
