@@ -24,7 +24,8 @@
 	            </div>
 	        </div>
 	        <div class="panel-image">
-	            <img class="img-responsive" src="{{asset('product/femlove.jpg')}}" alt="">
+	            {{-- <img class="img-responsive" src="{{asset('product/femlove.jpg')}}" alt=""> --}}
+				<img class="img-responsive" src="{{ isset($value['image_path']) ? asset('storage/'.$value['image_path']) : asset('invalid-image.png') }}" alt="">
 	        </div>
 	        <div class="panel-body">
 	            {{-- <p>
