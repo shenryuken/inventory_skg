@@ -88,8 +88,8 @@ textarea {
                                                 <td>{{ $order->order_no }}</td>
                                                 <td>{{ Carbon\Carbon::parse($order->purchase_date)->format('d/m/Y') }}</td>
                                                 <td>{{ isset($order->deliveryType->type_description) ? $order->deliveryType->type_description:"" }}</td>
-                                                <td>{{ $order->user->username }}</td>
-                                                <td>{{ $order->globalstatus->description }}</td>
+                                                <td>{{ isset($order->user->username) ? $order->user->username:"" }}</td>
+                                                <td>{{ isset($order->globalstatus->description) ? $order->globalstatus->description:"" }}</td>
                                                 <td><a href="{{ url('inventory/order/delivery/create/'.$order->order_no) }}" class="btn btn-info">Delivery pick-up</a>
                                                     <a href="{{ url('inventory/order/sales/view/'.$order->order_no) }}" class="btn btn-default">View Order</a></td>
                                             @endforeach
