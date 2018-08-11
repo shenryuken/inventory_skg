@@ -32,30 +32,30 @@
                 @if($order)
             <div id="printed_area" class="panel-body panel-body-pricing">
                 <div class="row">
-                <img class="pull-right" src="data:image/png;base64,{{ DNS1D::getBarcodePNG(str_replace("SO","INV",$order->order_no), "C93") }}" alt="barcode"   />
+                <img class="pull-right" src="data:image/png;base64,{{ DNS1D::getBarcodePNG(str_replace("SO","INV",isset($order->order_no)? $order->order_no : ""), "C93") }}" alt="barcode"   />
             </div>
 
                    
                     {{-- {!! DNS1D::getBarcodeSVG($order->order_no, "C93") !!} --}}
-                    <h1>Invoice : <strong style="text-transform: uppercase;">#{{ str_replace("SO","INV",$order->order_no)}}</strong></h1>  
+                    <h1>Invoice : <strong style="text-transform: uppercase;">#{{ str_replace("SO","INV",isset($order->order_no)? $order->order_no : "")}}</strong></h1>  
                 
 
-                <p><span class="fa fa-caret-right"></span> <strong>Customer:</strong> {{ $order->user->username }}</p>
-                <p><span class="fa fa-caret-right"></span> <strong>Status:</strong> {{ $order->globalstatus->description }}</p>
-                <p><span class="fa fa-caret-right"></span> <strong>Purchase Date:</strong> {{ Carbon\Carbon::parse($order->purchase_date)->format('d/m/Y') }}</p>
+                <p><span class="fa fa-caret-right"></span> <strong>Customer:</strong> {{ isset($order->user->username) ? $order->user->username : "" }}</p>
+                <p><span class="fa fa-caret-right"></span> <strong>Status:</strong> {{ isset($order->globalstatus->description) ? $order->globalstatus->description : "" }}</p>
+                <p><span class="fa fa-caret-right"></span> <strong>Purchase Date:</strong> {{ Carbon\Carbon::parse(isset($order->purchase_date) ? $order->purchase_date : "")->format('d/m/Y') }}</p>
                 
-                <p><span class="fa fa-caret-right"></span> <strong>Bill To:</strong> {{ $order->billing_address->street1 }}{{ $order->billing_address->street2 }},
-                    {{ $order->billing_address->poscode }},
-                    {{ $order->billing_address->city }},
-                    {{ $order->billing_address->state }},
-                    {{ $order->billing_address->country }}                                                                    
+                <p><span class="fa fa-caret-right"></span> <strong>Bill To:</strong> {{ isset($order->billing_address->street1) ? $order->billing_address->street1 : "" }}{{ isset($order->billing_address->street2) ? $order->billing_address->street2 : "" }},
+                    {{ isset($order->billing_address->poscode) ? $order->billing_address->poscode : "" }},
+                    {{ isset($order->billing_address->city) ? $order->billing_address->city : "" }},
+                    {{ isset($order->billing_address->state) ? $order->billing_address->state : "" }},
+                    {{ isset($order->billing_address->country) ? $order->billing_address->country : "" }}                                                                    
                 </p>
 
-                <p><span class="fa fa-caret-right"></span> <strong>Ship To:</strong> {{ $order->shipping_address->street1 }}{{ $order->billing_address->street2 }},
-                    {{ $order->shipping_address->poscode }},
-                    {{ $order->shipping_address->city }},
-                    {{ $order->shipping_address->state }},
-                    {{ $order->shipping_address->country }}                                                                    
+                <p><span class="fa fa-caret-right"></span> <strong>Ship To:</strong> {{ isset($order->shipping_address->street1)? $order->shipping_address->street1 : "" }}{{ isset($order->billing_address->street2)? $order->billing_address->street2 : "" }},
+                    {{ isset($order->shipping_address->poscode) ? $order->shipping_address->poscode : "" }},
+                    {{ isset($order->shipping_address->city ) ? $order->shipping_address->city  : ""}},
+                    {{ isset($order->shipping_address->state) ? $order->shipping_address->state : "" }},
+                    {{ isset($order->shipping_address->country) ? $order->shipping_address->country : "" }}                                                                    
                 </p>
 
                 <table class="table">
@@ -69,9 +69,9 @@
                     <tbody>
                             @foreach($items as $item)
                             <tr>
-                                <td>{{ $item->products->name }}</td>
-                                <td>{{ $item->products->price_wm }}</td>
-                                <td>{{ $item->product_qty }}</td>
+                                <td>{{ isset($item->products->name) ? $item->products->name : "" }}</td>
+                                <td>{{ isset($item->products->price_wm) ? $item->products->price_wm : "" }}</td>
+                                <td>{{ isset($item->product_qty) ? $item->product_qty : "" }}</td>
                             </tr>
                             @endforeach
                     </tbody>

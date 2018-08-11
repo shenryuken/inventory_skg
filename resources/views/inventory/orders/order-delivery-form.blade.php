@@ -52,11 +52,11 @@
                     <div class="form-group">
                             <label class="col-xs-2 control-label">Shipping to</label>
                             <div class="col-xs-4">
-                                <p class="form-control-static">{{ $order->shipping_address->street1 }},</p>
-                                <p class="form-control-static">{{ $order->shipping_address->street2 }},</p>
-                                <p class="form-control-static">{{ $order->shipping_address->poscode }},</p>
-                                <p class="form-control-static">{{ $order->shipping_address->city }},</p>
-                                <p class="form-control-static">{{ $order->shipping_address->state }}</p>
+                                <p class="form-control-static">{{ isset($order->shipping_address->street1) ?  $order->shipping_address->street1 : ""}},</p>
+                                <p class="form-control-static">{{ isset($order->shipping_address->street2) ?  $order->shipping_address->street2 : "" }},</p>
+                                <p class="form-control-static">{{ isset($order->shipping_address->poscode) ?  $order->shipping_address->poscode : "" }},</p>
+                                <p class="form-control-static">{{ isset($order->shipping_address->city) ?  $order->shipping_address->city : "" }},</p>
+                                <p class="form-control-static">{{ isset($order->shipping_address->state) ?  $order->shipping_address->state : "" }}</p>
 
                                 <input class="hidden" value="{{ $order->ship_address }}" readonly>
                             </div>
@@ -65,12 +65,12 @@
                     <div class="form-group">
                             <label class="col-xs-2 control-label">Billing to</label>
                             <div class="col-xs-4">
-                                    <p class="form-control-static">{{ $order->billing_address->street1 }},</p>
-                                    <p class="form-control-static">{{ $order->billing_address->street2 }},</p>
-                                    <p class="form-control-static">{{ $order->billing_address->poscode }},</p>
-                                    <p class="form-control-static">{{ $order->billing_address->city }},</p>
-                                    <p class="form-control-static">{{ $order->billing_address->state }}</p>
-                                <input class="hidden" value="{{ $order->bill_address }}" readonly>
+                                    <p class="form-control-static">{{ isset($order->billing_address->street1) ?  $order->billing_address->street1 : "" }},</p>
+                                    <p class="form-control-static">{{ isset($order->billing_address->street2) ?  $order->billing_address->street2 : "" }},</p>
+                                    <p class="form-control-static">{{ isset($order->billing_address->poscode) ?  $order->billing_address->poscode : "" }},</p>
+                                    <p class="form-control-static">{{ isset($order->billing_address->city) ?  $order->billing_address->city : "" }},</p>
+                                    <p class="form-control-static">{{ isset($order->billing_address->state) ?  $order->billing_address->state : "" }}</p>
+                                <input class="hidden" value="{{ isset($order->bill_address) ?  $order->bill_address : "" }}" readonly>
                             </div>
                     </div>
     
