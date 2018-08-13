@@ -200,7 +200,7 @@ trait RegisterMember
         $rmvp = 0;
 
         foreach (Cart::content() as $item) {
-            $product = Product::find($item->id);
+            $product  = Product::find($item->id);
             $rmvp     = $rmvp + ($item->qty * $product->wm_price);
         }
 
