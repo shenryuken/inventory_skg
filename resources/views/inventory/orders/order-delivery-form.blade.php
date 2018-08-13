@@ -96,8 +96,8 @@
                             {{-- @for($x = 0; $x<$item->product_qty; $x++) --}}
                         <tr>
                             <td>
-                                    {{ $item->products->name }}
-                                <input type="hidden" name="item_id[]" value="{{ $item->products->id }}">
+                                    {{ $item->product->name }}
+                                <input type="hidden" name="item_id[]" value="{{ $item->product->id }}">
                             </td>
                             <td>
                                     <textarea class="form-control input_barcode" name="serial_no[]" >{{ old('serial_no[]') }}</textarea>
