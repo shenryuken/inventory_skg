@@ -87,7 +87,7 @@
 								<div class="form-group">
 									<label class="col-md-3 control-label">Fax No</label>
 									<div class="col-md-9">
-										<p class="form-control-static">{!! $supplier->fax !!}</p>
+										<p class="form-control-static">{!! $supplier->fax_no !!}</p>
 									</div>
 								</div>
 								<div class="form-group">
