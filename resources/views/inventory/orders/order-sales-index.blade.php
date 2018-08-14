@@ -1,5 +1,5 @@
 @extends('layouts.joli.app')
-@section('title','Sales Order Listing')
+@section('title','Order Listing')
 <style>
 #table_listing{
     font-size: 1.2rem;
@@ -14,7 +14,7 @@ textarea {
 <ul class="breadcrumb">
 	<li><a href="{{ url('home') }}">Home</a></li>                    
     <li><a href="{{ url('order/sales/listing') }}">Order Management</a></li>
-    <li><a href="{{ url('order/sales/listing') }}">Sales Order Listing</a></li>
+    <li><a href="{{ url('order/sales/listing') }}">Order Listing</a></li>
 </ul>
 <!-- END BREADCRUMB -->   
 
@@ -61,10 +61,11 @@ textarea {
                                         <thead>
                                                 <tr>
                                         <th>Order Number</th>
-                                        <th>Purchase Date</th>
-                                        <th>Delivery Type</th>                                                                
+                                        <th>Purchase Date</th>                                                                                                       
                                         <th>Agent Code</th>
                                         <th>Status</th>
+                                        <th>Ship To</th>
+                                        <th>Delivery Type</th> 
                                         <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -74,12 +75,13 @@ textarea {
                                             @foreach($agent_order as $order)
                                             <tr>
                                                 <td>{{ $order->order_no }}</td>
-                                                <td>{{ Carbon\Carbon::parse($order->purchase_date)->format('d/m/Y') }}</td>
-                                                <td>{{ isset($order->deliveryType->type_description) ? $order->deliveryType->type_description:"" }}</td>
+                                                <td>{{ Carbon\Carbon::parse($order->purchase_date)->format('d/m/Y') }}</td>                                                
                                                 <td>{{ isset($order->user->username) ? $order->user->username:"" }}</td>
                                                 <td>{{ isset($order->globalstatus->description) ? $order->globalstatus->description:"" }}</td>
-                                                <td><a href="{{ url('inventory/order/delivery/create/'.$order->order_no) }}" class="btn btn-info">Delivery pick-up</a>
-                                                    <a href="{{ url('inventory/order/sales/view/'.$order->order_no) }}" class="btn btn-default">View Order</a></td>
+                                                <td>{{ isset($order->billing_address->city) ? $order->billing_address->city:"" }}</td>
+                                                <td>{{ isset($order->deliveryType->type_description) ? $order->deliveryType->type_description:"" }}</td>
+                                                <td><a href="{{ url('inventory/order/delivery/create/'.$order->order_no) }}" class="btn btn-info">Edit Order</a>
+                                                    <a href="{{ url('inventory/order/sales/view/'.$order->order_no) }}" class="btn btn-default">Invoice</a></td>
                                             @endforeach
                                         </tbody>
                                 </table>
@@ -87,6 +89,9 @@ textarea {
                     </div>
             </div>
         </div>
+
+        
+
 
 @endsection
 {{-- page level scripts --}}
@@ -106,5 +111,6 @@ textarea {
 <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/tableexport/jspdf/libs/base64.js') }}"></script>        
 <!-- END THIS PAGE PLUGINS-->  
 
-<!-- END SCRIPTS -->       
+<!-- END SCRIPTS -->  
+   
 @stop

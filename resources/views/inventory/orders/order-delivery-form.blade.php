@@ -29,49 +29,97 @@
 	<div class="col-md-12">
 		<div class="panel panel-default">
 		    <div class="panel-heading ui-draggable-handle">
-		      <h3 class="panel-title"><strong>Delivery Pick-Up</strong></h3>
+		      <h3 class="panel-title"><strong>Courier</strong></h3>
+		      <ul class="panel-controls">
+		        <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
+		      </ul>
+            </div>
+            
+		    <div class="panel-body">
+		    	
+                <div class="form-group">
+                  <label class="col-xs-2 control-label">Courier Service</label>
+                  <div class="col-xs-4">
+	                  <select class="form-control" name="courier_id">
+                      @foreach($couriers as $courier)
+                      <option value=""></option>
+	                    <option value="{{ $courier->id}}">{{ $courier->courier_name }}</option>
+	                  @endforeach
+	                  </select>
+	              </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="inputPassword3" class="col-xs-2 control-label">Consigment Note</label>
+
+                  <div class="col-xs-4">
+                    <input class="form-control" name="consignment_note" type="text">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                        <label class="col-md-2 control-label">Fee (RM)</label>
+                        <div class="col-md-4">                                    
+                                <input class="form-control" name="shipping_fee" value="{{isset($order->shipping_fee) ?  $order->shipping_fee : ""}}"" type="text">
+                        </div>  
+                </div>
+
+              </div>
+              
+          </div>
+          
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="panel panel-default">
+		    <div class="panel-heading ui-draggable-handle">
+		      <h3 class="panel-title"><strong>Delivery Pick-Up: #{{ isset($order->order_no) ?  $order->order_no : "" }} </strong></h3>
             </div>
 
-            <div class="panel-body">		    	
+            <div class="panel-body">		    
                     <div class="form-group">
-                      <label class="col-xs-2 control-label">Order No.</label>
-                      <div class="col-xs-4">
-                            <p class="form-control-static">{{ $order->order_no }}</p>
-                          <input type="text" name="order_no" class="hidden" value="{{ $order->order_no }}" readonly>
-                      </div>
-                    </div>
-    
-                    <div class="form-group">
-                            <label class="col-xs-2 control-label">Customer</label>
-                            <div class="col-xs-4">
-                                <p class="form-control-static">{{ $order->user->username }}</p>
-                                <input class="hidden" value="{{ $order->user->id }}" readonly>
+                            <input type="text" name="order_no" class="hidden" value="{{ isset($order->id) ?  $order->id : "" }}" readonly>
+                            <label class="col-md-2 control-label">Customer</label>
+                            <div class="col-md-4">
+                                <p class="form-control-static">{{ isset($order->user->username) ?  $order->user->username : "" }}</p>
+                                <input class="hidden" value="{{ isset($order->user->id) ?  $order->user->id : "" }}" readonly>
                             </div>
                     </div>
-
+                    
+                    
                     <div class="form-group">
-                            <label class="col-xs-2 control-label">Shipping to</label>
-                            <div class="col-xs-4">
-                                <p class="form-control-static">{{ isset($order->shipping_address->street1) ?  $order->shipping_address->street1 : ""}},</p>
-                                <p class="form-control-static">{{ isset($order->shipping_address->street2) ?  $order->shipping_address->street2 : "" }},</p>
-                                <p class="form-control-static">{{ isset($order->shipping_address->poscode) ?  $order->shipping_address->poscode : "" }},</p>
-                                <p class="form-control-static">{{ isset($order->shipping_address->city) ?  $order->shipping_address->city : "" }},</p>
-                                <p class="form-control-static">{{ isset($order->shipping_address->state) ?  $order->shipping_address->state : "" }}</p>
-
-                                <input class="hidden" value="{{ $order->ship_address }}" readonly>
-                            </div>
+                            <div class="col-md-6">
+                                    <label class="col-md-2 control-label">Shipping to</label>
+                                    <div class="col-md-4">
+                                        <p class="form-control-static">{{ isset($order->shipping_address->street1) ?  $order->shipping_address->street1 : ""}},</p>
+                                        <p class="form-control-static">{{ isset($order->shipping_address->street2) ?  $order->shipping_address->street2 : "" }},</p>
+                                        <p class="form-control-static">{{ isset($order->shipping_address->poscode) ?  $order->shipping_address->poscode : "" }},</p>
+                                        <p class="form-control-static">{{ isset($order->shipping_address->city) ?  $order->shipping_address->city : "" }},</p>
+                                        <p class="form-control-static">{{ isset($order->shipping_address->state) ?  $order->shipping_address->state : "" }}</p>
+        
+                                        <input class="hidden" value="{{ $order->ship_address }}" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                        <label class="col-md-2 control-label">Billing to</label>
+                                        <div class="col-md-4">
+                                                <p class="form-control-static">{{ isset($order->billing_address->street1) ?  $order->billing_address->street1 : "" }},</p>
+                                                <p class="form-control-static">{{ isset($order->billing_address->street2) ?  $order->billing_address->street2 : "" }},</p>
+                                                <p class="form-control-static">{{ isset($order->billing_address->poscode) ?  $order->billing_address->poscode : "" }},</p>
+                                                <p class="form-control-static">{{ isset($order->billing_address->city) ?  $order->billing_address->city : "" }},</p>
+                                                <p class="form-control-static">{{ isset($order->billing_address->state) ?  $order->billing_address->state : "" }}</p>
+                                            <input class="hidden" value="{{ isset($order->bill_address) ?  $order->bill_address : "" }}" readonly>
+                                        </div>
+                                </div>
+                            
                     </div>
 
                     <div class="form-group">
-                            <label class="col-xs-2 control-label">Billing to</label>
-                            <div class="col-xs-4">
-                                    <p class="form-control-static">{{ isset($order->billing_address->street1) ?  $order->billing_address->street1 : "" }},</p>
-                                    <p class="form-control-static">{{ isset($order->billing_address->street2) ?  $order->billing_address->street2 : "" }},</p>
-                                    <p class="form-control-static">{{ isset($order->billing_address->poscode) ?  $order->billing_address->poscode : "" }},</p>
-                                    <p class="form-control-static">{{ isset($order->billing_address->city) ?  $order->billing_address->city : "" }},</p>
-                                    <p class="form-control-static">{{ isset($order->billing_address->state) ?  $order->billing_address->state : "" }}</p>
+                            <label class="col-md-2 control-label">Fee</label>
+                            <div class="col-md-4">                                    
                                 <input class="hidden" value="{{ isset($order->bill_address) ?  $order->bill_address : "" }}" readonly>
-                            </div>
+                            </div>  
                     </div>
     
              </div>
@@ -111,51 +159,31 @@
                     </tbody>
                 </table>
 	        <!-- /.box-body -->
-	    	</div>
+            </div>
+            <div class="panel-footer">
+                {{-- <button class="btn btn-default">Clear Form</button> --}}
+                <a href="{{url('/inventory/order/sales')}}" type="button" class="btn btn-default pull-right"> Cancel</a>
+                <button type="submit" class="btn btn-info pull-right">Save</button>
+              </div>
    		</div>
 	</div>
 </div>
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-		    <div class="panel-heading ui-draggable-handle">
-		      <h3 class="panel-title"><strong>Courier</strong></h3>
-		      <ul class="panel-controls">
-		        <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
-		      </ul>
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
             </div>
-            
-		    <div class="panel-body">
-		    	
-                <div class="form-group">
-                  <label class="col-xs-2 control-label">Courier Service</label>
-                  <div class="col-xs-4">
-	                  <select class="form-control" name="courier_id">
-	                  @foreach($couriers as $courier)
-	                    <option value="{{ $courier->id}}">{{ $courier->courier_name }}</option>
-	                  @endforeach
-	                  </select>
-	              </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="inputPassword3" class="col-xs-2 control-label">Consigment Note</label>
-
-                  <div class="col-xs-4">
-                    <input class="form-control" name="consignment_note" type="text">
-                  </div>
-                </div>
-
-              </div>
-              <div class="panel-footer">
-	        {{-- <button class="btn btn-default">Clear Form</button> --}}
-	       	<button type="submit" class="btn btn-default pull-right">Cancel</button>
-            <button type="submit" class="btn btn-info pull-right">Save</button>
-	      </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" id="modal-btn-si">Si</button>
+              <button type="button" class="btn btn-primary" id="modal-btn-no">No</button>
+            </div>
           </div>
-          
-	</div>
-</div>
+        </div>
+      </div>
+      
+      <div class="alert" role="alert" id="result"></div>
 </form>
 @endsection
 {{-- page level scripts --}}
@@ -173,6 +201,33 @@
     
 <script  type="text/javascript" >
 $(document).ready(function() {
+
+    var modalConfirm = function(callback){
+  
+  $("#btn-confirm").on("click", function(){
+    $("#mi-modal").modal('show');
+  });
+
+  $("#modal-btn-si").on("click", function(){
+    callback(true);
+    $("#mi-modal").modal('hide');
+  });
+  
+  $("#modal-btn-no").on("click", function(){
+    callback(false);
+    $("#mi-modal").modal('hide');
+  });
+};
+
+modalConfirm(function(confirm){
+  if(confirm){
+    //Acciones si el usuario confirma
+    $("#result").html("CONFIRMADO");
+  }else{
+    //Acciones si el usuario no confirma
+    $("#result").html("NO CONFIRMADO");
+  }
+});
 
 
             $(".input_barcode").keyup(function(event) {

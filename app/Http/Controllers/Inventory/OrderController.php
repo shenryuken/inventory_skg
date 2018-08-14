@@ -36,7 +36,7 @@ class OrderController extends Controller
     public function salesIndex()
     {
         
-        $agent_order = OrderHdr::all();
+        $agent_order = OrderHdr::where('status','01')->get();
 
         return view('inventory.orders.order-sales-index',[ 'agent_order' => $agent_order]);
     }
@@ -84,7 +84,7 @@ class OrderController extends Controller
 
     public function deliveryCreate($order_no)
     {
-        $order = OrderHdr::where('order_no',$order_no)->first();
+        $order = OrderHdr::where('order_no',$order_no)->where('status','01')->first();
         $items = OrderItem::where('order_no',$order_no)->get();
         $couriers = Courier::all();
         // var_dump($items->products->name);
@@ -96,8 +96,9 @@ class OrderController extends Controller
     {
         $postData = $this->validate($request,[
             'order_no' => 'required',
-            'courier_id' => 'required',
-            'consignment_note' =>  'required'            
+            // 'courier_id' => 'required',
+
+            // 'consignment_note' =>  'required'            
         ]);
 
         $order_no = $request->get('order_no');
@@ -107,8 +108,8 @@ class OrderController extends Controller
 			$data = [
 				'order_id'	=> $order_no,
                 'delivery_number'	=> $delivery_no['data'],
-                'courier_id' => $request->get('courier_id'),
-                'courier_consignment' => 	$request->get('consignment_note'),		
+                'courier_id' => $request->get('courier_id') ? $request->get('courier_id') : "",
+                'courier_consignment' => 	$request->get('consignment_note') ? $request->get('consignment_note') : "",		
 				'created_by'	=> Auth::user()->id,
 				'created_at'	=> Carbon::now(new \DateTimeZone('Asia/Kuala_Lumpur'))
             ];
@@ -117,35 +118,56 @@ class OrderController extends Controller
             $delivery->save();
 			$delivery_id = $delivery->id;
             
-            for($x = 0; $x < count($request->get('serial_no')); $x++){
-                //trim serial
-                $trimmed_serial = explode("\n",$request->get('serial_no')[$x]);
-
-                foreach($trimmed_serial as $serial_number){
-                    $serial_number = preg_replace('/\s+/', '', $serial_number);
-                    if($serial_number != ""){
-                        $data_item = [
-                            'delivery_id' => $delivery_id,
-                            'product_id'  => $request->get('item_id')[$x],
-                            'barcode'  => $serial_number,
-                            'quantity' => $request->get('quantity')[$x],
-                    ];
-                    //update to stock
-                    try{
-                        $stock_item = new StockItem;    
+            if($request->get('serial_no')){
+                for($x = 0; $x < count($request->get('serial_no')); $x++){
+                    //trim serial
+                    $trimmed_serial = explode("\n",$request->get('serial_no')[$x]);
     
-                        $stock_item->where('barcode',$serial_number)->update(['status' => '02']);
-                    }catch(Exception $e){
+                    foreach($trimmed_serial as $serial_number){
+                        $serial_number = preg_replace('/\s+/', '', $serial_number);
+                        if($serial_number != ""){
+                            $data_item = [
+                                'delivery_id' => $delivery_id,
+                                'product_id'  => $request->get('item_id')[$x],
+                                'barcode'  => $serial_number,
+                                'quantity' => $request->get('quantity')[$x],
+                        ];
+                        //update to stock
+                        try{
+                            $stock_item = new StockItem;    
+        
+                            $stock_item->where('barcode',$serial_number)->update(['status' => '02']);
+                        }catch(Exception $e){
+        
+                        }
+                        $delivery_item = new DeliveryItem($data_item);
+                        $delivery_item->save();
+                        }
     
                     }
-                    $delivery_item = new DeliveryItem($data_item);
-                    $delivery_item->save();
-                    }
-
                 }
+
             }
 
-        Session::flash('message', 'Successfully saved supplier!');
+            if($delivery_id){
+                OrderHdr::where('id',$order_no)->update(['status'=>'02','shipping_fee'=>$request->get('shipping_fee')]);
+            }
+            
+
+        Session::flash('message', 'Successfully created delivery order');
         return redirect('inventory/order/delivery/');
+    }
+
+    public function deliveryComplete(Request $request)
+    {
+        $order_no = $request->input('order_no');
+        
+        if($order_no){
+            OrderHdr::where('id',$order_no)->update(['status'=>'04']);
+        }
+
+        return redirect('inventory/order/delivery/');
+
+
     }
 }
