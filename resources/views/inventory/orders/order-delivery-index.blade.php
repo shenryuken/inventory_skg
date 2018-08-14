@@ -71,14 +71,14 @@ textarea {
                                         <tbody>
                                             @foreach($deliveries as $delivery)
                                             <tr>
-                                                <td>{{ $delivery->delivery_number }}</td>
-                                                <td>{{ Carbon\Carbon::parse($delivery->created_at)->format('d/m/Y') }}</td>
-                                                <td>{{ $delivery->salesOrder->shipping_address->state }}</td>
-                                                <td>{{ $delivery->courier->courier_name }}</td>
+                                                <td>{{ isset($delivery->delivery_number) ? $delivery->delivery_number :  }}</td>
+                                                <td>{{ isset($$delivery->created_at) ? Carbon\Carbon::parse($delivery->created_at)->format('d/m/Y') : "" }}</td>
+                                                <td>{{ isset($$delivery->salesOrder->shipping_address->state) ? $delivery->salesOrder->shipping_address->state : "" }}</td>
+                                                <td>{{ isset($delivery->courier->courier_name) ? $delivery->courier->courier_name : "" }}</td>
                                                 {{-- <td>{{ $order->globalstatus->description }}</td> --}}
                                                 <td>
                                                     {{-- <a href="{{ url('inventory/order/delivery/edit/'.$delivery->delivery_number) }}" class="btn btn-info">Update</a> --}}
-                                                    <a href="{{ url('inventory/order/delivery/view/'.$delivery->delivery_number) }}" class="btn btn-default">View Order</a>
+                                                    <a href="{{ url('inventory/order/delivery/view/'.(isset($delivery->delivery_number) ? $delivery->delivery_number : "")) }}" class="btn btn-default">View Order</a>
                                                 </td>
                                             @endforeach
                                         </tbody>
