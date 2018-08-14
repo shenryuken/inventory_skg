@@ -71,7 +71,7 @@ textarea {
                                         <tbody>
                                             @foreach($deliveries as $delivery)
                                             <tr>
-                                                <td>{{ isset($delivery->delivery_number) ? $delivery->delivery_number :  }}</td>
+                                                <td>{{ isset($delivery->delivery_number) ? $delivery->delivery_number : "" }}</td>
                                                 <td>{{ isset($$delivery->created_at) ? Carbon\Carbon::parse($delivery->created_at)->format('d/m/Y') : "" }}</td>
                                                 <td>{{ isset($$delivery->salesOrder->shipping_address->state) ? $delivery->salesOrder->shipping_address->state : "" }}</td>
                                                 <td>{{ isset($delivery->courier->courier_name) ? $delivery->courier->courier_name : "" }}</td>
