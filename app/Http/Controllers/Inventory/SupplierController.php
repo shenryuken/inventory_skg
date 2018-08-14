@@ -103,8 +103,6 @@ class SupplierController extends Controller
 			'state' 		=> 'required',
 			'country'	 	=> 'required',
 			'telephone'	=> 'required',
-			'fax'	 	=> 'required',
-			'attn_no' 		=> 'required',
 			'email' 		=> 'required',
 			              
         ]);
