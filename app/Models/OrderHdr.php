@@ -45,8 +45,13 @@ class OrderHdr extends Model
     	return $this->hasOne('App\Models\Address','id','ship_address');
     }
 
+    // public function invoice()
+    // {
+    //     return $this->hasOne('App\Models\Invoice','invoice_no','invoice_no');
+    // }
+
     public function invoice()
     {
-        return $this->hasOne('App\Models\Invoice','invoice_no','invoice_no');
+        return $this->hasOne('App\Models\Invoice');
     }
 }
