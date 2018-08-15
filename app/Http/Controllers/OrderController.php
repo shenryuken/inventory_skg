@@ -22,7 +22,7 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::all();
+        $orders = OrderHdr::all();
         
     	return view('orders.index', compact('orders'));
     }
@@ -37,7 +37,7 @@ class OrderController extends Controller
 
     public function show($id)
     {
-    	$order = Order::find($id);
+    	$order = OrderHdr::find($id);
         $items = $order->orderItems;
 
     	return view('orders.show', compact('order', 'items'));
@@ -45,7 +45,7 @@ class OrderController extends Controller
 
     public function processOrder($id)
     {   
-        $order = Order::find($id);
+        $order = OrderHdr::find($id);
         $items = $order->orderItems;
         $couriers = Courier::all();
         
@@ -67,7 +67,7 @@ class OrderController extends Controller
 
         if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode)){
 
-            $order = Order::find($request->order_id);
+            $order = OrderHdr::find($request->order_id);
             $order->status = 'Shipping';
             $order->save();
 
