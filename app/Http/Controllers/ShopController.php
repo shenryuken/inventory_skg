@@ -154,13 +154,13 @@ class ShopController extends Controller
                 
                 $addToCart = Array(
 
-                    'order_type' => $order_type,
-                    'mall_type' => $sessionData,
-                    'agent_id' => $data['agent_id'],
-                    'product_id' => $data['product_id'],
-                    'quantity' => $data['quantity'], 
-                    'created_by' => $id,
-                    'created_at' => \Carbon\Carbon::now(new \DateTimeZone('Asia/Kuala_Lumpur'))
+                    'order_type'    => $order_type,
+                    'mall_type'     => $sessionData,
+                    'agent_id'      => $data['agent_id'],
+                    'product_id'    => $data['product_id'],
+                    'quantity'      => $data['quantity'], 
+                    'created_by'    => $id,
+                    'created_at'    => \Carbon\Carbon::now(new \DateTimeZone('Asia/Kuala_Lumpur'))
                 );
 
                 OrderTransection::insertGetId($addToCart);
@@ -173,23 +173,23 @@ class ShopController extends Controller
                                 ->where('agent_id',$data['agent_id'])
                                 ->update([
 
-                                    'quantity' => $updateQuantity,
-                                    'updated_by' =>  $id,
-                                    'updated_at' => \Carbon\Carbon::now()
+                                    'quantity'      => $updateQuantity,
+                                    'updated_by'    =>  $id,
+                                    'updated_at'    => \Carbon\Carbon::now()
 
                                 ]);
 
             }
 
             $count = OrderTransection::where('agent_id',$data['agent_id'])->where('order_type',$order_type)->where('mall_type',$sessionData)->count();
-            $return['message'] = "succssfuly inserted";
-            $return['status'] = "01";            
+            $return['message']  = "succssfuly inserted";
+            $return['status']   = "01";            
             
         } 
         catch (\Exception $e){
             
-            $return['message'] = $e->getMessage();
-            $return['status'] = "02";
+            $return['message']  = $e->getMessage();
+            $return['status']   = "02";
         }
 
         // dd($data);
@@ -219,41 +219,42 @@ class ShopController extends Controller
                                         ->where('orders_transection.agent_id','=',$agent_id)
                                         ->get()->toArray();
 
-            $totalPrice_wm = 0.00;
-            $totalPrice_em = 0.00;
-            $totalPrice_staff = 0.00;
-            $grandTotalPrice_wm = 0.00;
-            $grandTotalPrice_em = 0.00;
-            $grandTotalPrice_staff = 0.00;
-            $shipping_fee = 0.00;
+            $totalPrice_wm          = 0.00;
+            $totalPrice_em          = 0.00;
+            $totalPrice_staff       = 0.00;
+            $grandTotalPrice_wm     = 0.00;
+            $grandTotalPrice_em     = 0.00;
+            $grandTotalPrice_staff  = 0.00;
+            $shipping_fee           = 0.00;
+
             foreach ($cartItems as $key => $value){
 
                 $promotion = $this->checkPromotion($cartItems[$key]['product_id']);
 
                 if($promotion){
 
-                    $price_wm = $promotion->price_wm;
-                    $price_em = $promotion->price_em;
-                    $price_staff = $promotion->price_staff;
+                    $price_wm       = $promotion->price_wm;
+                    $price_em       = $promotion->price_em;
+                    $price_staff    = $promotion->price_staff;
                 }
                 else{
 
-                    $price_wm = $cartItems[$key]['price_wm'];
-                    $price_em = $cartItems[$key]['price_em'];
-                    $price_staff = $cartItems[$key]['price_staff'];
+                    $price_wm       = $cartItems[$key]['price_wm'];
+                    $price_em       = $cartItems[$key]['price_em'];
+                    $price_staff    = $cartItems[$key]['price_staff'];
                 }
 
-                $cartItems[$key]['price_wm'] = $this->fn_calc_gst_price($price_wm);
-                $cartItems[$key]['price_em'] = $this->fn_calc_gst_price($price_em);
+                $cartItems[$key]['price_wm']    = $this->fn_calc_gst_price($price_wm);
+                $cartItems[$key]['price_em']    = $this->fn_calc_gst_price($price_em);
                 $cartItems[$key]['price_staff'] = $this->fn_calc_gst_price($price_staff);
 
-                $total_price_wm = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price_wm']);
-                $total_price_em = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price_em']);
-                $total_price_staff = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price_staff']);
+                $total_price_wm     = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price_wm']);
+                $total_price_em     = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price_em']);
+                $total_price_staff  = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price_staff']);
 
-                $cartItems[$key]['total_price_wm'] = $total_price_wm;
-                $cartItems[$key]['total_price_em'] = $total_price_em;
-                $cartItems[$key]['total_price_staff'] = $total_price_em;
+                $cartItems[$key]['total_price_wm']      = $total_price_wm;
+                $cartItems[$key]['total_price_em']      = $total_price_em;
+                $cartItems[$key]['total_price_staff']   = $total_price_em;
 
                 $image = product_image::select('type','description','file_name','path')
                                         ->where('product_id',$cartItems[$key]['product_id'])
@@ -262,9 +263,9 @@ class ShopController extends Controller
 
                 $cartItems[$key]['image'] = ($image['path'] == null ? '' : $image['path']);
 
-                $totalPrice_wm = $totalPrice_wm + (float)str_replace(",", "", $cartItems[$key]['total_price_wm']);
-                $totalPrice_em = $totalPrice_em + (float)str_replace(",", "", $cartItems[$key]['total_price_em']);
-                $totalPrice_staff = $totalPrice_staff + (float)str_replace(",", "", $cartItems[$key]['total_price_em']);
+                $totalPrice_wm      = $totalPrice_wm + (float)str_replace(",", "", $cartItems[$key]['total_price_wm']);
+                $totalPrice_em      = $totalPrice_em + (float)str_replace(",", "", $cartItems[$key]['total_price_em']);
+                $totalPrice_staff   = $totalPrice_staff + (float)str_replace(",", "", $cartItems[$key]['total_price_em']);
 
             }
 
@@ -299,8 +300,6 @@ class ShopController extends Controller
             $grandTotalPrice_em     = number_format(round($grandTotalPrice_em,2),2);
             $grandTotalPrice_staff  = number_format(round($grandTotalPrice_staff,2),2);
 
-
-
             $returnData = [
 
                 'agent_id'              => $agent_id,
@@ -319,10 +318,8 @@ class ShopController extends Controller
             $paymentType = PaymentType::select('id','payment_code as code','payment_description as description')
                                         ->get();
 
-            $return['message'] = "successfully retrived";
-            $return['status'] = "01";
-
-
+            $return['message']  = "successfully retrived";
+            $return['status']   = "01";
         }
         catch(\Exception $e){
 

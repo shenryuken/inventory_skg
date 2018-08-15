@@ -24,11 +24,13 @@ class DeliverytypeController extends Controller
     }
 	
 	public function listing(){
+
 		$deliverytype_data = New DeliveryType;
+
 		$data = array(
-			'counttype' => $deliverytype_data->count(),
-			'startcount' => 0,
-			'deliverytypeArr' => $deliverytype_data->orderBy('id', 'desc')->paginate(20),
+			'counttype' 		=> $deliverytype_data->count(),
+			'startcount' 		=> 0,
+			'deliverytypeArr' 	=> $deliverytype_data->orderBy('id', 'desc')->paginate(20),
 		);
 		return view('inventory/configuration/deliverytype_listing',$data);
     }
@@ -54,11 +56,12 @@ class DeliverytypeController extends Controller
 		$deliverytypeArr = $deliverytype_data->orderBy('id', 'desc')->paginate(20);
 		
 		$data = array(
-			'counttype' => $counttype,
-			'startcount' => 0,
-			'deliverytypeArr' => $deliverytypeArr,
-			'search' => $search,
+			'counttype' 		=> $counttype,
+			'startcount' 		=> 0,
+			'deliverytypeArr' 	=> $deliverytypeArr,
+			'search' 			=> $search,
 		);
+
         return view('inventory/configuration/deliverytype_listing',$data);
     }
 	
@@ -80,10 +83,10 @@ class DeliverytypeController extends Controller
     public function save(Request $postdata){
 		$deliverytype_data = New DeliveryType;
 		$data = array(
-			'delivery_code' => strtoupper(trim($postdata->input("delivery_code"))),
-			'type_description' => $postdata->input("type_description") != null ? trim($postdata->input("type_description")) : '',
-			'updated_by' => Auth::user()->id,
-			'updated_at' => date('Y-m-d H:i:s'),
+			'delivery_code' 	=> strtoupper(trim($postdata->input("delivery_code"))),
+			'type_description' 	=> $postdata->input("type_description") != null ? trim($postdata->input("type_description")) : '',
+			'updated_by' 		=> Auth::user()->id,
+			'updated_at' 		=> date('Y-m-d H:i:s'),
 		);
 			
 		$base64 = $postdata->input("base64");
@@ -98,8 +101,8 @@ class DeliverytypeController extends Controller
 		else{
 			# update Delivery Type
 			$datadecode = unserialize(base64_decode($base64));
-			$selectid = isset($datadecode['selectid']) ? $datadecode['selectid'] : 0;
-			$search = isset($datadecode['search']) ? $datadecode['search'] : '';
+			$selectid 	= isset($datadecode['selectid']) ? $datadecode['selectid'] : 0;
+			$search 	= isset($datadecode['search']) ? $datadecode['search'] : '';
 			
 			$deliverytype_data->where('id',$selectid)->update($data);
 			if($search != '')
@@ -130,11 +133,12 @@ class DeliverytypeController extends Controller
 
     public function delete($data = ''){
 		if(@unserialize(base64_decode($data)) == true){
-			$deliverytype_data = New DeliveryType;
-			$datadecode = unserialize(base64_decode($data));
-			$selectid = isset($datadecode['selectid']) ? $datadecode['selectid'] : 0;
+			$deliverytype_data 	= New DeliveryType;
+			$datadecode 		= unserialize(base64_decode($data));
+			$selectid 			= isset($datadecode['selectid']) ? $datadecode['selectid'] : 0;
 			
-			$checkdeliverytype = $deliverytype_data->where('id', $selectid)->first();
+			$checkdeliverytype 	= $deliverytype_data->where('id', $selectid)->first();
+			
 			if($checkdeliverytype == false)
 				return redirect('inventory/setting/deliverytype')->with("errorid"," Data not found");
 			
