@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 
-use App\Models\Order;
+use App\Models\OrderHdr;
 use App\Models\OrderItem;
 use App\Models\Courier;
 use App\Models\Shipment;
@@ -29,8 +29,8 @@ class OrderController extends Controller
 
     public function myOrders()
     {
-        $id  = Auth::guard('web')->user()->id;  
-        $orders = Order::where('user_id', $id)->get();
+        $id     = Auth::guard('web')->user()->id;  
+        $orders = OrderHdr::where('user_id', $id)->get();
 
         return view('orders.my-orders', compact('orders'));
     }
