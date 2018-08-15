@@ -208,11 +208,11 @@ class ProfileController extends Controller
         $approved         = Profile::where('status_ic', 'Approved')->count();
 
         $mykad_status = [
-            'pending' => $pending,
-            'not_update' => $count_user - $count_profile,
-            'waiting_approval' => $waiting_approval,
-            'not_valid' => $not_valid,
-            'approved'  => $approved
+            'pending'           => $pending,
+            'not_update'        => $count_user - $count_profile,
+            'waiting_approval'  => $waiting_approval,
+            'not_valid'         => $not_valid,
+            'approved'          => $approved
         ];
 
         return view('profiles.ic-status-index', compact('users', 'mykad_status', 'count_user'));
@@ -248,7 +248,8 @@ class ProfileController extends Controller
 
         $hashedCode = Auth::guard('admin')->user()->security_code;
 
-        if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode)){
+        if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode))
+        {
             $profile = Profile::find($request->id);
             $profile->status_ic = $status;
             $profile->save();
