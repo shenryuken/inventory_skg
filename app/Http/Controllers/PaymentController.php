@@ -31,6 +31,8 @@ use App\Models\UserPurchase;
 use App\Models\ActiveDo;
 use App\Models\ActiveSdo;
 
+use App\Classes\GlobalNumberRange;
+
 use Carbon\Carbon;
 
 use App\Traits\RegisterMember;
@@ -192,8 +194,8 @@ class PaymentController extends Controller
         $orderItem  = $this->addOrderItem($order, $input['agent_user_id']);
         $updateStore= $this->addTostore($input['user_id']);
           
-        $year = (new DateTime)->format("Y");
-        $month = (new DateTime)->format("n");
+        $year   = (new DateTime)->format("Y");
+        $month  = (new DateTime)->format("n");
 
         $sale = Sale::firstOrNew(['year' => $year , 'month' => $month]);
         $sale->total_pv     = $sale->total_pv + $total_pv;
@@ -328,12 +330,13 @@ class PaymentController extends Controller
 
     public function getNewOrderNo($user_id, $agent_id = null)
     {
-        $model_name = ($agent_id > 0) ? 'AgentOrderHdr':'OrderHdr';
-        $model = 'App\\Models\\'.$model_name;
+        // $model_name = ($agent_id > 0) ? 'AgentOrderHdr':'OrderHdr';
+        // $model = 'App\\Models\\'.$model_name;
 
-        $order_no = $model::latest()->value('order_no');
+        // $order_no = $model::latest()->value('order_no');
 
-        $new_order_no = isset($order_no) ? ($order_no + 1) : 100000000;
+        // $new_order_no = isset($order_no) ? ($order_no + 1) : 100000000;
+        $new_order_no   = (new GlobalNumberRange)->generate_orderno("SO");
 
         return $new_order_no;
     }
