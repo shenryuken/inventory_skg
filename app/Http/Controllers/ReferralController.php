@@ -13,11 +13,11 @@ class ReferralController extends Controller
 {
     public function getHierarchy($user_id)
     {
-        $user = Referral::where('user_id', $user_id)->first();
-        $parent_id = $user->parent_id;
+        $user       = Referral::where('user_id', $user_id)->first();
+        $parent_id  = $user->parent_id;
 
         $descendantsAndSelf = $user->getDescendantsAndSelf()->toArray();;
-        $tree = $this->buildTree($descendantsAndSelf, $parent_id);
+        $tree               = $this->buildTree($descendantsAndSelf, $parent_id);
         
         //return $tree;
         return view('referrals.hierarchy', compact('tree'));
@@ -50,17 +50,17 @@ class ReferralController extends Controller
 
     public function getRankName($id)
     {
-        $user = User::find($id);
-        $rank_name = $user->rank->name;
+        $user       = User::find($id);
+        $rank_name  = $user->rank->name;
 
         return $rank_name;
     }
 
     public function getDownline()
     {
-        $id   = Auth::user()->id;
-        $user = Referral::where('user_id',$id)->first();
-        $descendants = $user->getImmediateDescendants();
+        $id             = Auth::user()->id;
+        $user           = Referral::where('user_id',$id)->first();
+        $descendants    = $user->getImmediateDescendants();
 
         // echo "<pre>";
         // var_dump($descendants);

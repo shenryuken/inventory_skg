@@ -39,12 +39,12 @@ class StockReportController extends Controller
     }
 
     public function index(){
-        $products = Product::all();  
-        $stocks = Stock::all();
-        $stock_items = StockItem::all(); 
-        $stock_adjustments = StockAdjustment::all(); 
-        $stock_in_total = 0;
-        $stock_out_total = 0;
+        $products           = Product::all();  
+        $stocks             = Stock::all();
+        $stock_items        = StockItem::all(); 
+        $stock_adjustments  = StockAdjustment::all(); 
+        $stock_in_total     = 0;
+        $stock_out_total    = 0;
 
             $reports = array();
 
@@ -52,7 +52,8 @@ class StockReportController extends Controller
             {
                 
                 $stock_in =  $v->StockItem->where('status','01')->sum('quantity') != 0 ? $v->StockItem->where('status','01')->sum('quantity') : "";
-                $stock_out = "";
+
+                $stock_out      = "";
                 $stock_in_total = $stock_in_total + ($v->StockItem->where('status','01')->sum('quantity'));
                 
 
@@ -66,17 +67,17 @@ class StockReportController extends Controller
 
             foreach($stock_adjustments as $a => $b)
             {
-                $stock_adj_in = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','03')->sum('quantity') : "";
-                $stock_adj_out = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','04')->sum('quantity') : "";
+                $stock_adj_in   = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','03')->sum('quantity') : "";
+                $stock_adj_out  = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','04')->sum('quantity') : "";
 
-                $stock_in_total = $stock_in_total + ($b->StockItem->where('status','03')->sum('quantity'));
-                $stock_out_total = $stock_out_total + ($b->StockItem->where('status','04')->sum('quantity'));
+                $stock_in_total     = $stock_in_total + ($b->StockItem->where('status','03')->sum('quantity'));
+                $stock_out_total    = $stock_out_total + ($b->StockItem->where('status','04')->sum('quantity'));
 
                 $reports[] = [
                     'date'          => Carbon::parse($b->stock_date)->format('d/m/Y'),
                     'description'   => $b->description,
-                    'stock_out'      => $stock_adj_in,
-                    'stock_in'       => $stock_adj_out,
+                    'stock_out'     => $stock_adj_in,
+                    'stock_in'      => $stock_adj_out,
                 ];
             }
 
@@ -88,16 +89,16 @@ class StockReportController extends Controller
 
     public function indexCurrentStock()
     {
-        $data = [];
-        $totalActiveStock = 0;
-        $totalLessStock = 0;
-        $lastAdjustment = '';
-        $totalProduct = 0;
-        $minStock = 5;
+        $data               = [];
+        $totalActiveStock   = 0;
+        $totalLessStock     = 0;
+        $lastAdjustment     = '';
+        $totalProduct       = 0;
+        $minStock           = 5;
         #Model
-        $products = new Product;  
+        $products        = new Product;  
         $StockAdjustment = new StockAdjustment;
-        $stock_item = new StockItem;
+        $stock_item      = new StockItem;
 
         //minidashboard
 		#1 Total Product in stock
@@ -118,23 +119,24 @@ class StockReportController extends Controller
         $stocks = $products->get();   
 
             foreach($stocks as $key=>$value){
-                $productId = $value->id;
+                
+                $productId          = $value->id;
                 $totalserial_number = $stock_item->where('product_id',$productId)->where('status','01')->sum('quantity');
-                $adjustment = $StockAdjustment->stockItem()->where('product_id',$productId)
+                $adjustment         = $StockAdjustment->stockItem()->where('product_id',$productId)
                                                 ->get();
                 if($adjustment){
                     foreach($adjustment as $k => $v){
-                        $quantity = $v->quantity;
-                        $operation = $v->stockAdjustmentType()->operation;
+                        $quantity   = $v->quantity;
+                        $operation  = $v->stockAdjustmentType()->operation;
                         
                         $totalserial_number = $this->calcAdjustment($totalserial_number,$quantity,$operation);
                         
                     }
                     $data[] = [
-                        'product_name' => $value->name,
-                        'product_code' => $value->code,
-                        'stocksCount' => $totalserial_number,
-                        'product_id' => $value->id,
+                        'product_name'  => $value->name,
+                        'product_code'  => $value->code,
+                        'stocksCount'   => $totalserial_number,
+                        'product_id'    => $value->id,
                     ];
                 }             
 
@@ -142,10 +144,10 @@ class StockReportController extends Controller
 
         
         $dashboards = [            
-            'totalActiveStock' => $totalActiveStock,
-            'totalLessStock' => $totalLessStock ? $totalLessStock->qty : 0,
-            'lastAdjustment' => Carbon::parse($stock_adjustments)->format('Y-m-d'),
-            'totalProduct' => $totalProduct
+            'totalActiveStock'  => $totalActiveStock,
+            'totalLessStock'    => $totalLessStock ? $totalLessStock->qty : 0,
+            'lastAdjustment'    => Carbon::parse($stock_adjustments)->format('Y-m-d'),
+            'totalProduct'      => $totalProduct
         ];
 
             // return  compact('data','dashboards');
@@ -164,25 +166,26 @@ class StockReportController extends Controller
     public function store(Request $request){
 
         $this->validate($request,[
-            'stock_date' => 'required',
-            'product' => 'required',
-            'supplier' => 'required',
+            'stock_date'    => 'required',
+            'product'       => 'required',
+            'supplier'      => 'required',
         ]);
 
         $document_no =  $this->generate_docno();
         
         $serialNumberArray = json_decode($request->input('serial_number_scan_json'));
+        
         $stock = new Stock;
-        $stock->stock_date  	= $request->stock_date;
-        $stock->stock_in_no   = $document_no;
+        $stock->stock_date  = $request->stock_date;
+        $stock->stock_in_no = $document_no;
         $stock->description = $request->description;
-        $stock->created_by = Auth::user()->id;
+        $stock->created_by  = Auth::user()->id;
         $stock->save();
         
         $product_stock_array = [
-            'product_id'   => $request->product,
-            'supplier_id' => $request->supplier,
-            'stock_id'     => $stock->id,
+            'product_id'    => $request->product,
+            'supplier_id'   => $request->supplier,
+            'stock_id'      => $stock->id,
             'barcode'       => $serialNumberArray
         ];
 
@@ -197,11 +200,11 @@ class StockReportController extends Controller
         foreach($product_stock_array['barcode'] as $product_supplier){
             
             $product_stock_array = [
-                'product_id'   => $product_stock_array['product_id'],
-                'supplier_id' => $product_stock_array['supplier_id'],
-                'stock_id'     => $product_stock_array['stock_id'],
+                'product_id'    => $product_stock_array['product_id'],
+                'supplier_id'   => $product_stock_array['supplier_id'],
+                'stock_id'      => $product_stock_array['stock_id'],
                 'barcode'       => $product_supplier->barcode,
-                'quantity'       => $product_supplier->quantity,
+                'quantity'      => $product_supplier->quantity,
                 'status'        => '01',
                 'created_by'    => Auth::user()->id,
                 'updated_at'    => Carbon::now()    
@@ -215,15 +218,19 @@ class StockReportController extends Controller
         //Generate SR
     private function generate_docno(){
         $LatestDocNo = stock::max('id');    
-            $numberOnly = preg_replace("/[^0-9]/", '', $LatestDocNo);
-            if(!$numberOnly){
-                $numberOnly = "00000";
-            }
-            $generatedNo =  str_pad($numberOnly+1, 5, '0', STR_PAD_LEFT);
-            return "SR".($generatedNo);      
+        $numberOnly = preg_replace("/[^0-9]/", '', $LatestDocNo);
+
+        if(!$numberOnly){
+            $numberOnly = "00000";
+        }
+
+        $generatedNo =  str_pad($numberOnly+1, 5, '0', STR_PAD_LEFT);
+        
+        return "SR".($generatedNo);      
     }
 
     private function calcAdjustment($totalserial_number,$quantity,$operation){
+        
         if($operation == '-'){
             return $totalserial_number - $quantity;
         }elseif($operation == '+'){
@@ -235,14 +242,15 @@ class StockReportController extends Controller
     }
 
     public function barcode($product_id){
+        
         if(strtoupper($product_id) == "ALL"){
-            $product = (object)[];
-            $product->name = "All";
-            $barcodes = StockItem::where('quantity','1')->get();
+            $product        = (object)[];
+            $product->name  = "All";
+            $barcodes       = StockItem::where('quantity','1')->get();
 
         }else{
-            $product = Product::find($product_id);
-            $barcodes = StockItem::where('product_id',$product_id)->where('quantity','1')->get();
+            $product    = Product::find($product_id);
+            $barcodes   = StockItem::where('product_id',$product_id)->where('quantity','1')->get();
         }
         
 

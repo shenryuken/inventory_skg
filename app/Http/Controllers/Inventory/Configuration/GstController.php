@@ -24,8 +24,10 @@ class GstController extends Controller{
     }
 	
     public function view(){
-        $taxdata = New Tax;
-		$data =  $taxdata->where('code', 'gst')->first();
+
+        $taxdata 	= New Tax;
+		$data 		=  $taxdata->where('code', 'gst')->first();
+		
 		if($data == false){
 			#create if gst not found
 			$insertdata = array(
@@ -37,6 +39,7 @@ class GstController extends Controller{
 				'updated_by' 	=> 1,
 				'updated_at' 	=> date('Y-m-d H:i:s'),
 			);
+			
 			$taxdata->insert($insertdata);
 			$data =  $taxdata->where('code', 'gst')->first();
 		}
@@ -45,8 +48,10 @@ class GstController extends Controller{
     }
 	
 	public function form(){
-        $taxdata = New Tax;
-		$data =  $taxdata->where('code', 'gst')->first();
+        
+        $taxdata 	= New Tax;
+		$data 		=  $taxdata->where('code', 'gst')->first();
+		
 		if($data == false){
 			#create if gst not found
 			$insertdata = array(
@@ -66,11 +71,15 @@ class GstController extends Controller{
     }
 	
 	public function update(Request $postdata){
+		
 		$taxdata = New Tax;
+		
 		$this->validate($postdata,[
 			'percent' => 'required',
 		]);
+		
 		$percent = $postdata->input("percent");
+		
 		if($percent > 0)
 			$percent = $percent;
 		else

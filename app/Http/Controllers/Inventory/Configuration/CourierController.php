@@ -26,8 +26,9 @@ class CourierController extends Controller
 	
 	public function listing(){
 		$courierdata = New Courier;
+
 		$data = array(
-			'counttype' => $courierdata->count(),
+			'counttype'  => $courierdata->count(),
 			'startcount' => 0,
 			'courierArr' => $courierdata->orderBy('id', 'desc')->paginate(20),
 		);
@@ -40,10 +41,12 @@ class CourierController extends Controller
 			
 		$datadecode = unserialize(base64_decode($x));
 		$search = isset($datadecode['search']) ? $datadecode['search'] : '';
+
 		if($search == '')
 			return redirect('inventory/setting/courier');
 		
 		$courierdata = New Courier;
+
 		if($search != ''){
 			$courierdata = $courierdata->where(function ($q) use($search){
 											$q->where('courier_code','LIKE','%'. $search .'%')
@@ -53,7 +56,7 @@ class CourierController extends Controller
 										});
 		}
 			
-		$counttype = $courierdata->count();
+		$counttype  = $courierdata->count();
 		$courierArr = $courierdata->orderBy('id', 'desc')->paginate(20);
 		
 		$data = array(
@@ -81,7 +84,9 @@ class CourierController extends Controller
     }
 	
     public function save(Request $postdata){
+
 		$courierdata = New Courier;
+		
 		$data = array(
 			'courier_code' 	=> strtoupper(trim($postdata->input("courier_code"))),
 			'courier_name' 	=> strtoupper(trim($postdata->input("courier_name"))),
@@ -117,7 +122,9 @@ class CourierController extends Controller
 	}
 	
 	public function check_existcode(Request $postdata){
+		
 		$base64 = $postdata->input("base64");
+		
 		if($base64 == '' || @unserialize(base64_decode($base64)) == false)
 			$id = 0;
 		else{
@@ -126,9 +133,10 @@ class CourierController extends Controller
 		}
 		
 		#uppercase & Replacing multiple spaces with a single space
-		$code = trim(preg_replace('!\s+!', ' ', strtoupper($postdata->input("code"))));
+		$code 			= trim(preg_replace('!\s+!', ' ', strtoupper($postdata->input("code"))));
 		$courierdata 	= New Courier;
 		$countcode 		= $courierdata->where('courier_code','=',$code)->where('id','<>', $id)->count();
+		
 		if($countcode > 0)
 			return 1;
 		else
@@ -136,13 +144,15 @@ class CourierController extends Controller
     }
 
     public function delete($data = ''){
+
 		if(@unserialize(base64_decode($data)) == true){
+			
 			$courierdata 	= New Courier;
 			$datadecode 	= unserialize(base64_decode($data));
 			$selectid 		= isset($datadecode['selectid']) ? $datadecode['selectid'] : 0;
 			
 			$checkcourier = $courierdata->where('id', $selectid)->first();
-			
+
 			if($checkcourier == false)
 				return redirect('inventory/setting/courier')->with("errorid"," Data not found");
 			

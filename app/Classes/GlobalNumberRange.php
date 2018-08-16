@@ -27,8 +27,8 @@ class GlobalNumberRange{
         try{
 
             // Generate new order no
-            $global_nr = GlobalNr::where('nrcode',$order_typ)->first();
-            $current_date = Carbon::now(new \DateTimeZone('Asia/Kuala_Lumpur'));
+            $global_nr      = GlobalNr::where('nrcode',$order_typ)->first();
+            $current_date   = Carbon::now(new \DateTimeZone('Asia/Kuala_Lumpur'));
 
             if($current_date->format('m') > substr($global_nr->current_date, 4, 2)){
                 $next_no = str_pad($global_nr->nrfrom + $global_nr->nritem, 5, '0', STR_PAD_LEFT);

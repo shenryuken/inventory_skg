@@ -54,11 +54,12 @@ class RegisterController extends Controller
         $hashedCode = Auth::guard('admin')->user()->security_code;
 
         if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode)){
+            
             $admin = new Admin;
-            $admin->username   = $request->username;
-            $admin->password   = bcrypt($request->password);
-            $admin->email      = $request->email;
-            $admin->mobile_no  = $request->mobile_no;
+            $admin->username        = $request->username;
+            $admin->password        = bcrypt($request->password);
+            $admin->email           = $request->email;
+            $admin->mobile_no       = $request->mobile_no;
             $admin->security_code   = bcrypt($request->password);
             $admin->save();
             // $input = $request->all();
@@ -77,10 +78,10 @@ class RegisterController extends Controller
 
     public function registrationMemberForm()
     {
-        $ranks  = Rank::all();
-        $banks  = Bank::all();
-        $products = Product::all();
-        $packages = Package::all();
+        $ranks      = Rank::all();
+        $banks      = Bank::all();
+        $products   = Product::all();
+        $packages   = Package::all();
 
         return view('registers.member', compact('ranks', 'banks', 'products', 'packages'));
     }
@@ -89,9 +90,9 @@ class RegisterController extends Controller
     {
         // try{
             $introducer = $request->introducer;
-            $admin = Admin::where('username', $introducer)->first();
-            $member= User::where('username', $introducer)->first();
-            $rank  = Rank::where('name', $request->rank)->first();
+            $admin      = Admin::where('username', $introducer)->first();
+            $member     = User::where('username', $introducer)->first();
+            $rank       = Rank::where('name', $request->rank)->first();
 
             // if (count($admin) == 1){
             //     $table = 'admins';
@@ -130,8 +131,8 @@ class RegisterController extends Controller
                 'relationship'      => 'required_with:beneficiary_name',
                 'beneficiary_address'   => 'required_with:beneficiary_name',
                 'beneficiary_mobile_no' => 'required_with:beneficiary_name, beneficiary_address',
-                'rank_id'           => '',
-                'security_code'     => 'required',
+                'rank_id'               => '',
+                'security_code'         => 'required',
             ]);
 
             $hashedCode = Auth::guard('admin')->user()->security_code;
@@ -212,32 +213,33 @@ class RegisterController extends Controller
     public function saveToPreregisterTable($request, $rank_id)
     {
         $user = new NewUser;
-        $user->username   = $request['username'];
-        $user->password   = bcrypt($request['password']);
+        $user->username      = $request['username'];
+        $user->password      = bcrypt($request['password']);
         $user->security_code = bcrypt($request['password']); 
-        $user->email      = $request['email'];
-        $user->email_token= Password::getRepository()->createNewToken();
-        $user->mobile_no  = $request['mobile_no'];
-        $user->introducer = $request['introducer'];
-        $user->rank_id    = $rank_id;
+        $user->email         = $request['email'];
+        $user->email_token   = Password::getRepository()->createNewToken();
+        $user->mobile_no     = $request['mobile_no'];
+        $user->introducer    = $request['introducer'];
+        $user->rank_id       = $rank_id;
         $user->save();
 
         Session::put('uid',$user->id);
 
         $profile = new NewProfile;     
-        $profile->full_name = $request['name'];
-        $profile->dob       = $request['dob'];
-        $profile->gender    = $request['gender'];
+        $profile->full_name      = $request['name'];
+        $profile->dob            = $request['dob'];
+        $profile->gender         = $request['gender'];
         $profile->marital_status = $request['marital_status'];
-        $profile->id_type   = $request['id_type'];
-        $profile->id_no     = $request['id_no'];
-        $profile->id_pic    = $request['id_pic'];
-        $profile->street    = $request['street'];
-        $profile->city      = $request['city'];
-        $profile->postcode  = $request['postcode'];
-        $profile->state     = $request['state'];
-        $profile->country   = $request['country'];
-        $profile->contact_no= $request['mobile_no'];
+        $profile->id_type        = $request['id_type'];
+        $profile->id_no          = $request['id_no'];
+        $profile->id_pic         = $request['id_pic'];
+        $profile->street         = $request['street'];
+        $profile->city           = $request['city'];
+        $profile->postcode       = $request['postcode'];
+        $profile->state          = $request['state'];
+        $profile->country        = $request['country'];
+        $profile->contact_no     = $request['mobile_no'];
+        
         $user->newprofile()->save($profile);
     }
 

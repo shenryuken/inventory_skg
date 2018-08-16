@@ -45,9 +45,9 @@ class OrderController extends Controller
 
     public function processOrder($id)
     {   
-        $order = OrderHdr::find($id);
-        $items = $order->orderItems;
-        $couriers = Courier::all();
+        $order      = OrderHdr::find($id);
+        $items      = $order->orderItems;
+        $couriers   = Courier::all();
         
         return view('orders.process', compact(['order', 'items', 'couriers']));
     }

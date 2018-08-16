@@ -92,8 +92,9 @@ class SupplierController extends Controller
     }
 
     public function store(Request $request){
+        
         $postData = $this->validate($request,[
-			'telephone' => 'required',
+			'telephone' 	=> 'required',
 			'supplier_code'	=> 'required',
 			'company_name'	=> 'required',
 			'street' 		=> 'required',
@@ -102,7 +103,7 @@ class SupplierController extends Controller
 			'city'	 		=> 'required',
 			'state' 		=> 'required',
 			'country'	 	=> 'required',
-			'telephone'	=> 'required',
+			'telephone'		=> 'required',
 			'email' 		=> 'required',
 			              
         ]);
@@ -125,6 +126,7 @@ class SupplierController extends Controller
             
             $supplier = new Supplier($data);
             $supplier->save();
+			
 			$new_id = $supplier->id;
         
         Session::flash('message', 'Successfully saved supplier!');
