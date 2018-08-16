@@ -424,11 +424,11 @@ class UserController extends Controller
         $approved         = Profile::where('status_ic', 'Approved')->count();
 
         $mykad_status = [
-            'pending' => $pending,
-            'not_update' => $count_user - $count_profile,
-            'waiting_approval' => $waiting_approval,
-            'not_valid' => $not_valid,
-            'approved'  => $approved
+            'pending'           => $pending,
+            'not_update'        => $count_user - $count_profile,
+            'waiting_approval'  => $waiting_approval,
+            'not_valid'         => $not_valid,
+            'approved'          => $approved
         ];
 
         return view('users.mykad-status-index', compact('users', 'mykad_status', 'count_user'));

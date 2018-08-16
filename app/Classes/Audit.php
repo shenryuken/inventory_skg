@@ -19,10 +19,10 @@ class Audit{
 		if(Auth::guard('admin')->check()){
 			$auditTrail = new AuditTrail;
 
-			$auditTrail->action = $action;
-			$auditTrail->action_by = $action_by;
-			$auditTrail->event = $event;
-			$auditTrail->event_created = Carbon::now();
+			$auditTrail->action 		= $action;
+			$auditTrail->action_by 		= $action_by;
+			$auditTrail->event 			= $event;
+			$auditTrail->event_created 	= Carbon::now();
 
 			$auditTrail->save();
 		}

@@ -54,38 +54,38 @@ class ShopController extends Controller
 
             foreach ($data['productArr']['Product'] as $key1 => $value) {
                 
-                $data['productArr']['Product'][$key1]['product_type'] = "product";
-                $data['productArr']['Product'][$key1]['promotion_status'] = "hidden";
-                $data['productArr']['Product'][$key1]['package_status'] = "hidden";
+                $data['productArr']['Product'][$key1]['product_type']       = "product";
+                $data['productArr']['Product'][$key1]['promotion_status']   = "hidden";
+                $data['productArr']['Product'][$key1]['package_status']     = "hidden";
             }
             foreach ($data['productArr']['Package'] as $key2 => $value) {
                 
-                $data['productArr']['Package'][$key2]['product_type'] = "package";
-                $data['productArr']['Package'][$key2]['promotion_status'] = "hidden";
-                $data['productArr']['Package'][$key2]['package_status'] = "";
+                $data['productArr']['Package'][$key2]['product_type']       = "package";
+                $data['productArr']['Package'][$key2]['promotion_status']   = "hidden";
+                $data['productArr']['Package'][$key2]['package_status']     = "";
             }
             foreach ($data['productArr']['Promotion'] as $key3 => $value) {
                 
-                $data['productArr']['Promotion'][$key3]['product_type'] = "promotion";
+                $data['productArr']['Promotion'][$key3]['product_type']     = "promotion";
                 $data['productArr']['Promotion'][$key3]['promotion_status'] = "";
-                $data['productArr']['Promotion'][$key3]['package_status'] = "hidden";
+                $data['productArr']['Promotion'][$key3]['package_status']   = "hidden";
             }
             foreach ($data['productArr']['Package_Promotion'] as $key4 => $value) {
                 
-                $data['productArr']['Package_Promotion'][$key4]['product_type'] = "package_promotion";
+                $data['productArr']['Package_Promotion'][$key4]['product_type']     = "package_promotion";
                 $data['productArr']['Package_Promotion'][$key4]['promotion_status'] = "";
-                $data['productArr']['Package_Promotion'][$key4]['package_status'] = "";
+                $data['productArr']['Package_Promotion'][$key4]['package_status']   = "";
             }
 
             // dd($data);
             // dd(Auth::guard('admin')->check());
             
             if(Auth::guard('admin')->check() == true){
-                $id = Auth::guard('admin')->user()->id;
+                $id         = Auth::guard('admin')->user()->id;
                 $order_type = "staff";
             }
             else{
-                $id = Auth::user()->id;
+                $id         = Auth::user()->id;
                 $order_type = "agent";
             }
 
@@ -114,12 +114,12 @@ class ShopController extends Controller
             // dd($data,$product);
             $count = OrderTransection::where('agent_id',$id)->where('order_type',$order_type)->where('mall_type','SKG_STORE')->count();
 
-            $return['message'] = 'succssfuly';
-            $return['status'] = '01';
+            $return['message']  = 'succssfuly';
+            $return['status']   = '01';
         }
         catch(\Exception $e){
-            $return['message'] = $e->getMessage();
-            $return['status'] = '02';
+            $return['message']  = $e->getMessage();
+            $return['status']   = '02';
             $image = "";
         }
         // dd($return);
@@ -201,11 +201,11 @@ class ShopController extends Controller
         $sessionData = session('STORE','default');
 
         if(Auth::guard('admin')->check() == true){
-            $id = Auth::guard('admin')->user()->id;
+            $id         = Auth::guard('admin')->user()->id;
             $order_type = "staff";
         }
         else{
-            $id = Auth::user()->id;
+            $id         = Auth::user()->id;
             $order_type = "agent";
         }
 
@@ -529,7 +529,7 @@ class ShopController extends Controller
             
             $grandTotalPrice = round($grandTotalPrice,2);
 
-            $totalPrice = number_format($totalPrice,2);
+            $totalPrice      = number_format($totalPrice,2);
             $grandTotalPrice = number_format($grandTotalPrice,2);
 
             if($addressData != null){
@@ -633,12 +633,12 @@ class ShopController extends Controller
             $address = [];
 
             if(Auth::guard('admin')->check() == true){
-                $id = Auth::guard('admin')->user()->id;
-                $user = Admin::find($id);
+                $id     = Auth::guard('admin')->user()->id;
+                $user   = Admin::find($id);
             }
             else{
-                $id = Auth::user()->id;
-                $user = User::find($id);
+                $id     = Auth::user()->id;
+                $user   = User::find($id);
             }
 
             $adds = $user->address;
@@ -804,6 +804,7 @@ class ShopController extends Controller
             
             $data = (new ProductUserController)->single_data_product($product_id);
             $package = [];
+
             if(!empty($data)){
 
                 $package = $data['productArr'];
@@ -849,16 +850,17 @@ class ShopController extends Controller
             if(!empty($gift)){
                 foreach ($gift as $key => $value) {
 
-                    $data = (new ProductUserController)->single_data_product($value['product_id']);
-                    $image = Product_image::select('type','description','file_name','path')
+                    $data   = (new ProductUserController)->single_data_product($value['product_id']);
+                    $image  = Product_image::select('type','description','file_name','path')
                                         ->where('product_id',$value['product_id'])
                                         ->orderBy('status','desc')
                                         ->first();
 
                     $gift[$key]['product_name'] = ($data['data']['name'] == null ? '' : $data['data']['name']);
-                    $gift[$key]['image'] = ($image['path'] == null ? '' : $image['path']);
+                    $gift[$key]['image']        = ($image['path'] == null ? '' : $image['path']);
                 }
             }
+
             $return['message']  = "succssfuly retrived";
             $return['status']   = "01";
         }
@@ -918,18 +920,17 @@ class ShopController extends Controller
             // dd($cartItems);
             if(count($cartItems) > 0){
 
-                $order_no   = (new GlobalNumberRange)->generate_orderno("SO");
+                $order_no               = (new GlobalNumberRange)->generate_orderno("SO");
                 // dd($order_no);
-                $order_item = [];
+                $order_item             = [];
                 $total_product_quantity = 0;
-                $date = new \DateTime();
+                $date                   = new \DateTime();
 
                 foreach($cartItems as $k => $v){
 
                     $item = Array(
 
                         'order_no'      => $order_no['data'],
-                        'do_no'         => "",
                         'product_id'    => $v['product_id'],
                         'product_qty'   => $v['total_quantity'],
                         'product_typ'   => "",
@@ -1172,11 +1173,11 @@ class ShopController extends Controller
 
     public function agentsStoreList()
     {
-    	$id = Auth::user()->id;
+    	$id        = Auth::user()->id;
 
-    	$my = Referral::where('user_id', $id)->first();
+    	$my        = Referral::where('user_id', $id)->first();
 
-    	$agents = $my->getAncestors();
+    	$agents    = $my->getAncestors();
 
     	$qualified_agents = array();
     	$count = 0;
@@ -1217,27 +1218,27 @@ class ShopController extends Controller
 
             foreach ($data['productArr']['Product'] as $key1 => $value) {
                 
-                $data['productArr']['Product'][$key1]['product_type'] = "product";
-                $data['productArr']['Product'][$key1]['promotion_status'] = "hidden";
-                $data['productArr']['Product'][$key1]['package_status'] = "hidden";
+                $data['productArr']['Product'][$key1]['product_type']       = "product";
+                $data['productArr']['Product'][$key1]['promotion_status']   = "hidden";
+                $data['productArr']['Product'][$key1]['package_status']     = "hidden";
             }
             foreach ($data['productArr']['Package'] as $key2 => $value) {
                 
-                $data['productArr']['Package'][$key2]['product_type'] = "package";
-                $data['productArr']['Package'][$key2]['promotion_status'] = "hidden";
-                $data['productArr']['Package'][$key2]['package_status'] = "";
+                $data['productArr']['Package'][$key2]['product_type']       = "package";
+                $data['productArr']['Package'][$key2]['promotion_status']   = "hidden";
+                $data['productArr']['Package'][$key2]['package_status']     = "";
             }
             foreach ($data['productArr']['Promotion'] as $key3 => $value) {
                 
-                $data['productArr']['Promotion'][$key3]['product_type'] = "promotion";
+                $data['productArr']['Promotion'][$key3]['product_type']     = "promotion";
                 $data['productArr']['Promotion'][$key3]['promotion_status'] = "";
-                $data['productArr']['Promotion'][$key3]['package_status'] = "hidden";
+                $data['productArr']['Promotion'][$key3]['package_status']   = "hidden";
             }
             foreach ($data['productArr']['Package_Promotion'] as $key4 => $value) {
                 
-                $data['productArr']['Package_Promotion'][$key4]['product_type'] = "package_promotion";
+                $data['productArr']['Package_Promotion'][$key4]['product_type']     = "package_promotion";
                 $data['productArr']['Package_Promotion'][$key4]['promotion_status'] = "";
-                $data['productArr']['Package_Promotion'][$key4]['package_status'] = "";
+                $data['productArr']['Package_Promotion'][$key4]['package_status']   = "";
             }
 
             $DataProduct = array_merge($data['productArr']['Product'],$data['productArr']['Package'],$data['productArr']['Promotion'],$data['productArr']['Package_Promotion']);

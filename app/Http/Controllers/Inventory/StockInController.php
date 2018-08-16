@@ -49,24 +49,25 @@ class StockInController extends Controller
 
         $this->validate($request,[
             'stock_date' => 'required',
-            'product' => 'required',
-            'supplier' => 'required',
+            'product'    => 'required',
+            'supplier'   => 'required',
         ]);
 
         $document_no =  $this->generate_docno();
         
         $serialNumberArray = json_decode($request->input('serial_number_scan_json'));
+        
         $stock = new Stock;
-        $stock->stock_date  	= $request->stock_date;
-        $stock->stock_in_no   = $document_no;
+        $stock->stock_date  = $request->stock_date;
+        $stock->stock_in_no = $document_no;
         $stock->description = $request->description;
-        $stock->created_by = Auth::user()->id;
+        $stock->created_by  = Auth::user()->id;
         $stock->save();
         
         $product_stock_array = [
-            'product_id'   => $request->product,
-            'supplier_id' => $request->supplier,
-            'stock_id'     => $stock->id,
+            'product_id'    => $request->product,
+            'supplier_id'   => $request->supplier,
+            'stock_id'      => $stock->id,
             'barcode'       => $serialNumberArray
         ];
 
@@ -81,11 +82,11 @@ class StockInController extends Controller
         foreach($product_stock_array['barcode'] as $product_supplier){
             
             $product_stock_array = [
-                'product_id'   => $product_stock_array['product_id'],
-                'supplier_id' => $product_stock_array['supplier_id'],
-                'stock_id'     => $product_stock_array['stock_id'],
+                'product_id'    => $product_stock_array['product_id'],
+                'supplier_id'   => $product_stock_array['supplier_id'],
+                'stock_id'      => $product_stock_array['stock_id'],
                 'barcode'       => $product_supplier->barcode,
-                'quantity'       => $product_supplier->quantity,
+                'quantity'      => $product_supplier->quantity,
                 'status'        => '01',
                 'created_by'    => Auth::user()->id,
                 'updated_at'    => Carbon::now()    
@@ -99,17 +100,20 @@ class StockInController extends Controller
         //Generate SR
     private function generate_docno(){
         $LatestDocNo = stock::max('id');    
-            $numberOnly = preg_replace("/[^0-9]/", '', $LatestDocNo);
-            if(!$numberOnly){
-                $numberOnly = "00000";
-            }
-            $generatedNo =  str_pad($numberOnly+1, 5, '0', STR_PAD_LEFT);
-            return "SR".($generatedNo);      
+        $numberOnly = preg_replace("/[^0-9]/", '', $LatestDocNo);
+        
+        if(!$numberOnly){
+            $numberOnly = "00000";
+        }
+
+        $generatedNo =  str_pad($numberOnly+1, 5, '0', STR_PAD_LEFT);
+
+        return "SR".($generatedNo);      
     }
 
     public function show($id = ""){
         try{
-                $stock = Stock::where('stock_in_no',$id)->first();
+                $stock      = Stock::where('stock_in_no',$id)->first();
                 $stock_item = StockItem::where('stock_id',$stock->id)->get();
 
             

@@ -48,10 +48,10 @@ class BankController extends Controller
         if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode)){
 
 	        $bank = new Bank;
-	        $bank->name 	= $request->bank_name;
-	        $bank->code  	= $request->code;
-	        $bank->status   = $request->status;
-	        $bank->origin_country = $request->origin_country;
+	        $bank->name 	       = $request->bank_name;
+	        $bank->code  	       = $request->code;
+	        $bank->status          = $request->status;
+	        $bank->origin_country  = $request->origin_country;
 	        $bank->save();
 
 	        return back()->with('success', 'Successfully saved!');
@@ -76,10 +76,10 @@ class BankController extends Controller
         if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode)){
 
             $bank = Bank::find($id);
-            $bank->name     = $request->bank_name;
-            $bank->code     = $request->code;
-            $bank->status   = $request->status;
-            $bank->origin_country = $request->origin_country;
+            $bank->name             = $request->bank_name;
+            $bank->code             = $request->code;
+            $bank->status           = $request->status;
+            $bank->origin_country   = $request->origin_country;
             $bank->save();
 
             return back()->with('success', 'Successfully updated!');

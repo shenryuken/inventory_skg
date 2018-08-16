@@ -56,17 +56,18 @@ class StockAdjustmentController extends Controller
     public function store(Request $request){
 
         $this->validate($request,[
-            'adjustment_date' => 'required',
-            'product' => 'required',
-            'adjustment_type' => 'required',
+            'adjustment_date'   => 'required',
+            'product'           => 'required',
+            'adjustment_type'   => 'required',
         ]);
         
-        $serialNumberArray = json_decode($request->input('serial_number_scan_json'));
-        $stock = new StockAdjustment;
-        $stock->adjustment_date  	= $request->adjustment_date;
-        $stock->stockadjustment_type_id   = $request->adjustment_type;
-        $stock->description = $request->description;
-        $stock->created_by = Auth::user()->id;
+        $serialNumberArray      = json_decode($request->input('serial_number_scan_json'));
+
+        $stock  = new StockAdjustment;
+        $stock->adjustment_date  	     = $request->adjustment_date;
+        $stock->stockadjustment_type_id  = $request->adjustment_type;
+        $stock->description              = $request->description;
+        $stock->created_by               = Auth::user()->id;
         $stock->save();
         
         $product_stock_array = [
@@ -87,19 +88,20 @@ class StockAdjustmentController extends Controller
             $stock_item = StockItem::where('barcode',$product_supplier->barcode)->first();
 
             if($stock_item){
+
                 StockItem::where('barcode',$product_supplier->barcode)->update([
-                    "stock_adjustment_id" => $product_stock_array['stock_adjustment_id'],
-                    "status" => "04",
-                    'updated_by'    => Auth::user()->id,
+                    "stock_adjustment_id"   => $product_stock_array['stock_adjustment_id'],
+                    "status"                => "04",
+                    'updated_by'            => Auth::user()->id,
                 ]);
             }else{
 
                 $product_stock_array = [
                     'stock_adjustment_id'   => $product_stock_array['stock_adjustment_id'],
-                    'adjustment_quantity'       => $product_supplier->quantity,
-                    'status'        => '04',
-                    'created_by'    => Auth::user()->id,
-                    'updated_at'    => Carbon::now()    
+                    'adjustment_quantity'   => $product_supplier->quantity,
+                    'status'                => '04',
+                    'created_by'            => Auth::user()->id,
+                    'updated_at'            => Carbon::now()    
                 ];
     
                 StockItem::insert($product_stock_array);
@@ -109,13 +111,17 @@ class StockAdjustmentController extends Controller
 
         //Generate SR
     private function generate_docno(){
+
         $LatestDocNo = stock::max('id');    
-            $numberOnly = preg_replace("/[^0-9]/", '', $LatestDocNo);
-            if(!$numberOnly){
-                $numberOnly = "00000";
-            }
-            $generatedNo =  str_pad($numberOnly+1, 5, '0', STR_PAD_LEFT);
-            return "SR".($generatedNo);      
+        $numberOnly  = preg_replace("/[^0-9]/", '', $LatestDocNo);
+        
+        if(!$numberOnly){
+            $numberOnly = "00000";
+        }
+        
+        $generatedNo =  str_pad($numberOnly+1, 5, '0', STR_PAD_LEFT);
+        
+        return "SR".($generatedNo);      
     }
 
 	

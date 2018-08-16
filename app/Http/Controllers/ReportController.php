@@ -114,10 +114,10 @@ class ReportController extends Controller
     public function getMembersReport()
     {
         $date = Carbon::now();
-        $startOfMOnth = Carbon::today()->startOfMonth();
-        $endOfMonth   = Carbon::today()->endOfMonth();
-        $startDate = Carbon::now()->startOfWeek()->format('Y/m/d');
-        $endDate = $date = Carbon::now()->endOfWeek()->format('Y/m/d');
+        $startOfMOnth   = Carbon::today()->startOfMonth();
+        $endOfMonth     = Carbon::today()->endOfMonth();
+        $startDate      = Carbon::now()->startOfWeek()->format('Y/m/d');
+        $endDate        = $date = Carbon::now()->endOfWeek()->format('Y/m/d');
 
         $users                   = User::count();
         $customers               = User::where('rank_id',1)->count();
@@ -140,7 +140,7 @@ class ReportController extends Controller
                                             ->get();
 
         $stats_register = array();
-        $data = array();
+        $data           = array();
 
         foreach ($monthly_register as $register) {
             $data = [
@@ -152,15 +152,15 @@ class ReportController extends Controller
         }
 
         $users = [
-            'ALL'=> $users,
-            'C'  => $customers,
-            'LC' => $loyal_customer,
-            'MO' => $marketing_officer,
-            'DO' => $district_officer,
-            'SDO'=> $senior_district_officer,
-            'today' => $today,
+            'ALL'       => $users,
+            'C'         => $customers,
+            'LC'        => $loyal_customer,
+            'MO'        => $marketing_officer,
+            'DO'        => $district_officer,
+            'SDO'       => $senior_district_officer,
+            'today'     => $today,
             'this_week' => $this_week,
-            'this_month' => $this_month,
+            'this_month'=> $this_month,
             'monthly_register' => json_encode($stats_register)
         ];
 
@@ -253,12 +253,12 @@ class ReportController extends Controller
                                         ->get();
 
         $sales = [
-            'this_year'  => $this_year_sales,
-            'last_year' => $last_year_sales,
-            'total_amount_this_year' => $this_year_sales->sum('amount'),
-            'total_amount_last_year' => $last_year_sales->sum('amount'),
-            'total_quantity_this_year' => $this_year_sales->sum('quantity'),
-            'total_quantity_last_year' => $last_year_sales->sum('quantity'),
+            'this_year'                 => $this_year_sales,
+            'last_year'                 => $last_year_sales,
+            'total_amount_this_year'    => $this_year_sales->sum('amount'),
+            'total_amount_last_year'    => $last_year_sales->sum('amount'),
+            'total_quantity_this_year'  => $this_year_sales->sum('quantity'),
+            'total_quantity_last_year'  => $last_year_sales->sum('quantity'),
         ];
 
         return $sales;

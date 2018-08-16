@@ -88,15 +88,15 @@ class ProfileController extends Controller
         }
 
         if(Hash::check($request->security_code, $hashedCode)){
-            $profile->full_name = $request->full_name;
-            $profile->icno      = $request->icno;
-            $profile->street    = $request->street;
-            $profile->postcode  = $request->postcode;
-            $profile->city      = $request->city;
-            $profile->state     = $request->state;
-            $profile->country   = $request->country;
-            $profile->contact_no= $request->contact_no;
-            $profile->contact_no2= $request->contact_no2;
+            $profile->full_name   = $request->full_name;
+            $profile->icno        = $request->icno;
+            $profile->street      = $request->street;
+            $profile->postcode    = $request->postcode;
+            $profile->city        = $request->city;
+            $profile->state       = $request->state;
+            $profile->country     = $request->country;
+            $profile->contact_no  = $request->contact_no;
+            $profile->contact_no2 = $request->contact_no2;
             $profile->save();
 
             return back()->with('success', $profile->profileable->username .' you are successfully updated your profile!');
@@ -107,7 +107,7 @@ class ProfileController extends Controller
 
     public function show($id)
     {
-    	$user = User::find($id);
+    	$user    = User::find($id);
     	$profile = $user->profile;
     	$guard   = 'web';
 
@@ -116,7 +116,7 @@ class ProfileController extends Controller
 
     public function showAdmin($id)
     {
-    	$admin = Admin::find($id);
+    	$admin   = Admin::find($id);
     	$profile = $admin->profile;
     	$guard   = 'admin';
 
@@ -136,11 +136,12 @@ class ProfileController extends Controller
 
         ]);
 
-        $avatar = $request->file('avatar');
+        $avatar   = $request->file('avatar');
         $filename = time() . '.' . $avatar->getClientOriginalExtension();
+        
         Image::make($avatar)->resize(200, 200)->save( public_path('/app/avatars/' . $filename ) );
 
-        $user = Auth::user();
+        $user         = Auth::user();
         $user->avatar = $filename;
         $user->save();
         

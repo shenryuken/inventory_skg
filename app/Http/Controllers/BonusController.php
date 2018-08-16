@@ -96,12 +96,12 @@ class BonusController extends Controller
     public function updateBonusType(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name'      => 'required',
-            'value'     => 'required',
-            'value_type'=> 'required',
-            'rank'      => 'required',
-            'term'      => 'required',
-            'duration'  => 'required',
+            'name'          => 'required',
+            'value'         => 'required',
+            'value_type'    => 'required',
+            'rank'          => 'required',
+            'term'          => 'required',
+            'duration'      => 'required',
             'duration_type' => 'required',
             'description'   => 'required',
         ]);
@@ -112,11 +112,11 @@ class BonusController extends Controller
         } else {
 
             $bonus_type = BonusType::find($id);
-            $bonus_type->name   = $request->name;
-            $bonus_type->value  = $request->value;
+            $bonus_type->name           = $request->name;
+            $bonus_type->value          = $request->value;
             $bonus_type->value_type     = $request->value_type;
-            $bonus_type->rank   = $request->rank;
-            $bonus_type->term   = $request->term;
+            $bonus_type->rank           = $request->rank;
+            $bonus_type->term           = $request->term;
             $bonus_type->duration       = $request->duration;
             $bonus_type->duration_type  = $request->duration_type;
             $bonus_type->description    = $request->description;
@@ -310,15 +310,15 @@ class BonusController extends Controller
     public function calculate_active_sdo_personal_gpv($user_id)
     {
         //return $active_do;
-        $root = Referral::where('user_id', $user_id)->first();
-        $root_wallet = Wallet::where('user_id', $user_id)->first();
+        $root           = Referral::where('user_id', $user_id)->first();
+        $root_wallet    = Wallet::where('user_id', $user_id)->first();
  
-        $descendants = $root->getDescendants();
+        $descendants        = $root->getDescendants();
         $first_pv_purchased = 0;
-        $personal_gpv = 0;
-        $first_gpv_purchased = $root_wallet ? $root_wallet->first_purchased:0;
-        $right        = 0;
-        $qualified    = array();
+        $personal_gpv       = 0;
+        $first_gpv_purchased= $root_wallet ? $root_wallet->first_purchased:0;
+        $right              = 0;
+        $qualified          = array();
 
         foreach ($descendants as $descendant)
         {
@@ -328,9 +328,9 @@ class BonusController extends Controller
             {
                 $wallet = Wallet::where('user_id', $descendant->user_id)->first();
 
-                $first_gpv_purchased = $first_gpv_purchased + ($wallet ? $wallet->first_purchased:0) ;
-                $personal_gpv = $personal_gpv + ($wallet ? $wallet->pv:0);//without root personal pv
-                $qualified[]  = $descendant->toArray();
+                $first_gpv_purchased    = $first_gpv_purchased + ($wallet ? $wallet->first_purchased:0) ;
+                $personal_gpv           = $personal_gpv + ($wallet ? $wallet->pv:0);//without root personal pv
+                $qualified[]            = $descendant->toArray();
             }
             elseif ($rank > 4 )
             {
@@ -344,7 +344,7 @@ class BonusController extends Controller
         $root_wallet = Wallet::where('user_id', $user_id)->first();//root personl pv
 
         $active_do = ActiveDo::where('user_id', $user_id)->first();
-        $active_do->personal_gpv = $personal_gpv + ($root_wallet ? $root_wallet->pv:0);
+        $active_do->personal_gpv        = $personal_gpv + ($root_wallet ? $root_wallet->pv:0);
         $active_do->first_gpv_purchased = $first_gpv_purchased;
         $active_do->save();
     }
@@ -371,7 +371,7 @@ class BonusController extends Controller
     {
         $root              = Referral::where('user_id', $user_id)->first();
         $descendants       = $root->getDescendants();
-        $active_sdo_members = array();
+        $active_sdo_members= array();
         $generation        = 1;
         $rgt_root          = $root->rgt;
         $rgt_generation[0] = $root->rgt ; //value for first time process
@@ -546,6 +546,7 @@ class BonusController extends Controller
         if($descendants)
         {
             foreach ($descendants as $descendant) {
+            
             $wallet = Wallet::where('user_id', $descendant->user_id)->first();
 
                 if($wallet && ($wallet->pv > 0 || $wallet->first_purchased > 0))

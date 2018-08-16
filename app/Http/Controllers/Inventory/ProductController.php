@@ -202,6 +202,7 @@ class ProductController extends Controller{
 			$dataproductcategory 		= $configproductcategorydata->orderBy('category', 'asc')->get();
 			# get Tax GST percentage		
 			$taxgst = Tax::where('code', 'gst')->first();
+
 			if($taxgst == false)
 				$gstpercentage = 6;
 			else
@@ -254,6 +255,7 @@ class ProductController extends Controller{
 			
 			# get Tax GST percentage		
 			$taxgst = Tax::where('code', 'gst')->first();
+
 			if($taxgst == false)
 				$gstpercentage = 6;
 			else
@@ -266,21 +268,26 @@ class ProductController extends Controller{
 			
 			$created_by_name = $updated_by_name = "";
 			$user = $userdata->where('id', $data['created_by'])->first();
+
 			if($user)
 				$created_by_name = $user['username'];
+
 			$user2 = $userdata->where('id', $data['updated_by'])->first();
+			
 			if($user2)
 				$updated_by_name = $user['username'];
 			
 			#get package if exist
 			$packageArr = array();
 			$querypackage = $packagedata->where('product_id',$id)->orderBy('id', 'desc')->get();
+			
 			if(count($querypackage) > 0){
 				foreach($querypackage->all() as $key => $row){
 					$package_id = $row->package_id;
-					$datap = $productdata->where('id', $package_id)->first();
+					$datap 		= $productdata->where('id', $package_id)->first();
 					
 					$type = "Product";
+					
 					if($datap['type'] == 2)
 						$type = "Package";
 						
@@ -296,10 +303,12 @@ class ProductController extends Controller{
 						$wm_gst 		= ($price_wm / 100) * $gstpercentage;
 						$wm_aftergst 	= $price_wm + $wm_gst;
 					}
+					
 					if($price_em > 0){
 						$em_gst 		= ($price_em / 100) * $gstpercentage;
 						$em_aftergst 	= $price_em + $em_gst;
 					}
+					
 					if($price_staff > 0){
 						$staff_gst 		= ($price_staff / 100) * $gstpercentage;
 						$staff_aftergst = $price_staff + $staff_gst;
@@ -396,7 +405,9 @@ class ProductController extends Controller{
     }
 	
     public function update(Request $postdata, $id = 0){
+		
 		$checkproduct = Product::where('id', $id)->first();
+		
 		if($checkproduct == false)
 			return redirect("inventory/product/listing")->with("errorid"," Data Not Found ");
 			
@@ -414,6 +425,7 @@ class ProductController extends Controller{
 		#check exist code
 		$productdata = New Product;
 		$countcode = $productdata->where('code','=',$code)->where('id','<>', $id)->count();
+		
 		if($countcode > 0){
 			$messages = "Code " . trim($postdata->input("code")) . " already exist";
 			return redirect('inventory/product/edit/' . $id)->withErrors($messages);
@@ -479,6 +491,7 @@ class ProductController extends Controller{
 			'tabgallery' 			=> '',
 			'productArr' 			=> $productArr, # not package product
 		);
+		
 		return view('inventory/product_package_form',$data);
     }
 	
@@ -493,6 +506,7 @@ class ProductController extends Controller{
 				
 			# get Tax GST percentage		
 			$taxgst = Tax::where('code', 'gst')->first();
+			
 			if($taxgst == false)
 				$gstpercentage = 6;
 			else
@@ -534,9 +548,12 @@ class ProductController extends Controller{
     }
 	
 	public function package_view($id = 0){
+		
 		if($id > 0){
+			
 			$productdata = New Product;
 			$data = $productdata->where('id', $id)->first();
+			
 			if($data == false)
 				return redirect("inventory/product/listing")->with("errorid"," Not Found 1");
 				
@@ -554,6 +571,7 @@ class ProductController extends Controller{
 			
 			# get Tax GST percentage		
 			$taxgst = Tax::where('code', 'gst')->first();
+			
 			if($taxgst == false)
 				$gstpercentage = 6;
 			else
@@ -580,7 +598,9 @@ class ProductController extends Controller{
 
 			if($user)
 				$created_by_name = $user['username'];
+			
 			$user2 = $userdata->where('id', $data['updated_by'])->first();
+			
 			if($user2)
 				$updated_by_name = $user['username'];
 				
@@ -666,6 +686,7 @@ class ProductController extends Controller{
 						'updated_by' 	=> Auth::user()->id,
 						'updated_at' 	=> date('Y-m-d H:i:s'),
 					);
+
 					$packagedata->insert($datapraduct);
 				}
 			}
@@ -675,8 +696,10 @@ class ProductController extends Controller{
     }
 	
     public function package_update(Request $postdata, $id = 0){
-		$productdata = New Product;
-		$checkproduct = $productdata->where('id', $id)->where('type', 2)->first();
+		
+		$productdata 	= New Product;
+		$checkproduct 	= $productdata->where('id', $id)->where('type', 2)->first();
+		
 		if($checkproduct == false)
 			return redirect("inventory/product/listing")->with("errorid"," Data Not Found ");
 			
@@ -691,8 +714,9 @@ class ProductController extends Controller{
 		$name = trim(preg_replace('!\s+!', ' ', $postdata->input("name")));
 		
 		#check exist code
-		$productdata = New Product;
-		$countcode = $productdata->where('code','=',$code)->where('id','<>', $id)->count();
+		$productdata 	= New Product;
+		$countcode 		= $productdata->where('code','=',$code)->where('id','<>', $id)->count();
+		
 		if($countcode > 0){
 			$messages = "Code " . trim($postdata->input("code")) . " already exist";
 			return redirect('inventory/product/edit/' . $id)->withErrors($messages);
@@ -741,6 +765,7 @@ class ProductController extends Controller{
 						'updated_by' 	=> Auth::user()->id,
 						'updated_at' 	=> date('Y-m-d H:i:s'),
 					);
+					
 					$packagedata->where('id',$v)->update($datapraduct);
 					$valid_id[] = $v;
 				}
@@ -758,6 +783,7 @@ class ProductController extends Controller{
 						'updated_by' 	=> Auth::user()->id,
 						'updated_at' 	=> date('Y-m-d H:i:s'),
 					);
+					
 					$v = $packagedata->insertGetId($datapraduct);
 					$valid_id[] = $v;
 				}
@@ -777,17 +803,22 @@ class ProductController extends Controller{
     }
 	
 	public function upload_image(Request $postdata,$id = 0){
+		
 		$imagedata = New Product_image;
 		$datajson = array(
 			'status' 	=> 'Fail',
 			'remarks' 	=> 'Product not Founds',
 		);
+		
 		$checkproduct = Product::where('id', $id)->first();
+		
 		if($checkproduct == true){
 			$statusimg = 1;
 			$mainimage = $imagedata->where('product_id', $id)->where('status', 1)->first();
+			
 			if($mainimage == true)
 				$statusimg = 0;
+			
 			$data = array(
 				'product_id' 	=> $id,
 				'description' 	=> $postdata->input("description") != null ? $postdata->input("description") : '',
@@ -845,18 +876,22 @@ class ProductController extends Controller{
 	}
 	
 	public function reload_image($id = 0){
+		
 		$checkproduct = Product::where('id', $id)->first();
+		
 		if($checkproduct == true){
 			$imagedata 			= New Product_image;
 			$data['imageArr'] 	= $imagedata->where('product_id',$id)->orderBy('status', 'desc')->orderBy('id', 'desc')->get();
 			$data['productId'] 	= $id;
 			$data['productName']= $checkproduct['code'] . ' (' . $checkproduct['description'] . ') '; 
+			
 			return view('inventory/product_reload_image',$data);
 		}
 		return "Not Valid";
 	}
 	
 	public function check_existcode(Request $postdata){
+		
 		$id 			= $postdata->input("id");
 		#uppercase & Replacing multiple spaces with a single space
 		$code 			= trim(preg_replace('!\s+!', ' ', strtoupper($postdata->input("code"))));
@@ -870,6 +905,7 @@ class ProductController extends Controller{
     }
 	
     public function delete($data = ''){
+		
 		if(@unserialize(base64_decode($data)) == true){
 			$datadecode = unserialize(base64_decode($data));
 			$delete 	= isset($datadecode['delete']) ? $datadecode['delete'] : 0;
@@ -905,11 +941,11 @@ class ProductController extends Controller{
 						$promotion_id = $rowpromotion->id;
 						$promotiongiftdata->where('promotion_id', $promotion_id)->delete();
 					}
+					
 					# delete all promotion
 					$promotiondata->where('product_id', $deleteid)->delete();
 					# delete all promotion Gift
 					$promotiongiftdata->where('product_id', $deleteid)->delete();
-					
 					
 					#delete all image
 					$imagedata 	= New Product_image;
@@ -938,6 +974,7 @@ class ProductController extends Controller{
     }
 	
 	public function set_mainimage(Request $postdata){
+		
 		$product_id = $postdata->input("product_id");
 		$imageid 	= $postdata->input("imageid");
 		
@@ -946,6 +983,7 @@ class ProductController extends Controller{
 			$data = array(
 				'status' => 0,
 			);
+
 			$imagedata = New Product_image;
 			$imagedata->where('product_id',$product_id)->update($data);
 			# set 1
@@ -954,6 +992,7 @@ class ProductController extends Controller{
 				'updated_by' 	=> Auth::user()->id,
 				'updated_at' 	=> date('Y-m-d H:i:s'),
 			);
+			
 			$imagedata->where('id',$imageid)->where('product_id',$product_id)->update($data);
 			return "success";
 		}
@@ -999,16 +1038,19 @@ class ProductController extends Controller{
 		$productQuery 	= $productdata->orderBy('id', 'desc')->where('status',1)->where('notforsale', 0)->get();
 		# get Tax GST percentage		
 		$taxgst = Tax::where('code', 'gst')->first();
+		
 		if($taxgst == false)
 			$gstpercentage = 6;
 		else
 			$gstpercentage = $taxgst['percent'];
+		
 		$productArr = array(
 			'Product'	 		=> array(),
 			'Package' 			=> array(),
 			'Promotion' 		=> array(),
 			'Package_Promotion' => array()
 		);
+		
 		if(count($productQuery) > 0){
 			foreach($productQuery->all() as $key => $row){
 				$type = "Product";
@@ -1059,6 +1101,7 @@ class ProductController extends Controller{
 				);
 				#image
 				$image = $imagedata->where('product_id',$productid)->orderBy('status', 'desc')->orderBy('id', 'desc')->first();
+				
 				if($image){
 					$data['image_id'] 			= $image['id'];
 					$data['image_name'] 		= $image['file_name'];
@@ -1110,14 +1153,17 @@ class ProductController extends Controller{
 						$wm_gst 		= ($price_wm / 100) * $gstpercentage;
 						$wm_aftergst 	= $price_wm + $wm_gst;
 					}
+					
 					if($price_em > 0){
 						$em_gst 		= ($price_em / 100) * $gstpercentage;
 						$em_aftergst 	= $price_em + $em_gst;
 					}
+					
 					if($price_staff > 0){
 						$staff_gst 		= ($price_staff / 100) * $gstpercentage;
 						$staff_aftergst = $price_staff + $staff_gst;
 					}
+					
 					$data['price_wm'] 		= number_format($price_wm, 2, '.', '');
 					$data['wm_gst'] 		= number_format($wm_gst, 2, '.', '');
 					$data['wm_aftergst'] 	= number_format($wm_aftergst, 2, '.', '');
@@ -1142,7 +1188,7 @@ class ProductController extends Controller{
 			'nowdatetime' 	=> $nowdatetime,
 			'countproduct' 	=> $productdata->count(),
 			'productArr' 	=> $productArr,
-			'typeArr' => array( '0' => '', '1' => 'Product','2' => 'Package ','3' => 'Promotion' ),
+			'typeArr' 		=> array( '0' => '', '1' => 'Product','2' => 'Package ','3' => 'Promotion' ),
 		);
 
 		return $datalisting;
@@ -1156,6 +1202,7 @@ class ProductController extends Controller{
 		// $nowdatetime =  date('Y-m-d H:i:s');
 		$data 			= array();
 		$productArr 	= array();
+		
 		if($id > 0){
 			$productdata 	= New Product;
 			$promotiondata 	= New Product_promotion;
@@ -1180,18 +1227,23 @@ class ProductController extends Controller{
 					$wm_gst 		= ($price_wm / 100) * $gstpercentage;
 					$wm_aftergst 	= $price_wm + $wm_gst;
 				}
+				
 				if($price_em > 0){
 					$em_gst 		= ($price_em / 100) * $gstpercentage;
 					$em_aftergst 	= $price_em + $em_gst;
 				}
+				
 				if($price_staff > 0){
 					$staff_gst 		= ($price_staff / 100) * $gstpercentage;
 					$staff_aftergst = $price_staff + $staff_gst;
 				}
+				
 				$packagedata = New Product_package;
+				
 				if($datap['type'] == 2){
 					#Type Product Package
 					$product_list = $packagedata->where('package_id', $id)->get();
+					
 					if(count($product_list) > 0){
 						foreach($product_list->all() as $key => $row){
 							$package_item = $productdata->where('id', $row->product_id)->where('type','<>', 2)->first();
@@ -1206,10 +1258,12 @@ class ProductController extends Controller{
 								$wm_gst2 		= ($price_wm2 / 100) * $gstpercentage;
 								$wm_aftergst2 	= $price_wm2 + $wm_gst2;
 							}
+							
 							if($price_em2 > 0){
 								$em_gst2 		= ($price_em2 / 100) * $gstpercentage;
 								$em_aftergst2 	= $price_em2 + $em_gst2;
 							}
+							
 							if($price_staff2 > 0){
 								$staff_gst2 	 = ($price_staff2 / 100) * $gstpercentage;
 								$staff_aftergst2 = $price_staff2 + $staff_gst2;
@@ -1234,6 +1288,7 @@ class ProductController extends Controller{
 				else{
 					#Type Product
 					$package_list = $packagedata->where('product_id',$id)->orderBy('id', 'desc')->get();
+					
 					if(count($package_list) > 0){
 						foreach($package_list->all() as $key => $row){
 							$package_id = $row->package_id;
@@ -1251,10 +1306,12 @@ class ProductController extends Controller{
 								$wm_gst2 		= ($price_wm2 / 100) * $gstpercentage;
 								$wm_aftergst2 	= $price_wm2 + $wm_gst2;
 							}
+							
 							if($price_em2 > 0){
 								$em_gst2 		= ($price_em2 / 100) * $gstpercentage;
 								$em_aftergst2 	= $price_em2 + $em_gst2;
 							}
+							
 							if($price_staff2 > 0){
 								$staff_gst2 	= ($price_staff2 / 100) * $gstpercentage;
 								$staff_aftergst2= $price_staff2 + $staff_gst2;
@@ -1312,6 +1369,7 @@ class ProductController extends Controller{
 						$wm_gst 		= ($price_wm / 100) * $gstpercentage;
 						$wm_aftergst 	= $price_wm + $wm_gst;
 					}
+					
 					if($price_em > 0){
 						$em_gst 		= ($price_em / 100) * $gstpercentage;
 						$em_aftergst 	= $price_em + $em_gst;
@@ -1320,6 +1378,7 @@ class ProductController extends Controller{
 						$staff_gst 		= ($price_staff / 100) * $gstpercentage;
 						$staff_aftergst = $price_staff + $staff_gst;
 					}
+					
 					$data['price_wm'] 		= number_format($price_wm, 2, '.', '');
 					$data['wm_gst'] 		= number_format($wm_gst, 2, '.', '');
 					$data['wm_aftergst'] 	= number_format($wm_aftergst, 2, '.', '');

@@ -58,12 +58,12 @@ class OrderController extends Controller
 
     public function deliveryDetail($order_no = "")
     {
-        $delivery = [];
-        $items = [];
+        $delivery   = [];
+        $items      = [];
 
         try{
-            $delivery = Delivery::where('delivery_number',$order_no)->first();
-            $items = DeliveryItem::where('delivery_id',$delivery->id)->get();
+            $delivery   = Delivery::where('delivery_number',$order_no)->first();
+            $items      = DeliveryItem::where('delivery_id',$delivery->id)->get();
             // var_dump($items->products->name);
         
         
@@ -84,9 +84,9 @@ class OrderController extends Controller
 
     public function deliveryCreate($order_no)
     {
-        $order = OrderHdr::where('order_no',$order_no)->where('status','01')->first();
-        $items = OrderItem::where('order_no',$order_no)->get();
-        $couriers = Courier::all();
+        $order      = OrderHdr::where('order_no',$order_no)->where('status','01')->first();
+        $items      = OrderItem::where('order_no',$order_no)->get();
+        $couriers   = Courier::all();
         // var_dump($items->products->name);
 
         return view('inventory.orders.order-delivery-form',[ 'order' => $order, 'items' => $items, 'couriers' => $couriers]);
@@ -106,12 +106,12 @@ class OrderController extends Controller
         $delivery_no = (new GlobalNumberRange)->generate_orderno("DO");
 
 			$data = [
-				'order_id'	=> $order_no,
-                'delivery_number'	=> $delivery_no['data'],
-                'courier_id' => $request->get('courier_id') ? $request->get('courier_id') : "",
-                'courier_consignment' => 	$request->get('consignment_note') ? $request->get('consignment_note') : "",		
-				'created_by'	=> Auth::user()->id,
-				'created_at'	=> Carbon::now(new \DateTimeZone('Asia/Kuala_Lumpur'))
+				'order_id'	           => $order_no,
+                'delivery_number'	   => $delivery_no['data'],
+                'courier_id'           => $request->get('courier_id') ? $request->get('courier_id') : "",
+                'courier_consignment'  => 	$request->get('consignment_note') ? $request->get('consignment_note') : "",		
+				'created_by'	       => Auth::user()->id,
+				'created_at'	       => Carbon::now(new \DateTimeZone('Asia/Kuala_Lumpur'))
             ];
 
             $delivery = new Delivery($data);
@@ -124,13 +124,15 @@ class OrderController extends Controller
                     $trimmed_serial = explode("\n",$request->get('serial_no')[$x]);
     
                     foreach($trimmed_serial as $serial_number){
+                        
                         $serial_number = preg_replace('/\s+/', '', $serial_number);
+                        
                         if($serial_number != ""){
                             $data_item = [
-                                'delivery_id' => $delivery_id,
-                                'product_id'  => $request->get('item_id')[$x],
-                                'barcode'  => $serial_number,
-                                'quantity' => $request->get('quantity')[$x],
+                                'delivery_id'   => $delivery_id,
+                                'product_id'    => $request->get('item_id')[$x],
+                                'barcode'       => $serial_number,
+                                'quantity'      => $request->get('quantity')[$x],
                         ];
                         //update to stock
                         try{
