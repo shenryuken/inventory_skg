@@ -51,15 +51,6 @@ class InventoryController extends Controller
         $total_stock        = StockItem::sum('quantity');
         $total_product      = Product::where('type',1)->count();
 
-        
-        
-        
-        
-        
-
-        
-
-
         $data = [
             'to_be_processed'   => $to_be_processed,
             'to_be_shipped'     => $to_be_shipped,

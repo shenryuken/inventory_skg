@@ -301,6 +301,7 @@ class ProductUserController extends Controller{
 
 							$package_id = $row->package_id;
 							$package 	= $productdata->where('id', $package_id)->first();
+							
 							$productArr[$package['id']] = $package;
 							
 							$price_wm2 		= $package['price_wm'];
@@ -363,6 +364,7 @@ class ProductUserController extends Controller{
 											->where('status',1)
 											->orderBy('id', 'desc')->first();
 				if($promotion){
+					
 					$data['typename'] = $data['typename'] . " Promotion";
 					#price after gst
 					$price_wm 		= $promotion['price_wm'];
