@@ -31,10 +31,10 @@ class QuantitytypeController extends Controller
 	public function listing(){
 		$quantitytypedata = New QuantityType;
 		$data = array(
-			'counttype' => $quantitytypedata->count(),
-			'startcount' => 0,
-			'typeArr' => $quantitytypedata->orderBy('id', 'desc')->paginate(20),
-			'status' => $this->statusArr,
+			'counttype' 	=> $quantitytypedata->count(),
+			'startcount' 	=> 0,
+			'typeArr' 		=> $quantitytypedata->orderBy('id', 'desc')->paginate(20),
+			'status' 		=> $this->statusArr,
 		);
 		return view('inventory/configuration/quantitytype_listing',$data);
     }
@@ -43,13 +43,15 @@ class QuantitytypeController extends Controller
 		if($x == '' || @unserialize(base64_decode($x)) == false)
 			return redirect('inventory/setting/quantitytype');
 			
-		$datadecode = unserialize(base64_decode($x));
-		$search = isset($datadecode['search']) ? $datadecode['search'] : '';
-		$search_status = isset($datadecode['search_status']) ? $datadecode['search_status'] : '';
+		$datadecode 	= unserialize(base64_decode($x));
+		$search 		= isset($datadecode['search']) ? $datadecode['search'] : '';
+		$search_status 	= isset($datadecode['search_status']) ? $datadecode['search_status'] : '';
+		
 		if($search == '' && $search_status == '')
 			return redirect('inventory/setting/quantitytype');
 		
 		$quantitytypedata = New QuantityType;
+		
 		if($search != ''){
 			$quantitytypedata = $quantitytypedata->where(function ($q) use($search){
 											$q->where('type','LIKE','%'. $search .'%')
@@ -59,29 +61,30 @@ class QuantitytypeController extends Controller
 		if($search_status != '')
 			$quantitytypedata = $quantitytypedata->where('status',$search_status);
 			
-		$counttype = $quantitytypedata->count();
-		$typeArr = $quantitytypedata->orderBy('id', 'desc')->paginate(20);
+		$counttype 	= $quantitytypedata->count();
+		$typeArr 	= $quantitytypedata->orderBy('id', 'desc')->paginate(20);
 		
 		$data = array(
-			'counttype' => $counttype,
-			'startcount' => 0,
-			'typeArr' => $typeArr,
-			'status' => $this->statusArr,
-			'search' => $search,
+			'counttype' 	=> $counttype,
+			'startcount' 	=> 0,
+			'typeArr' 		=> $typeArr,
+			'status' 		=> $this->statusArr,
+			'search' 		=> $search,
 			'search_status' => $search_status,
 		);
         return view('inventory/configuration/quantitytype_listing',$data);
     }
 	
 	public function form_search(Request $postdata){
-		$search = trim($postdata->input("search"));
-		$search_status = trim($postdata->input("search_status"));
+		
+		$search 		= trim($postdata->input("search"));
+		$search_status 	= trim($postdata->input("search_status"));
 		
 		if($search == '' && $search_status == '')
 			return redirect('inventory/setting/quantitytype');
 			
 		$rowdata = array(
-			'search' => $search,
+			'search' 		=> $search,
 			'search_status' => $search_status,
 		);
 		
@@ -91,16 +94,19 @@ class QuantitytypeController extends Controller
     }
 	
     public function save(Request $postdata){
+
 		$quantitytypedata = New QuantityType;
+		
 		$data = array(
-			'type' => strtoupper(trim($postdata->input("type"))),
-			'remarks' => $postdata->input("remarks") != null ? $postdata->input("remarks") : '',
-			'status' => $postdata->input("status") != null ? $postdata->input("status") : '1',
-			'updated_by' => Auth::user()->id,
-			'updated_at' => date('Y-m-d H:i:s'),
+			'type' 		=> strtoupper(trim($postdata->input("type"))),
+			'remarks' 	=> $postdata->input("remarks") != null ? $postdata->input("remarks") : '',
+			'status' 	=> $postdata->input("status") != null ? $postdata->input("status") : '1',
+			'updated_by'=> Auth::user()->id,
+			'updated_at'=> date('Y-m-d H:i:s'),
 		);
 			
 		$base64 = $postdata->input("base64");
+		
 		if($base64 == '' || @unserialize(base64_decode($base64)) == false){
 			#insert new Quantity Type
 			$data['created_by'] = Auth::user()->id;
@@ -112,8 +118,8 @@ class QuantitytypeController extends Controller
 		else{
 			# update Quantity Type
 			$datadecode = unserialize(base64_decode($base64));
-			$selectid = isset($datadecode['selectid']) ? $datadecode['selectid'] : 0;
-			$search = isset($datadecode['search']) ? $datadecode['search'] : '';
+			$selectid 	= isset($datadecode['selectid']) ? $datadecode['selectid'] : 0;
+			$search 	= isset($datadecode['search']) ? $datadecode['search'] : '';
 			
 			$quantitytypedata->where('id',$selectid)->update($data);
 			if($search != '')
@@ -124,12 +130,15 @@ class QuantitytypeController extends Controller
 	}
 
     public function delete($data = ''){
+
 		if(@unserialize(base64_decode($data)) == true){
-			$quantitytypedata = New QuantityType;
-			$datadecode = unserialize(base64_decode($data));
-			$selectid = isset($datadecode['selectid']) ? $datadecode['selectid'] : 0;
+
+			$quantitytypedata 	= New QuantityType;
+			$datadecode 		= unserialize(base64_decode($data));
+			$selectid 			= isset($datadecode['selectid']) ? $datadecode['selectid'] : 0;
 			
 			$checkquantitytype = $quantitytypedata->where('id', $selectid)->first();
+			
 			if($checkquantitytype == false)
 				return redirect('inventory/setting/quantitytype')->with("errorid"," Data not found");
 			

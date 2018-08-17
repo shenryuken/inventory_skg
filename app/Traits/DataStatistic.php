@@ -1,15 +1,15 @@
 <?php namespace App\Traits;
 
 use App\User;
-use App\Sale;
 
 use App\Models\Invoice;
 use App\Models\Sale;
 use App\Models\Wallet;
 use App\Models\Store;
 use App\Models\UserPurchase;
+use App\Models\UserBonus;
 use App\Models\Product;
-use App\Models\Stock; 
+use App\Models\StockItem; 
 
 use Validator;
 use Session;
@@ -17,13 +17,13 @@ use Carbon\Carbon;
 use DB;
 use Mail;
 
-trait DataStatistic()
+trait DataStatistic
 {
     public function getUserStats()
     {
         $date 		= Carbon::now();
         $startDate 	= Carbon::now()->startOfWeek()->format('Y/m/d');
-        $endDate = $date = Carbon::now()->endOfWeek()->format('Y/m/d');
+        $endDate    = $date = Carbon::now()->endOfWeek()->format('Y/m/d');
 
         $users                   = User::count();
         $customers               = User::where('rank_id',1)->count();
@@ -110,9 +110,10 @@ trait DataStatistic()
         foreach ($products as $product) {
             $data = [
              'y'       => $product->name,
-             'Sold'    => Stock::where('product_id', $product->id)->where('status', 'Sold')->count(),
-             'Stock'   => $product->stocks->count(),
-             'Returned'=> $product->returnGoods->count()
+             //'Sold'    => Stock::where('product_id', $product->id)->where('status', 'Sold')->count(), //original code before merge
+             'Sold'    => StockItem::where('product_id', $product->id)->where('status', 'Sold')->count(),
+             'Stock'   => count($product->stocks),
+             'Returned'=> count($product->returnGoods)
             ];
 
             $stats[] = $data;
