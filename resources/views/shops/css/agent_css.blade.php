@@ -365,7 +365,7 @@
 }
 
 
-ul > li{margin-right:25px;font-weight:lighter;cursor:pointer}
+/*ul > li{margin-right:25px;font-weight:lighter;cursor:pointer}
 li.active{border-bottom:3px solid silver;}
 
 .item-photo{display:flex;justify-content:center;align-items:center;border-right:1px solid #f6f6f6;}
@@ -397,7 +397,7 @@ div.section > div > input {margin:0;padding-left:5px;font-size:10px;padding-righ
     }            
     .section{width:104%;}
     .menu-items{padding-left:0;}
-}
+}*/
 
 
 /*for promotion purpose*/
