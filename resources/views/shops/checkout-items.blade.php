@@ -117,13 +117,13 @@
                                         <div class="form-group">
                                             <label class="col-md-3 control-label"> Name </label>
                                             <div class="col-md-9">        
-                                                <input type="text" class="form-control agent-name" id="agent_name" value="" />
+                                                <input type="text" class="form-control contect-name" id="contect-name" value="" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-md-3 control-label"> Contect No. </label>
                                             <div class="col-md-9">
-                                                <input type="text" class="form-control agent-username" id="agent_username" value="" />   
+                                                <input type="text" class="form-control contect-no" id="contect-no" value="" />   
                                             </div>
                                         </div>
                                     </div>
@@ -310,8 +310,10 @@
         var total_price = "{{ $returnData['grandTotalPrice'] }}";
         var shipping_fee = "{{ $returnData['shippingPrice'] }}";
         var delivery_type = "{{ $returnData['deliveryType'] }}";
+        var name = $('#contect-name').val();
+        var contect_no = $('#contect-no').val();
 
-        console.log(agent_id,shipping_id, billing_id,total_price,shipping_fee);
+        console.log(agent_id,shipping_id, billing_id,total_price,shipping_fee,name,contect_no);
 
          var data = {
 
@@ -321,7 +323,9 @@
             billing_id : billing_id,
             total_price : total_price,
             shipping_fee : shipping_fee,
-            delivery_type : delivery_type
+            delivery_type : delivery_type,
+            name : name,
+            contect_no : contect_no
         };
 
         $.ajax({

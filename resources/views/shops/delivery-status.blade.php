@@ -26,16 +26,19 @@
                     <div class="row">
                         <div class="col-md-11">
                             <div class="col-md-6">
+                                
                                 <p><span id="form-title"><h4>Delivery Type : {{ $orderHdr->type_description }} </h4></span></p>
                                 <p><span id="form-title">Purchase Order No. : {{ $orderHdr->order_no }} </span></p>
                                 <p><span id="form-title">Purchase Date : {{ $orderHdr->purchase_date }} </span></p>
+                                <p><span id="form-title">Name. : {{ $orderHdr->name }} </span></p>
+                                <p><span id="form-title">Contect Number : {{ $orderHdr->contect_no }} </span></p>
                             </div>
                         </div>
                         <div class="container cart-list col-md-12" style="margin-top:0px;">
                             <div class="row cart-row">
                                 <div class="col-sm-12 col-md-12">
                                     <div class="wizard">
-                                        <ul class="steps_4 anchor">
+                                        <ul class="steps_{{ count($data) }} anchor">
                                             @foreach($data as $k => $v)
                                             <li>
                                                 <a href="#step-1" class="" id="status-{{ $v['status'] }}" isdone="1" rel="{{ $v['sequence'] }}">
