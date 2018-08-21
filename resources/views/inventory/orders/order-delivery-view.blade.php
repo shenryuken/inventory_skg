@@ -30,9 +30,12 @@
                     <button class="btn pull-right" onclick="printElem('printed_area')"><i class="fa fa-print"></i> Print </a></button>
                 </div>
                 @if($delivery)
-            <div id="printed_area" class="panel-body panel-body-pricing">               
-                    <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG(isset($delivery->delivery_number) ? $delivery->delivery_number : "", "C93") }}" alt="barcode"   />
-                    {{-- {!! DNS1D::getBarcodeSVG($order->order_no, "C93") !!} --}}
+                    
+            <div id="printed_area" class="panel-body panel-body-pricing">  
+                    <div class="row">
+                            <img class="pull-right" src="data:image/png;base64,{{ DNS1D::getBarcodePNG(isset($delivery->delivery_number) ? $delivery->delivery_number : "", "C93")  }}" alt="barcode"   />
+                        </div>             
+                    
                     <h1>Order : <strong style="text-transform: uppercase;">#{{ isset($delivery->delivery_number) ? $delivery->delivery_number : ""}}</strong></h1>  
                 
 
@@ -66,8 +69,8 @@
                             @foreach($items as $item)
                             <tr>
                                 <td>{{ isset($item->products->name) ? $item->products->name : "" }}</td>
-                                <td>{{ isset($item->products->price_wm) ? $item->products->price_wm : "" }}</td>
-                                <td>{{ isset($item->product_qty) ? $item->product_qty : "" }}</td>
+                                <td>RM(WM){{ isset($item->products->price_wm) ? $item->products->price_wm : "" }}</td>
+                                <td>{{ isset($item->quantity) ? $item->quantity : "" }}</td>
                             </tr>
                             @endforeach
                     </tbody>

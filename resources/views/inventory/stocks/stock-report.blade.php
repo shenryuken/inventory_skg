@@ -37,7 +37,7 @@
 
                         <div class="panel-body">
                                                  <div class="table-responsive">
-                                                     <table id="stock_bal_report" class="table datatable">
+                                                     <table id="stock_bal_report" class="table datatable table-bordered">
                                                          <thead>
                                                              <tr>
                                                                  <th>Date</th>
@@ -57,11 +57,11 @@
                                                              @endforeach
                                                             </tbody>
                                                         <tfoot>
-                                                            <tr>
+                                                            <tr style="background-color: gray;">
                                                                 <td><strong>Total</strong></td>
                                                                 <td></td>
-                                                                <td>{{ $stock_in_total }}</td>
-                                                                <td>{{ $stock_out_total }}</td>
+                                                                <td><strong>{{ $stock_in_total }}</strong></td>
+                                                                <td><strong>{{ $stock_out_total }}</strong></td>
                                                             </tr>
                                                         </tfoot>
                                                      </table>
