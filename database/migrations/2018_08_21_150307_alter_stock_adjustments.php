@@ -15,7 +15,7 @@ class AlterStockAdjustments extends Migration
     {
         Schema::table('stock_adjustments', function (Blueprint $table) {
             //
-            $table->date('adjustment_date')-after('id');
+            $table->date('adjustment_date')->after('id');
         });
     }
 
