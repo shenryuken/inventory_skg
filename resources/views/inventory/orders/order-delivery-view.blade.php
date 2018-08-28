@@ -33,7 +33,7 @@
                     
             <div id="printed_area" class="panel-body panel-body-pricing">  
                     <div class="row">
-                            <img class="pull-right" src="data:image/png;base64,{{ DNS1D::getBarcodePNG(isset($delivery->delivery_number) ? $delivery->delivery_number : "", "C93")  }}" alt="barcode"   />
+                            <img class="pull-right" src="data:image/png;base64,{{ DNS1D::getBarcodePNG(isset($delivery->delivery_number) ? str_replace("DO","",$delivery->delivery_number) : "", "C93")  }}" alt="barcode"   />
                         </div>             
                     
                     <h1>Order : <strong style="text-transform: uppercase;">#{{ isset($delivery->delivery_number) ? $delivery->delivery_number : ""}}</strong></h1>  
