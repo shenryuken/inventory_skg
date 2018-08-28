@@ -41,6 +41,7 @@
                                                          <thead>
                                                              <tr>
                                                                  <th>Date</th>
+								 <th>Product</th>
                                                                  <th>Description</th>
                                                                  <th>Stock In</th>
                                                                  <th>Stock Out</th>
@@ -50,7 +51,8 @@
                                                              @foreach($reports as $report )
                                                                 <tr>
                                                                     <td>{{ $report['date'] }}</td>
-                                                                    <td>{{ $report['description'] }}</td>
+								    <td></td>
+                                                                    <td>{{ $report['description'] }}</td>								    
                                                                     <td>{{ $report['stock_in'] }}</td>
                                                                     <td>{{ $report['stock_out'] }}</td>
                                                                 </tr>
