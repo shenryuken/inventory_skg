@@ -53,7 +53,7 @@ textarea {
                                     </div>
                                     <div class="actions pull-right">
                                             <a href="#" class="btn btn-default  btn-sm btn-circle" title="Check Barcode" data-toggle="modal" data-target="#barcode_checker">
-                                                <i class="fa fa-search"></i> Check Barcode </a>
+                                                <i class="fa fa-search"></i> Check Product S/N </a>
                                         </div>
                             </div>
                             <div class="panel-body"> 

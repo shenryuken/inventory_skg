@@ -19,8 +19,8 @@
                         <div class="panel-heading">
                         <h3 class="panel-title">Stock In Listing as {{date('d/m/Y')}}</h3>
                         <div class="actions pull-right">
-                                <a href="{{ url('inventory/stock/barcode/all') }}" class="btn btn-default  btn-sm btn-circle" title="Show All Barcode">
-                                    <i class="fa fa-list"></i> Show All Barcode </a>
+                                <a href="{{ url('inventory/stock/barcode/all') }}" class="btn btn-default  btn-sm btn-circle" title="Show All Products Serial Number">
+                                    <i class="fa fa-list"></i> Show All Product S/N</a>
                         </div>
                         </div>
                         <div class="panel-body panel-body-table">

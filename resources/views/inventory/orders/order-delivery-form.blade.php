@@ -132,7 +132,7 @@
                                 Item
                             </th>
                             <th>
-                                Barcode
+                                Product S/N
                             </th>
                             <th>
                                 Quantity
@@ -247,7 +247,7 @@ modalConfirm(function(confirm){
                                 if(result.status == "01"){
                                    
                                 }else{
-                                    alert('Barcode Not Exist')
+                                    alert('Product S/N Not Exist')
                                     if(split_value.length >= 3){
                                         inputcode.val(split_value[split_value.length-3])
                                     }else{

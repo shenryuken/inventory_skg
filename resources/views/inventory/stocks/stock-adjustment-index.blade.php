@@ -93,7 +93,7 @@
                                 <div class="form-group">
                                          
                                         <div class="col-md-4">
-                                                <label for="Barcode">Barcode</label>                        
+                                                <label for="Barcode">Product S/N</label>                        
                                                 <input type="text" class="form-control" id="input_barcode">
                                         </div>    
                                         <div class="col-md-4">
@@ -227,10 +227,10 @@ $(document).ready(function() {
                                 counter++;
                                 $("#input_quantity").prop('disabled', true);
                                 }else{
-                                    alert('Duplicate Barcode')
+                                    alert('Duplicate Product S/N')
                                 }
                                 }else{
-                                    alert('Barcode Not Exist')
+                                    alert('Product S/N Not Exist')
                                 }
                                 calcTotal()     
                                 

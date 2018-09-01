@@ -1,6 +1,6 @@
 
 @extends('layouts.joli.app')
-@section('title','Barcode Listing')
+@section('title','Product S/N Listing')
 <style>
 #table_listing{
     font-size: 1.2rem;
@@ -14,7 +14,7 @@ textarea {
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb">
 	<li><a href="{{ url('home') }}">Home</a></li>                    
-	<li><a href="{{ url('stock/listing') }}">Barcode Listing</a></li>
+	<li><a href="{{ url('stock/listing') }}">Product S/N Listing</a></li>
 </ul>
 <!-- END BREADCRUMB -->   
 
@@ -44,7 +44,7 @@ textarea {
 
                     <div class="panel panel-default">
                             <div class="panel-heading">
-                            <h3 class="panel-title">Barcode Listing for <strong>{{$product->name}}</strong></h3>
+                            <h3 class="panel-title">Product S/N Listing for <strong>{{$product->name}}</strong></h3>
                             </div>
                             
                             <div class="panel-body">              
@@ -56,7 +56,7 @@ textarea {
                                                         <th width="5px" class="no-sort">No.</th>                                                        
                                                         <th>Stock In Number</th>
                                                         <th>Stock In Date</th>                  
-                                                        <th>Barcode</th>                            
+                                                        <th>Product S/N</th>                            
                                                     </tr>
                                                 </thead>
                                                 <tbody>

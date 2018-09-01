@@ -94,7 +94,7 @@
                                 <div class="form-group">
                                          
                                         <div class="col-md-4">
-                                                <label for="Barcode">Barcode</label>                        
+                                                <label for="Barcode">Product Serial Number</label>                        
                                                 <input type="text" class="form-control" id="input_barcode">
                                         </div>    
                                         <div class="col-md-4">
