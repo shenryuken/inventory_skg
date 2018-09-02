@@ -248,6 +248,16 @@ class OrderController extends Controller
         if($agent_order->isNotEmpty()){
             foreach($agent_order as $k => $order)
             {
+                $street1 = isset($order->shipping_address->street1) ? $order->shipping_address->street1 : "";
+                $street2 = isset($order->shipping_address->street2 ) ? $order->shipping_address->street2  : "";
+                $city = isset($order->shipping_address->city) ? $order->shipping_address->city : "";
+                $state = isset($order->shipping_address->state) ? $order->shipping_address->state : "";
+                $country = isset($order->shipping_address->country) ? $order->shipping_address->country : "";
+                $customer_name = isset($order->name) ? $order->name : "";
+                $tel  = isset($order->contect_no) ? $order->contect_no : "";
+                $poscode = isset($order->shipping_address->poscode) ? $order->shipping_address->poscode : "";
+
+
                 // var_dump($order->shipping_address->street1);die();
                 $pdf = new Fpdf();
                 $pdf::AddPage('L', array($length,$width));
@@ -278,19 +288,19 @@ class OrderController extends Controller
                 ####### part 4 client address #########	
                     $pdf::setY(16+$y4);
                     $pdf::SetX(135+$x4);
-                    $pdf::MultiCell(90, 4,  isset($order->shipping_address->street1) ? $order->shipping_address->street1 : "".' '. isset($order->shipping_address->street2 ) ? $order->shipping_address->street2  : "" .' '.isset($order->shipping_address->city) ? $order->shipping_address->city : "" .' '. isset($order->shipping_address->state) ? $order->shipping_address->state : "" .' '. isset($order->shipping_address->country) ? $order->shipping_address->country : "" , 0,'L', 0);
+                    $pdf::MultiCell(90, 4,  $street1.' '. $street2 .' '.$city .' '. $state .' '. $country , 0,'L', 0);
                 ####### part 5 client name & phone #########	
                     $pdf::setY(37+$y5);
                     $pdf::SetX(145+$x5);
-                    $pdf::Cell(75,4, $order->name,0,0,'L');
+                    $pdf::Cell(75,4, $customer_name,0,0,'L');
                     
                     $pdf::setY(41+$y5);
                     $pdf::SetX(145+$x5);
-                    $pdf::MultiCell(100, 4, 'Mobile No. : '. $order->contect_no, 0,'L', 0); 
+                    $pdf::MultiCell(100, 4, 'Mobile No. : '. $tel, 0,'L', 0); 
                 ####### part 6 client poscode #########	
                     $pdf::setY(41+$y6);
                     $pdf::SetX(215+$x6);
-                    $pdf::Cell(75,4, isset($order->shipping_address->poscode) ? $order->shipping_address->poscode : "",0,0,'L');
+                    $pdf::Cell(75,4, $poscode,0,0,'L');
             }
         }
         return response($pdf::Output(), 200)
