@@ -43,6 +43,7 @@
                 <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h2>Stock Adjustment Form</h2>
+                                    <p>Stock Keeper : {{ isset(Auth::user()->name) ? Auth::user()->name : Auth::user()->email }}</p>
                                     
                                 </div>
                             <form  id="create_adjustment" method="POST" class="form-horizontal" action="{{url('inventory/stock/adjustment/store')}}">
@@ -91,14 +92,21 @@
                     <div class="panel-body">    
                         <div class="form-horizontal">
                                 <div class="form-group">
-                                         
+                                        <div class="col-md-12">
+                                                <p class="text-warning"> Please use appropriate input </p>
+                                        </div>
                                         <div class="col-md-4">
+                                                <div class="has-success has-feedback">
                                                 <label for="Barcode">Product S/N</label>                        
                                                 <input type="text" class="form-control" id="input_barcode">
+                                                <span class="glyphicon glyphicon-barcode form-control-feedback"></span>
+                                            </div>
                                         </div>    
                                         <div class="col-md-4">
+                                                <div class="has-warning">
                                                 <label for="Quantity">Quantity</label>                        
                                                 <input type="number" class="form-control" id="input_quantity">
+                                                </div>
                                         </div>
                                         <div class="col-md-4 hide">
                                                 <label for="Barcode">Upload</label>                        

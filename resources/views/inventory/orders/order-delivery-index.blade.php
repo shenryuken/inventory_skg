@@ -80,7 +80,7 @@ textarea {
                                                 {{-- <td>{{ $order->globalstatus->description }}</td> --}}
                                                 <td>
                                                     {{-- <a href="{{ url('inventory/order/delivery/edit/'.$delivery->delivery_number) }}" class="btn btn-info">Update</a> --}}
-                                                    <a href="{{ url('inventory/order/delivery/view/'.(isset($delivery->delivery_number) ? $delivery->delivery_number : "")) }}" class="btn btn-default">View Order</a>
+                                                    <a href="{{ url('inventory/order/delivery/view/'.(isset($delivery->delivery_number) ? base64_encode($delivery->delivery_number) : "")) }}" class="btn btn-default">View Order</a>
                                                 @if($order_status == '02' || $order_status == '03')
                                                 <form method="post" action="{{ url('inventory/order/delivery/complete')}}">
                                                     {{ csrf_field() }}

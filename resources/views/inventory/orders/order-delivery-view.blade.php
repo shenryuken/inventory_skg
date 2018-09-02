@@ -33,14 +33,17 @@
                     
             <div id="printed_area" class="panel-body panel-body-pricing">  
                     <div class="row">
-                            <img style="float: right!important;" class="pull-right" src="data:image/png;base64,{{ DNS1D::getBarcodePNG(isset($delivery->delivery_number) ? $delivery->delivery_number : "", "C128")  }}" alt="barcode"   />
-                        </div>             
-                    
-                    <h1>Order : <strong style="text-transform: uppercase;">#{{ isset($delivery->delivery_number) ? $delivery->delivery_number : ""}}</strong></h1>  
+                        <img style="float: right!important;" class="pull-right" src="data:image/png;base64,{{ DNS1D::getBarcodePNG(isset($delivery->delivery_number) ? $delivery->delivery_number : "", "C128",1,33,array(1,1,1),true)  }}" alt="barcode"   />
+                         
+                    </div>             
+                        <img src="{{ asset('themes/Joli/img/skgwrldogo.png') }}"  height="50" width="200" alt="skgworld">
+                        <h3>SKG WORLD SDN BHD</h3>
+                        <hr>
+                        <h1 style="text-align: center;">Deliver Order</h1>                          
                 
-
+                <div style="width:50%;float:left">
                 <p><span class="fa fa-caret-right"></span> <strong>Customer:</strong> {{ isset($delivery->salesOrder->user->username) ? $delivery->salesOrder->user->username : "" }}</p>
-                <p><span class="fa fa-caret-right"></span> <strong>Status:</strong> {{ isset($delivery->salesOrder->globalstatus->description) ? $delivery->salesOrder->globalstatus->description : "" }}</p>
+                <p><span class="fa fa-caret-right"></span> <strong>Tel:</strong> {{ isset($delivery->salesOrder->tel) ? $delivery->salesOrder->tel : "" }}</p>                
                 <p><span class="fa fa-caret-right"></span> <strong>Purchase Date:</strong> {{ Carbon\Carbon::parse(isset($delivery->salesOrder->purchase_date) ?$delivery->salesOrder->purchase_date: "")->format('d/m/Y') }}</p>
                 
                 <p><span class="fa fa-caret-right"></span> <strong>Bill To:</strong> {{ isset($delivery->salesOrder->billing_address->street1) ? $delivery->salesOrder->billing_address->street1 : "" }}{{ isset($delivery->salesOrder->billing_address->street2) ? $delivery->salesOrder->billing_address->street2 : "" }},
@@ -57,6 +60,14 @@
                     {{ isset($delivery->salesOrder->shipping_address->country) ? $delivery->salesOrder->shipping_address->country : "" }}                                                                    
                 </p>
 
+                
+            </div>
+            <div style="width:50%;float:right;">
+                    <p><span class="fa fa-caret-right"></span> <strong>Delivery Order:</strong>#{{ isset($delivery->delivery_number) ? $delivery->delivery_number : ""}}</p>
+                    <p><span class="fa fa-caret-right"></span> <strong>Consignment Note (C/N):</strong> {{ isset($delivery->courier_consignment) ? $delivery->courier_consignment : "" }}</p>
+                    <p><span class="fa fa-caret-right"></span> <strong>Courier (C/N):</strong> {{ isset($delivery->courier->courier_name) ? $delivery->courier->courier_name : "" }}</p>
+                    <p><span class="fa fa-caret-right"></span> <strong>Generate Date:</strong> {{ isset($delivery->created_at) ? Carbon\Carbon::parse($delivery->created_at)->format('Y/m/d H:i:s') : "" }}</p>
+            </div>
                 <table class="table">
                     <thead>
                         <tr>
@@ -78,7 +89,7 @@
                 {{-- <p><span class="fa fa-caret-right"></span> <strong>Total Items: {{ $order->total_items }}</strong></p>
                 <p><span class="fa fa-caret-right"></span> <strong>Total Price: MYR {{ $order->invoice->total }}</strong></p>
                 <p><span class="fa fa-caret-right"></span> <strong>Delivery Price: MYR {{ $order->invoice->delivery_cost }}</strong></p> --}}
-
+               
             </div>
             @else
             <div class="alert alert-danger">

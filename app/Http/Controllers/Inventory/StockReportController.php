@@ -23,6 +23,7 @@ use App\Models\Stock;
 use App\Models\StockItem;
 use App\Models\StockAdjustment;
 use Datatables;
+use Log;
 
 class StockReportController extends Controller
 {
@@ -55,13 +56,22 @@ class StockReportController extends Controller
 
                 $stock_out      = "";
                 $stock_in_total = $stock_in_total + ($v->StockItem->where('status','01')->sum('quantity'));
+
+                $product_name = isset($v->StockItem->first()->products->name) ? $v->StockItem->first()->products->name : "";
+                $product_code = isset($v->StockItem->first()->products->code) ? $v->StockItem->first()->products->code : "";
+                $supplier_name = isset($v->StockItem->first()->suppliers->company_name) ? $v->StockItem->first()->suppliers->company_name : "";
+                $supplier_code = isset($v->StockItem->first()->suppliers->supplier_code) ? $v->StockItem->first()->suppliers->supplier_code : "";
                 
 
                 $reports[] = [
                     'date'          => Carbon::parse($v->stock_date)->format('d/m/Y'),
                     'description'   => $v->description,
                     'stock_in'      => $stock_in,
-                    'stock_out'     => $stock_out
+                    'stock_out'     => $stock_out,
+                    'product_name'  => $product_name,
+                    'product_code'  => $product_code,
+                    'supplier_name' => $supplier_name,
+                    'supplier_code' => $supplier_code
                 ];
             }
 
@@ -70,14 +80,24 @@ class StockReportController extends Controller
                 $stock_adj_in   = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','03')->sum('quantity') : "";
                 $stock_adj_out  = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','04')->sum('quantity') : "";
 
+
                 $stock_in_total     = $stock_in_total + ($b->StockItem->where('status','03')->sum('quantity'));
                 $stock_out_total    = $stock_out_total + ($b->StockItem->where('status','04')->sum('quantity'));
+
+                $product_name = isset($b->StockItem->first()->products->name) ? $b->StockItem->first()->products->name : "";
+                $product_code = isset($b->StockItem->first()->products->code) ? $b->StockItem->first()->products->code : "";
+                $supplier_name = isset($b->StockItem->first()->suppliers->company_name) ? $b->StockItem->first()->suppliers->company_name : "";
+                $supplier_code = isset($b->StockItem->first()->suppliers->supplier_code) ? $b->StockItem->first()->suppliers->supplier_code : "";
 
                 $reports[] = [
                     'date'          => Carbon::parse($b->stock_date)->format('d/m/Y'),
                     'description'   => $b->description,
                     'stock_out'     => $stock_adj_in,
                     'stock_in'      => $stock_adj_out,
+                    'product_name'  => $product_name,
+                    'product_code'  => $product_code,
+                    'supplier_name' => $supplier_name,
+                    'supplier_code' => $supplier_code
                 ];
             }
 

@@ -13,6 +13,9 @@ use App\Models\StockItem;
 use Auth;
 use Carbon\Carbon;
 use Session;
+use Fpdf;
+use Storage;
+use Response;
 use App\Classes\GlobalNumberRange;
 
 
@@ -58,6 +61,7 @@ class OrderController extends Controller
 
     public function deliveryDetail($order_no = "")
     {
+        $order_no = base64_decode($order_no);
         $delivery   = [];
         $items      = [];
 
@@ -84,6 +88,7 @@ class OrderController extends Controller
 
     public function deliveryCreate($order_no)
     {
+        $order_no = base64_decode($order_no);
         $order      = OrderHdr::where('order_no',$order_no)->where('status','01')->first();
         $items      = OrderItem::where('order_no',$order_no)->get();
         $couriers   = Courier::all();
@@ -170,6 +175,22 @@ class OrderController extends Controller
 
         return redirect('inventory/order/delivery/');
 
+
+    }
+
+    public function deliveryOrderPDF($order_no){
+        $order_no = base64_decode($order_no);
+
+            Fpdf::AddPage();
+            Fpdf::SetFont('Arial', 'B', 18);
+            Fpdf::Image('http://www.skgworld.us/skg/image/logo_skg_top.png');
+            Fpdf::Cell(0,10,"Delivery Order",1,"","C");
+            Fpdf::Ln();
+            Fpdf::Cell(50, 25,  $order_no);
+            return response(Fpdf::Output($order_no.'.pdf','I',true), 200)
+            ->header('Content-Type', 'application/pdf');   
+            
+        
 
     }
 }

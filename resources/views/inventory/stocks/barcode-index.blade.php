@@ -47,7 +47,8 @@ textarea {
                             <h3 class="panel-title">Product S/N Listing for <strong>{{$product->name}}</strong></h3>
                             </div>
                             
-                            <div class="panel-body">              
+                            <div class="panel-body"> 
+                                        
                                             <p>Total listing: <b>{{ count($barcodes) }}</b></p>
                                         <div class="table-responsive">
                                             <table class="table table-striped datatable" id="table_listing">
@@ -73,9 +74,6 @@ textarea {
                                                         </tr>
                                                     @endforeach
                                                 @else
-                                                <tr>
-                                                    <td colspan="9" class="text-center"> No Data Found <br />
-                                                </tr>
                                                 @endif
                                                 </tbody>
                                             </table>
@@ -88,16 +86,22 @@ textarea {
 
 
 </div>
+@endsection
+{{-- page level scripts --}}
+@section('footer_scripts')
+<script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
       <script type='text/javascript' src="{!! asset('joli/js/plugins/validationengine/jquery.validationEngine.js') !!}"></script>   
       <script>
             $(document).ready(function() {
-                $.fn.dataTable.ext.errMode = 'none';
+
                 var t = $('.datatable').DataTable({
                     "order": [],
                     "columnDefs": [
                                 { targets: 'no-sort', orderable: false }
                                 ]
                 });
+
+                
             })
                
 

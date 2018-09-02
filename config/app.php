@@ -163,11 +163,13 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Codedge\Fpdf\FpdfServiceProvider::class, // [1]
 
         /*
          * Package Service Providers...
          */
         Milon\Barcode\BarcodeServiceProvider::class,
+        NahidulHasan\Html2pdf\Html2pdfServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -177,6 +179,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        
 
     ],
 
@@ -228,6 +231,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
         'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
+        'Fpdf' => Codedge\Fpdf\Facades\Fpdf::class, // [2]
+        'Pdf'  => NahidulHasan\Html2pdf\Facades\Pdf::class,
 
     ],
 

@@ -115,7 +115,7 @@
         <a href="javascript:;"><span class="fa fa-puzzle-piece"></span> Product </a>
         <ul>
             <li class="<?php echo in_array(Request::segment(1) . '/' . Request::segment(2) . '/' . Request::segment(3), array("inventory/product/listing","inventory/product/search")) ? "active" : "" ; ?>">
-                <a href="{{ url('inventory/product/listing') }}"><span class="fa fa-list-alt"></span> Products Listing </a>
+                <a href="{{ url('inventory/product/listing') }}"><span class="fa fa-list-alt"></span> Product Listing </a>
             </li>
             <li class="<?php echo in_array(Request::segment(1) . '/' . Request::segment(2) . '/' . Request::segment(3), array("inventory/product/form","inventory/product/edit","inventory/product/view")) ? "active" : "" ; ?>">
                 <a href="{{ url('inventory/product/form') }}"><span class="fa fa-plus"></span> Create Product Detail</a>
@@ -132,7 +132,7 @@
         <a href="{{ url('supplier/supplier/list') }}"><span class="fa fa-truck"></span> <span class="xn-text">Supplier</span></a>
         <ul>
             <li class="<?php echo in_array(Request::segment(1).'/'.Request::segment(2). '/' .Request::segment(3), array("inventory/supplier/list")) ? "active" : "" ; ?>">
-                <a href="{{ url('inventory/supplier/list') }}"><span class="fa fa-puzzle-piece"></span>Supplier Lists</a>
+                <a href="{{ url('inventory/supplier/list') }}"><span class="fa fa-puzzle-piece"></span>Supplier Listing</a>
             </li>
            
         </ul>
