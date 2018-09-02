@@ -193,4 +193,108 @@ class OrderController extends Controller
         
 
     }
+
+    public function gdexDocket()
+    {
+        $agent_order = OrderHdr::where('status','01')->get();
+
+        
+        ### Docket Template Configuration ###
+        #~by AwakComey
+        #~to adjust docket part position, setting X-axis & Y-axis value
+        # x-axis will be left or right
+        # y-axis will be up and down
+
+
+        /********************DOCKET GDEX EXAMPLE 2018 **************************/
+
+        ############################################################################
+        #									  |								       #
+        #      PART 1 COMPANY NAME            |     PART 4 DELIVERY ADD            #
+        #      COMPANY CONTACT                |     ADDRESS CONT        	 	   #
+        #      COMPANY EMAIL                  |   				                   #
+        #									  |		  PART 5				 	   #
+        #							 PART 3	  |       ATT TO		  PART 6	   #
+        #      PART 2 PHONE No		 POSCODE  |       PHONE NO        POSCODE      #
+        #--------------------------------------------------------------------------#
+        #																		   #
+        #																	 	   #
+        #																		   #
+        #                                				                           #
+        ############################################################################
+
+        ##### DOCKET SIZE (CM) #######
+        $width =242; $length = 101;
+
+        ##### Part 1 #######
+        $x1 =0; $y1 = 0;
+
+        ##### Part 2 #######
+        $x2 =0; $y2 = 0;
+
+        ##### Part 3 #######
+        $x3 =0; $y3 = 0;
+
+        ##### Part 4 #######
+        $x4 =0; $y4 = 0;
+
+        ##### Part 5 #######
+        $x5 =0; $y5 = 0;
+
+        ##### Part 6 #######
+        $x6 =0; $y6 = 0;
+        ####################
+        
+        if($agent_order->isNotEmpty()){
+            foreach($agent_order as $k => $order)
+            {
+                // var_dump($order->shipping_address->street1);die();
+                $pdf = new Fpdf();
+                $pdf::AddPage('L', array($length,$width));
+                $pdf::SetAutoPageBreak(false,0);
+                $pdf::setFont('Arial','',10);
+
+                ####### part 1 sender address #########	
+                    $pdf::setXY(20+$x1,16+$y1);
+                    $pdf::cell(98,10,'SKG WORLD (SA23456-T)',0,1,'L');
+                    $pdf::setXY(20+$x1,22+$y1);
+                    $pdf::setFont('Arial','',9);
+                    $pdf::Cell(98,4,'ADDRESS 1,',0,0,'L');
+                    $pdf::setXY(20+$x1,25+$y1);
+                    $pdf::Cell(98,4,'ADDRESS 2 CITY, Selangor.',0,0,'L');
+                    $pdf::setXY(20+$x1,28+$y1);
+                    $pdf::Cell(98,5,'E-Mail : sale@company.com ',0,1,'L');
+                    $pdf::setXY(20+$x1,31+$y1);
+                    $pdf::Cell(98,5,'Website : www.company.com',0,1,'L');
+                    
+                ####### part 2 sender phone #########		
+                    $pdf::setXY(20+$x2,41+$y2);
+                    $pdf::Cell(98,4,'Tel : +603-3341 1337 / +6017 4747 300',0,0,'L');
+                ####### part 3 sender poscode #########		
+                    $pdf::setY(41+$y3);
+                    $pdf::SetX(100+$x3);
+                    $pdf::Cell(98,4,'45500',0,1,'L');
+
+                ####### part 4 client address #########	
+                    $pdf::setY(16+$y4);
+                    $pdf::SetX(135+$x4);
+                    $pdf::MultiCell(90, 4,  $order->shipping_address->street1 .' '. $order->shipping_address->street2.' '.$order->shipping_address->city .' '. $order->shipping_address->state .' '. $order->shipping_address->country , 0,'L', 0);
+                ####### part 5 client name & phone #########	
+                    $pdf::setY(37+$y5);
+                    $pdf::SetX(145+$x5);
+                    $pdf::Cell(75,4, $order->name,0,0,'L');
+                    
+                    $pdf::setY(41+$y5);
+                    $pdf::SetX(145+$x5);
+                    $pdf::MultiCell(100, 4, 'Mobile No. : '. $order->contect_no, 0,'L', 0); 
+                ####### part 6 client poscode #########	
+                    $pdf::setY(41+$y6);
+                    $pdf::SetX(215+$x6);
+                    $pdf::Cell(75,4, $order->shipping_address->poscode,0,0,'L');
+            }
+        }
+        return response($pdf::Output(), 200)
+        ->header('Content-Type', 'application/pdf');   
+                
+        }
 }

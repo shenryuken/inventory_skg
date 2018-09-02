@@ -46,7 +46,7 @@ textarea {
                             <div class="panel-heading">
                                     <h3 class="panel-title">Sales Order Listing</h3>
                                     <div class="pull-right">
-                                            <button  class="btn btn-warning">Print C/N</button>
+                                            <a href="{{url('print/docket-gdex') }} "  class="btn btn-warning">Print C/N</a>
                                    
                                     <div class="btn-group pull-right">
                                         <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i> Export Data</button>
@@ -85,7 +85,7 @@ textarea {
                                                 <td>{{ Carbon\Carbon::parse($order->purchase_date)->format('d/m/Y') }}</td>                                                
                                                 <td>{{ isset($order->user->username) ? $order->user->username:"" }}</td>
                                                 <td>{{ isset($order->globalstatus->description) ? $order->globalstatus->description:"" }}</td>
-                                                <td>{{ isset($order->billing_address->city) ? $order->billing_address->city:"" }}</td>
+                                                <td>{{ isset($order->shipping_address->city) ? $order->shipping_address->city:"" }}</td>
                                                 <td>{{ isset($order->deliveryType->type_description) ? $order->deliveryType->type_description:"" }}</td>
                                                 <td><a href="{{ url('inventory/order/delivery/create/'.base64_encode($order->order_no)) }}" class="btn btn-info">Process Order</a>
                                                     {{-- <a href="{{ url('inventory/order/sales/view/'.$order->order_no) }}" class="btn btn-default">Invoice</a></td> --}}
