@@ -278,7 +278,7 @@ class OrderController extends Controller
                 ####### part 4 client address #########	
                     $pdf::setY(16+$y4);
                     $pdf::SetX(135+$x4);
-                    $pdf::MultiCell(90, 4,  $order->shipping_address->street1 .' '. $order->shipping_address->street2.' '.$order->shipping_address->city .' '. $order->shipping_address->state .' '. $order->shipping_address->country , 0,'L', 0);
+                    $pdf::MultiCell(90, 4,  isset($order->shipping_address->street1) ? $order->shipping_address->street1 : "".' '. isset($order->shipping_address->street2 ) ? $order->shipping_address->street2  : "" .' '.isset($order->shipping_address->city) ? $order->shipping_address->city : "" .' '. isset($order->shipping_address->state) ? $order->shipping_address->state : "" .' '. isset($order->shipping_address->country) ? $order->shipping_address->country : "" , 0,'L', 0);
                 ####### part 5 client name & phone #########	
                     $pdf::setY(37+$y5);
                     $pdf::SetX(145+$x5);
@@ -290,7 +290,7 @@ class OrderController extends Controller
                 ####### part 6 client poscode #########	
                     $pdf::setY(41+$y6);
                     $pdf::SetX(215+$x6);
-                    $pdf::Cell(75,4, $order->shipping_address->poscode,0,0,'L');
+                    $pdf::Cell(75,4, isset($order->shipping_address->poscode) ? $order->shipping_address->poscode : "",0,0,'L');
             }
         }
         return response($pdf::Output(), 200)
