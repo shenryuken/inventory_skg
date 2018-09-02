@@ -49,7 +49,7 @@ class StockReportController extends Controller
 
             $reports = array();
         try{
-            if(count($stocks) > 0){
+            if($stocks->isNotEmpty()){
             foreach($stocks as $k => $v)
             {
                 
@@ -78,7 +78,7 @@ class StockReportController extends Controller
         }
            
 
-            if(count($stock_adjustments) > 0){
+            if($stock_adjustments->isNotEmpty()){
                 foreach($stock_adjustments as $a => $b)
                 {
                     $stock_adj_in   = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','03')->sum('quantity') : "";
