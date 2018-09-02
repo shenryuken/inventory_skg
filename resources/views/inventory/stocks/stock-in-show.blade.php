@@ -46,7 +46,7 @@
                                 <div class="panel-body">
                                     <div class="col-md-6">
                                             <div class="table-responsive">
-                                                    <table class="table table-hover table-bordered" >
+                                                    <table class="table table-hover table-bordered datatable" >
                                                             <thead>
                                                                     <tr>
                                                                        <th>Product name</th>
@@ -77,12 +77,7 @@
 
 </div>
 @endsection
-@section('script')
-<script src="//cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>
-<script src="https://cdn.datatables.net/fixedcolumns/3.2.2/js/dataTables.fixedColumns.min.js"></script>
-<script type="text/javascript" src="{!! asset('joli/js/daterangepicker/moment.min.js') !!}" ></script> 
-<script type="text/javascript" src="{!! asset('joli/js/daterangepicker/daterangepicker.js') !!}" ></script>
+@section('footer_scripts')
+<script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 
 @endsection
