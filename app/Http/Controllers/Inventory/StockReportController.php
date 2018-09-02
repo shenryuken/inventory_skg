@@ -49,6 +49,7 @@ class StockReportController extends Controller
 
             $reports = array();
         try{
+            if(count($stocks) > 0){
             foreach($stocks as $k => $v)
             {
                 
@@ -74,32 +75,38 @@ class StockReportController extends Controller
                     'supplier_code' => $supplier_code
                 ];
             }
+        }
+           
 
-            foreach($stock_adjustments as $a => $b)
-            {
-                $stock_adj_in   = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','03')->sum('quantity') : "";
-                $stock_adj_out  = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','04')->sum('quantity') : "";
+            if(count($stock_adjustments) > 0){
+                foreach($stock_adjustments as $a => $b)
+                {
+                    $stock_adj_in   = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','03')->sum('quantity') : "";
+                    $stock_adj_out  = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','04')->sum('quantity') : "";
+    
+    
+                    $stock_in_total     = $stock_in_total + ($b->StockItem->where('status','03')->sum('quantity'));
+                    $stock_out_total    = $stock_out_total + ($b->StockItem->where('status','04')->sum('quantity'));
+    
+                    $product_name = isset($b->StockItem->first()->products->name) ? $b->StockItem->first()->products->name : "";
+                    $product_code = isset($b->StockItem->first()->products->code) ? $b->StockItem->first()->products->code : "";
+                    $supplier_name = isset($b->StockItem->first()->suppliers->company_name) ? $b->StockItem->first()->suppliers->company_name : "";
+                    $supplier_code = isset($b->StockItem->first()->suppliers->supplier_code) ? $b->StockItem->first()->suppliers->supplier_code : "";
+    
+                    $reports[] = [
+                        'date'          => Carbon::parse($b->stock_date)->format('d/m/Y'),
+                        'description'   => $b->description,
+                        'stock_out'     => $stock_adj_in,
+                        'stock_in'      => $stock_adj_out,
+                        'product_name'  => $product_name,
+                        'product_code'  => $product_code,
+                        'supplier_name' => $supplier_name,
+                        'supplier_code' => $supplier_code
+                    ];
+                }
 
-
-                $stock_in_total     = $stock_in_total + ($b->StockItem->where('status','03')->sum('quantity'));
-                $stock_out_total    = $stock_out_total + ($b->StockItem->where('status','04')->sum('quantity'));
-
-                $product_name = isset($b->StockItem->first()->products->name) ? $b->StockItem->first()->products->name : "";
-                $product_code = isset($b->StockItem->first()->products->code) ? $b->StockItem->first()->products->code : "";
-                $supplier_name = isset($b->StockItem->first()->suppliers->company_name) ? $b->StockItem->first()->suppliers->company_name : "";
-                $supplier_code = isset($b->StockItem->first()->suppliers->supplier_code) ? $b->StockItem->first()->suppliers->supplier_code : "";
-
-                $reports[] = [
-                    'date'          => Carbon::parse($b->stock_date)->format('d/m/Y'),
-                    'description'   => $b->description,
-                    'stock_out'     => $stock_adj_in,
-                    'stock_in'      => $stock_adj_out,
-                    'product_name'  => $product_name,
-                    'product_code'  => $product_code,
-                    'supplier_name' => $supplier_name,
-                    'supplier_code' => $supplier_code
-                ];
             }
+           
 
         }catch(\Exception $e){
             
