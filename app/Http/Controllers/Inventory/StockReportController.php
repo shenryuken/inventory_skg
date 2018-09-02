@@ -48,7 +48,7 @@ class StockReportController extends Controller
         $stock_out_total    = 0;
 
             $reports = array();
-
+        try{
             foreach($stocks as $k => $v)
             {
                 
@@ -100,6 +100,11 @@ class StockReportController extends Controller
                     'supplier_code' => $supplier_code
                 ];
             }
+
+        }catch(\Exception $e){
+            
+        }
+           
 
 
             // return compact('reports');
