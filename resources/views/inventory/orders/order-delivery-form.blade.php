@@ -26,6 +26,30 @@
 {{ csrf_field() }}
 <input type="hidden" name="order_id" value="{{ $order->id }}">
 <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading ui-draggable-handle">
+                  <h3 class="panel-title"><strong>Packer</strong></h3>
+                  <ul class="panel-controls">
+                    <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
+                  </ul>
+                </div>
+                
+                <div class="panel-body">
+                    
+                    <div class="form-group">
+                      <label class="col-xs-2 control-label">Packer's Name: {{ isset(Auth::user()->name) ? Auth::user()->name : Auth::user()->email }} </label>
+                      <div class="col-xs-4">
+                      </div>
+                    </div>
+    
+                  </div>
+                  
+              </div>
+              
+        </div>
+    </div>
+<div class="row">
 	<div class="col-md-12">
 		<div class="panel panel-default">
 		    <div class="panel-heading ui-draggable-handle">
@@ -50,7 +74,7 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="inputPassword3" class="col-xs-2 control-label">Consigment Note</label>
+                  <label for="inputPassword3" class="col-xs-2 control-label">Consigment Note (C/N)</label>
 
                   <div class="col-xs-4">
                     <input class="form-control" name="consignment_note" type="text">
@@ -74,16 +98,24 @@
 	<div class="col-md-12">
 		<div class="panel panel-default">
 		    <div class="panel-heading ui-draggable-handle">
-		      <h3 class="panel-title"><strong>Delivery Pick-Up: #{{ isset($order->order_no) ?  $order->order_no : "" }} </strong></h3>
+		      <h3 class="panel-title"><strong>Create Delivery for Order: #{{ isset($order->order_no) ?  $order->order_no : "" }} </strong></h3>
             </div>
 
             <div class="panel-body">		    
                     <div class="form-group">
                             <input type="text" name="order_no" class="hidden" value="{{ isset($order->id) ?  $order->id : "" }}" readonly>
-                            <label class="col-md-2 control-label">Customer</label>
+                            <label class="col-md-2 control-label">Referer</label>
                             <div class="col-md-4">
                                 <p class="form-control-static">{{ isset($order->user->username) ?  $order->user->username : "" }}</p>
                                 <input class="hidden" value="{{ isset($order->user->id) ?  $order->user->id : "" }}" readonly>
+                            </div>
+                            <label class="col-md-2 control-label">Customer</label>
+                            <div class="col-md-4">
+                                <p class="form-control-static">{{ isset($order->name) ?  $order->name : "" }}</p>
+                            </div>
+                            <label class="col-md-2 control-label">Tel</label>
+                            <div class="col-md-4">                                
+                                <p class="form-control-static">{{ isset($order->contect_no) ?  $order->contect_no : "" }}</p>
                             </div>
                     </div>
                     
@@ -132,7 +164,7 @@
                                 Item
                             </th>
                             <th>
-                                Barcode
+                                Product S/N
                             </th>
                             <th>
                                 Quantity
@@ -201,33 +233,12 @@
     
 <script  type="text/javascript" >
 $(document).ready(function() {
-
-    var modalConfirm = function(callback){
-  
-  $("#btn-confirm").on("click", function(){
-    $("#mi-modal").modal('show');
+    $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
   });
-
-  $("#modal-btn-si").on("click", function(){
-    callback(true);
-    $("#mi-modal").modal('hide');
-  });
-  
-  $("#modal-btn-no").on("click", function(){
-    callback(false);
-    $("#mi-modal").modal('hide');
-  });
-};
-
-modalConfirm(function(confirm){
-  if(confirm){
-    //Acciones si el usuario confirma
-    $("#result").html("CONFIRMADO");
-  }else{
-    //Acciones si el usuario no confirma
-    $("#result").html("NO CONFIRMADO");
-  }
-});
 
 
             $(".input_barcode").keyup(function(event) {
@@ -247,7 +258,7 @@ modalConfirm(function(confirm){
                                 if(result.status == "01"){
                                    
                                 }else{
-                                    alert('Barcode Not Exist')
+                                    alert('Product S/N Not Exist')
                                     if(split_value.length >= 3){
                                         inputcode.val(split_value[split_value.length-3])
                                     }else{

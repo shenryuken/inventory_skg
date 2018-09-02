@@ -51,7 +51,7 @@
                                                                     <tr>
                                                                        <th>Product name</th>
                                                                        <th>Product Code</th>                                                                                              
-                                                                       <th>Barcode</th>
+                                                                       <th>Product S/N</th>
                                                                     </tr>
                                                             </thead>
                                                             <tbody>

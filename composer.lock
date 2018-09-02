@@ -1,11 +1,53 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "cb8c1bd098ddb21d419b5a428421179a",
+    "content-hash": "2f0a83723369fe53079e893d937931ad",
     "packages": [
+        {
+            "name": "codedge/laravel-fpdf",
+            "version": "1.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/codedge/laravel-fpdf.git",
+                "reference": "2d0ca3a04e69a519e6007067a9bbd6d27c220a01"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/codedge/laravel-fpdf/zipball/2d0ca3a04e69a519e6007067a9bbd6d27c220a01",
+                "reference": "2d0ca3a04e69a519e6007067a9bbd6d27c220a01",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "5.*",
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Codedge\\Fpdf\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Holger Lösken",
+                    "email": "holger.loesken@codedge.de"
+                }
+            ],
+            "description": "Laravel 5 package for use with Fpdf. It ships with Fpdf 1.81.",
+            "keywords": [
+                "fpdf",
+                "laravel",
+                "pdf"
+            ],
+            "time": "2017-11-05T00:15:37+00:00"
+        },
         {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "0.1",
@@ -1322,6 +1364,49 @@
                 "schedule"
             ],
             "time": "2017-01-23T04:29:33+00:00"
+        },
+        {
+            "name": "nahidulhasan/html2pdf",
+            "version": "1.2.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nahidulhasan/laravel-html2pdf.git",
+                "reference": "87c7651cb25c285b13e582960a71b38fa32adf03"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nahidulhasan/laravel-html2pdf/zipball/87c7651cb25c285b13e582960a71b38fa32adf03",
+                "reference": "87c7651cb25c285b13e582960a71b38fa32adf03",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "NahidulHasan\\Html2pdf\\Html2pdfServiceProvider"
+                    ],
+                    "aliases": {
+                        "Pdf": "NahidulHasan\\Html2pdf\\Facades\\Pdf"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "NahidulHasan\\Html2pdf\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nahidul Hasan",
+                    "email": "nahidul.cse@gmail.com"
+                }
+            ],
+            "description": "A Simple package for easily generating PDF documents from HTML.This package is specially for laravel but you can use this without laravel.",
+            "time": "2018-06-27T08:03:07+00:00"
         },
         {
             "name": "nesbot/carbon",

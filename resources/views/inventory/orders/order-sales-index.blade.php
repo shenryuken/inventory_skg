@@ -45,6 +45,9 @@ textarea {
                     <div class="panel panel-default">
                             <div class="panel-heading">
                                     <h3 class="panel-title">Sales Order Listing</h3>
+                                    <div class="pull-right">
+                                            <button  class="btn btn-warning">Print C/N</button>
+                                   
                                     <div class="btn-group pull-right">
                                         <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i> Export Data</button>
                                         <ul class="dropdown-menu">
@@ -54,6 +57,10 @@ textarea {
                                             <li><a href="#" onClick ="$('#sales-order').tableExport({type:'pdf',escape:'false'});"><img src="{{ asset('themes/Joli/img/icons/pdf.png') }}" width="24"/> PDF</a></li>
                                         </ul>
                                     </div> 
+                            </div>
+                            <div class="panel-body">
+                                    
+                                    <p>Filter</p><div class="col-md-6">Purchase Date From:<input id="min" name="min" type="date">Purchase Date Until:<input id="max" name="max" type="date"></div>
                             </div>
 
                             <div class="panel-body">
@@ -80,8 +87,8 @@ textarea {
                                                 <td>{{ isset($order->globalstatus->description) ? $order->globalstatus->description:"" }}</td>
                                                 <td>{{ isset($order->billing_address->city) ? $order->billing_address->city:"" }}</td>
                                                 <td>{{ isset($order->deliveryType->type_description) ? $order->deliveryType->type_description:"" }}</td>
-                                                <td><a href="{{ url('inventory/order/delivery/create/'.$order->order_no) }}" class="btn btn-info">Edit Order</a>
-                                                    <a href="{{ url('inventory/order/sales/view/'.$order->order_no) }}" class="btn btn-default">Invoice</a></td>
+                                                <td><a href="{{ url('inventory/order/delivery/create/'.base64_encode($order->order_no)) }}" class="btn btn-info">Process Order</a>
+                                                    {{-- <a href="{{ url('inventory/order/sales/view/'.$order->order_no) }}" class="btn btn-default">Invoice</a></td> --}}
                                             @endforeach
                                         </tbody>
                                 </table>
@@ -112,5 +119,42 @@ textarea {
 <!-- END THIS PAGE PLUGINS-->  
 
 <!-- END SCRIPTS -->  
+
+<script type="text/javascript">
+
+
+    $(document).ready(function($) {
+
+         var d = new Date();
+        var early_month = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +"01"
+        var today = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +("0" + d.getDate()).slice(-2)
+
+        $('#min').val(early_month)
+        $('#max').val(today)
+
+
+         $.fn.dataTable.ext.search.push(
+                    function( settings, data, dataIndex ) {
+                        var min = new Date($('#min').val()) ; //parseInt( $('#min').val(), 10 );
+                        var max = new Date($('#max').val()); //parseInt( $('#max').val(), 10 );
+                        var age = new Date(data[1]) || 0; //parseFloat( data[3] ) || 0; // use data for the age column
+                
+                        if ( ( isNaN( min ) && isNaN( max ) ) ||
+                            ( isNaN( min ) && age <= max ) ||
+                            ( min <= age   && isNaN( max ) ) ||
+                            ( min <= age   && age <= max ) )
+                        {
+                            return true;
+                        }
+                        return false;
+                    }
+                );
+                var t = $('.datatable').DataTable({})
+     // Event listener to the two range filtering inputs to redraw on input
+     $('#min, #max').change( function() {
+                    t.draw();
+                } );
+    });
+</script>
    
 @stop

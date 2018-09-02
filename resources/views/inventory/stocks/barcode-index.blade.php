@@ -1,6 +1,6 @@
 
 @extends('layouts.joli.app')
-@section('title','Barcode Listing')
+@section('title','Product S/N Listing')
 <style>
 #table_listing{
     font-size: 1.2rem;
@@ -14,7 +14,7 @@ textarea {
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb">
 	<li><a href="{{ url('home') }}">Home</a></li>                    
-	<li><a href="{{ url('stock/listing') }}">Barcode Listing</a></li>
+	<li><a href="{{ url('stock/listing') }}">Product S/N Listing</a></li>
 </ul>
 <!-- END BREADCRUMB -->   
 
@@ -44,10 +44,11 @@ textarea {
 
                     <div class="panel panel-default">
                             <div class="panel-heading">
-                            <h3 class="panel-title">Barcode Listing for <strong>{{$product->name}}</strong></h3>
+                            <h3 class="panel-title">Product S/N Listing for <strong>{{$product->name}}</strong></h3>
                             </div>
                             
-                            <div class="panel-body">              
+                            <div class="panel-body"> 
+                                        
                                             <p>Total listing: <b>{{ count($barcodes) }}</b></p>
                                         <div class="table-responsive">
                                             <table class="table table-striped datatable" id="table_listing">
@@ -56,7 +57,7 @@ textarea {
                                                         <th width="5px" class="no-sort">No.</th>                                                        
                                                         <th>Stock In Number</th>
                                                         <th>Stock In Date</th>                  
-                                                        <th>Barcode</th>                            
+                                                        <th>Product S/N</th>                            
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -73,9 +74,6 @@ textarea {
                                                         </tr>
                                                     @endforeach
                                                 @else
-                                                <tr>
-                                                    <td colspan="9" class="text-center"> No Data Found <br />
-                                                </tr>
                                                 @endif
                                                 </tbody>
                                             </table>
@@ -88,16 +86,22 @@ textarea {
 
 
 </div>
+@endsection
+{{-- page level scripts --}}
+@section('footer_scripts')
+<script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
       <script type='text/javascript' src="{!! asset('joli/js/plugins/validationengine/jquery.validationEngine.js') !!}"></script>   
       <script>
             $(document).ready(function() {
-                $.fn.dataTable.ext.errMode = 'none';
+
                 var t = $('.datatable').DataTable({
                     "order": [],
                     "columnDefs": [
                                 { targets: 'no-sort', orderable: false }
                                 ]
                 });
+
+                
             })
                
 

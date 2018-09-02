@@ -34,14 +34,31 @@
                                     </div>                 
                       
                         </div>
+                        <div class="panel-body">
+                            Filter
+                                <table cellspacing="5" cellpadding="5" border="0">
+                                        <tbody><tr>
+                                            <td>Start Date:</td>
+                                            <td><input id="min" name="min" type="date"></td>
+                                       
+                                            <td>End Date:</td>
+                                            <td><input id="max" name="max" type="date"></td>
+                                        </tr></tbody>
+                                </table>  
+
+                        </div>
 
                         <div class="panel-body">
+                                       
                                                  <div class="table-responsive">
                                                      <table id="stock_bal_report" class="table datatable table-bordered">
                                                          <thead>
                                                              <tr>
                                                                  <th>Date</th>
-								 <th>Product</th>
+                                                                 <th>Product</th>
+                                                                 <th>Product Code</th>
+                                                                 <th>Supplier</th>
+                                                                 <th>Supplier Code</th>
                                                                  <th>Description</th>
                                                                  <th>Stock In</th>
                                                                  <th>Stock Out</th>
@@ -51,7 +68,10 @@
                                                              @foreach($reports as $report )
                                                                 <tr>
                                                                     <td>{{ $report['date'] }}</td>
-								    <td></td>
+                                                                    <td>{{ $report['product_name'] }}</td>
+                                                                    <td>{{ $report['product_code'] }}</td>
+                                                                    <td>{{ $report['supplier_name'] }}</td>
+                                                                    <td>{{ $report['supplier_code'] }}</td>
                                                                     <td>{{ $report['description'] }}</td>								    
                                                                     <td>{{ $report['stock_in'] }}</td>
                                                                     <td>{{ $report['stock_out'] }}</td>
@@ -61,6 +81,10 @@
                                                         <tfoot>
                                                             <tr style="background-color: gray;">
                                                                 <td><strong>Total</strong></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
                                                                 <td></td>
                                                                 <td><strong>{{ $stock_in_total }}</strong></td>
                                                                 <td><strong>{{ $stock_out_total }}</strong></td>
@@ -108,8 +132,85 @@
 
 <script type="text/javascript">
 
+
     $(document).ready(function($) {
+
+        var d = new Date();
+        var early_month = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +"01"
+        var today = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +("0" + d.getDate()).slice(-2)
+
+        $('#min').val(early_month)
+        $('#max').val(today)
+
+
+         $.fn.dataTable.ext.search.push(
+                    function( settings, data, dataIndex ) {
+                        var min = new Date($('#min').val()) ; //parseInt( $('#min').val(), 10 );
+                        var max = new Date($('#max').val()); //parseInt( $('#max').val(), 10 );
+                        var age = new Date(data[0]) || 0; //parseFloat( data[3] ) || 0; // use data for the age column
+                
+                        if ( ( isNaN( min ) && isNaN( max ) ) ||
+                            ( isNaN( min ) && age <= max ) ||
+                            ( min <= age   && isNaN( max ) ) ||
+                            ( min <= age   && age <= max ) )
+                        {
+                            return true;
+                        }
+                        return false;
+                    }
+                );
+
         var t = $('.datatable').DataTable({
+        "footerCallback": function ( row, data, start, end, display ) {
+            var api = this.api(), data;
+ 
+            // Remove the formatting to get integer data for summation
+            var intVal = function ( i ) {
+                return typeof i === 'string' ?
+                    i.replace(/[\$,]/g, '')*1 :
+                    typeof i === 'number' ?
+                        i : 0;
+            };
+ 
+            // Total over all pages
+            total1 = api
+                .column( 6 )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+
+            total2 = api
+            .column( 7 )
+            .data()
+            .reduce( function (a, b) {
+                return intVal(a) + intVal(b);
+            }, 0 );
+ 
+            // Total over this page
+            pageTotal1 = api
+                .column( 6, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+
+            pageTotal2 = api
+                .column( 7, { page: 'current'} )
+                .data()
+                .reduce( function (a, b) {
+                    return intVal(a) + intVal(b);
+                }, 0 );
+ 
+            // Update footer
+            $( api.column( 6 ).footer() ).html(
+                '<strong>'+pageTotal1 +'</strong>'
+            );
+
+            $( api.column( 7 ).footer() ).html(
+                '<strong>'+pageTotal2 + '</strong>'
+            );
+        },
                     "order": [],
                     // "scrollY":        "200px",
                     // "scrollCollapse": true,
@@ -118,6 +219,11 @@
                                 { targets: 'no-sort', orderable: false }
                                 ]                    
                 });
+
+                // Event listener to the two range filtering inputs to redraw on input
+                $('#min, #max').change( function() {
+                    t.draw();
+                } );
 
         
 

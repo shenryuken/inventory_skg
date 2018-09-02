@@ -13,6 +13,16 @@ class Product extends Model
         return $this->hasMany('App\Models\StockItem', 'product_id');
     }
 
+    public function Stocks()
+    {
+        return $this->hasMany('App\Models\StockItem', 'product_id');
+    }
+
+    public function returnGoods()
+    {
+        return $this->hasMany('App\Models\StockItem', 'product_id');
+    }
+
     public function orderItem()
     {
     	return $this->belongsTo('App\Models\OrderItem');
