@@ -65,7 +65,7 @@
             <div style="width:50%;float:right;">
                     <p><span class="fa fa-caret-right"></span> <strong>Delivery Order:</strong>#{{ isset($delivery->delivery_number) ? $delivery->delivery_number : ""}}</p>
                     <p><span class="fa fa-caret-right"></span> <strong>Consignment Note (C/N):</strong> {{ isset($delivery->courier_consignment) ? $delivery->courier_consignment : "" }}</p>
-                    <p><span class="fa fa-caret-right"></span> <strong>Courier (C/N):</strong> {{ isset($delivery->courier->courier_name) ? $delivery->courier->courier_name : "" }}</p>
+                    <p><span class="fa fa-caret-right"></span> <strong>Courier:</strong> {{ isset($delivery->courier->courier_name) ? $delivery->courier->courier_name : "" }}</p>
                     <p><span class="fa fa-caret-right"></span> <strong>Generate Date:</strong> {{ isset($delivery->created_at) ? Carbon\Carbon::parse($delivery->created_at)->format('Y/m/d H:i:s') : "" }}</p>
             </div>
                 <table class="table">
