@@ -81,8 +81,9 @@ class StockReportController extends Controller
             if($stock_adjustments->isNotEmpty()){
                 foreach($stock_adjustments as $a => $b)
                 {
-                    $stock_adj_in   = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','03')->sum('quantity') : "";
-                    $stock_adj_out  = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','04')->sum('quantity') : "";
+                    if($b->StockItem){
+                        $stock_adj_in   = $b->StockItem->where('status','03')->sum('quantity') != 0 ? $b->StockItem->where('status','03')->sum('quantity') : "";
+                         $stock_adj_out  = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','04')->sum('quantity') : "";
     
     
                     $stock_in_total     = $stock_in_total + ($b->StockItem->where('status','03')->sum('quantity'));
@@ -103,6 +104,9 @@ class StockReportController extends Controller
                         'supplier_name' => $supplier_name,
                         'supplier_code' => $supplier_code
                     ];
+
+                    }
+                    
                 }
 
             }
