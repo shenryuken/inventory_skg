@@ -60,7 +60,7 @@ textarea {
                             </div>
                             <div class="panel-body">
                                     
-                                    <p>Filter</p><div class="col-md-6">Purchase Date From:<input id="min" name="min" type="date">Purchase Date Until:<input id="max" name="max" type="date"></div>
+                                    <p>Filter</p><div class="col-md-6">Purchase Date From:<input id="min" name="min" type="text"  class="datepicker">Purchase Date Until:<input id="max" name="max" type="text"  class="datepicker"></div>
                             </div>
 
                             <div class="panel-body">
@@ -108,6 +108,7 @@ textarea {
 <!-- START THIS PAGE PLUGINS-->        
 <script type='text/javascript' src="{{ asset('themes/Joli/js/plugins/icheck/icheck.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/bootstrap/bootstrap-datepicker.js') }}"></script>
 
 <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/tableexport/tableExport.js') }}"></script>
@@ -124,13 +125,12 @@ textarea {
 
 
     $(document).ready(function($) {
+        $.fn.datepicker.defaults.format = "dd/mm/yyyy";
 
          var d = new Date();
         var early_month = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +"01"
         var today = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +("0" + d.getDate()).slice(-2)
 
-        $('#min').val(early_month)
-        $('#max').val(today)
 
 
          $.fn.dataTable.ext.search.push(
@@ -150,6 +150,10 @@ textarea {
                     }
                 );
                 var t = $('.datatable').DataTable({})
+
+                        
+        $('#min').datepicker("update",new Date(early_month)).change(t.draw());
+        $('#max').datepicker("update",new Date(today)).change(t.draw());
      // Event listener to the two range filtering inputs to redraw on input
      $('#min, #max').change( function() {
                     t.draw();

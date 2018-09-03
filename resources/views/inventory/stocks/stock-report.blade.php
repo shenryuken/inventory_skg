@@ -36,13 +36,14 @@
                         </div>
                         <div class="panel-body">
                             Filter
+                            
                                 <table cellspacing="5" cellpadding="5" border="0">
                                         <tbody><tr>
                                             <td>Start Date:</td>
-                                            <td><input id="min" name="min" type="date"></td>
+                                            <td><input id="min" name="min" type="text"  class="datepicker"></td>
                                        
                                             <td>End Date:</td>
-                                            <td><input id="max" name="max" type="date"></td>
+                                            <td><input id="max" name="max" type="text" class="datepicker"></td>
                                         </tr></tbody>
                                 </table>  
 
@@ -79,7 +80,7 @@
                                                              @endforeach
                                                             </tbody>
                                                         <tfoot>
-                                                            <tr style="background-color: gray;">
+                                                            <tr style="background-color: Wheat;">
                                                                 <td><strong>Total</strong></td>
                                                                 <td></td>
                                                                 <td></td>
@@ -104,6 +105,8 @@
 @section('footer_scripts')
  <script type='text/javascript' src="{{ asset('themes/Joli/js/plugins/icheck/icheck.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/bootstrap/bootstrap-datepicker.js') }}"></script>
+
     
     <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/tableexport/tableExport.js') }}"></script>
@@ -134,31 +137,10 @@
 
 
     $(document).ready(function($) {
-
+        $.fn.datepicker.defaults.format = "dd/mm/yyyy";
         var d = new Date();
         var early_month = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +"01"
         var today = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +("0" + d.getDate()).slice(-2)
-
-        $('#min').val(early_month)
-        $('#max').val(today)
-
-
-         $.fn.dataTable.ext.search.push(
-                    function( settings, data, dataIndex ) {
-                        var min = new Date($('#min').val()) ; //parseInt( $('#min').val(), 10 );
-                        var max = new Date($('#max').val()); //parseInt( $('#max').val(), 10 );
-                        var age = new Date(data[0]) || 0; //parseFloat( data[3] ) || 0; // use data for the age column
-                
-                        if ( ( isNaN( min ) && isNaN( max ) ) ||
-                            ( isNaN( min ) && age <= max ) ||
-                            ( min <= age   && isNaN( max ) ) ||
-                            ( min <= age   && age <= max ) )
-                        {
-                            return true;
-                        }
-                        return false;
-                    }
-                );
 
         var t = $('.datatable').DataTable({
         "footerCallback": function ( row, data, start, end, display ) {
@@ -219,6 +201,29 @@
                                 { targets: 'no-sort', orderable: false }
                                 ]                    
                 });
+        
+        $('#min').datepicker("update",new Date(early_month)).change(t.draw());
+        $('#max').datepicker("update",new Date(today)).change(t.draw());
+
+
+         $.fn.dataTable.ext.search.push(
+                    function( settings, data, dataIndex ) {
+                        var min = new Date($('#min').val()) ; //parseInt( $('#min').val(), 10 );
+                        var max = new Date($('#max').val()); //parseInt( $('#max').val(), 10 );
+                        var age = new Date(data[0]) || 0; //parseFloat( data[3] ) || 0; // use data for the age column
+                
+                        if ( ( isNaN( min ) && isNaN( max ) ) ||
+                            ( isNaN( min ) && age <= max ) ||
+                            ( min <= age   && isNaN( max ) ) ||
+                            ( min <= age   && age <= max ) )
+                        {
+                            return true;
+                        }
+                        return false;
+                    }
+                );
+
+        
 
                 // Event listener to the two range filtering inputs to redraw on input
                 $('#min, #max').change( function() {
