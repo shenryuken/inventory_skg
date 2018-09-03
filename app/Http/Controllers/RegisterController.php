@@ -88,7 +88,7 @@ class RegisterController extends Controller
 
     public function registerMember(Request $request)
     {
-        // try{
+        try{
             $introducer = $request->introducer;
             $admin      = Admin::where('username', $introducer)->first();
             $member     = User::where('username', $introducer)->first();
@@ -195,11 +195,11 @@ class RegisterController extends Controller
 
             return back()->withInput()
                          ->with('fail', 'Failed to register! Please Check Your Security Code Is Correct Or Try Again. ');
-        //}
-        // catch(\Exception $e)
-        // {
-        //     return $e->getMessage();
-        // }
+        }
+        catch(\Exception $e)
+        {
+            return $e->getMessage();
+        }
     }
 
     public function firstTimePurchaseRegistration()

@@ -13,6 +13,7 @@ use App\Models\DeliveryType;
 use App\Admin;
 use App\User;
 use App\Models\Role;
+
 class DeliverytypeController extends Controller
 {
 	public function __construct(){
