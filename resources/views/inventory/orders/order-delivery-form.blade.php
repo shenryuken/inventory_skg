@@ -247,7 +247,7 @@ $(document).ready(function() {
                 var value = $(this).val()
                 //ajax
                 let split_value = value.split(/\n/);
-                let input = split_value[split_value.length-2]
+                let input = split_value[split_value.length-2] || split_value[split_value.length-1]
                 if(input != ''){
                     $.ajax({
                             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
