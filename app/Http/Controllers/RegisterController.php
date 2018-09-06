@@ -114,7 +114,7 @@ class RegisterController extends Controller
                 'race'              => 'required',
                 'id_type'           => 'required',
                 'id_no'             => 'required',
-                'id_pic'            => 'image|mimes:jpeg,bmp,png|max:2040',
+                'id_pic'            => 'image|mimes:jpeg,bmp,png|max:5120',
                 'introducer'        => 'required|exists:'.$table.',username',
                 'mobile_no'         => 'required',
                 'email'             => 'required',
