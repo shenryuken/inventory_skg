@@ -35,17 +35,22 @@
                       
                         </div>
                         <div class="panel-body">
-                            Filter
-                            
-                                <table cellspacing="5" cellpadding="5" border="0">
-                                        <tbody><tr>
-                                            <td>Start Date:</td>
-                                            <td><input id="min" name="min" type="text"  class="datepicker"></td>
-                                       
-                                            <td>End Date:</td>
-                                            <td><input id="max" name="max" type="text" class="datepicker"></td>
-                                        </tr></tbody>
-                                </table>  
+                                <p>Filter</p>      
+                                <form class="form-horizontal" role="form">   
+                                                             
+                                        <div class="form-group">
+                                            <label class="col-md-3 control-label">Start Date:</label>
+                                            <div class="col-md-3">
+                                                <input type="text" id="min" name="min" class="form-control datepicker">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                                <label class="col-md-3 control-label">End Date:</label>
+                                                <div class="col-md-3">
+                                                    <input type="text" id="max" name="max" class="form-control datepicker">
+                                                </div>
+                                            </div>
+                                </form>
 
                         </div>
 
@@ -103,11 +108,7 @@
 
 {{-- page level scripts --}}
 @section('footer_scripts')
- <script type='text/javascript' src="{{ asset('themes/Joli/js/plugins/icheck/icheck.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/bootstrap/bootstrap-datepicker.js') }}"></script>
-
-    
     <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/tableexport/tableExport.js') }}"></script>
     <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/tableexport/jspdf/libs/base64.js') }}"></script> 
