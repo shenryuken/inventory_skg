@@ -202,8 +202,8 @@
                                 ]                    
                 });
         
-        $('#min').datepicker("update",new Date(early_month)).change(t.draw());
-        $('#max').datepicker("update",new Date(today)).change(t.draw());
+        $('#min').datepicker("update",new Date(early_month)).on('change',function(){t.draw()});
+        $('#max').datepicker("update",new Date(today)).on('change',function(){t.draw()});
 
 
          $.fn.dataTable.ext.search.push(
@@ -226,13 +226,13 @@
         
 
                 // Event listener to the two range filtering inputs to redraw on input
-                $('#min, #max').change( function() {
+                $('#min, #max').on('change', function() {
                     t.draw();
                 } );
 
         
 
-    $(".click").click(function() {
+    $(".click").on('click',function() {
             window.location = $(this).data("href");
         });
     });

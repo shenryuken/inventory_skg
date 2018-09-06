@@ -122,10 +122,14 @@
         @yield('footer_scripts')
         <!-- end page level js -->
         <!-- START TEMPLATE -->
-       
+        <script type='text/javascript' src="{{ asset('themes/Joli/js/plugins/icheck/icheck.min.js') }}"></script>        
+        <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/scrolltotop/scrolltopcontrol.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('themes/Joli/js/settings.js') }}"></script>
+
         <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins.js') }}"></script>        
         <script type="text/javascript" src="{{ asset('themes/Joli/js/actions.js') }}"></script>        
-        <script type="text/javascript" src="{{ asset('themes/Joli/js/dashboard_chart.js') }}"></script> 
+        <script type="text/javascript" src="{{ asset('themes/Joli/js/dashboard_chart.js') }}"></script>        
         <script type="text/javascript" src="{{ asset('js/proajax.js')}}"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->         
