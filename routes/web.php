@@ -299,7 +299,7 @@ Route::get('inventory/stock/adjustment/check_barcode', 'Inventory\StockAdjustmen
 Route::post('inventory/stock/adjustment/store', 'Inventory\StockAdjustmentController@store');
 #Stock Reports
 Route::get('inventory/stock/current/', 'Inventory\StockReportController@indexCurrentStock');
-Route::get('inventory/stock/report/', 'Inventory\StockReportController@index');
+Route::get('inventory/report/stock-balance/', 'Inventory\StockReportController@index');
 Route::get('inventory/stock/barcode/{x?}', 'Inventory\StockReportController@barcode');
 
 #Order Delivery

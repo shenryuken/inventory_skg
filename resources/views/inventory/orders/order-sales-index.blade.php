@@ -59,8 +59,18 @@ textarea {
                                     </div> 
                             </div>
                             <div class="panel-body">
+                                    <div class="col-md-6">
+                                            Filter
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                     <td>Purchase Date From:<input id="min" name="min" type="text"  class="datepicker"></td>
+                                                     <td>Purchase Date Until:<input id="max" name="max" type="text"  class="datepicker"></td>      
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
                                     
-                                    <p>Filter</p><div class="col-md-6">Purchase Date From:<input id="min" name="min" type="text"  class="datepicker">Purchase Date Until:<input id="max" name="max" type="text"  class="datepicker"></div>
                             </div>
 
                             <div class="panel-body">
@@ -152,10 +162,10 @@ textarea {
                 var t = $('.datatable').DataTable({})
 
                         
-        $('#min').datepicker("update",new Date(early_month)).change(t.draw());
-        $('#max').datepicker("update",new Date(today)).change(t.draw());
+        $('#min').datepicker("update",new Date(early_month)).on('change',function(){t.draw()});
+        $('#max').datepicker("update",new Date(today)).on('change',function(){t.draw()});
      // Event listener to the two range filtering inputs to redraw on input
-     $('#min, #max').change( function() {
+     $('#min, #max').on('change', function() {
                     t.draw();
                 } );
     });

@@ -45,8 +45,8 @@
                                     <h2>Stock In Form</h2>
                                     <p>Stock Keeper : {{ isset(Auth::user()->name) ? Auth::user()->name : Auth::user()->email }}</p>
                                      
-                                    <button class="btn btn-info pull-right">New Supplier</button>
-                                    <button class="btn btn-default pull-right">New Product</button>
+                                    <button class="btn btn-info pull-right hide">New Supplier</button>
+                                    <button class="btn btn-default pull-right hide">New Product</button>
                                     
                                 </div>
                             <form  id="create_stock" method="POST" class="form-horizontal" action="{{url('inventory/stock/in/store')}}">
