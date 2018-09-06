@@ -22,14 +22,14 @@
                             <h3>Sales</h3>
                             <span>Sales activities</span>
                         </div>                                     
-                        <ul class="panel-controls panel-controls-title">                                        
+                        {{-- <ul class="panel-controls panel-controls-title">                                        
                             <li>
                                 <div id="reportrange" class="dtrange">                                            
                                     <span></span><b class="caret"></b>
                                 </div>                                     
                             </li>                                
                             <li><a href="#" class="panel-fullscreen rounded"><span class="fa fa-expand"></span></a></li>
-                        </ul> 
+                        </ul>  --}}
                     </div>
                     <div class="panel-body">                                    
                         <div class="col-md-3">                        
@@ -70,7 +70,8 @@
 
                 
         </div>
-
+    </div>  
+    <div class="row">
         <div class="col-md-12">
             <!-- START SALES BLOCK -->
             <div class="panel panel-default">
@@ -78,14 +79,14 @@
                         <div class="panel-title-box">
                             <h3>Inventory</h3>
                         </div>                                     
-                        <ul class="panel-controls panel-controls-title">                                        
+                        {{-- <ul class="panel-controls panel-controls-title">                                        
                             <li>
                                 <div id="reportrange" class="dtrange">                                            
                                     <span></span><b class="caret"></b>
                                 </div>                                     
                             </li>                                
                             <li><a href="#" class="panel-fullscreen rounded"><span class="fa fa-expand"></span></a></li>
-                        </ul> 
+                        </ul>  --}}
                     </div>
                     <div class="panel-body">                                    
                         <div class="row stacked">
@@ -113,8 +114,44 @@
                 <!-- END SALES BLOCK -->
         </div>
     </div>    
-                   
+
     <div class="row">
+            <div class="col-md-12">
+                <!-- START SALES BLOCK -->
+                <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <div class="panel-title-box">
+                                <h3>Warehouse</h3>
+                            </div>                                     
+                            {{-- <ul class="panel-controls panel-controls-title">                                        
+                                <li>
+                                    <div id="reportrange" class="dtrange">                                            
+                                        <span></span><b class="caret"></b>
+                                    </div>                                     
+                                </li>                                
+                                <li><a href="#" class="panel-fullscreen rounded"><span class="fa fa-expand"></span></a></li>
+                            </ul>  --}}
+                        </div>
+                        <div class="panel-body">                                    
+                                <div class="col-md-3">                        
+                                        <a href="#" class="tile tile-default">
+                                                <i class="fa fa-shopping-cart"></i>
+                                            <p>Order Activity</p>                            
+                                        </a>                        
+                                </div>
+                                <div class="col-md-3">                        
+                                        <a href="{{url('print/docket-gdex')}}" class="tile tile-default">
+                                            <i class="fa fa-print"></i>
+                                            <p>Print All Orders C/N (GDEX)</p>                            
+                                        </a>                        
+                                </div>                       
+                        </div>
+                    </div>
+                    <!-- END SALES BLOCK -->
+            </div>
+        </div>    
+                   
+    <div class="row hide">
         <div class="col-md-4">
         <!-- START USERS ACTIVITY BLOCK -->
         <div class="panel panel-default">
