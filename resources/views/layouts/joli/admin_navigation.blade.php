@@ -23,37 +23,45 @@
         </div>                                                                        
     </li>                                                                     
     <li class="xn-title">Navigation</li>
-    <li>
+    <li class="xn-openable {{ Request::is('admin/dashboard') ? 'active' : '' }}">
         <a href="{{ url('admin/dashboard')}}">
         	<span class="fa fa-desktop"></span> 
         	<span class="xn-text">Dashboard</span>
        	</a>
     </li>
-    <li>
+    <li class="{{ Request::is('admin/profile/*') ? 'active' : '' }}">
         <a href="{{ url('admin/profile/'. Auth::guard('admin')->user()->id)}}">
         	<span class="fa fa-user"></span> 
         	<span class="xn-text">My Profile</span>
         </a>
     </li>  
-    <li class="xn-openable">
+    <li class="xn-openable {{ Request::is('banks/*') ? 'active' : '' }}">
         <a href="#" class="arrow"><span class="fa fa-table"></span> <span class="xn-text">Accounts</span></a>
         <ul>                            
-            <li><a href="{{ url('banks/')}}"><span class="fa fa-align-justify"></span> Bank List</a></li>
-            <li><a href="{{ url('banks/create')}}"><span class="fa fa-sort-alpha-desc"></span> Add New Bank</a></li>                
+            <li class="{{ Request::is('banks/') ? 'active' : '' }}">
+                <a href="{{ url('banks/')}}"><span class="fa fa-align-justify"></span> Bank List</a>
+            </li>
+            <li class="{{ Request::is('banks/create') ? 'active' : '' }}">
+                <a href="{{ url('banks/create')}}"><span class="fa fa-sort-alpha-desc"></span> Add New Bank</a>
+            </li>                
         </ul>
     </li>  
-    <li class="xn-openable">
+    <li class="xn-openable {{ Request::is('admin/lists') ? 'active' : '' }}">
         <a href="#" class="arrow"><span class="fa fa-table"></span> <span class="xn-text">Staff</span></a>
         <ul>                            
-            <li><a href="{{ url('admin/lists')}}"><span class="fa fa-align-justify"></span> Staff List</a></li>
-            <li><a href="{{ url('registers/staff')}}"><span class="fa fa-sort-alpha-desc"></span> Register New Staff</a></li>                
+            <li class="{{ Request::is('admin/lists') ? 'active' : '' }}">
+                <a href="{{ url('admin/lists')}}"><span class="fa fa-align-justify"></span> Staff List</a>
+            </li>
+            <li class="{{ Request::is('registers/staff') ? 'active' : '' }}">
+                <a href="{{ url('registers/staff')}}"><span class="fa fa-sort-alpha-desc"></span> Register New Staff</a>
+            </li>                
         </ul>
     </li>   
-    <li class="xn-openable">
-        <a href="#"><span class="fa fa-table"></span> <span class="xn-text">Member</span></a>
+    <li class="xn-openable {{ Request::is('users/list') ? 'active' : '' or Request::is('registers/member') ? 'active' : '' or  Request::is('profile/ic-status-index') ? 'active' : ''}} ">
+        <a href="#"><span class="fa fa-table"></span> <span class="xn-text">Agents</span></a>
         <ul>                            
-            <li><a href="{{ url('users/list')}}"><span class="fa fa-align-justify"></span> Member List</a></li>
-            <li><a href="{{ url('registers/member')}}"><span class="fa fa-sort-alpha-desc"></span> Register New Member</a></li>
+            <li><a href="{{ url('users/list')}}"><span class="fa fa-align-justify"></span> Agent List</a></li>
+            <li><a href="{{ url('registers/member')}}"><span class="fa fa-sort-alpha-desc"></span> Register New Agent</a></li>
             <li><a href="{{ url('profile/ic-status-index')}}"><span class="fa fa-sort-alpha-desc"></span> MyKad/Passport Status Index</a></li>   
         </ul>
     </li> 
@@ -72,23 +80,34 @@
     		<span class="fa fa-file-text-o"></span> Products
     	</a>
     </li>   --}}
-    <li>
+    <li class="{{ Request::is('admin/lists') ? 'active' : '' }}">
         <a href="{{ url('bonus/calculate-end-month-bonus') }}">
             <span class="fa fa-file-text-o"></span> Count Bonus
         </a>
     </li> 
-    <li class="xn-openable">
+    <li class="xn-openable {{ Request::is('reports/*') ? 'active' : '' }}">
         <a href="#"><span class="fa fa-table"></span> <span class="xn-text">Reports</span></a>
         <ul>                            
-            <li><a href="{{ url('reports/members')}}"><span class="fa fa-align-justify"></span> Members</a></li>
-            <li class="xn-openable"><a href="#"><span class="fa fa-sort-alpha-desc"></span> Sales</a>
+            <li class="{{ Request::is('admin/lists') ? 'active' : '' }}">
+                <a href="{{ url('reports/members')}}"><span class="fa fa-align-justify"></span> Agents</a>
+            </li>
+            <li class="xn-openable {{ Request::is('reports/sales*') ? 'active' : '' }}">
+                <a href="#"><span class="fa fa-sort-alpha-desc"></span> Sales</a>
                 <ul>
-                    <li><a href="{{ url('reports/sales')}}">General</a></li>
-                    <li><a href="">By Product</a></li>
+                    <li class="{{ Request::is('admin/lists') ? 'active' : '' }}">
+                        <a href="{{ url('reports/sales')}}">General</a>
+                    </li>
+                    <li>
+                        <a href="">By Product</a>
+                    </li>
                 </ul>
             </li>
-            <li><a href="{{ url('reports/stocks')}}"><span class="fa fa-sort-alpha-desc"></span> Stocks</a></li>
-            <li><a href="{{ url('reports/bonuses')}}"><span class="fa fa-sort-alpha-desc"></span> Bonuses</a></li>   
+            <li>
+                <a href="{{ url('reports/stocks')}}"><span class="fa fa-sort-alpha-desc"></span> Stocks</a>
+            </li>
+            <li>
+                <a href="{{ url('reports/bonuses')}}"><span class="fa fa-sort-alpha-desc"></span> Bonuses</a>
+            </li>   
         </ul>
     </li>  
     <li>
