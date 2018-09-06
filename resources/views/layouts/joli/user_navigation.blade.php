@@ -25,52 +25,52 @@
         </div>                                                                        
     </li>                                                                     
     <li class="xn-title">Navigation</li>
-    <li>
+    <li class="{{ Request::is('users/dashboard') ? 'active' : '' }}">
         <a href="{{ url('users/dashboard')}}">
         	<span class="fa fa-desktop"></span> 
         	<span class="xn-text">Dashboard</span>
        	</a>
     </li>
     
-    <li class="xn-openable">
-        <a href="tables.html"><span class="fa fa-table"></span> <span class="xn-text">Member</span></a>
+    <li class="xn-openable {{ Request::is('registers/*') ? 'active' : '' }}">
+        <a href="tables.html"><span class="fa fa-table"></span> <span class="xn-text">Agents</span></a>
         <ul>        
             @if(Auth::user()->rank_id > 2)                    
-            <li><a href="{{ url('registers/member')}}">Register New Member</a></li>
+            <li class="{{ Request::is('registers/member') ? 'active' : '' }}"><a href="{{ url('registers/member')}}">Register New Agent</a></li>
             @endif
-            <li><a href="{{ url('referrals/hierarchy/'.Auth::user()->id)}}">Org Chart</a></li>
-            <li><a href="{{ url('referrals/my-downline')}}">Referrals</a></li>                
+            <li class="{{ Request::is('referrals/hierarchy/*') ? 'active' : '' }}"><a href="{{ url('referrals/hierarchy/'.Auth::user()->id)}}">Org Chart</a></li>
+            <li class="{{ Request::is('referrals/my-downline') ? 'active' : '' }}"><a href="{{ url('referrals/my-downline')}}">Referrals</a></li>                
         </ul>
     </li> 
     <li class="xn-openable">
         <a href="tables.html"><span class="fa fa-table"></span> <span class="xn-text">Order</span></a>
         <ul>                            
-            <li><a href="{{ url('orders/my-orders')}}">My Orders</a></li>
+            <li class="{{ Request::is('orders/my-orders') ? 'active' : '' }}"><a href="{{ url('orders/my-orders')}}">My Orders</a></li>
             @if(Auth::user()->rank_id > 2)
             <li><a href="#">My Customer Orders</a></li>
             @endif        
         </ul>
     </li> 
-    <li class="xn-openable">
+    <li class="xn-openable {{ Request::is('invoices/*') ? 'active' : '' }}">
         <a href="tables.html"><span class="fa fa-table"></span> <span class="xn-text">Invoice</span></a>
         <ul>                            
-            <li><a href="{{ url('invoices/my-invoices')}}">My Invoices</a></li>
-            <li><a href="{{ url('invoices/my-customer-invoices/'.Auth::user()->id)}}">My Customer Invoices</a></li>          
+            <li class="{{ Request::is('invoices/my-invoices') ? 'active' : '' }}"><a href="{{ url('invoices/my-invoices')}}">My Invoices</a></li>
+            <li class="{{ Request::is('invoices/my-customer-invoices/*') ? 'active' : '' }}"><a href="{{ url('invoices/my-customer-invoices/'.Auth::user()->id)}}">My Customer Invoices</a></li>          
         </ul>
     </li> 
-    <li class="xn-openable">
+    <li class="xn-openable {{ Request::is('bonus/*') ? 'active' : '' }}">
         <a href="tables.html"><span class="fa fa-table"></span> <span class="xn-text">Bonus</span></a>
         <ul>                            
-            <li><a href="{{ url('bonus/statement/'.Auth::user()->id)}}">My Bonus Statement</a></li>
-            <li><a href="{{ url('bonus/my-bonus-history/'.Auth::user()->id)}}">My Bonus History</a></li>            
+            <li class="{{ Request::is('bonus/statement/*') ? 'active' : '' }}"><a href="{{ url('bonus/statement/'.Auth::user()->id)}}">My Bonus Statement</a></li>
+            <li class="{{ Request::is('bonus/my-bonus-history/*') ? 'active' : '' }}"><a href="{{ url('bonus/my-bonus-history/'.Auth::user()->id)}}">My Bonus History</a></li>            
         </ul>
     </li> 
     <li class="xn-title">Shopping</li>
-    <li class="xn-openable">
+    <li class="xn-openable {{ Request::is('shop/*') ? 'active' : '' }}">
         <a href="tables.html"><span class="fa fa-table"></span> <span class="xn-text">Mall</span></a>
         <ul>                            
-            <li><a href="{{ url('shop/skg-mall') }}">SKG Mall</a></li>
-            <li><a href="{{ url('shop/agents') }}">Agents Stores</a></li>             
+            <li class="{{ Request::is('shop/*') ? 'active' : '' }}"><a href="{{ url('shop/skg-mall') }}">SKG Mall</a></li>
+            <li class="{{ Request::is('shop/*') ? 'active' : '' }}"><a href="{{ url('shop/agents') }}">Agents Stores</a></li>             
         </ul>
     </li>
     <li>

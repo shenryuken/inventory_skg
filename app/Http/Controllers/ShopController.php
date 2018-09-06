@@ -35,12 +35,16 @@ use App\Models\PaymentType;
 
 use App\Http\Controllers\Inventory\ProductUserController;
 
+use App\Traits\WalletTrait;
+use App\Models\SalesTrait;
+
 use Validator;
 use Session;
 use Cart;
 
 class ShopController extends Controller
 {   
+    use WalletTrait, SalesTrait;
     //amin
     public function skgMall(){
         $product = Array();
@@ -997,7 +1001,8 @@ class ShopController extends Controller
                     $rank = $userRank->rank()->first();
 
                     if($rank->code_name == "C" && $rank->code_name == "LC"){
-
+                        $total_pv = 0;
+                        
                         foreach($cartItems as $k => $v){
 
                             $promotion = $this->checkPromotion($v['product_id']);
@@ -1036,11 +1041,19 @@ class ShopController extends Controller
                                 'created_at'    => \Carbon\Carbon::now()
                             ];
 
+                            $total_pv +=$v['point'];
+
                             UserPurchase::insert($lv_product);
+                            $this->updateSalesDataByProduct($v,$price);
                         }
+
+                        $this->updateWallet($id, $total_pv);
+                        $this->updateSalesData($total_pv, $total_price);
+                        
                     }
                     else{
                         // dd($cartItems);
+                        $total_pv = 0;
                         foreach($cartItems as $k => $v){
 
                             $promotion = $this->checkPromotion($v['product_id']);
@@ -1080,8 +1093,14 @@ class ShopController extends Controller
                                 'created_at'    => \Carbon\Carbon::now()
                             ];
 
+                            $total_pv +=$v['point'];
+
                             Store::insert($lv_product);
+                            $this->updateSalesDataByProduct($v,$price);
                         }
+
+                        $this->updateWallet($id, $total_pv);
+                        $this->updateSalesData($total_pv, $total_price);
                     }
                 }
 
