@@ -122,17 +122,18 @@
                 <a href="{{ url('inventory/product/listing') }}"><span class="fa fa-flask"></span> Products </a>
                 <ul>
                     <li class="{{ Request::is('inventory/product/listing') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/product/listing') }}">Product Listing</a>
-                    </li>
-                    <li class="{{ Request::is('inventory/product/form') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/product/form') }}">Create Product Info</a>
-                    </li>
-                    <li class="{{ Request::is('inventory/product/package_form') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/product/package_form') }}">Create Package</a>
+                        <a href="{{ url('inventory/product/listing') }}"><span class="fa fa-align-justify fa-sm"></span>Product Listing</a>
                     </li>
                     <li class="{{ Request::is('inventory/product/promotion/listing') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/product/promotion/listing') }}">Promotion Listing</a>
+                        <a href="{{ url('inventory/product/promotion/listing') }}"><span class="fa fa-align-justify fa-sm"></span>Promotion Listing</a>
                     </li>
+                    <li class="{{ Request::is('inventory/product/form') ? 'active' : '' }}">
+                        <a href="{{ url('inventory/product/form') }}"><span class="fa fa-plus fa-sm"></span>Create Product Info</a>
+                    </li>
+                    <li class="{{ Request::is('inventory/product/package_form') ? 'active' : '' }}">
+                        <a href="{{ url('inventory/product/package_form') }}"><span class="fa fa-plus fa-sm"></span>Create Package</a>
+                    </li>
+                    
                 </ul>
             </li>
 
@@ -140,7 +141,10 @@
                 <a href="{{ url('inventory/supplier/list') }}"><span class="fa fa-truck"></span> Suppliers </a>
                 <ul>
                     <li class="{{ Request::is('inventory/supplier/list') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/supplier/list') }}">Supplier Listing</a>
+                        <a href="{{ url('inventory/supplier/list') }}"><span class="fa fa-align-justify fa-sm"></span>Supplier Listing</a>
+                    </li>
+                    <li class="{{ Request::is('inventory/supplier/create') ? 'active' : '' }}">
+                        <a href="{{ url('inventory/supplier/create') }}"><span class="fa fa-plus fa-sm"></span>Create Supplier Info</a>
                     </li>
                 </ul>
             </li>
@@ -149,19 +153,16 @@
                 <a href="{{ url('inventory/stock/current') }}"><span class="fa fa-archive"></span> Stocks </a>
                 <ul>
                     <li class="{{ Request::is('inventory/stock/current') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/stock/current') }}">Current Stock Listing</a>
+                        <a href="{{ url('inventory/stock/current') }}"><span class="fa fa-align-justify fa-sm"></span>Current Stock Listing</a>
                     </li>
                     <li class="{{ Request::is('inventory/stock/list') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/stock/list') }}">Stock In Listing</a>
-                    </li>
-                    <li class="{{ Request::is('inventory/stock/report') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/stock/current') }}"> Stock Balance Report </a>
-                    </li>
+                        <a href="{{ url('inventory/stock/list') }}"><span class="fa fa-align-justify fa-sm"></span>Stock In Listing</a>
+                    </li>                    
                     <li class="{{ Request::is('inventory/stock/in') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/stock/in') }}">Create New Stock In</a>
+                        <a href="{{ url('inventory/stock/in') }}"><span class="fa fa-plus fa-sm"></span>Create New Stock In</a>
                     </li>
                     <li class="{{ Request::is('inventory/stock/adjustment') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/stock/adjustment') }}">Stock Adjustment</a>
+                        <a href="{{ url('inventory/stock/adjustment') }}"><span class="fa fa-plus fa-sm"></span>Stock Adjustment</a>
                     </li>
                 </ul>
             </li>
@@ -170,34 +171,43 @@
                 <a href="{{ url('inventory/order/sales') }}"><span class="fa fa-shopping-cart"></span> Order Management </a>
                 <ul>
                     <li class="{{ Request::is('inventory/order/sales') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/order/sales') }}"> Sales Order List</a>
+                        <a href="{{ url('inventory/order/sales') }}"><span class="fa fa-align-justify fa-sm"></span>Sales Order Listing</a>
                     </li>
                     <li class="{{ Request::is('inventory/stock/delivery') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/order/delivery') }}"> Delivery Order List</a>
+                        <a href="{{ url('inventory/order/delivery') }}"><span class="fa fa-align-justify fa-sm"></span> Delivery Order Listing</a>
                     </li>
+                </ul>
+            </li>
+
+            <li class="xn-openable {{ Request::is('inventory/report/stock-balance') ? 'active' : '' }}">
+                <a href="{{ url('inventory//stock/report') }}"><span class="fa fa-book"></span> Report </a>
+                <ul>
+                    <li class="{{ Request::is('inventory/report/stock-balance') ? 'active' : '' }}">
+                        <a href="{{ url('inventory/report/stock-balance') }}"> Stock Balance Report </a>
+                    </li>
+                    
                 </ul>
             </li>
 
             <li class="xn-openable {{ Request::is('inventory/setting*') ? 'active' : '' }}">
                 <a href="{{ url('inventory/setting/productcategory') }}"><span class="fa fa-cogs"></span> Inventory Settings </a>
                 <ul>
-                    <li class="{{ Request::is('inventory/order/productcategory') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/order/productcategory') }}"> Product Category </a>
+                    <li class="{{ Request::is('inventory/setting/productcategory') ? 'active' : '' }}">
+                        <a href="{{ url('inventory/setting/productcategory') }}"> Product Category </a>
                     </li>
-                    <li class="{{ Request::is('inventory/order/productcategory') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/order/productcategory') }}"> Quantity Type </a>
+                    <li class="{{ Request::is('inventory/setting/quantitytype') ? 'active' : '' }}">
+                        <a href="{{ url('inventory/setting/quantitytype') }}"> Quantity Type </a>
                     </li>
-                    <li class="{{ Request::is('inventory/order/productcategory') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/order/productcategory') }}"> Stock Adjustment Type</a>
+                    <li class="{{ Request::is('inventory/setting/stockadjustment') ? 'active' : '' }}">
+                        <a href="{{ url('inventory/setting/stockadjustment') }}"> Stock Adjustment Type</a>
                     </li>
-                    <li class="{{ Request::is('inventory/order/productcategory') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/order/productcategory') }}"> Courier Info </a>
-                    </li>
-                    <li class="{{ Request::is('inventory/order/productcategory') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/order/productcategory') }}"> Product Category </a>
+                    <li class="{{ Request::is('inventory/setting/courier') ? 'active' : '' }}">
+                        <a href="{{ url('inventory/setting/courier') }}"> Courier Info </a>
                     </li>
                 </ul>
             </li>
+
+            
             
         </ul>
     </li> 

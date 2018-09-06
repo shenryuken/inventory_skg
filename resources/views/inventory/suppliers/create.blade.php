@@ -37,87 +37,87 @@
 				{{ csrf_field() }}
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Supplier Detail</h3>
+                        <h3 class="panel-title">Supplier Detail Form</h3>
                     </div>
                     <div class="panel-body">
 						<div class="row">
-							<div class="col-md-6">
+							{{-- <div class="col-md-6"> --}}
 								<div class="form-group">
 									<label class="col-md-3 control-label">Supplier Code</label>
-									<div class="col-md-9">
+									<div class="col-md-6 col-xs-12">
 											<input name="supplier_code" type="text" class="form-control" value="">
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-md-3 control-label">Company Name</label>
-									<div class="col-md-9">
+									<div class="col-md-6 col-xs-12">
 										<input name="company_name" type="text" class="form-control" value="">
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-md-3 control-label">Address 1</label>
-									<div class="col-md-9">
+									<div class="col-md-6 col-xs-12">
 										<input name="street" type="text" class="form-control" value="">
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-md-3 control-label">Address 2</label>
-									<div class="col-md-9">
+									<div class="col-md-6 col-xs-12">
 										<input name="street2" type="text" class="form-control" value="">
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-md-3 control-label">Postal Code</label>
-									<div class="col-md-9">
+									<div class="col-md-6 col-xs-12">
 										<input name="postcode" type="text" class="form-control" value="">
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-md-3 control-label">City</label>
-									<div class="col-md-9">
+									<div class="col-md-6 col-xs-12">
 										<input name="city" type="text" class="form-control" value="">
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-md-3 control-label">State</label>
-									<div class="col-md-9">
+									<div class="col-md-6 col-xs-12">
 										<input name="state" type="text" class="form-control" value="">
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-md-3 control-label">Country</label>
-									<div class="col-md-9">
+									<div class="col-md-6 col-xs-12">
 										<input name="country" type="text" class="form-control" value="">
 									</div>
 								</div>
-							</div>
-							<div class="col-md-6">
+							{{-- </div>
+							<div class="col-md-6"> --}}
 								<div class="form-group">
 									<label class="col-md-3 control-label">Telephone</label>
-									<div class="col-md-9">
+									<div class="col-md-6 col-xs-12">
 										<input name="telephone" type="text" class="form-control" value="">
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-md-3 control-label">Fax No</label>
-									<div class="col-md-9">
+									<div class="col-md-6 col-xs-12">
 										<input name="fax" type="text" class="form-control" value="">
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-md-3 control-label">Attn To</label>
-									<div class="col-md-9">
+									<div class="col-md-6 col-xs-12">
 										<input name="attn_no" type="text" class="form-control" value="">
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-md-3 control-label">Email</label>
-									<div class="col-md-9">
+									<div class="col-md-6 col-xs-12">
 										<input name="email" type="email" class="form-control" value="">
 									</div>
 								</div>
 								
-							</div>
+							{{-- </div> --}}
 						</div>
                     </div>
                     <div class="panel-footer">

@@ -256,7 +256,7 @@ $(document).ready(function() {
                             }).done(function(result){
                                 console.log(result)
                                 if(result.status == "01"){
-                                   
+                                   inputcode
                                 }else{
                                     alert('Product S/N Not Exist')
                                     if(split_value.length >= 3){
