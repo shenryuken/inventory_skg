@@ -41,7 +41,7 @@ use Cart;
 
 class ShopController extends Controller
 {   
-
+    //amin
     public function skgMall(){
         $product = Array();
         $count = 0;
@@ -127,6 +127,7 @@ class ShopController extends Controller
 
     }
 
+    //amin
     public function addCartItems(Request $request){
 
         $data = (!empty($request->get('item')) ? $request->get('item') : []);
@@ -196,6 +197,7 @@ class ShopController extends Controller
         return compact('data','return','product','agent','count');
     }
 
+    //amin
     public function getCartItems($agent_id = null){
 
         $sessionData = session('STORE','default');
@@ -333,6 +335,7 @@ class ShopController extends Controller
         return view('shops.cart-lists',compact('cartItems','returnData','deliveryType','paymentType'));
     }
 
+    //amin
     public function deleteCartItem(Request $request){
 
         $id = $request->get('item');
@@ -364,7 +367,7 @@ class ShopController extends Controller
 
         return compact('return');
     }
-
+    //amin
     public function updateCartitems(Request $request){
 
         $agent_id = $request->get('agent_id');
@@ -410,7 +413,7 @@ class ShopController extends Controller
 
         return compact('return','quantity');
     }
-
+    //amin
     public function checkoutItems($agent_id = null,$deliveryType = null){
 
         // dd($delivery_type);
