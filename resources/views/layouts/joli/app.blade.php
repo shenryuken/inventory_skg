@@ -118,9 +118,7 @@
         <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/bootstrap/bootstrap.min.js') }}"></script>
         <script src="{!! asset('themes/Joli/js/plugins/smartwizard/jquery.smartWizard-2.0.min.js') !!}"></script>    
         <!-- END PLUGINS -->
-        <!-- begin page level js -->
-        @yield('footer_scripts')
-        <!-- end page level js -->
+        
         <!-- START TEMPLATE -->
         <script type='text/javascript' src="{{ asset('themes/Joli/js/plugins/icheck/icheck.min.js') }}"></script>        
         <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js') }}"></script>
@@ -138,6 +136,9 @@
         </script>
         
         <!-- END TEMPLATE -->
+        <!-- begin page level js -->
+        @yield('footer_scripts')
+        <!-- end page level js -->
     <!-- END SCRIPTS -->         
     </body>
 </html>

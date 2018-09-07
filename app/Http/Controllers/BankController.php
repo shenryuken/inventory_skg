@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests;
 
 use App\Models\Bank;
+use App\Models\Account;
 
 class BankController extends Controller
 {
@@ -87,5 +88,22 @@ class BankController extends Controller
 
         return back()->with('fail', 'Failed to update! Please make sure your security code is correct');
 
+    }
+
+    public function destroy($id)
+    {
+        $account = Account::where('bank_id')->get();
+
+        if(count($account) == 0)
+        {
+            $bank = Bank::destroy($id);
+
+            return redirect()->route('bank-list')
+                             ->with('success','Bank deleted successfully');
+        } 
+
+        return redirect()->route('bank-list')
+                             ->with('failed','The data being used in another table. Delete this data will lead to system errors.!');
+       
     }
 }
