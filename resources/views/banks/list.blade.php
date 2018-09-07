@@ -45,7 +45,12 @@ Banks List
 							<td>{{ $bank->origin_country }}</td>
 							<td>
 								<a class="btn btn-primary" href="{{url('banks/'.$bank->id.'/edit')}}">Update</a> |
-								<a class="btn btn-primary" href="{{url('banks/'.$bank->id)}}">View</a>
+								<a class="btn btn-primary" href="{{url('banks/'.$bank->id)}}">View</a> | 
+								<form action="{{url('banks', [$bank->id])}}" method="POST">
+								     <input type="hidden" name="_method" value="DELETE">
+								   <input type="hidden" name="_token" value="{{ csrf_token() }}">
+								   <input type="submit" class="btn btn-danger" value="Delete"/>
+								</form>
 							</td>
 						</tr>
 						@endforeach()

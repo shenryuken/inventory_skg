@@ -102,11 +102,12 @@ Route::post('profile', 'ProfileController@store');
  Banks
 ======================================================================================
 */
-Route::get('banks', 'BankController@list');
+Route::get('banks', 'BankController@list')->name('bank-list');
 Route::get('banks/create', 'BankController@create')->name('banks.create');
 Route::get('banks/{id}/edit', 'BankController@edit');
 Route::post('bank', 'BankController@store');
 Route::put('banks/{id}', 'BankController@update');
+Route::delete('banks/{id}','BankController@destroy');
 
 /*
 ======================================================================================

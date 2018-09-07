@@ -81,7 +81,7 @@
 		<div class="form-group">
 			<label class="col-md-3 control-label">Date Of Birth *</label>
 			<div class="col-md-2">
-				<input class="form-control datepicker" value="2014-08-04" type="text" name="dob" {{-- value="{{ old('dob') }} --}}">
+				<input class="form-control datepicker" id="dp-4" value="06-06-2014" data-date="06-06-2014" type="text" name="dob" data-date-format="dd-mm-yyyy" data-date-viewmode="months">
 			</div>
 		</div>
 		<div class="form-group">
