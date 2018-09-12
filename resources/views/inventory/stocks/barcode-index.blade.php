@@ -51,7 +51,7 @@ textarea {
                                         
                                             <p>Total listing: <b>{{ count($barcodes) }}</b></p>
                                         <div class="table-responsive">
-                                            <table class="table table-striped datatable" id="table_listing">
+                                            <table class="table table-striped" id="table_listing">
                                                 <thead>
                                                     <tr>
                                                         <th width="5px" class="no-sort">No.</th>                                                        
@@ -94,7 +94,7 @@ textarea {
       <script>
             $(document).ready(function() {
 
-                var t = $('.datatable').DataTable({
+                var t = $('#table_listing').DataTable({
                     "order": [],
                     "columnDefs": [
                                 { targets: 'no-sort', orderable: false }

@@ -25,116 +25,67 @@
 <form class="form-horizontal" id="form" method="post" action="{{ url('inventory/order/delivery/store')}}">
 {{ csrf_field() }}
 <input type="hidden" name="order_id" value="{{ $order->id }}">
+<input type="text" name="order_no" class="hidden" value="{{ isset($order->id) ?  $order->id : "" }}" readonly>   
+<input class="hidden" value="{{ isset($order->user->id) ?  $order->user->id : "" }}" readonly>
+
 <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading ui-draggable-handle">
-                  <h3 class="panel-title"><strong>Packer</strong></h3>
-                  <ul class="panel-controls">
-                    <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
-                  </ul>
-                </div>
+	<div class="col-md-12">
+		<div class="panel panel-default">
+		    <div class="panel-heading ui-draggable-handle">
+		      <h3 class="panel-title"><strong>Create Delivery for SO: #{{ isset($order->order_no) ?  $order->order_no : "" }} </strong></h3>
+            </div>
+
+            <div class="panel-body">		 
+                    <div class="row">                                        
+                            <div class="col-md-4">
+                                    <div class="form-group"> 
+                                            <label class="col-md-2 control-label">Referer</label>
+                                            <div class="col-md-4">
+                                                <p class="form-control-static">{{ isset($order->user->username) ?  $order->user->username : "" }}</p>
+                                            </div>
+                                        </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                    <div class="form-group"> 
+                                            <label class="col-md-2 control-label">Customer</label>
+                                            <div class="col-md-4">
+                                                <p class="form-control-static">{{ isset($order->name) ?  $order->name : "" }}</p>
+                                            </div>
+                                        </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                    <div class="form-group"> 
+                                            <label class="col-md-2 control-label">Tel</label>
+                                            <div class="col-md-4">                                
+                                                <p class="form-control-static">{{ isset($order->contect_no) ?  $order->contect_no : "" }}</p>
+                                            </div>
+                                        </div>
+                            </div>
+                    </div>
+
+                   
+
+                    <div class="row">                                        
+                            <div class="col-md-4">
+                                    <div class="form-group"> 
+                                            <label class="col-md-2 control-label">Ship to</label>
+                                            <div class="col-md-4">
+                                                <p class="form-control-static">{{ isset($order->shipping_address->street1) ?  $order->shipping_address->street1 : ""}},</p>
+                                                <p class="form-control-static">{{ isset($order->shipping_address->street2) ?  $order->shipping_address->street2 : "" }},</p>
+                                                <p class="form-control-static">{{ isset($order->shipping_address->poscode) ?  $order->shipping_address->poscode : "" }},</p>
+                                                <p class="form-control-static">{{ isset($order->shipping_address->city) ?  $order->shipping_address->city : "" }},</p>
+                                                <p class="form-control-static">{{ isset($order->shipping_address->state) ?  $order->shipping_address->state : "" }}</p>
                 
-                <div class="panel-body">
-                    
-                    <div class="form-group">
-                      <label class="col-xs-2 control-label">Packer's Name: {{ isset(Auth::user()->name) ? Auth::user()->name : Auth::user()->email }} </label>
-                      <div class="col-xs-4">
-                      </div>
-                    </div>
-    
-                  </div>
-                  
-              </div>
-              
-        </div>
-    </div>
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-		    <div class="panel-heading ui-draggable-handle">
-		      <h3 class="panel-title"><strong>Courier</strong></h3>
-		      <ul class="panel-controls">
-		        <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
-		      </ul>
-            </div>
-            
-		    <div class="panel-body">
-		    	
-                <div class="form-group">
-                  <label class="col-xs-2 control-label">Courier Service</label>
-                  <div class="col-xs-4">
-	                  <select class="form-control" name="courier_id">
-                      @foreach($couriers as $courier)
-                      <option value=""></option>
-	                    <option value="{{ $courier->id}}">{{ $courier->courier_name }}</option>
-	                  @endforeach
-	                  </select>
-	              </div>
-                </div>
+                                                <input class="hidden" value="{{ $order->ship_address }}" readonly>
+                                            </div>
+                                        </div>
+                            </div>
 
-                <div class="form-group">
-                  <label for="inputPassword3" class="col-xs-2 control-label">Consigment Note (C/N)</label>
-
-                  <div class="col-xs-4">
-                    <input class="form-control" name="consignment_note" type="text">
-                  </div>
-                </div>
-
-                <div class="form-group">
-                        <label class="col-md-2 control-label">Fee (RM)</label>
-                        <div class="col-md-4">                                    
-                                <input class="form-control" name="shipping_fee" value="{{isset($order->shipping_fee) ?  $order->shipping_fee : ""}}"" type="text">
-                        </div>  
-                </div>
-
-              </div>
-              
-          </div>
-          
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-12">
-		<div class="panel panel-default">
-		    <div class="panel-heading ui-draggable-handle">
-		      <h3 class="panel-title"><strong>Create Delivery for Order: #{{ isset($order->order_no) ?  $order->order_no : "" }} </strong></h3>
-            </div>
-
-            <div class="panel-body">		    
-                    <div class="form-group">
-                            <input type="text" name="order_no" class="hidden" value="{{ isset($order->id) ?  $order->id : "" }}" readonly>
-                            <label class="col-md-2 control-label">Referer</label>
                             <div class="col-md-4">
-                                <p class="form-control-static">{{ isset($order->user->username) ?  $order->user->username : "" }}</p>
-                                <input class="hidden" value="{{ isset($order->user->id) ?  $order->user->id : "" }}" readonly>
-                            </div>
-                            <label class="col-md-2 control-label">Customer</label>
-                            <div class="col-md-4">
-                                <p class="form-control-static">{{ isset($order->name) ?  $order->name : "" }}</p>
-                            </div>
-                            <label class="col-md-2 control-label">Tel</label>
-                            <div class="col-md-4">                                
-                                <p class="form-control-static">{{ isset($order->contect_no) ?  $order->contect_no : "" }}</p>
-                            </div>
-                    </div>
-                    
-                    
-                    <div class="form-group">
-                            <div class="col-md-6">
-                                    <label class="col-md-2 control-label">Shipping to</label>
-                                    <div class="col-md-4">
-                                        <p class="form-control-static">{{ isset($order->shipping_address->street1) ?  $order->shipping_address->street1 : ""}},</p>
-                                        <p class="form-control-static">{{ isset($order->shipping_address->street2) ?  $order->shipping_address->street2 : "" }},</p>
-                                        <p class="form-control-static">{{ isset($order->shipping_address->poscode) ?  $order->shipping_address->poscode : "" }},</p>
-                                        <p class="form-control-static">{{ isset($order->shipping_address->city) ?  $order->shipping_address->city : "" }},</p>
-                                        <p class="form-control-static">{{ isset($order->shipping_address->state) ?  $order->shipping_address->state : "" }}</p>
-        
-                                        <input class="hidden" value="{{ $order->ship_address }}" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                        <label class="col-md-2 control-label">Billing to</label>
+                                    <div class="form-group"> 
+                                            <label class="col-md-2 control-label">Bill to</label>
                                         <div class="col-md-4">
                                                 <p class="form-control-static">{{ isset($order->billing_address->street1) ?  $order->billing_address->street1 : "" }},</p>
                                                 <p class="form-control-static">{{ isset($order->billing_address->street2) ?  $order->billing_address->street2 : "" }},</p>
@@ -143,15 +94,9 @@
                                                 <p class="form-control-static">{{ isset($order->billing_address->state) ?  $order->billing_address->state : "" }}</p>
                                             <input class="hidden" value="{{ isset($order->bill_address) ?  $order->bill_address : "" }}" readonly>
                                         </div>
-                                </div>
-                            
-                    </div>
+                                        </div>
+                            </div>
 
-                    <div class="form-group">
-                            <label class="col-md-2 control-label">Fee</label>
-                            <div class="col-md-4">                                    
-                                <input class="hidden" value="{{ isset($order->bill_address) ?  $order->bill_address : "" }}" readonly>
-                            </div>  
                     </div>
     
              </div>
@@ -161,30 +106,38 @@
                     <thead>
                         <tr>
                             <th>
-                                Item
+                                Product Code
+                            </th>
+                            <th>
+                                Product Name
+                            </th>
+                            <th>
+                                    Quantity
                             </th>
                             <th>
                                 Product S/N
                             </th>
-                            <th>
-                                Quantity
-                            </th>
+                            
                         </tr>
                     </thead>
                     <tbody>
                             @foreach($items as $item)    
                             {{-- @for($x = 0; $x<$item->product_qty; $x++) --}}
                         <tr>
+                                <td>
+                                        {{ $item->product->code }}
+                                </td>
                             <td>
                                     {{ $item->product->name }}
                                 <input type="hidden" name="item_id[]" value="{{ $item->product->id }}">
                             </td>
                             <td>
-                                    <textarea class="form-control input_barcode" name="serial_no[]" >{{ old('serial_no[]') }}</textarea>
-                            </td>
-                            <td>
                                     <input class="form-control" name="quantity[]" value="{{ $item->product_qty }}" type="text">
                             </td>
+                            <td>
+                                    <textarea style="resize: none;" class="form-control input_barcode" name="serial_no[]" >{{ old('serial_no[]') }}</textarea>
+                            </td>
+                            
                         </tr>
                             {{-- @endfor --}}
                             @endforeach
@@ -200,6 +153,83 @@
    		</div>
 	</div>
 </div>
+
+<div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading ui-draggable-handle">
+                  <h3 class="panel-title"><strong>Courier</strong></h3>
+                  <ul class="panel-controls">
+                    <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
+                  </ul>
+                </div>
+                
+                <div class="panel-body">
+                    
+                    <div class="form-group">
+                      <label class="col-xs-2 control-label">Courier Service</label>
+                      <div class="col-xs-4">
+                          <select class="form-control" name="courier_id">
+                          @foreach($couriers as $courier)
+                          <option value=""></option>
+                            <option value="{{ $courier->id}}">{{ $courier->courier_name }}</option>
+                          @endforeach
+                          </select>
+                      </div>
+                    </div>
+    
+                    <div class="form-group">
+                      <label for="inputPassword3" class="col-xs-2 control-label">Consigment Note (C/N)</label>
+    
+                      <div class="col-xs-4">
+                        <input class="form-control" name="consignment_note" type="text">
+                      </div>
+                    </div>
+    
+                    <div class="form-group">
+                            <label class="col-md-2 control-label">Fee (RM)</label>
+                            <div class="col-md-4">                                    
+                                    <input class="form-control" name="shipping_fee" value="{{isset($order->shipping_fee) ?  $order->shipping_fee : ""}}"" type="text">
+                            </div>  
+                    </div>
+    
+                  </div>
+                  
+              </div>
+              
+        </div>
+    </div>
+
+<div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading ui-draggable-handle">
+                  <h3 class="panel-title"><strong>Packer</strong></h3>
+                  <ul class="panel-controls">
+                    <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
+                  </ul>
+                </div>
+                
+                <div class="panel-body">
+
+                        <div class="form-group">
+                                <label class="col-xs-2 control-label">Packed Date: {{ date('d/m/Y') }} </label>
+                                <div class="col-xs-4">
+                                </div>
+                        </div>
+                    
+                    <div class="form-group">
+                      <label class="col-xs-2 control-label">Packer's Name: {{ isset(Auth::user()->name) ? Auth::user()->name : Auth::user()->email }} </label>
+                      <div class="col-xs-4">
+                      </div>
+                    </div>
+    
+                  </div>
+                  
+              </div>
+              
+        </div>
+    </div>
 <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal">
         <div class="modal-dialog modal-sm">
           <div class="modal-content">
@@ -233,18 +263,17 @@
     
 <script  type="text/javascript" >
 $(document).ready(function() {
-    $(window).keydown(function(event){
-    if(event.keyCode == 13) {
-      event.preventDefault();
-      return false;
-    }
-  });
+    $('form').keyup(function(e) {
+        return e.which !== 13  
+     });
 
 
             $(".input_barcode").keyup(function(event) {
                 if (event.keyCode === 13 || event.keyCode === 116) { 
-                var inputcode = $(this);                   
+                var inputcode = $(this); 
+               
                 var value = $(this).val()
+      
                 //ajax
                 let split_value = value.split(/\n/);
                 let input = split_value[split_value.length-2] || split_value[split_value.length-1]
@@ -256,11 +285,11 @@ $(document).ready(function() {
                             }).done(function(result){
                                 console.log(result)
                                 if(result.status == "01"){
-                                   inputcode
+                                //    inputcode.val(result.serial_number)
                                 }else{
                                     alert('Product S/N Not Exist')
                                     if(split_value.length >= 3){
-                                        inputcode.val(split_value[split_value.length-3])
+                                        inputcode.val(split_value[split_value.length-3]+'\n')
                                     }else{
                                         inputcode.val("");
                                     }
@@ -270,7 +299,6 @@ $(document).ready(function() {
                             });
                 }
                 
-                console.log(split_value)
                 event.preventDefault();
                 }                     
             });

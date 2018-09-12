@@ -63,15 +63,21 @@ textarea {
                                     <form class="form-horizontal" role="form">   
                                                                  
                                             <div class="form-group">
-                                                <label class="col-md-3 control-label">Start Date:</label>
+                                                <label class="col-md-3 control-label">Purchase Date From:</label>
                                                 <div class="col-md-3">
-                                                    <input type="text" id="min" name="min" class="form-control datepicker">
+                                                        <div class="input-group">
+                                                    <input type="text" id="min" name="min" class="form-control datepicker"  data-date="" data-date-format="dd-mm-yyyy" data-date-viewmode="years">
+                                                    <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                                        </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                    <label class="col-md-3 control-label">End Date:</label>
+                                                    <label class="col-md-3 control-label">Purchase Date To:</label>
                                                     <div class="col-md-3">
+                                                            <div class="input-group">
                                                         <input type="text" id="max" name="max" class="form-control datepicker">
+                                                        <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                                            </div>
                                                     </div>
                                                 </div>
                                     </form>
@@ -79,15 +85,16 @@ textarea {
                             </div>
 
                             <div class="panel-body">
-                                <table  id="sales-order" class="table datatable"> 
+                                <table  id="sales-order" class="table"> 
                                         <thead>
                                                 <tr>
-                                        <th>Order Number</th>
-                                        <th>Purchase Date</th>                                                                                                       
+                                        <th>Sales Order#</th>                                                                                                                                       
                                         <th>Agent Code</th>
                                         <th>Status</th>
                                         <th>Ship To</th>
-                                        <th>Delivery Type</th> 
+                                        <th>Delivery Type</th>
+                                        <th>Purchase Date</th>
+                                        <th class="hidden"></th>         
                                         <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -96,12 +103,13 @@ textarea {
                                             
                                             @foreach($agent_order as $order)
                                             <tr>
-                                                <td>{{ $order->order_no }}</td>
-                                                <td>{{ Carbon\Carbon::parse($order->purchase_date)->format('d/m/Y') }}</td>                                                
+                                                <td>{{ $order->order_no }}</td>                                                                                                
                                                 <td>{{ isset($order->user->username) ? $order->user->username:"" }}</td>
                                                 <td>{{ isset($order->globalstatus->description) ? $order->globalstatus->description:"" }}</td>
                                                 <td>{{ isset($order->shipping_address->city) ? $order->shipping_address->city:"" }}</td>
                                                 <td>{{ isset($order->deliveryType->type_description) ? $order->deliveryType->type_description:"" }}</td>
+                                                <td data-order="{{ Carbon\Carbon::parse($order->purchase_date)}}">{{ Carbon\Carbon::parse($order->purchase_date)->format('d/m/Y') }}</td>
+                                                <td class="hidden" data-order="{{ Carbon\Carbon::parse($order->purchase_date)}}">{{ $order->purchase_date }}</td>
                                                 <td><a href="{{ url('inventory/order/delivery/create/'.base64_encode($order->order_no)) }}" class="btn btn-info">Process Order</a>
                                                     {{-- <a href="{{ url('inventory/order/sales/view/'.$order->order_no) }}" class="btn btn-default">Invoice</a></td> --}}
                                             @endforeach
@@ -135,23 +143,27 @@ textarea {
 <!-- END SCRIPTS -->  
 
 <script type="text/javascript">
-
+     
 
     $(document).ready(function($) {
-        $.fn.datepicker.defaults.format = "dd/mm/yyyy";
+       
 
-         var d = new Date();
-        var early_month = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +"01"
-        var today = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +("0" + d.getDate()).slice(-2)
-
-
-
+            var d = new Date();
+         var early_month = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +"01"
+         var today = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +("0" + d.getDate()).slice(-2)
+        
+         $.fn.datepicker.defaults.format = "dd/mm/yyyy";
+            $('#min').datepicker("update",new Date(early_month)).on('change',function(){t.draw()});
+            $('#max').datepicker("update",new Date(today)).on('change',function(){t.draw()});
          $.fn.dataTable.ext.search.push(
                     function( settings, data, dataIndex ) {
+                        
                         var min = new Date($('#min').val()) ; //parseInt( $('#min').val(), 10 );
                         var max = new Date($('#max').val()); //parseInt( $('#max').val(), 10 );
-                        var age = new Date(data[1]) || 0; //parseFloat( data[3] ) || 0; // use data for the age column
-                
+                        var dateString = data[5] || {{ date('d/m/Y') }};
+                        var dateParts = dateString.split("/");
+                        var age = new Date(data[6]) || new Date()
+
                         if ( ( isNaN( min ) && isNaN( max ) ) ||
                             ( isNaN( min ) && age <= max ) ||
                             ( min <= age   && isNaN( max ) ) ||
@@ -162,11 +174,10 @@ textarea {
                         return false;
                     }
                 );
-                var t = $('.datatable').DataTable({})
+                var t = $('#sales-order').DataTable({})
 
-                        
-        $('#min').datepicker("update",new Date(early_month)).on('change',function(){t.draw()});
-        $('#max').datepicker("update",new Date(today)).on('change',function(){t.draw()});
+                            
+        
      // Event listener to the two range filtering inputs to redraw on input
      $('#min, #max').on('change', function() {
                     t.draw();

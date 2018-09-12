@@ -150,7 +150,7 @@
             </li>
 
             <li class="xn-openable {{ Request::is('inventory/stock*') ? 'active' : '' }}">
-                <a href="{{ url('inventory/stock/current') }}"><span class="fa fa-archive"></span> Stocks </a>
+                <a href="{{ url('inventory/stock/current') }}"><span class="fa fa-archive"></span> Stock Management</a>
                 <ul>
                     <li class="{{ Request::is('inventory/stock/current') ? 'active' : '' }}">
                         <a href="{{ url('inventory/stock/current') }}"><span class="fa fa-align-justify fa-sm"></span>Current Stock Listing</a>
@@ -159,7 +159,7 @@
                         <a href="{{ url('inventory/stock/list') }}"><span class="fa fa-align-justify fa-sm"></span>Stock In Listing</a>
                     </li>                    
                     <li class="{{ Request::is('inventory/stock/in') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/stock/in') }}"><span class="fa fa-plus fa-sm"></span>Create New Stock In</a>
+                        <a href="{{ url('inventory/stock/in') }}"><span class="fa fa-plus fa-sm"></span>New Stock In</a>
                     </li>
                     <li class="{{ Request::is('inventory/stock/adjustment') ? 'active' : '' }}">
                         <a href="{{ url('inventory/stock/adjustment') }}"><span class="fa fa-plus fa-sm"></span>Stock Adjustment</a>
