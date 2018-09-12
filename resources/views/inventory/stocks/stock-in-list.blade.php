@@ -25,7 +25,7 @@
                         </div>
                         <div class="panel-body panel-body-table">
                             <div class="table-responsive">
-                                <table class="table table-hover table-striped datatable">
+                                <table class="table table-hover table-striped" id="table_listing">
                                     <thead>
                                         <tr>
                                             <th>Stock In Date</th>
@@ -76,7 +76,7 @@
 <script type="text/javascript">
 
     $(document).ready(function($) {
-        var t = $('.datatable').DataTable({
+        var t = $('#table_listing').DataTable({
                     "order": [],
                     "columnDefs": [
                                 { targets: 'no-sort', orderable: false }

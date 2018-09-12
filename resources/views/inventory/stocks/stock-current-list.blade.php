@@ -125,7 +125,7 @@ textarea {
                             <div class="panel-body">              
                                             <p>Total listing: <b>{{ count($data) }}</b></p>
                                         <div class="table-responsive">
-                                            <table class="table table-hover table-striped datatable" id="table_listing">
+                                            <table class="table table-hover table-striped" id="table_listing">
                                                 <thead>
                                                         <tr>
                                                                 <th  class="no-sort">Name</th>
@@ -219,7 +219,8 @@ textarea {
 <script type="text/javascript">
 
     $(document).ready(function() {
-                var t = $('.datatable').DataTable({
+        
+                var t = $('#table_listing').DataTable({
                     "order": [],
                     "columnDefs": [
                                 { targets: 'no-sort', orderable: false }

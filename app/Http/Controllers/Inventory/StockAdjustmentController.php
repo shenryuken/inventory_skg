@@ -47,9 +47,9 @@ class StockAdjustmentController extends Controller
 		$StockItem = StockItem::where('barcode',$barcode)->first();	
 
 		if($StockItem){
-			return ['status' => "01"];
+			return ['status' => "01",'serial_number' =>$barcode];
 		}else{
-			return ['status' => "02"];
+			return ['status' => "02",'serial_number'=>""];
 		}
 	}
 
