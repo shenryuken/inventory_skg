@@ -44,7 +44,7 @@ textarea {
             <div class="col-md-12">
                     <div class="panel panel-default">
                             <div class="panel-heading">
-                                    <h3 class="panel-title">Sales Order Listing</h3>
+                                    <h3 class="panel-title">Sales Order</h3>
                                     <div class="pull-right">
                                             <a href="{{url('print/docket-gdex') }} "  class="btn btn-warning">Print C/N</a>
                                    
@@ -79,7 +79,37 @@ textarea {
                                                         <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
                                                             </div>
                                                     </div>
-                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                    <label class="col-md-3 control-label">Agent Code:</label>
+                                                    <div class="col-md-3">
+                                                            <div class="input-group">
+                                                        <input type="text" id="agent_code_filter" name="agent_code_filter" class="form-control">
+                                                        <span class="input-group-addon"><span class="fa fa-smile-o"></span></span>
+                                                            </div>
+                                                    </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                    <label class="col-md-3 control-label">Delivery Type:</label>
+                                                    <div class="col-md-3">
+                                                            <div class="input-group">
+                                                        <input type="text" id="delivery_type_filter" name="delivery_type_filter" class="form-control">
+                                                        <span class="input-group-addon"><span class="fa fa-circle"></span></span>
+                                                            </div>
+                                                    </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                    <label class="col-md-3 control-label">Ship To:</label>
+                                                    <div class="col-md-3">
+                                                            <div class="input-group">
+                                                        <input type="text" id="ship_to_filter" name="ship_to_filter" class="form-control">
+                                                        <span class="input-group-addon"><span class="fa fa-map-marker""></span></span>
+                                                            </div>
+                                                    </div>
+                                            </div>
                                     </form>
                                     
                             </div>
@@ -143,23 +173,27 @@ textarea {
 <!-- END SCRIPTS -->  
 
 <script type="text/javascript">
-     
 
-    $(document).ready(function($) {
-       
+    $(document).ready(function($) {     
 
-            var d = new Date();
-         var early_month = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +"01"
-         var today = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +("0" + d.getDate()).slice(-2)
+        var d = new Date();
+        var early_month = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +"01"
+        var today = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +("0" + d.getDate()).slice(-2)
         
-         $.fn.datepicker.defaults.format = "dd/mm/yyyy";
+        $.fn.datepicker.defaults.format = "dd/mm/yyyy";
             $('#min').datepicker("update",new Date(early_month)).on('change',function(){t.draw()});
             $('#max').datepicker("update",new Date(today)).on('change',function(){t.draw()});
-         $.fn.dataTable.ext.search.push(
+
+            $('#agent_code_filter').on('blur',function(){t.draw()});
+            $('#delivery_type_filter').on('blur',function(){t.draw()});
+            $('#ship_to_filter').on('blur',function(){t.draw()});
+
+        $.fn.dataTable.ext.search.push(
                     function( settings, data, dataIndex ) {
                         
                         var min = new Date($('#min').val()) ; //parseInt( $('#min').val(), 10 );
                         var max = new Date($('#max').val()); //parseInt( $('#max').val(), 10 );
+
                         var dateString = data[5] || {{ date('d/m/Y') }};
                         var dateParts = dateString.split("/");
                         var age = new Date(data[6]) || new Date()
@@ -172,16 +206,28 @@ textarea {
                             return true;
                         }
                         return false;
-                    }
-                );
-                var t = $('#sales-order').DataTable({})
-
-                            
+                    } );
         
-     // Event listener to the two range filtering inputs to redraw on input
-     $('#min, #max').on('change', function() {
-                    t.draw();
-                } );
+        $.fn.dataTable.ext.search.push(
+                    function( settings, data, dataIndex ) {
+                        var agent = $('#agent_code_filter').val().toLowerCase();
+                        var delivery_type = $('#delivery_type_filter').val().toLowerCase();
+                        var ship_to = $('#ship_to_filter').val().toLowerCase();               
+
+                        if( ((data[1].toLowerCase().indexOf(agent) !== -1 ) || agent == "") && 
+                            ((data[4].toLowerCase().indexOf(delivery_type) !== -1 )  || delivery_type == "") &&
+                            ((data[3].toLowerCase().indexOf(ship_to) !== -1 ) || ship_to == "")){
+                            return true;
+                        }
+                        return false;
+                    });
+        
+        var t = $('#sales-order').DataTable({
+            "oLanguage": {
+                            "sSearch": "Search Sales Order"
+                        }
+        })
+
     });
 </script>
    
