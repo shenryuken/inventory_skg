@@ -153,7 +153,7 @@
                 <a href="{{ url('inventory/stock/current') }}"><span class="fa fa-archive"></span> Stock Management</a>
                 <ul>
                     <li class="{{ Request::is('inventory/stock/current') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/stock/current') }}"><span class="fa fa-align-justify fa-sm"></span>Current Stock Listing</a>
+                        <a href="{{ url('inventory/stock/current') }}"><span class="fa fa-align-justify fa-sm"></span>Products in Stock</a>
                     </li>
                     <li class="{{ Request::is('inventory/stock/list') ? 'active' : '' }}">
                         <a href="{{ url('inventory/stock/list') }}"><span class="fa fa-align-justify fa-sm"></span>Stock In Listing</a>
@@ -171,10 +171,10 @@
                 <a href="{{ url('inventory/order/sales') }}"><span class="fa fa-shopping-cart"></span> Order Management </a>
                 <ul>
                     <li class="{{ Request::is('inventory/order/sales') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/order/sales') }}"><span class="fa fa-align-justify fa-sm"></span>Sales Order Listing</a>
+                        <a href="{{ url('inventory/order/sales') }}"><span class="fa fa-align-justify fa-sm"></span>Sales Order</a>
                     </li>
                     <li class="{{ Request::is('inventory/stock/delivery') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/order/delivery') }}"><span class="fa fa-align-justify fa-sm"></span> Delivery Order Listing</a>
+                        <a href="{{ url('inventory/order/delivery') }}"><span class="fa fa-align-justify fa-sm"></span> Delivery Order</a>
                     </li>
                 </ul>
             </li>

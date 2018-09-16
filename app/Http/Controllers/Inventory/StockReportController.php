@@ -65,6 +65,7 @@ class StockReportController extends Controller
                 
 
                 $reports[] = [
+                    'server_date'   => $v->stock_date,
                     'date'          => Carbon::parse($v->stock_date)->format('d/m/Y'),
                     'description'   => $v->description,
                     'stock_in'      => $stock_in,
@@ -72,7 +73,8 @@ class StockReportController extends Controller
                     'product_name'  => $product_name,
                     'product_code'  => $product_code,
                     'supplier_name' => $supplier_name,
-                    'supplier_code' => $supplier_code
+                    'supplier_code' => $supplier_code,
+                    'adjustment_type' => ""
                 ];
             }
         }
@@ -93,8 +95,11 @@ class StockReportController extends Controller
                     $product_code = isset($b->StockItem->first()->products->code) ? $b->StockItem->first()->products->code : "";
                     $supplier_name = isset($b->StockItem->first()->suppliers->company_name) ? $b->StockItem->first()->suppliers->company_name : "";
                     $supplier_code = isset($b->StockItem->first()->suppliers->supplier_code) ? $b->StockItem->first()->suppliers->supplier_code : "";
+
+                    $adjustment_type =  isset($b->stockAdjustmentType->adjustment) ? $b->stockAdjustmentType->adjustment : "";
     
                     $reports[] = [
+                        'server_date'   => $b->stock_date,
                         'date'          => Carbon::parse($b->stock_date)->format('d/m/Y'),
                         'description'   => $b->description,
                         'stock_out'     => $stock_adj_in,
@@ -102,7 +107,8 @@ class StockReportController extends Controller
                         'product_name'  => $product_name,
                         'product_code'  => $product_code,
                         'supplier_name' => $supplier_name,
-                        'supplier_code' => $supplier_code
+                        'supplier_code' => $supplier_code,
+                        'adjustment_type' => $adjustment_type
                     ];
 
                     }

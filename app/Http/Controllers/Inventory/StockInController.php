@@ -46,12 +46,18 @@ class StockInController extends Controller
     }
 
     public function store(Request $request){
-
-        $this->validate($request,[
+        
+        // try{
+            
+        $validation = $this->validate($request,[
             'stock_date' => 'required',
             'product'    => 'required',
             'supplier'   => 'required',
         ]);
+
+        if(!$validation){
+            return back()->withInput();
+        }
 
         $document_no =  $this->generate_docno();
         
@@ -71,9 +77,17 @@ class StockInController extends Controller
             'barcode'       => $serialNumberArray
         ];
 
-        $this->storeProductStocks($product_stock_array);
+            $this->storeProductStocks($product_stock_array);
+            return back()->with('success', 'Successfully saved!');
 
-        return back()->with('success', 'Successfully saved!');
+        // }
+        // catch(\Exception $e)
+        // {
+        //         return back()->withInput();
+
+        // }
+
+        
 
     }
 
