@@ -46,7 +46,7 @@ textarea {
                             <div class="panel-heading">
                                     <h3 class="panel-title">Sales Order</h3>
                                     <div class="pull-right">
-                                            {{-- <a href="{{url('print/docket-gdex') }} "  class="btn btn-warning">Print C/N</a> --}}
+                                            {{-- <a href="{{url('print/docket-gdex') }} "  class="btn btn-warning">Print C/N(G-DEX)</a> --}}
                                             
                                             <form action="{{url('print/docket-gdex')}}" method="post" target="_blank" id="docket_form">
                                                 {{ csrf_field() }}
