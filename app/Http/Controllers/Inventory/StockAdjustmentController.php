@@ -55,11 +55,15 @@ class StockAdjustmentController extends Controller
 
     public function store(Request $request){
 
-        $this->validate($request,[
+        $validation = $this->validate($request,[
             'adjustment_date'   => 'required',
             'product'           => 'required',
             'adjustment_type'   => 'required',
         ]);
+
+        if(!$validation){
+            return back()->withInput();
+        }
         
         $serialNumberArray      = json_decode($request->input('serial_number_scan_json'));
 

@@ -57,9 +57,10 @@
                         <div class="panel-body">
                                        
                                                  <div class="table-responsive">
-                                                     <table id="stock_bal_report" class="table datatable table-bordered">
+                                                     <table id="stock_bal_report" class="table table-bordered">
                                                          <thead>
                                                              <tr>
+                                                                 <th class="hidden"></th>
                                                                  <th>Date</th>
                                                                  <th>Product</th>
                                                                  <th>Product Code</th>
@@ -73,6 +74,7 @@
                                                          <tbody>
                                                              @foreach($reports as $report )
                                                                 <tr>
+                                                                    <td class="hidden">{{ $report['server_date'] }}</td>
                                                                     <td>{{ $report['date'] }}</td>
                                                                     <td>{{ $report['product_name'] }}</td>
                                                                     <td>{{ $report['product_code'] }}</td>
@@ -80,13 +82,14 @@
                                                                     <td>{{ $report['supplier_code'] }}</td>
                                                                     <td>{{ $report['description'] }}</td>								    
                                                                     <td>{{ $report['stock_in'] }}</td>
-                                                                    <td>{{ $report['stock_out'] }}</td>
+                                                                <td title="{{ $report['adjustment_type'] }}">{{ $report['stock_out'] }}</td>
                                                                 </tr>
                                                              @endforeach
                                                             </tbody>
                                                         <tfoot>
                                                             <tr style="background-color: Wheat;">
                                                                 <td><strong>Total</strong></td>
+                                                                <td class="hidden"></td>
                                                                 <td></td>
                                                                 <td></td>
                                                                 <td></td>
@@ -143,7 +146,7 @@
         var early_month = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +"01"
         var today = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +("0" + d.getDate()).slice(-2)
 
-        var t = $('.datatable').DataTable({
+        var t = $('#stock_bal_report').DataTable({
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
  
@@ -212,6 +215,7 @@
                         var min = new Date($('#min').val()) ; //parseInt( $('#min').val(), 10 );
                         var max = new Date($('#max').val()); //parseInt( $('#max').val(), 10 );
                         var age = new Date(data[0]) || 0; //parseFloat( data[3] ) || 0; // use data for the age column
+                        console.log(age)
                 
                         if ( ( isNaN( min ) && isNaN( max ) ) ||
                             ( isNaN( min ) && age <= max ) ||

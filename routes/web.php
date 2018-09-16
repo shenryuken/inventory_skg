@@ -310,7 +310,7 @@ Route::get('inventory/order/delivery/create/{order_no?}', 'Inventory\OrderContro
 Route::get('inventory/order/sales/view/{order_no?}', 'Inventory\OrderController@salesDetail');
 Route::get('inventory/order/delivery/view/{order_no?}', 'Inventory\OrderController@deliveryDetail');
 // Route::get('inventory/order/delivery/view/{order_no?}', 'Inventory\OrderController@deliveryOrderPDF');
-Route::get('print/docket-gdex', 'Inventory\OrderController@gdexDocket');
+Route::post('print/docket-gdex', 'Inventory\OrderController@gdexDocket');
 Route::post('inventory/order/delivery/store', 'Inventory\OrderController@deliveryStore');
 Route::post('inventory/order/delivery/complete', 'Inventory\OrderController@deliveryComplete');
 

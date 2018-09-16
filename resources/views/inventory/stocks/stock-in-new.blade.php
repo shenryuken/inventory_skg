@@ -59,7 +59,7 @@
                                         <div class="form-group">
                                                     <label for="stock_in_date" class="col-md-3 col-xs-12 control-label">Stock Date</label> 
                                                     <div class="col-md-6 col-xs-12">                       
-                                                    <input type="input" name="stock_date" class="form-control datepicker" date>
+                                                    <input type="input" name="stock_date" class="form-control datepicker" value="{{old('stock_date')}}">
                                                     </div>
                                         </div>
 

@@ -194,10 +194,10 @@ class OrderController extends Controller
 
     }
 
-    public function gdexDocket()
-    {
-        $agent_order = OrderHdr::where('status','01')->get();
-
+    public function gdexDocket(Request $request)
+    {   
+        $sale_order = json_decode($request->get('so'));
+        $agent_order = OrderHdr::whereIn('order_no',$sale_order)->get();
         
         ### Docket Template Configuration ###
         #~by AwakComey
@@ -266,7 +266,7 @@ class OrderController extends Controller
 
                 ####### part 1 sender address #########	
                     $pdf::setXY(20+$x1,16+$y1);
-                    $pdf::cell(98,10,'SKG WORLD (SA23456-T)',0,1,'L');
+                    $pdf::cell(98,10,'SKG WORLD SDN BHD (885623-P)',0,1,'L');
                     $pdf::setXY(20+$x1,22+$y1);
                     $pdf::setFont('Arial','',9);
                     $pdf::Cell(98,4,'ADDRESS 1,',0,0,'L');

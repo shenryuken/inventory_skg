@@ -54,7 +54,7 @@
                                         <div class="form-group">
                                                 <label for="stock_in_date" class="col-md-3 col-xs-12 control-label">Adjustment Date</label> 
                                                 <div class="col-md-6 col-xs-12">                       
-                                                        <input type="input" name="adjustment_date" class="form-control datepicker"> 
+                                                        <input type="input" name="adjustment_date" class="form-control datepicker"  value="{{old('adjustment_date')}}"> 
                                                 </div>
                                         </div>
 
@@ -94,7 +94,7 @@
                                                 </div>
                                         </div>
 
-                                        <input type="text" name="serial_number_scan_json" id="serial_number_scan_json" hidden>
+                                        <input type="text" name="serial_number_scan_json" id="serial_number_scan_json" hidden  value="{{old('serial_number_scan_json')}}">
                                        
                         
                     </div>
