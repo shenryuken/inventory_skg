@@ -51,7 +51,7 @@ textarea {
                                             <form action="{{url('print/docket-gdex')}}" method="post" target="_blank" id="docket_form">
                                                 {{ csrf_field() }}
                                                 <input type="text" name="so" id="so" hidden>
-                                                <a href="#" id="docket-btn" class="btn btn-warning"><i class="glyphicon glyphicon-print"></i>Print C/N</a>
+                                                <a href="#" id="docket-btn" class="btn btn-warning"><i class="glyphicon glyphicon-print"></i>Print C/N (GDex)</a>
 
                                             </form>
                                    
