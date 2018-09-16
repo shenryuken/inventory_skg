@@ -160,14 +160,14 @@
  
             // Total over all pages
             total1 = api
-                .column( 6 )
+                .column( 7   )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
 
             total2 = api
-            .column( 7 )
+            .column( 8 )
             .data()
             .reduce( function (a, b) {
                 return intVal(a) + intVal(b);
@@ -175,25 +175,25 @@
  
             // Total over this page
             pageTotal1 = api
-                .column( 6, { page: 'current'} )
+                .column( 7  , { page: 'current'} )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
 
             pageTotal2 = api
-                .column( 7, { page: 'current'} )
+                .column( 8, { page: 'current'} )
                 .data()
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
  
             // Update footer
-            $( api.column( 6 ).footer() ).html(
+            $( api.column( 7     ).footer() ).html(
                 '<strong>'+pageTotal1 +'</strong>'
             );
 
-            $( api.column( 7 ).footer() ).html(
+            $( api.column( 8 ).footer() ).html(
                 '<strong>'+pageTotal2 + '</strong>'
             );
         },
