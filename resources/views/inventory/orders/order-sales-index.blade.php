@@ -117,6 +117,11 @@ textarea {
                                                             </div>
                                                     </div>
                                             </div>
+                                            <div class="form-group">
+                                                    <div class="col-md-6">
+                                                <input type="button" class="btn btn-default btn-rounded pull-right" id="clear_filter" value="Clear Filter">
+                                                    </div>
+                                            </div>
                                     </form>
                                     
                             </div>
@@ -272,9 +277,23 @@ textarea {
         $('#so').val(JSON.stringify(so));
         $('#docket_form').submit();
     })
+
+
+    $('#clear_filter').on('click',function(){
+        
+        $('#min').val("");
+        $('#max').val("");
+
+        $('#agent_code_filter').val("");
+        $('#delivery_type_filter').val("");
+        $('#ship_to_filter').val("");
+        t.draw();
+    })
         
 
     });
+
+    
 
     
 </script>
