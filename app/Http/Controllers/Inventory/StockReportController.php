@@ -100,8 +100,8 @@ class StockReportController extends Controller
                     $adjustment_type =  isset($b->stockAdjustmentType->adjustment) ? $b->stockAdjustmentType->adjustment : "";
                         Log::info($b->stockAdjustmentType);
                     $reports[] = [
-                        'server_date'   => $b->stock_date,
-                        'date'          => Carbon::parse($b->stock_date)->format('d/m/Y'),
+                        'server_date'   => $b->adjustment_date,
+                        'date'          => Carbon::parse($b->adjustment_date)->format('d/m/Y'),
                         'description'   => $b->description,
                         'stock_in'     => $stock_adj_in,
                         'stock_out'      => $stock_adj_out,
