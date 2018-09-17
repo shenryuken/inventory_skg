@@ -64,24 +64,33 @@ class StockAdjustmentController extends Controller
         if(!$validation){
             return back()->withInput();
         }
+        try{
+            $serialNumberArray      = json_decode($request->input('serial_number_scan_json'));
+
+            $stock  = new StockAdjustment;
+            $stock->adjustment_date  	     = $request->adjustment_date;
+            $stock->stockadjustment_type_id  = $request->adjustment_type;
+            $stock->description              = $request->description;
+            $stock->created_by               = Auth::user()->id;
+            $stock->save();
+
+        if($stock->id)
+        {
+            $product_stock_array = [
+                'stock_adjustment_id'   => $stock->id,
+                'barcode'               => $serialNumberArray
+            ];
+    
+            $this->storeProductStocks($product_stock_array);
+        }
         
-        $serialNumberArray      = json_decode($request->input('serial_number_scan_json'));
-
-        $stock  = new StockAdjustment;
-        $stock->adjustment_date  	     = $request->adjustment_date;
-        $stock->stockadjustment_type_id  = $request->adjustment_type;
-        $stock->description              = $request->description;
-        $stock->created_by               = Auth::user()->id;
-        $stock->save();
         
-        $product_stock_array = [
-            'stock_adjustment_id'   => $stock->id,
-            'barcode'               => $serialNumberArray
-        ];
 
-        $this->storeProductStocks($product_stock_array);
-
-        return back()->with('success', 'Successfully saved!');
+            return back()->with('success', 'Successfully saved!');
+        }catch(\Exception $e){
+            return back();
+        }
+        
 
     }
 
@@ -93,23 +102,29 @@ class StockAdjustmentController extends Controller
 
             if($stock_item){
 
-                StockItem::where('barcode',$product_supplier->barcode)->update([
-                    "stock_adjustment_id"   => $product_stock_array['stock_adjustment_id'],
-                    "status"                => "04",
-                    'updated_by'            => Auth::user()->id,
-                ]);
-            }else{
+                $new = $stock_item->replicate();
 
+                $new->status = "04";
+                $new->stock_adjustment_id = $product_stock_array['stock_adjustment_id'];
+                $new->updated_by = Auth::user()->id;
+                $new->save();
+
+                $stock_item->status = "99"; //moved
+                $stock_item->update();
+                
+
+            }else{
+                //Create non serial number
                 $product_stock_array = [
                     'stock_adjustment_id'   => $product_stock_array['stock_adjustment_id'],
-                    'adjustment_quantity'   => $product_supplier->quantity,
+                    'quantity'   => $product_supplier->quantity,
                     'status'                => '04',
                     'created_by'            => Auth::user()->id,
-                    'updated_at'            => Carbon::now()    
+                    'created_at'            => Carbon::now()    
                 ];
     
                 StockItem::insert($product_stock_array);
-            }           
+            }        
         }
     }
 

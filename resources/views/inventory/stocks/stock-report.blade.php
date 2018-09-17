@@ -82,7 +82,7 @@
                                                                     <td>{{ $report['supplier_code'] }}</td>
                                                                     <td>{{ $report['description'] }}</td>								    
                                                                     <td>{{ $report['stock_in'] }}</td>
-                                                                <td title="{{ $report['adjustment_type'] }}">{{ $report['stock_out'] }}</td>
+                                                                <td data-toggle="tooltip" data-original-title="{{ $report['adjustment_type'] }}" data-container="body" data-toggle="tooltip" data-placement="bottom" title="" title="">{{ $report['stock_out'] }}</td>
                                                                 </tr>
                                                              @endforeach
                                                             </tbody>
@@ -235,7 +235,9 @@
                     t.draw();
                 } );
 
-        
+        $(function () {
+            $("[data-toggle='tooltip']").tooltip();
+        });
 
     $(".click").on('click',function() {
             window.location = $(this).data("href");
@@ -245,6 +247,7 @@
     function fn_clear(){
         console.log("clear!");
     }
+    
     </script>
 
 @stop

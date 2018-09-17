@@ -14,7 +14,7 @@
             </div>
             <div class="profile-data">
                 <div class="profile-data-name">{{ Auth::guard('admin')->user()->username}}</div>
-                <div class="profile-data-title">Web Developer/Designer</div>
+                <div class="profile-data-title"></div>
             </div>
             <div class="profile-controls">
                 <a href="{{ url('admin/profile/'.Auth::guard('admin')->user()->id) }}" class="profile-control-left"><span class="fa fa-info"></span></a>

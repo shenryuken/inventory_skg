@@ -83,9 +83,10 @@ class StockReportController extends Controller
             if($stock_adjustments->isNotEmpty()){
                 foreach($stock_adjustments as $a => $b)
                 {
+                    
                     if($b->StockItem){
                         $stock_adj_in   = $b->StockItem->where('status','03')->sum('quantity') != 0 ? $b->StockItem->where('status','03')->sum('quantity') : "";
-                         $stock_adj_out  = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','04')->sum('quantity') : "";
+                        $stock_adj_out  = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','04')->sum('quantity') : "";
     
     
                     $stock_in_total     = $stock_in_total + ($b->StockItem->where('status','03')->sum('quantity'));
@@ -97,13 +98,13 @@ class StockReportController extends Controller
                     $supplier_code = isset($b->StockItem->first()->suppliers->supplier_code) ? $b->StockItem->first()->suppliers->supplier_code : "";
 
                     $adjustment_type =  isset($b->stockAdjustmentType->adjustment) ? $b->stockAdjustmentType->adjustment : "";
-    
+                        Log::info($b->stockAdjustmentType);
                     $reports[] = [
                         'server_date'   => $b->stock_date,
                         'date'          => Carbon::parse($b->stock_date)->format('d/m/Y'),
                         'description'   => $b->description,
-                        'stock_out'     => $stock_adj_in,
-                        'stock_in'      => $stock_adj_out,
+                        'stock_in'     => $stock_adj_in,
+                        'stock_out'      => $stock_adj_out,
                         'product_name'  => $product_name,
                         'product_code'  => $product_code,
                         'supplier_name' => $supplier_name,
@@ -119,7 +120,7 @@ class StockReportController extends Controller
            
 
         }catch(\Exception $e){
-            
+            Log::error($e);
         }
            
 
