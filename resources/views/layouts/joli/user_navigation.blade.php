@@ -5,11 +5,11 @@
         <a href="#" class="x-navigation-control"></a>
     </li> 
     <li class="xn-profile">
-        <a href="#" class="profile-mini">
+        <a href="#" class="profile-mini hidden">
             <img src="{{ asset('themes/Joli/assets/images/users/avatar.jpg') }}" alt="John Doe">
         </a>
         <div class="profile">
-            <div class="profile-image">
+            <div class="profile-image hidden">
                 <img src="{{ asset('themes/Joli/assets/images/users/avatar.jpg') }}" alt="John Doe">
             </div>
             <div class="profile-data">

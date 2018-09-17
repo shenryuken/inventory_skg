@@ -8,12 +8,12 @@ class StockAdjustment extends Model
 {
     public function stockAdjustmentType()
     {
-        return $this->hasOne('App\Models\stockadjustmentType');
+        return $this->belongsTo('App\Models\stockadjustmentType','stockadjustment_type_id','id');
     }
 
     public function stockItem()
     {
-        return $this->belongsTo('App\Models\StockItem');
+        return $this->hasOne('App\Models\StockItem');
     }
 
     
