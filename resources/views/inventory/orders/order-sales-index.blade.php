@@ -70,8 +70,8 @@ textarea {
                                     <form class="form-horizontal" role="form">   
                                                                  
                                             <div class="form-group">
-                                                <label class="col-md-3 control-label">Purchase Date From:</label>
-                                                <div class="col-md-3">
+                                                <label class="col-md-4 control-label">Purchase Date From:</label>
+                                                <div class="col-md-4">
                                                         <div class="input-group">
                                                     <input type="text" id="min" name="min" class="form-control datepicker"  data-date="" data-date-format="dd-mm-yyyy" data-date-viewmode="years">
                                                     <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
@@ -79,8 +79,8 @@ textarea {
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                    <label class="col-md-3 control-label">Purchase Date To:</label>
-                                                    <div class="col-md-3">
+                                                    <label class="col-md-4 control-label">Purchase Date To:</label>
+                                                    <div class="col-md-4">
                                                             <div class="input-group">
                                                         <input type="text" id="max" name="max" class="form-control datepicker">
                                                         <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
@@ -89,8 +89,8 @@ textarea {
                                             </div>
 
                                             <div class="form-group">
-                                                    <label class="col-md-3 control-label">Agent Code:</label>
-                                                    <div class="col-md-3">
+                                                    <label class="col-md-4 control-label">Agent Code:</label>
+                                                    <div class="col-md-4">
                                                             <div class="input-group">
                                                         <input type="text" id="agent_code_filter" name="agent_code_filter" class="form-control">
                                                         <span class="input-group-addon"><span class="fa fa-smile-o"></span></span>
@@ -99,8 +99,8 @@ textarea {
                                             </div>
 
                                             <div class="form-group">
-                                                    <label class="col-md-3 control-label">Delivery Type:</label>
-                                                    <div class="col-md-3">
+                                                    <label class="col-md-4 control-label">Delivery Type:</label>
+                                                    <div class="col-md-4">
                                                             <div class="input-group">
                                                         <input type="text" id="delivery_type_filter" name="delivery_type_filter" class="form-control">
                                                         <span class="input-group-addon"><span class="fa fa-circle"></span></span>
@@ -109,8 +109,8 @@ textarea {
                                             </div>
 
                                             <div class="form-group">
-                                                    <label class="col-md-3 control-label">Ship To:</label>
-                                                    <div class="col-md-3">
+                                                    <label class="col-md-4 control-label">Ship To:</label>
+                                                    <div class="col-md-4">
                                                             <div class="input-group">
                                                         <input type="text" id="ship_to_filter" name="ship_to_filter" class="form-control">
                                                         <span class="input-group-addon"><span class="fa fa-map-marker""></span></span>
@@ -152,8 +152,8 @@ textarea {
                                                 <td>{{ isset($order->deliveryType->type_description) ? $order->deliveryType->type_description:"" }}</td>
                                                 <td data-order="{{ Carbon\Carbon::parse($order->purchase_date)}}">{{ Carbon\Carbon::parse($order->purchase_date)->format('d/m/Y') }}</td>
                                                 <td class="hidden" data-order="{{ Carbon\Carbon::parse($order->purchase_date)}}">{{ $order->purchase_date }}</td>
-                                                <td><a href="{{ url('inventory/order/delivery/create/'.base64_encode($order->order_no)) }}" class="btn btn-info">Process Order</a>
-                                                    {{-- <a href="{{ url('inventory/order/sales/view/'.$order->order_no) }}" class="btn btn-default">Invoice</a></td> --}}
+                                                <td>
+                                                    <a href="{{ url('inventory/order/sales/view/'.$order->order_no) }}" class="btn btn-default">View Order</a></td>
                                             @endforeach
                                         </tbody>
                                 </table>
