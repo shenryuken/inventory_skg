@@ -10,6 +10,7 @@ use App\Models\Courier;
 use App\Models\Delivery;
 use App\Models\DeliveryItem;
 use App\Models\StockItem;
+use App\Models\Product;
 use Auth;
 use Carbon\Carbon;
 use Session;
@@ -50,13 +51,14 @@ class OrderController extends Controller
         try{
             $order = OrderHdr::where('order_no',$order_no)->first();
             $items = OrderItem::where('order_no',$order_no)->get();
+            $deliveries = Delivery::where('order_id',$order->id)->get();
             // var_dump($items->products->name);
         
         
     }catch(\Exception $e){
         return back()->withError($e->getMessage());
     }
-        return view('inventory.orders.order-sales-view',[ 'order' => $order, 'items' => $items]);
+        return view('inventory.orders.order-sales-view',[ 'order' => $order, 'items' => $items,'deliveries' => $deliveries]);
     }
 
     public function deliveryDetail($order_no = "")
@@ -92,9 +94,10 @@ class OrderController extends Controller
         $order      = OrderHdr::where('order_no',$order_no)->where('status','01')->first();
         $items      = OrderItem::where('order_no',$order_no)->get();
         $couriers   = Courier::all();
+        $products = Product::all();
         // var_dump($items->products->name);
 
-        return view('inventory.orders.order-delivery-form',[ 'order' => $order, 'items' => $items, 'couriers' => $couriers]);
+        return view('inventory.orders.order-delivery-form',[ 'order' => $order, 'items' => $items, 'couriers' => $couriers,'products'=>$products]);
     }
 
     public function deliveryStore(Request $request)
@@ -121,48 +124,54 @@ class OrderController extends Controller
 
             $delivery = new Delivery($data);
             $delivery->save();
-			$delivery_id = $delivery->id;
+            $delivery_id = $delivery->id;
             
-            if($request->get('serial_no')){
-                for($x = 0; $x < count($request->get('serial_no')); $x++){
-                    //trim serial
-                    $trimmed_serial = explode("\n",$request->get('serial_no')[$x]);
-    
-                    foreach($trimmed_serial as $serial_number){
-                        
-                        $serial_number = preg_replace('/\s+/', '', $serial_number);
-                        
-                        if($serial_number != ""){
-                            $data_item = [
-                                'delivery_id'   => $delivery_id,
-                                'product_id'    => $request->get('item_id')[$x],
-                                'barcode'       => $serial_number,
-                                'quantity'      => $request->get('quantity')[$x],
-                        ];
-                        //update to stock
-                        try{
-                            $stock_item = new StockItem;    
-        
-                            $stock_item->where('barcode',$serial_number)->update(['status' => '02']);
-                        }catch(Exception $e){
-        
-                        }
-                        $delivery_item = new DeliveryItem($data_item);
-                        $delivery_item->save();
-                        }
-    
-                    }
-                }
+            $serialNumberArray = json_decode($request->input('serial_number_scan_json'));
 
-            }
+            $product_stock_array = [
+                'delivery_id'   => $delivery_id,
+                'barcode'       => $serialNumberArray,
+            ];
+    
+                $this->storeProductStocks($product_stock_array);
 
             if($delivery_id){
-                OrderHdr::where('id',$order_no)->update(['status'=>'02','shipping_fee'=>$request->get('shipping_fee')]);
+                // OrderHdr::where('id',$order_no)->update(['status'=>'02','shipping_fee'=>$request->get('shipping_fee')]);
             }
             
 
         Session::flash('message', 'Successfully created delivery order');
         return redirect('inventory/order/delivery/');
+    }
+
+    public function storeProductStocks($product_stock_array){
+        
+        foreach($product_stock_array['barcode'] as $product_supplier){
+            $product = new Product;
+            $product_query = $product->where('code',$product_supplier->product_code)->first();
+            $data_item = [
+                'product_id'    => $product_query->id,
+                'delivery_id'   => $product_stock_array['delivery_id'],
+                'barcode'       => $product_supplier->barcode,
+                'quantity'      => $product_supplier->quantity,
+                'created_by'    => Auth::user()->id,
+                'updated_at'    => Carbon::now()    
+            ];
+
+            if($product_supplier->barcode){
+                try{
+                                    $stock_item = new StockItem;    
+                
+                                    $stock_item->where('barcode',$product_supplier->barcode)->update(['status' => '02']);
+                                }catch(Exception $e){
+                
+                                }
+            }
+
+            $delivery_item = new DeliveryItem($data_item);
+            $delivery_item->save();
+        }
+        
     }
 
     public function deliveryComplete(Request $request)

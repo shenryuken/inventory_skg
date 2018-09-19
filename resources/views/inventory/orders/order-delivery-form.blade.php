@@ -24,6 +24,7 @@
 @endif
 <form class="form-horizontal" id="form" method="post" action="{{ url('inventory/order/delivery/store')}}">
 {{ csrf_field() }}
+@if($order)
 <input type="hidden" name="order_id" value="{{ $order->id }}">
 <input type="text" name="order_no" class="hidden" value="{{ isset($order->id) ?  $order->id : "" }}" readonly>   
 <input class="hidden" value="{{ isset($order->user->id) ?  $order->user->id : "" }}" readonly>
@@ -100,151 +101,163 @@
                     </div>
     
              </div>
-		    <div class="panel-body">
+                    
+		    
+            <div class="panel-heading ui-draggable-handle">
+                    <h3 class="panel-title"><strong>Courier</strong></h3>
+                    <ul class="panel-controls">
+                      <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
+                    </ul>
+                  </div>
+                  <div class="panel-body">
+                    
+                        <div class="form-group">
+                          <label class="col-xs-2 control-label">Courier Service</label>
+                          <div class="col-xs-4">
+                              <select class="form-control" name="courier_id">
+                              @foreach($couriers as $courier)
+                              <option value=""></option>
+                                <option value="{{ $courier->id}}">{{ $courier->courier_name }}</option>
+                              @endforeach
+                              </select>
+                          </div>
+                        </div>
+        
+                        <div class="form-group">
+                          <label for="inputPassword3" class="col-xs-2 control-label">Consigment Note (C/N)</label>
+        
+                          <div class="col-xs-4">
+                            <input class="form-control" name="consignment_note" type="text">
+                          </div>
+                        </div>
+        
+                        <div class="form-group">
+                                <label class="col-md-2 control-label">Fee (RM)</label>
+                                <div class="col-md-4">                                    
+                                        <input class="form-control" name="shipping_fee" value="{{isset($order->shipping_fee) ?  $order->shipping_fee : ""}}"" type="text">
+                                </div>  
+                        </div>
+        
+                      </div>
+            
+                      <div class="panel-heading ui-draggable-handle">
+                            <h3 class="panel-title"><strong>Packer</strong></h3>
+                            <ul class="panel-controls">
+                              <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
+                            </ul>
+                          </div>
+                    
+                          <div class="panel-body">
 
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>
-                                Product Code
-                            </th>
-                            <th>
-                                Product Name
-                            </th>
-                            <th>
-                                    Quantity
-                            </th>
-                            <th>
-                                Product S/N
-                            </th>
+                                <div class="form-group">
+                                        <label class="col-xs-2 control-label">Packed Date: {{ date('d/m/Y') }} </label>
+                                        <div class="col-xs-4">
+                                        </div>
+                                </div>
                             
-                        </tr>
-                    </thead>
-                    <tbody>
-                            @foreach($items as $item)    
-                            {{-- @for($x = 0; $x<$item->product_qty; $x++) --}}
-                        <tr>
-                                <td>
-                                        {{ $item->product->code }}
-                                </td>
-                            <td>
-                                    {{ $item->product->name }}
-                                <input type="hidden" name="item_id[]" value="{{ $item->product->id }}">
-                            </td>
-                            <td>
-                                    <input class="form-control" name="quantity[]" value="{{ $item->product_qty }}" type="text">
-                            </td>
-                            <td>
-                                    <textarea style="resize: none;" class="form-control input_barcode" name="serial_no[]" >{{ old('serial_no[]') }}</textarea>
-                            </td>
-                            
-                        </tr>
-                            {{-- @endfor --}}
-                            @endforeach
-                    </tbody>
-                </table>
-	        <!-- /.box-body -->
-            </div>
+                            <div class="form-group">
+                              <label class="col-xs-2 control-label">Packer's Name: {{ isset(Auth::user()->name) ? Auth::user()->name : Auth::user()->email }} </label>
+                              <div class="col-xs-4">
+                              </div>
+                            </div>
+            
+                          </div>
+
+                          <div class="panel-heading">   
+                                <h3 class="panel-title"><strong>Ordered Items</strong></h3>              
+                         </div>
+                         <div class="panel-body scroll" style="height: 150px;"> 
+                               
+                                        
+                                @foreach($items as $item)   
+                                <p>{{ isset($item->product->code) ? $item->product->code : "" }}
+                                {{ isset($item->product->name) ? $item->product->name : "" }}
+                                x {{ isset($item->product_qty) ? $item->product_qty : "" }}</p>
+                                @endforeach      
+                            </div>
+                          <div class="panel-heading ui-draggable-handle">
+                                <h3 class="panel-title"><strong>Add Item(s)</strong></h3>
+                                <ul class="panel-controls">
+                                  <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
+                                </ul>
+                              </div>
+                          <div class="panel-body">    
+                                <div class="form-horizontal"> 
+                                    <div class="form-group">
+                                        
+                                        <div class="col-md-4">    
+                                                <label class="col-md-3">Search</label>                                                                            
+                                            <select class="form-control select" data-live-search="true" id="input_product">
+                                                @foreach($products as $product)
+                                                <option value="{{$product->code}}" >{{$product->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                                <div class="has-warning">
+                                                    <label for="Quantity"><input type="radio" name="optradio" class="hidden">Quantity</label>                        
+                                                    <input type="number" class="form-control" id="input_quantity">
+                                                </div>
+                                            </div> 
+                                            <div class="col-md-4">
+                                                    <label class="col-md-3">Add item</label>  
+                                                    
+                                                    <button class="btn btn-primary" id="add_item" type="button"> <i class="fa fa-plus-circle" ></i>
+                                                        </button>    
+                                            </div>
+                                    </div>
+
+                                        <div class="form-group">
+                                                <div class="col-md-4">
+                                                    <div class="has-success has-feedback">
+                                                        <label for="Barcode"><input type="radio" name="optradio" checked class="hidden">Product S/N</label>                        
+                                                        <input type="text" class="form-control" id="input_barcode">
+                                                        <span class="glyphicon glyphicon-barcode form-control-feedback"></span>
+        
+                                                </div>
+                                                </div>  
+                                            </div>
+                                            <div class="form-group"> 
+                                                 
+                                        </div>
+                                </div>
+                                       
+                                <div class="table-responsive">
+                                        <table class="table datatable" id="table_listing">
+                                            <thead>
+                                                <tr>
+                                                    {{-- <th width="5px"></th> --}}
+                                                    <th>Serial Number</th> 
+                                                    <th>Product Code</th>
+                                                    {{-- <th>Product Name</th> --}}
+                                                    <th>Quantity</th>
+                                                    <th></th>                                     
+                                                                                                
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <textarea style="resize: none;" class="form-control hidden" name="serial_number_scan_json" id="serial_number_scan_json" >{{ old('serial_number_scan_json') }}</textarea>
+                            </div>
+            
             <div class="panel-footer">
                 {{-- <button class="btn btn-default">Clear Form</button> --}}
                 <a href="{{url('/inventory/order/sales')}}" type="button" class="btn btn-default pull-right"> Cancel</a>
-                <button type="submit" class="btn btn-info pull-right">Save</button>
+                <button type="submit" class="btn btn-info pull-right" id="save-btn">Save</button>
               </div>
    		</div>
 	</div>
 </div>
-
-<div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading ui-draggable-handle">
-                  <h3 class="panel-title"><strong>Courier</strong></h3>
-                  <ul class="panel-controls">
-                    <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
-                  </ul>
-                </div>
-                
-                <div class="panel-body">
-                    
-                    <div class="form-group">
-                      <label class="col-xs-2 control-label">Courier Service</label>
-                      <div class="col-xs-4">
-                          <select class="form-control" name="courier_id">
-                          @foreach($couriers as $courier)
-                          <option value=""></option>
-                            <option value="{{ $courier->id}}">{{ $courier->courier_name }}</option>
-                          @endforeach
-                          </select>
-                      </div>
-                    </div>
-    
-                    <div class="form-group">
-                      <label for="inputPassword3" class="col-xs-2 control-label">Consigment Note (C/N)</label>
-    
-                      <div class="col-xs-4">
-                        <input class="form-control" name="consignment_note" type="text">
-                      </div>
-                    </div>
-    
-                    <div class="form-group">
-                            <label class="col-md-2 control-label">Fee (RM)</label>
-                            <div class="col-md-4">                                    
-                                    <input class="form-control" name="shipping_fee" value="{{isset($order->shipping_fee) ?  $order->shipping_fee : ""}}"" type="text">
-                            </div>  
-                    </div>
-    
-                  </div>
-                  
-              </div>
-              
-        </div>
-    </div>
-
-<div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-heading ui-draggable-handle">
-                  <h3 class="panel-title"><strong>Packer</strong></h3>
-                  <ul class="panel-controls">
-                    <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
-                  </ul>
-                </div>
-                
-                <div class="panel-body">
-
-                        <div class="form-group">
-                                <label class="col-xs-2 control-label">Packed Date: {{ date('d/m/Y') }} </label>
-                                <div class="col-xs-4">
-                                </div>
-                        </div>
-                    
-                    <div class="form-group">
-                      <label class="col-xs-2 control-label">Packer's Name: {{ isset(Auth::user()->name) ? Auth::user()->name : Auth::user()->email }} </label>
-                      <div class="col-xs-4">
-                      </div>
-                    </div>
-    
-                  </div>
-                  
-              </div>
-              
-        </div>
-    </div>
-<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="mi-modal">
-        <div class="modal-dialog modal-sm">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-              <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+@else
+            <div class="alert alert-danger">
+                    <ul>
+                        <h1>Order not found</h1>
+                    </ul>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-default" id="modal-btn-si">Si</button>
-              <button type="button" class="btn btn-primary" id="modal-btn-no">No</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      
+@endif
+
       <div class="alert" role="alert" id="result"></div>
 </form>
 @endsection
@@ -260,50 +273,183 @@
 	<script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/tableexport/jspdf/libs/sprintf.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/tableexport/jspdf/jspdf.js') }}"></script>
     <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/tableexport/jspdf/libs/base64.js') }}"></script> 
+    <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/bootstrap/bootstrap-select.js') }}"></script>
+
     
 <script  type="text/javascript" >
 $(document).ready(function() {
-    $('form').keyup(function(e) {
-        return e.which !== 13  
-     });
+    $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
+
+    //Init datatable
+    window.t = $('.datatable').DataTable();
+    //init counter
+    window.counter = 1;
 
 
-            $(".input_barcode").keyup(function(event) {
-                if (event.keyCode === 13 || event.keyCode === 116) { 
-                var inputcode = $(this); 
-               
-                var value = $(this).val()
-      
-                //ajax
-                let split_value = value.split(/\n/);
-                let input = split_value[split_value.length-2] || split_value[split_value.length-1]
-                if(input != ''){
-                    $.ajax({
+    //deletion
+    $('#table_listing tbody').on( 'click', '.glyphicon-remove-sign', function () {
+        t
+            .row( $(this).parents('tr') )
+            .remove()
+            .draw();
+            getSerialNumber()
+    } );
+
+    //redraw
+    if($('#serial_number_scan_json').val() !== ""){
+        var json_serial = JSON.parse($('#serial_number_scan_json').val()); 
+        if(json_serial.length > 1 && json_serial[0].barcode != ""){
+            json_serial.reverse(); 
+            for(var x=0;x<json_serial.length;x++)
+            {
+                t.row.add( [
+                        // counter,
+                        json_serial[x].barcode,
+                        json_serial[x].product_code,
+                        json_serial[x].quantity,
+                        ' <span class="glyphicon glyphicon-remove-sign" style="color:red;"></span>'
+                    ] ).draw( false );
+                    counter++;
+            }            
+        }
+    }
+    
+    
+    //quantity
+    $("#input_quantity__").keyup(function(event) {
+                    if (event.keyCode === 13 || event.keyCode === 116) {
+                        var input = $('#input_quantity').val();
+
+                        if(input!=''){
+                            
+                            
+                                t.row.add( [
+                                    counter,
+                                    "",
+                                    input,
+                                    "",
+                        "",
+                                    ' <span class="glyphicon glyphicon-remove-sign" style="color:red;"></span>'
+                                ] ).draw( false );
+                                counter++;
+                                $("#input_barcode").prop('disabled', true);
+                            
+                        }else{
+                            alert('Input cannot be empty')
+                        }
+                        $('#input_quantity').val('');             
+                    }                     
+    });
+
+    $("#add_item").on('click',function() {
+                        t.row.add( [
+                                    "",
+                                    $('#input_product').val(),
+                                    $('#input_quantity').val(),                                    
+                                    ' <span class="glyphicon glyphicon-remove-sign" style="color:red;"></span>'
+                                ] ).draw( false );
+    })
+
+    //barcode
+    $("#input_barcode").keyup(function(event) {
+                    if (event.keyCode === 13 || event.keyCode === 116) {
+                        var input = $('#input_barcode').val();
+
+                        if(input!=''){
+                            if(checkIfArrayIsUnique(input) == true){
+                                $.ajax({
                             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                             data:{barcode:input},	
                             url: "{{url('inventory/stock/adjustment/check_barcode')}}"
                             }).done(function(result){
-                                console.log(result)
+    
                                 if(result.status == "01"){
                                 //    inputcode.val(result.serial_number)
+                                t.row.add( [
+                                    result.serial_number,
+                                    result.product_code,
+                                    // result.product_name,
+                                    1,
+                                    ' <span class="glyphicon glyphicon-remove-sign" style="color:red;"></span>'
+                                ] ).draw( false );
+                                counter++;
                                 }else{
                                     alert('Product S/N Not Exist')
-                                    if(split_value.length >= 3){
-                                        inputcode.val(split_value[split_value.length-3]+'\n')
-                                    }else{
-                                        inputcode.val("");
-                                    }
                                     
                                 }                                
 
-                            });
-                }
-                
-                event.preventDefault();
-                }                     
-            });
+                            });                                
+                                counter++;
+                            }else{
+                                alert('Duplicate Serial Number')
+                            }
+                        }else{
+                            alert('Input cannot be empty')
+                        }
+                        $('#input_barcode').val('');             
+                    }                     
+                }); 
+            
 
+    function checkIfArrayIsUnique(input) {        
+        var myArray = getSerialNumber();
+        myArray.push(input)        
+        return myArray.length === new Set(myArray).size;
+    }
 
+    function getSerialNumber(){
+        
+        var data = t
+                        .columns( 0 )
+                        .data()
+                        .eq( 0 )      // Reduce the 2D array into a 1D array of data
+                        .sort()       // Sort data alphabetically
+                        // .unique()     // Reduce to unique values
+                        .join( '\n' )
+
+        var qty = t
+                        .columns( 2 )
+                        .data()
+                        .eq( 0 )      // Reduce the 2D array into a 1D array of data
+                        .sort()       // Sort data alphabetically
+                        // .unique()     // Reduce to unique values
+                        .join( '\n' )
+        
+        var product_code = t
+                        .columns( 1 )
+                        .data()
+                        .eq( 0 )      // Reduce the 2D array into a 1D array of data
+                        .sort()       // Sort data alphabetically
+                        // .unique()     // Reduce to unique values
+                        .join( '\n' )
+
+        var barcode_arr = data.split("\n")
+        var qty = qty.split("\n")
+        var product_code = product_code.split("\n")
+        var post_array = [];
+        
+        //sort to each qty
+        for(let x = 0; x < barcode_arr.length;x++){
+            post_array.push({
+                barcode : barcode_arr[x],
+                quantity : qty[x],
+                product_code : product_code[x]
+            })
+        }
+		$('#serial_number_scan_json').val(JSON.stringify(post_array));		
+		return barcode_arr;
+    }
+
+    $(document).on('click','#save-btn',function(){
+        getSerialNumber();
+        $('#form').submit();
+        
+    })
 
 });
 
