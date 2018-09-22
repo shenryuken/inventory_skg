@@ -53,10 +53,10 @@ class StockReportController extends Controller
             foreach($stocks as $k => $v)
             {
                 
-                $stock_in =  $v->StockItem->where('status','01')->sum('quantity') != 0 ? $v->StockItem->where('status','01')->sum('quantity') : "";
+                $stock_in =  $v->StockItem->where('stock_id',$v->id)->where('status','01')->sum('quantity');
 
-                $stock_out      = "";
-                $stock_in_total = $stock_in_total + ($v->StockItem->where('status','01')->sum('quantity'));
+                $stock_out      = 0;
+                $stock_in_total = $stock_in_total + $stock_in;
 
                 $product_name = isset($v->StockItem->first()->products->name) ? $v->StockItem->first()->products->name : "";
                 $product_code = isset($v->StockItem->first()->products->code) ? $v->StockItem->first()->products->code : "";
@@ -85,12 +85,13 @@ class StockReportController extends Controller
                 {
                     
                     if($b->StockItem){
-                        $stock_adj_in   = $b->StockItem->where('status','03')->sum('quantity') != 0 ? $b->StockItem->where('status','03')->sum('quantity') : "";
-                        $stock_adj_out  = $b->StockItem->where('status','04')->sum('quantity') != 0 ? $b->StockItem->where('status','04')->sum('quantity') : "";
+                        Log::info($b);
+                        $stock_adj_in   = $b->StockItem->where('stock_adjustment_id',$b->id)->where('status','03')->sum('quantity');
+                        $stock_adj_out  = $b->StockItem->where('stock_adjustment_id',$b->id)->where('status','04')->sum('quantity');
     
     
-                    $stock_in_total     = $stock_in_total + ($b->StockItem->where('status','03')->sum('quantity'));
-                    $stock_out_total    = $stock_out_total + ($b->StockItem->where('status','04')->sum('quantity'));
+                    $stock_in_total     = $stock_in_total + ($stock_adj_in);
+                    $stock_out_total    = $stock_out_total + ($stock_adj_out);
     
                     $product_name = isset($b->StockItem->first()->products->name) ? $b->StockItem->first()->products->name : "";
                     $product_code = isset($b->StockItem->first()->products->code) ? $b->StockItem->first()->products->code : "";
@@ -98,7 +99,6 @@ class StockReportController extends Controller
                     $supplier_code = isset($b->StockItem->first()->suppliers->supplier_code) ? $b->StockItem->first()->suppliers->supplier_code : "";
 
                     $adjustment_type =  isset($b->stockAdjustmentType->adjustment) ? $b->stockAdjustmentType->adjustment : "";
-                        Log::info($b->stockAdjustmentType);
                     $reports[] = [
                         'server_date'   => $b->adjustment_date,
                         'date'          => Carbon::parse($b->adjustment_date)->format('d/m/Y'),
@@ -126,7 +126,7 @@ class StockReportController extends Controller
 
 
             // return compact('reports');
-        return view('inventory.stocks.stock-report',compact('stock_in_total','stock_out_total','reports'));
+        return view('inventory.stocks.stock-report',compact('stock_in_total','stock_out_total','reports','products'));
     }
 
 

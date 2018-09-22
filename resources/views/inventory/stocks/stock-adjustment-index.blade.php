@@ -54,7 +54,7 @@
                                         <div class="form-group">
                                                 <label for="stock_in_date" class="col-md-3 col-xs-12 control-label">Adjustment Date</label> 
                                                 <div class="col-md-6 col-xs-12">                       
-                                                        <input type="input" name="adjustment_date" class="form-control datepicker"  value="{{old('adjustment_date')}}"> 
+                                                        <input type="input" id="adjustment_date" name="adjustment_date" class="form-control datepicker"  value="{{old('adjustment_date')}}"> 
                                                 </div>
                                         </div>
 
@@ -196,7 +196,6 @@
  <script type='text/javascript' src="{{ asset('themes/Joli/js/plugins/icheck/icheck.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/bootstrap/bootstrap-datepicker.js') }}"></script>
-    <script type="text/javascript" src="//cdn.datatables.net/plug-ins/1.10.19/api/sum().js"></script>
     <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/tableexport/tableExport.js') }}"></script>
 	<script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/tableexport/jquery.base64.js"') }}"></script>
@@ -207,6 +206,11 @@
     
 <script  type="text/javascript" >
 $(document).ready(function() {
+
+      var d = new Date();
+    var today = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +("0" + d.getDate()).slice(-2)
+    $('#adjustment_date').datepicker("update",new Date(today))
+
     //Init datatable
     window.t = $('.datatable').DataTable();
     //init counter
@@ -256,11 +260,18 @@ $(document).ready(function() {
                     if (event.keyCode === 13 || event.keyCode === 116) {
                         var input = $('#input_barcode').val();
 
+                        var product_input;
+                        $( "#product option:selected" ).each(function() {
+                        product_input = $( this ).val();
+                        console.log(product_input)
+                        
+                        });
+
                         if(input!=''){
                             //Check Barcode exist
                             $.ajax({
                             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                            data:{barcode:input},	
+                            data:{barcode:input,product_id:product_input},	
                             url: "adjustment/check_barcode"
                             }).done(function(result){
                                 console.log(result)
