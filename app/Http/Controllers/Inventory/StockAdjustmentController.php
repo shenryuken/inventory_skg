@@ -41,10 +41,16 @@ class StockAdjustmentController extends Controller
 	}
 
 	public function checkBarcode(Request $request){
-		$barcode = $request->get('barcode');
+        $barcode = $request->get('barcode');
+        $product_id = $request->get('product_id');
 
 		
-		$StockItem = StockItem::where('barcode',$barcode)->first();	
+        $select_query  = StockItem::where('barcode',$barcode);
+        if($product_id)
+        {
+            $select_query->where('product_id',$product_id);
+        }
+        $StockItem = $select_query->first();	
 
 		if($StockItem){
 			return ['status' => "01",'serial_number' =>$barcode,'product_code' => $StockItem->products->code,'product_name'=>$StockItem->products->name];

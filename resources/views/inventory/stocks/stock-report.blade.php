@@ -23,13 +23,10 @@
 
                                     <div class="btn-group pull-right">
                                         <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i> Export Data</button>
-                                        <ul class="dropdown-menu">
-                                           
-                                           
-                                            <li><a href="#" onClick ="$('#stock_bal_report').tableExport({type:'csv',escape:'false',consoleLog:'true'});"><img src='img/icons/csv.png' width="24"/> CSV</a></li>
-                                            <li><a href="#" onClick ="$('#stock_bal_report').tableExport({type:'txt',escape:'false'});"><img src='img/icons/txt.png' width="24"/> TXT</a></li>
-                                            
-                                            <li><a href="#" onClick ="$('#stock_bal_report').tableExport({type:'pdf',escape:'false'});"><img src='img/icons/pdf.png' width="24"/> PDF</a></li>
+                                        <ul class="dropdown-menu">                                       
+                                            <li><a href="#" onClick ="$('#stock_bal_report').tableExport({type:'csv',formats:['csv'],fileName:'stock_balance_report',escape:'false'});"><img src='{{asset('themes/Joli/img/icons/csv.png')}}' width="24"/> CSV</a></li>
+                                            <li><a href="#" onClick ="$('#stock_bal_report').tableExport({type:'txt',escape:'false'});"><img src='{{asset('themes/Joli/img/icons/txt.png')}}' width="24"/> TXT</a></li>
+                                            <li><a href="#" onClick ="$('#stock_bal_report').tableExport({type:'pdf',escape:'false'});"><img src='{{asset('themes/Joli/img/icons/pdf.png')}}' width="24"/> PDF</a></li>
                                         </ul>
                                     </div>                 
                       
@@ -39,17 +36,34 @@
                                 <form class="form-horizontal" role="form">   
                                                              
                                         <div class="form-group">
-                                            <label class="col-md-3 control-label">Start Date:</label>
-                                            <div class="col-md-3">
+                                            <label class="col-md-2 control-label">Start Date:</label>
+                                            <div class="col-md-2">
                                                 <input type="text" id="min" name="min" class="form-control datepicker">
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                                <label class="col-md-3 control-label">End Date:</label>
-                                                <div class="col-md-3">
+                                                <label class="col-md-2 control-label">End Date:</label>
+                                                <div class="col-md-2">
                                                     <input type="text" id="max" name="max" class="form-control datepicker">
                                                 </div>
-                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                                <label class="col-md-2 control-label">Products:</label>
+                                                <div class="col-md-2">
+                                                    <select  id="product-select" class="form-control">
+                                                    <option value="">All</option>
+                                                        @foreach ($products as $product)
+                                                    <option value="{{$product->code}}">{{$product->name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                                <div class="col-md-4">
+                                            <input type="button" class="btn btn-default btn-rounded pull-right" id="clear_filter" value="Clear Filter">
+                                                </div>
+                                        </div>
                                 </form>
 
                         </div>
@@ -67,8 +81,9 @@
                                                                  <th>Supplier</th>
                                                                  <th>Supplier Code</th>
                                                                  <th>Description</th>
-                                                                 <th>Stock In</th>
-                                                                 <th>Stock Out</th>
+                                                                 <th class="success">Stock In</th>
+                                                                 <th class="warning">Stock Out</th>
+                                                                 <th>Balance</th>
                                                              </tr>
                                                          </thead>
                                                          <tbody>
@@ -81,13 +96,14 @@
                                                                     <td>{{ $report['supplier_name'] }}</td>
                                                                     <td>{{ $report['supplier_code'] }}</td>
                                                                     <td>{{ $report['description'] }}</td>								    
-                                                                    <td>{{ $report['stock_in'] }}</td>
-                                                                <td data-toggle="tooltip" data-original-title="{{ $report['adjustment_type'] }}" data-container="body" data-toggle="tooltip" data-placement="bottom" title="" title="">{{ $report['stock_out'] }}</td>
+                                                                    <td  class="success">{{ $report['stock_in'] }}</td>                                                                    
+                                                                    <td  class="warning" data-toggle="tooltip" data-original-title="{{ $report['adjustment_type'] }}" data-container="body" data-toggle="tooltip" data-placement="bottom" title="" title="">{{ $report['stock_out'] }}</td>
+                                                                    <td></td>
                                                                 </tr>
                                                              @endforeach
                                                             </tbody>
                                                         <tfoot>
-                                                            <tr style="background-color: Wheat;">
+                                                            <tr style="background-color: mistyrose;">
                                                                 <td><strong>Total</strong></td>
                                                                 <td class="hidden"></td>
                                                                 <td></td>
@@ -97,6 +113,7 @@
                                                                 <td></td>
                                                                 <td><strong>{{ $stock_in_total }}</strong></td>
                                                                 <td><strong>{{ $stock_out_total }}</strong></td>
+                                                                <td></td>
                                                             </tr>
                                                         </tfoot>
                                                      </table>
@@ -187,6 +204,7 @@
                 .reduce( function (a, b) {
                     return intVal(a) + intVal(b);
                 }, 0 );
+
  
             // Update footer
             $( api.column( 7     ).footer() ).html(
@@ -196,6 +214,26 @@
             $( api.column( 8 ).footer() ).html(
                 '<strong>'+pageTotal2 + '</strong>'
             );
+
+            $( api.column( 9 ).footer() ).html(
+                '<strong>'+ (parseInt(pageTotal1) - parseInt(pageTotal2))  + '</strong>'
+            );
+        },
+
+        "rowCallback": function ( row, data, index ) {
+            var balance = 0;
+
+            if (index == 0) {
+                 balance = data[7] ||  0;
+                } else {
+                    var prev_row = this.api().row( index -1 ).data()
+                    balance = parseInt(prev_row[9]) + parseInt(data[7] || 0) - parseInt(data[8] || 0);
+                    
+                }
+
+            data[9] = balance;
+            $('td',row).eq(9).text(balance)
+
         },
                     "order": [],
                     // "scrollY":        "200px",
@@ -205,22 +243,16 @@
                                 { targets: 'no-sort', orderable: false }
                                 ]                    
                 });
+
         
-        $('#min').datepicker("update",new Date(early_month)).on('change',function(){t.draw()});
+        $('#min').datepicker("update",new Date(today)).on('change',function(){t.draw()});
         $('#max').datepicker("update",new Date(today)).on('change',function(){t.draw()});
+        $('#product-select').on('change',function(){t.draw()});
 
-
-         $.fn.dataTable.ext.search.push(
-                    function( settings, data, dataIndex ) {
-                        var min = new Date($('#min').val()) ; //parseInt( $('#min').val(), 10 );
-                        var max = new Date($('#max').val()); //parseInt( $('#max').val(), 10 );
-                        var age = new Date(data[0]) || 0; //parseFloat( data[3] ) || 0; // use data for the age column
-                        console.log(age)
-                
-                        if ( ( isNaN( min ) && isNaN( max ) ) ||
-                            ( isNaN( min ) && age <= max ) ||
-                            ( min <= age   && isNaN( max ) ) ||
-                            ( min <= age   && age <= max ) )
+        $.fn.dataTable.ext.search.push(
+                    function( settings, data, dataIndex ) {                       
+                        var product = $('#product-select').val().toLowerCase(); 
+                        if((data[3].toLowerCase().indexOf(product) !== -1 ) || product == "") 
                         {
                             return true;
                         }
@@ -228,12 +260,30 @@
                     }
                 );
 
+
+         $.fn.dataTable.ext.search.push(
+                    function( settings, data, dataIndex ) {
+                        var min = new Date($('#min').val()) ; //parseInt( $('#min').val(), 10 );
+                        var max = new Date($('#max').val()); //parseInt( $('#max').val(), 10 );
+                        var age = new Date(data[0]) || 0; //parseFloat( data[3] ) || 0; // use data for the age column
+
+                         
+                
+                        if ( ( isNaN( min ) && isNaN( max ) ) ||
+                            ( isNaN( min ) && age <= max ) ||
+                            ( min <= age   && isNaN( max ) ) ||
+                            ( min <= age   && age <= max ) )
+                        {
+                            return true;
+                        }else{
+                            
+                        }
+                        return false;
+                    }
+                );
+
         
 
-                // Event listener to the two range filtering inputs to redraw on input
-                $('#min, #max').on('change', function() {
-                    t.draw();
-                } );
 
         $(function () {
             $("[data-toggle='tooltip']").tooltip();
@@ -242,11 +292,22 @@
     $(".click").on('click',function() {
             window.location = $(this).data("href");
         });
+
+        $('#clear_filter').on('click',function(){
+        
+            $('#min').val("");
+            $('#max').val("");
+
+            $('#product-select').val("");
+            t.draw();
+        })
     });
     
     function fn_clear(){
         console.log("clear!");
     }
+
+    
     
     </script>
 

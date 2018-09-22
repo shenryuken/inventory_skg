@@ -59,7 +59,7 @@
                                         <div class="form-group">
                                                     <label for="stock_in_date" class="col-md-3 col-xs-12 control-label">Stock Date</label> 
                                                     <div class="col-md-6 col-xs-12">                       
-                                                    <input type="input" name="stock_date" class="form-control datepicker" value="{{old('stock_date')}}">
+                                                    <input type="input" name="stock_date" id="stock_date" class="form-control datepicker" value="{{old('stock_date')}}">
                                                     </div>
                                         </div>
 
@@ -197,7 +197,9 @@
     
 <script  type="text/javascript" >
 $(document).ready(function() {
-    
+    var d = new Date();
+    var today = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +("0" + d.getDate()).slice(-2)
+    $('#stock_date').datepicker("update",new Date(today))
     //Init datatable
     window.t = $('.datatable').DataTable();
     //init counter
