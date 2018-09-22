@@ -243,7 +243,8 @@ Route::get('bonus/calculate-end-month-bonus', 'BonusController@calculate_end_mon
 */
 //Courier Page
 Route::get('orders/process/{id}', 'OrderController@processOrder');
-Route::get('orders/my-orders', 'OrderController@myOrders');
+Route::get('orders/my-orders', function(){ return view('orders.my-orders'); });
+Route::get('orders/my-orders-list', 'OrderController@myOrders');
 Route::post('orders/postProcessOrder', 'OrderController@postProcessOrder');
 Route::get('orders/{id}', 'OrderController@show');
 Route::get('orders', 'OrderController@index');

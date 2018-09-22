@@ -115,7 +115,7 @@
                                                 <p><span id="form-title"> Payment Type </span></p>
                                                 <div class="form-group">
                                                     <div class="col-md-12" id="">        
-                                                        <select class="form-control delivery-type">
+                                                        <select class="form-control payment-type">
                                                             @foreach($paymentType as $key => $value)
                                                             <option data-code="{{ $value['id'] }}" value="{{ $value['code'] }}" >{{ $value['description'] }}</option>
                                                             @endforeach

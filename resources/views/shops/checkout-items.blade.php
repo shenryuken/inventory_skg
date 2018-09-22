@@ -512,7 +512,7 @@
                     tag += "<input type='hidden' class='address-code' value="+ response.address[i].code +">";
                     tag += "<p class='name'>"+response.address[i].name+"</p>";
                     tag += "<p class='address'>"+response.address[i].address+"</p>";
-                    tag += "</diV>";
+                    tag += "</div>";
                    
                 }
                 $('div.address-row').html(tag);
