@@ -118,46 +118,14 @@
                 <a href="{{ url('inventory/dashboard')}}"><span class="fa fa-desktop"></span> Dashboard</a>
             </li>
 
-            <li class="xn-openable {{ Request::is('inventory/product*') ? 'active' : '' }}">
-                <a href="{{ url('inventory/product/listing') }}"><span class="fa fa-flask"></span> Products </a>
-                <ul>
-                    <li class="{{ Request::is('inventory/product/listing') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/product/listing') }}"><span class="fa fa-align-justify fa-sm"></span>Product Listing</a>
-                    </li>
-                    <li class="{{ Request::is('inventory/product/promotion/listing') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/product/promotion/listing') }}"><span class="fa fa-align-justify fa-sm"></span>Promotion Listing</a>
-                    </li>
-                    <li class="{{ Request::is('inventory/product/form') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/product/form') }}"><span class="fa fa-plus fa-sm"></span>Create Product Info</a>
-                    </li>
-                    <li class="{{ Request::is('inventory/product/package_form') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/product/package_form') }}"><span class="fa fa-plus fa-sm"></span>Create Package</a>
-                    </li>
-                    
-                </ul>
-            </li>
-
-            <li class="xn-openable {{ Request::is('inventory/supplier*') ? 'active' : '' }}">
-                <a href="{{ url('inventory/supplier/list') }}"><span class="fa fa-truck"></span> Suppliers </a>
-                <ul>
-                    <li class="{{ Request::is('inventory/supplier/list') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/supplier/list') }}"><span class="fa fa-align-justify fa-sm"></span>Supplier Listing</a>
-                    </li>
-                    <li class="{{ Request::is('inventory/supplier/create') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/supplier/create') }}"><span class="fa fa-plus fa-sm"></span>Create Supplier Info</a>
-                    </li>
-                </ul>
-            </li>
+            
 
             <li class="xn-openable {{ Request::is('inventory/stock*') ? 'active' : '' }}">
                 <a href="{{ url('inventory/stock/current') }}"><span class="fa fa-archive"></span> Stock Management</a>
                 <ul>
                     <li class="{{ Request::is('inventory/stock/current') ? 'active' : '' }}">
                         <a href="{{ url('inventory/stock/current') }}"><span class="fa fa-align-justify fa-sm"></span>Products in Stock</a>
-                    </li>
-                    <li class="{{ Request::is('inventory/stock/list') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/stock/list') }}"><span class="fa fa-align-justify fa-sm"></span>Stock In Listing</a>
-                    </li>                    
+                    </li>                   
                     <li class="{{ Request::is('inventory/stock/in') ? 'active' : '' }}">
                         <a href="{{ url('inventory/stock/in') }}"><span class="fa fa-plus fa-sm"></span>New Stock In</a>
                     </li>
@@ -186,6 +154,37 @@
                         <a href="{{ url('inventory/report/stock-balance') }}"> Stock Balance Report </a>
                     </li>
                     
+                </ul>
+            </li>
+
+            <li class="xn-openable {{ Request::is('inventory/product*') ? 'active' : '' }}">
+                <a href="{{ url('inventory/product/listing') }}"><span class="fa fa-flask"></span> Products </a>
+                <ul>
+                    <li class="{{ Request::is('inventory/product/listing') ? 'active' : '' }}">
+                        <a href="{{ url('inventory/product/listing') }}"><span class="fa fa-align-justify fa-sm"></span>Product Listing</a>
+                    </li>
+                    <li class="{{ Request::is('inventory/product/promotion/listing') ? 'active' : '' }}">
+                        <a href="{{ url('inventory/product/promotion/listing') }}"><span class="fa fa-align-justify fa-sm"></span>Promotion Listing</a>
+                    </li>
+                    <li class="{{ Request::is('inventory/product/form') ? 'active' : '' }}">
+                        <a href="{{ url('inventory/product/form') }}"><span class="fa fa-plus fa-sm"></span>Create Product Info</a>
+                    </li>
+                    <li class="{{ Request::is('inventory/product/package_form') ? 'active' : '' }}">
+                        <a href="{{ url('inventory/product/package_form') }}"><span class="fa fa-plus fa-sm"></span>Create Package</a>
+                    </li>
+                    
+                </ul>
+            </li>
+
+            <li class="xn-openable {{ Request::is('inventory/supplier*') ? 'active' : '' }}">
+                <a href="{{ url('inventory/supplier/list') }}"><span class="fa fa-truck"></span> Suppliers </a>
+                <ul>
+                    <li class="{{ Request::is('inventory/supplier/list') ? 'active' : '' }}">
+                        <a href="{{ url('inventory/supplier/list') }}"><span class="fa fa-align-justify fa-sm"></span>Supplier Listing</a>
+                    </li>
+                    <li class="{{ Request::is('inventory/supplier/create') ? 'active' : '' }}">
+                        <a href="{{ url('inventory/supplier/create') }}"><span class="fa fa-plus fa-sm"></span>Create Supplier Info</a>
+                    </li>
                 </ul>
             </li>
 

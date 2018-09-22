@@ -18,9 +18,16 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                         <h3 class="panel-title">Stock In Listing as {{date('d/m/Y')}}</h3>
-                        <div class="actions pull-right">
-                                <a href="{{ url('inventory/stock/barcode/all') }}" class="btn btn-default  btn-sm btn-circle" title="Show All Products Serial Number">
-                                    <i class="fa fa-list"></i> Show All Product S/N</a>
+                        <div class="btn-group pull-right">
+                                <a href="{{ url('inventory/stock/barcode/all') }}" class="btn btn-default  btn-md btn-circle" title="Show All Products Serial Number"><i class="fa fa-list"></i> Show All Product S/N</a>
+                                    <a href="{{ url('inventory/stock/in') }}" class="btn btn-default  btn-md btn-circle"><span class="fa fa-plus fa-sm"></span>New Stock In</a>
+                                <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i> Export Data</button>
+                                            <ul class="dropdown-menu">                                       
+                                                <li><a href="#" onClick ="$('#table_listing').tableExport({type:'csv',formats:['csv'],fileName:'table_listing',escape:'false'});"><img src='{{asset('themes/Joli/img/icons/csv.png')}}' width="24"/> CSV</a></li>
+                                                <li><a href="#" onClick ="$('#table_listing').tableExport({type:'txt',escape:'false'});"><img src='{{asset('themes/Joli/img/icons/txt.png')}}' width="24"/> TXT</a></li>
+                                                <li><a href="#" onClick ="$('#table_listing').tableExport({type:'pdf',escape:'false'});"><img src='{{asset('themes/Joli/img/icons/pdf.png')}}' width="24"/> PDF</a></li>
+                                            </ul>
+                                       
                         </div>
                         </div>
                         <div class="panel-body panel-body-table">
@@ -30,8 +37,8 @@
                                         <tr>
                                             <th>Stock Received No</th>
                                             <th>Description</th>
-                                            <th>Stock In Date</th>                                       
                                             <th>Quantity</th>
+                                            <th>Stock In Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>

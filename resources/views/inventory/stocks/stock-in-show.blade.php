@@ -37,7 +37,7 @@
                                         <div class="panel-heading">
                                                         <div class="actions pull-right">
                                                                 <a href="{{ url('inventory/stock/list') }}" class="btn btn-default  btn-sm btn-circle" title="Stock In" >
-                                                                        <i class="fa fa-list"></i> Stock In List</a>
+                                                                        <i class="fa fa-list"></i> Stock In Listing</a>
                                                         </div>
                                                         <h4><strong>Stock In No:</strong>  {{ $stock->stock_in_no }} </h4>
                                                         <h4><strong>Date:</strong>  {{ Carbon\Carbon::parse($stock->stock_date)->format('d/m/Y') }} </h4>
@@ -79,5 +79,6 @@
 @endsection
 @section('footer_scripts')
 <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/tableexport/tableExport.js') }}"></script>
 
 @endsection

@@ -160,9 +160,21 @@ class OrderController extends Controller
 
             if($product_supplier->barcode){
                 try{
-                                    $stock_item = new StockItem;    
-                
-                                    $stock_item->where('barcode',$product_supplier->barcode)->update(['status' => '02']);
+                    $stock_item = StockItem::where('barcode',$product_supplier->barcode)->first();
+
+                    if($stock_item){
+        
+                        $new = $stock_item->replicate();
+        
+                        $new->status = "05"; //adjust out sell
+                        // $new->stock_adjustment_id = $product_stock_array['stock_adjustment_id'];
+                        $new->updated_by = Auth::user()->id;
+                        $new->save();
+        
+                        $stock_item->status = "98"; //sold
+                        $stock_item->update();
+                    }
+                        
                                 }catch(Exception $e){
                 
                                 }

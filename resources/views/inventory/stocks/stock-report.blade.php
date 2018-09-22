@@ -238,7 +238,7 @@
                     "order": [],
                     // "scrollY":        "200px",
                     // "scrollCollapse": true,
-                    "paging":false,
+                    "paging":true,
                     "columnDefs": [
                                 { targets: 'no-sort', orderable: false }
                                 ]                    
