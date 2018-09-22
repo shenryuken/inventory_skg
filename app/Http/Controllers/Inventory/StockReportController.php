@@ -53,7 +53,7 @@ class StockReportController extends Controller
             foreach($stocks as $k => $v)
             {
                 
-                $stock_in =  $v->StockItem->where('stock_id',$v->id)->where('status','01')->sum('quantity');
+                $stock_in =  $v->StockItem->where('stock_id',$v->id)->whereIn('status',['01','99','98'])->sum('quantity');
 
                 $stock_out      = 0;
                 $stock_in_total = $stock_in_total + $stock_in;
@@ -89,7 +89,6 @@ class StockReportController extends Controller
                         $stock_adj_in   = $b->StockItem->where('stock_adjustment_id',$b->id)->where('status','03')->sum('quantity');
                         $stock_adj_out  = $b->StockItem->where('stock_adjustment_id',$b->id)->where('status','04')->sum('quantity');
     
-    
                     $stock_in_total     = $stock_in_total + ($stock_adj_in);
                     $stock_out_total    = $stock_out_total + ($stock_adj_out);
     
@@ -117,6 +116,28 @@ class StockReportController extends Controller
                 }
 
             }
+
+            $stock_item_sold = StockItem::where('status','05')->get();
+                foreach($stock_item_sold as $item){
+                    $product_name = isset($item->products->name) ? $item->products->name : "";
+                    $product_code = isset($item->products->code) ? $item->products->code : "";
+                    $supplier_name = isset($item->suppliers->company_name) ? $item->suppliers->company_name : "";
+                    $supplier_code = isset($item->suppliers->supplier_code) ? $item->suppliers->supplier_code : "";
+
+                    $reports[] = [
+                        'server_date'   => Carbon::parse($item->created_at)->format('Y-m-d'),
+                        'date'          => Carbon::parse($item->created_at)->format('d/m/Y'),
+                        'description'   => "Out For Delivery",
+                        'stock_in'     => "",
+                        'stock_out'      => $item->quantity,
+                        'product_name'  => $product_name,
+                        'product_code'  => $product_code,
+                        'supplier_name' => $supplier_name,
+                        'supplier_code' => $supplier_code,
+                        'adjustment_type' => ""
+                    ];
+                }
+
            
 
         }catch(\Exception $e){
@@ -164,7 +185,7 @@ class StockReportController extends Controller
             foreach($stocks as $key=>$value){
                 
                 $productId          = $value->id;
-                $totalserial_number = $stock_item->where('product_id',$productId)->where('status','01')->sum('quantity');
+                $totalserial_number = $stock_item->where('product_id',$productId)->whereIn('status',['01','99','98'])->sum('quantity');
                 $adjustment         = $StockAdjustment->stockItem()->where('product_id',$productId)
                                                 ->get();
                 if($adjustment){

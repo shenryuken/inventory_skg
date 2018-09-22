@@ -303,11 +303,11 @@ select, .checkbox-label{cursor:pointer;}
 										</div>
 									</div>
 									<br /> &nbsp;
-									<div class="col-md-12">
+									{{-- <div class="col-md-12">
 										<h3> Inventory </h3>
 										<hr />
-									</div>
-									<div class="form-group">
+									</div> --}}
+									{{-- <div class="form-group">
 										<label class="col-md-6 control-label"> Stock Reminder </label>
 										<div class="col-md-6">
 											<div class="input-group ">
@@ -324,7 +324,7 @@ select, .checkbox-label{cursor:pointer;}
 												<div class="form-control mask_number text-right" >{{ isset($inventorytotal) ? $inventorytotal : '0' }}</div>		
 											</div>
 										</div>
-									</div>
+									</div> --}}
 								</div>
 							</div>
 						</div>

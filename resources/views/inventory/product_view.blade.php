@@ -171,7 +171,7 @@ if(isset($id) && $id > 0){
 								<div class="col-md-6 control-label text-left"> RM {{ isset($last_purchase) ? number_format($last_purchase, 2, '.', ',') : '' }}</div>
 							</div>
 							<br /> &nbsp;
-							<div class="col-md-12">
+							{{-- <div class="col-md-12">
 								<h3> Inventory </h3>
 								<hr />
 							</div>
@@ -182,7 +182,7 @@ if(isset($id) && $id > 0){
 							<div class="form-group">
 								<label class="col-md-6 control-label"> Stock Quantity: </label>
 								<div class="col-md-6 control-label text-left"> {{ isset($inventorytotal) ? number_format($inventorytotal) : '' }}</div>
-							</div>
+							</div> --}}
 						</div>
 					</div>
 					<div class="row">
