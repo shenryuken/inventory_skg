@@ -13,8 +13,8 @@ textarea {
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb">
 	<li><a href="{{ url('home') }}">Home</a></li>                    
-    <li><a href="{{ url('order/delivery/') }}">Order Management</a></li>
-    <li><a href="{{ url('order/delivery/') }}">Delivery Order Listing</a></li>
+    <li><a href="{{ url('inventory/order/delivery/') }}">Order Management</a></li>
+    <li class="active">Delivery Order Listing</li>
 </ul>
 <!-- END BREADCRUMB -->   
 
@@ -43,8 +43,9 @@ textarea {
             <div class="col-md-12">
                     <div class="panel panel-default">
                             <div class="panel-heading">
-                                    <h3 class="panel-title">delivery Order Listing</h3>
+                                    <h3 class="panel-title">Delivery Order Listing</h3>
                                     <div class="btn-group pull-right">
+                                        <a href="#" class="btn btn-success">Pick Up DO</a>
                                         <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i> Export Data</button>
                                         <ul class="dropdown-menu">                                            
                                             <li><a href="#" onClick ="$('#sales-order').tableExport({type:'csv',escape:'false'});"><img src="{{ asset('themes/Joli/img/icons/csv.png') }}" width="24"/> CSV</a></li>

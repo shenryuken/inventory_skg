@@ -184,12 +184,13 @@ textarea {
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal">&times;</button>
-              <h4 class="modal-title">Scan</h4>
+              <h4 class="modal-title">Scan S/N here</h4>
             </div>
             <div class="modal-body">
+                <input type="text" class="form-control" id="barcode-input" name="barcode-input">
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-success" data-dismiss="modal" id="barcodeDoneBtn">Done</button>
+              <button type="button" class="btn btn-success" data-dismiss="modal" id="barcodeDoneBtn">Check</button>
             </div>
           </div>
       

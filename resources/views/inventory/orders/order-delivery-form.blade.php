@@ -8,6 +8,10 @@
         <li  class="active">Generate DO</li>
     </ul>
     <!-- END BREADCRUMB --> 
+    
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+        <!-- START RESPONSIVE TABLES -->
 <!-- form start -->
 @if (count($errors) > 0)
 <div class="alert alert-danger">
@@ -39,8 +43,10 @@
 	<div class="col-md-6">
 		<div class="panel panel-default">
 		    <div class="panel-heading ui-draggable-handle">
-              <h3 class="panel-title"><strong>Create Delivery for SO: #{{ isset($order->order_no) ?  $order->order_no : "" }} </strong></h3><br>
-              <p  class="panel-title">Packer's Name: {{ isset(Auth::user()->name) ? Auth::user()->name : Auth::user()->email }} </p>
+                    <div class="panel-title-box">
+                            <h3><strong>Create Delivery for SO: #{{ isset($order->order_no) ?  $order->order_no : "" }} </strong></h3>
+                            <span>Packer's Name: {{ isset(Auth::user()->name) ? Auth::user()->name : Auth::user()->email }} </span>
+                        </div>
             </div>
 
             <div class="panel-body">		 
@@ -244,16 +250,40 @@
    		</div>
 	</div>
 </div>
+</form>
+</div>
 @else
-            <div class="alert alert-danger">
-                    <ul>
-                        <h1>Order not found</h1>
-                    </ul>
+<div class="page-content-wrap">
+                
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="error-container">
+                    <div class="error-code">Order not found</div>
+                    <div class="error-text"></div>
+                    <div class="error-subtext">Kindly check the order exist or not.</div>
+                    <div class="error-actions">                                
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="btn btn-info btn-block btn-lg" onClick="document.location.href = '{{ url("inventory/order/sales") }}';">Back to dashboard</div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="btn btn-primary btn-block btn-lg" onClick="history.back();">Previous page</div>
+                            </div>
+                        </div>                                
+                    </div>
+                </div>
+
             </div>
+        </div>
+        
+                                                            
+    </div>                
+    <!-- END PAGE CONTENT WRAPPER -->   
 @endif
 
       <div class="alert" role="alert" id="result"></div>
-</form>
+
 @endsection
 {{-- page level scripts --}}
 @section('footer_scripts')

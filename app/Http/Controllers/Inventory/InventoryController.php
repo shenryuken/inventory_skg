@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\StockItem;
 use App\Models\OrderHdr;
 use App\Models\AgentOrderHdr;
+use App\Models\Delivery;
 
 class InventoryController extends Controller
 {
@@ -50,6 +51,7 @@ class InventoryController extends Controller
         $total_order        = 0;
         $total_stock        = StockItem::sum('quantity');
         $total_product      = Product::where('type',1)->count();
+        $deliveries         = Delivery::orderBy('created_at','desc')->limit(5)->get();
 
         $data = [
             'to_be_processed'   => $to_be_processed,
@@ -61,7 +63,9 @@ class InventoryController extends Controller
             'stock_out_today'   => $stock_out_today,
             'total_order'       => $total_order,
             'total_stock'       => $total_stock,
-            'total_product'     => $total_product
+            'total_product'     => $total_product,
+
+            'deliveries'        => $deliveries
         ];
         
         return view('inventory.dashboard',$data);
