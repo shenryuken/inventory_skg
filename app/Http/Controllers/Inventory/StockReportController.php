@@ -85,7 +85,6 @@ class StockReportController extends Controller
                 {
                     
                     if($b->StockItem){
-                        Log::info($b);
                         $stock_adj_in   = $b->StockItem->where('stock_adjustment_id',$b->id)->where('status','03')->sum('quantity');
                         $stock_adj_out  = $b->StockItem->where('stock_adjustment_id',$b->id)->where('status','04')->sum('quantity');
     

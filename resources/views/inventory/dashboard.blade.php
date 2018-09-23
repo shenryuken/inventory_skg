@@ -17,11 +17,11 @@
         <div class="col-md-12">
             <!-- START SALES BLOCK -->
             <div class="panel panel-default">
-                    <div class="panel-heading">
+                    {{-- <div class="panel-heading">
                         <div class="panel-title-box">
                             <h3>Sales</h3>
                             <span>Sales activities</span>
-                        </div>                                     
+                        </div>                                      --}}
                         {{-- <ul class="panel-controls panel-controls-title">                                        
                             <li>
                                 <div id="reportrange" class="dtrange">                                            
@@ -30,7 +30,7 @@
                             </li>                                
                             <li><a href="#" class="panel-fullscreen rounded"><span class="fa fa-expand"></span></a></li>
                         </ul>  --}}
-                    </div>
+                    {{-- </div> --}}
                     <div class="panel-body">                                    
                         <div class="col-md-3">                        
                             <a href="#" class="tile tile-danger">
@@ -72,12 +72,13 @@
         </div>
     </div>  
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <!-- START SALES BLOCK -->
             <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="panel-title-box">
                             <h3>Inventory</h3>
+                            <span>Stock In/Stock Out</span>
                         </div>                                     
                         {{-- <ul class="panel-controls panel-controls-title">                                        
                             <li>
@@ -113,6 +114,59 @@
                 </div>
                 <!-- END SALES BLOCK -->
         </div>
+
+        <div class="col-md-6">
+         <!-- START PROJECTS BLOCK -->
+         <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title-box">
+                        <h3>Delivery</h3>
+                        <span>Latest DO Created</span>
+                    </div>                                    
+                    <ul class="panel-controls hide" style="margin-top: 2px;">
+                        <li><a href="#" class="panel-fullscreen"><span class="fa fa-expand"></span></a></li>
+                        <li><a href="#" class="panel-refresh"><span class="fa fa-refresh"></span></a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-cog"></span></a>                                        
+                            <ul class="dropdown-menu">
+                                <li><a href="#" class="panel-collapse"><span class="fa fa-angle-down"></span> Collapse</a></li>
+                                <li><a href="#" class="panel-remove"><span class="fa fa-times"></span> Remove</a></li>
+                            </ul>                                        
+                        </li>                                        
+                    </ul>
+                </div>
+                <div class="panel-body panel-body-table">
+                    
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th width="50%">DO#</th>
+                                    <th width="20%">SO#</th>
+                                    <th width="30%">Qty</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if($deliveries)
+                                @foreach($deliveries as $delivery)
+                                    <tr>
+                                            <td><strong>{{ isset($delivery->delivery_number) ? $delivery->delivery_number : "" }}</strong></td>
+                                            <td>{{ isset($delivery->salesOrder->order_no) ? $delivery->salesOrder->order_no : "" }}</td>
+                                            <td><span class="label label-warning">{{  $delivery->deliveryItem->sum('quantity')  }}</span></td>
+                                            
+                                        </tr>   
+                                @endforeach
+                                @endif                                        
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                </div>
+            </div>
+            <!-- END PROJECTS BLOCK -->
+        </div>
+
     </div>    
 
     <div class="row">

@@ -302,6 +302,7 @@ Route::post('inventory/stock/adjustment/store', 'Inventory\StockAdjustmentContro
 #Stock Reports
 Route::get('inventory/stock/current/', 'Inventory\StockReportController@indexCurrentStock');
 Route::get('inventory/report/stock-balance/', 'Inventory\StockReportController@index');
+Route::get('inventory/report/sales', 'Inventory\SalesReportController@index');
 Route::get('inventory/stock/barcode/{x?}', 'Inventory\StockReportController@barcode');
 
 #Order Delivery

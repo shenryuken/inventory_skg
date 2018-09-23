@@ -118,6 +118,18 @@
                 <a href="{{ url('inventory/dashboard')}}"><span class="fa fa-desktop"></span> Dashboard</a>
             </li>
 
+            <li class="xn-openable {{ Request::is('inventory/order*') ? 'active' : '' }}">
+                <a href="{{ url('inventory/order/sales') }}"><span class="fa fa-shopping-cart"></span> Order Management </a>
+                <ul>
+                    <li class="{{ Request::is('inventory/order/sales') ? 'active' : '' }}">
+                        <a href="{{ url('inventory/order/sales') }}"><span class="fa fa-align-justify fa-sm"></span>Sales Order</a>
+                    </li>
+                    <li class="{{ Request::is('inventory/stock/delivery') ? 'active' : '' }}">
+                        <a href="{{ url('inventory/order/delivery') }}"><span class="fa fa-align-justify fa-sm"></span> Delivery Order</a>
+                    </li>
+                </ul>
+            </li>
+
             
 
             <li class="xn-openable {{ Request::is('inventory/stock*') ? 'active' : '' }}">
@@ -135,23 +147,16 @@
                 </ul>
             </li>
 
-            <li class="xn-openable {{ Request::is('inventory/order*') ? 'active' : '' }}">
-                <a href="{{ url('inventory/order/sales') }}"><span class="fa fa-shopping-cart"></span> Order Management </a>
-                <ul>
-                    <li class="{{ Request::is('inventory/order/sales') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/order/sales') }}"><span class="fa fa-align-justify fa-sm"></span>Sales Order</a>
-                    </li>
-                    <li class="{{ Request::is('inventory/stock/delivery') ? 'active' : '' }}">
-                        <a href="{{ url('inventory/order/delivery') }}"><span class="fa fa-align-justify fa-sm"></span> Delivery Order</a>
-                    </li>
-                </ul>
-            </li>
+            
 
             <li class="xn-openable {{ Request::is('inventory/report/stock-balance') ? 'active' : '' }}">
                 <a href="{{ url('inventory//stock/report') }}"><span class="fa fa-book"></span> Report </a>
                 <ul>
                     <li class="{{ Request::is('inventory/report/stock-balance') ? 'active' : '' }}">
                         <a href="{{ url('inventory/report/stock-balance') }}"> Stock Balance Report </a>
+                    </li>
+                    <li class="{{ Request::is('inventory/report/sales') ? 'active' : '' }}">
+                        <a href="{{ url('inventory/report/sales') }}"> Sales Report </a>
                     </li>
                     
                 </ul>
