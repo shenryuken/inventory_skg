@@ -1,7 +1,13 @@
 @extends('layouts.joli.app')
-<?php $page_title = 'Process Order'; ?>
 @section('content')
-
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb">
+        <li><a href="{{ url('home') }}">Home</a></li>
+        <li><a href="#">Order Management</a></li>
+        <li><a href="{{ url('inventory/order/sales') }}">Sales Order</a></li>
+        <li  class="active">Generate DO</li>
+    </ul>
+    <!-- END BREADCRUMB --> 
 <!-- form start -->
 @if (count($errors) > 0)
 <div class="alert alert-danger">
@@ -30,10 +36,11 @@
 <input class="hidden" value="{{ isset($order->user->id) ?  $order->user->id : "" }}" readonly>
 
 <div class="row">
-	<div class="col-md-12">
+	<div class="col-md-6">
 		<div class="panel panel-default">
 		    <div class="panel-heading ui-draggable-handle">
-		      <h3 class="panel-title"><strong>Create Delivery for SO: #{{ isset($order->order_no) ?  $order->order_no : "" }} </strong></h3>
+              <h3 class="panel-title"><strong>Create Delivery for SO: #{{ isset($order->order_no) ?  $order->order_no : "" }} </strong></h3><br>
+              <p  class="panel-title">Packer's Name: {{ isset(Auth::user()->name) ? Auth::user()->name : Auth::user()->email }} </p>
             </div>
 
             <div class="panel-body">		 
@@ -101,19 +108,37 @@
                     </div>
     
              </div>
-                    
-		    
+            </div>
+    </div>
+
+    <div class="col-md-6">        
+            <div class="panel panel-default"> 
+                      <div class="panel-heading">   
+                            <h3 class="panel-title"><strong>Ordered Items</strong></h3>              
+                     </div>
+                     <div class="panel-body scroll" style="height: 150px;"> 
+                           
+                                    
+                            @foreach($items as $item)   
+                            <p>{{ isset($item->product->code) ? $item->product->code : "" }}
+                            {{ isset($item->product->name) ? $item->product->name : "" }}
+                            x {{ isset($item->product_qty) ? $item->product_qty : "" }}</p>
+                            @endforeach      
+                            </div>
+            </div>
+    </div>
+</div>
+<div class="row">
+        <div class="col-md-6">        
+             <div class="panel panel-default"> 
             <div class="panel-heading ui-draggable-handle">
                     <h3 class="panel-title"><strong>Courier</strong></h3>
-                    <ul class="panel-controls">
-                      <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
-                    </ul>
                   </div>
                   <div class="panel-body">
                     
                         <div class="form-group">
-                          <label class="col-xs-2 control-label">Courier Service</label>
-                          <div class="col-xs-4">
+                          <label class="col-xs-4 control-label">Courier Service</label>
+                          <div class="col-xs-8">
                               <select class="form-control" name="courier_id">
                               @foreach($couriers as $courier)
                               <option value=""></option>
@@ -124,106 +149,72 @@
                         </div>
         
                         <div class="form-group">
-                          <label for="inputPassword3" class="col-xs-2 control-label">Consigment Note (C/N)</label>
+                          <label for="inputPassword3" class="col-xs-4 control-label">Consigment Note (C/N)</label>
         
-                          <div class="col-xs-4">
+                          <div class="col-xs-8">
                             <input class="form-control" name="consignment_note" type="text">
                           </div>
                         </div>
         
                         <div class="form-group">
-                                <label class="col-md-2 control-label">Fee (RM)</label>
-                                <div class="col-md-4">                                    
+                                <label class="col-md-4 control-label">Fee (RM)</label>
+                                <div class="col-md-8">                                    
                                         <input class="form-control" name="shipping_fee" value="{{isset($order->shipping_fee) ?  $order->shipping_fee : ""}}"" type="text">
                                 </div>  
                         </div>
         
                       </div>
-            
-                      <div class="panel-heading ui-draggable-handle">
-                            <h3 class="panel-title"><strong>Packer</strong></h3>
-                            <ul class="panel-controls">
-                              <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
-                            </ul>
-                          </div>
-                    
-                          <div class="panel-body">
-
-                                <div class="form-group">
-                                        <label class="col-xs-2 control-label">Packed Date: {{ date('d/m/Y') }} </label>
-                                        <div class="col-xs-4">
-                                        </div>
-                                </div>
-                            
-                            <div class="form-group">
-                              <label class="col-xs-2 control-label">Packer's Name: {{ isset(Auth::user()->name) ? Auth::user()->name : Auth::user()->email }} </label>
-                              <div class="col-xs-4">
-                              </div>
-                            </div>
-            
-                          </div>
-
-                          <div class="panel-heading">   
-                                <h3 class="panel-title"><strong>Ordered Items</strong></h3>              
-                         </div>
-                         <div class="panel-body scroll" style="height: 150px;"> 
-                               
-                                        
-                                @foreach($items as $item)   
-                                <p>{{ isset($item->product->code) ? $item->product->code : "" }}
-                                {{ isset($item->product->name) ? $item->product->name : "" }}
-                                x {{ isset($item->product_qty) ? $item->product_qty : "" }}</p>
-                                @endforeach      
-                            </div>
+             </div>
+        </div>
+        
+        <div class="col-md-6">        
+                <div class="panel panel-default"> 
                           <div class="panel-heading ui-draggable-handle">
                                 <h3 class="panel-title"><strong>Add Item(s)</strong></h3>
-                                <ul class="panel-controls">
-                                  <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
-                                </ul>
+
                               </div>
                           <div class="panel-body">    
                                 <div class="form-horizontal"> 
-                                    <div class="form-group">
-                                        
-                                        <div class="col-md-4">    
-                                                <label class="col-md-3">Search</label>                                                                            
+                                        <div class="form-group">
+                                                <div class="col-md-6">
+                                            <p>Please choose either one input</p>
+                                                </div>
+                                        </div>
+                                        <div class="form-group" style=" background-color:cadetblue;padding:5px; ">
+                                                <div class="col-md-6">
+                                                    <div class="has-success has-feedback">
+                                                        <label for="Barcode"><input type="radio" name="optradio" checked class="hidden">Product S/N</label>                        
+                                                        <input type="text" class="form-control" id="input_barcode">
+                                                        <span class="glyphicon glyphicon-barcode form-control-feedback"></span>
+                                                </div>
+                                                </div>  
+                                            </div>
+                                    <div class="form-group" style="  background-color:aquamarine;padding:5px;">                                        
+                                        <div class="col-md-2">    
+                                            <label class="col-md-2">Products</label>                                                                            
                                             <select class="form-control select" data-live-search="true" id="input_product">
                                                 @foreach($products as $product)
                                                 <option value="{{$product->code}}" >{{$product->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-2">
                                                 <div class="has-warning">
                                                     <label for="Quantity"><input type="radio" name="optradio" class="hidden">Quantity</label>                        
                                                     <input type="number" class="form-control" id="input_quantity">
                                                 </div>
                                             </div> 
-                                            <div class="col-md-4">
-                                                    <label class="col-md-3">Add item</label>  
-                                                    
+                                            <div class="col-md-2 push-up-20">                                                   
                                                     <button class="btn btn-primary" id="add_item" type="button"> <i class="fa fa-plus-circle" ></i>
+                                                        Add item
                                                         </button>    
                                             </div>
                                     </div>
-
-                                        <div class="form-group">
-                                                <div class="col-md-4">
-                                                    <div class="has-success has-feedback">
-                                                        <label for="Barcode"><input type="radio" name="optradio" checked class="hidden">Product S/N</label>                        
-                                                        <input type="text" class="form-control" id="input_barcode">
-                                                        <span class="glyphicon glyphicon-barcode form-control-feedback"></span>
-        
-                                                </div>
-                                                </div>  
-                                            </div>
-                                            <div class="form-group"> 
-                                                 
-                                        </div>
-                                </div>
-                                       
+                                
+                                    <div class="form-group" >                                        
+                                            <div class="col-md-12">    
                                 <div class="table-responsive">
-                                        <table class="table datatable" id="table_listing">
+                                        <table class="table" id="table_listing">
                                             <thead>
                                                 <tr>
                                                     {{-- <th width="5px"></th> --}}
@@ -239,6 +230,9 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                            </div>
+                                    </div>
+                                </div>
                                     <textarea style="resize: none;" class="form-control hidden" name="serial_number_scan_json" id="serial_number_scan_json" >{{ old('serial_number_scan_json') }}</textarea>
                             </div>
             
@@ -286,7 +280,12 @@ $(document).ready(function() {
   });
 
     //Init datatable
-    window.t = $('.datatable').DataTable();
+    window.t = $('#table_listing').DataTable({
+        "bLengthChange": false,
+        "columnDefs": [
+                        { "orderable": false, "targets": [0,1,2,3] }
+                        ]
+    });
     //init counter
     window.counter = 1;
 
