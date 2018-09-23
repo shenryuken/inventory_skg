@@ -14,7 +14,7 @@ textarea {
 <ul class="breadcrumb">
 	<li><a href="{{ url('home') }}">Home</a></li>                    
     <li><a href="{{ url('order/sales/listing') }}">Order Management</a></li>
-    <li><a href="{{ url('order/sales/listing') }}">Order Listing</a></li>
+    <li><a href="{{ url('order/sales/listing') }}">Sales Order</a></li>
 </ul>
 <!-- END BREADCRUMB -->   
 
@@ -45,17 +45,14 @@ textarea {
                     <div class="panel panel-default">
                             <div class="panel-heading">
                                     <h3 class="panel-title">Sales Order</h3>
-                                    <div class="pull-right">
-                                            {{-- <a href="{{url('print/docket-gdex') }} "  class="btn btn-warning">Print C/N(G-DEX)</a> --}}
-                                            
+                                   
                                             <form action="{{url('print/docket-gdex')}}" method="post" target="_blank" id="docket_form">
+                                                <div class="btn-group pull-right">
                                                 {{ csrf_field() }}
                                                 <input type="text" name="so" id="so" hidden>
                                                 <a href="#" id="docket-btn" class="btn btn-warning"><i class="glyphicon glyphicon-print"></i>Print C/N (GDex)</a>
 
                                             </form>
-                                   
-                                    <div class="btn-group pull-right">
                                         <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i> Export Data</button>
                                         <ul class="dropdown-menu">
                                             <li><a href="#" onClick ="$('#sales-order').tableExport({type:'csv',escape:'false'});"><img src="{{ asset('themes/Joli/img/icons/csv.png') }}" width="24"/> CSV</a></li>

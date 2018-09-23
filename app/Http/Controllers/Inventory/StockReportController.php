@@ -310,11 +310,11 @@ class StockReportController extends Controller
         if(strtoupper($product_id) == "ALL"){
             $product        = (object)[];
             $product->name  = "All";
-            $barcodes       = StockItem::where('quantity','1')->get();
+            $barcodes       = StockItem::where('quantity','1')->distinct('barcode')->get();
 
         }else{
             $product    = Product::find($product_id);
-            $barcodes   = StockItem::where('product_id',$product_id)->where('quantity','1')->get();
+            $barcodes   = StockItem::where('product_id',$product_id)->distinct('barcode')->where('quantity','1')->get();
         }
         
 

@@ -14,7 +14,7 @@ textarea {
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb">
 	<li><a href="{{ url('home') }}">Home</a></li>                    
-	<li><a href="{{ url('stock/listing') }}">Product S/N Listing</a></li>
+	<li><a href="{{ url('inventory/stock/list') }}">Product S/N Listing</a></li>
 </ul>
 <!-- END BREADCRUMB -->   
 
@@ -48,16 +48,14 @@ textarea {
                             </div>
                             
                             <div class="panel-body"> 
-                                        
-                                            <p>Total listing: <b>{{ count($barcodes) }}</b></p>
                                         <div class="table-responsive">
                                             <table class="table table-striped" id="table_listing">
                                                 <thead>
                                                     <tr>
-                                                        <th width="5px" class="no-sort">No.</th>                                                        
+                                                        <th>Product S/N</th>                                                               
                                                         <th>Stock In Number</th>
                                                         <th>Stock In Date</th>                  
-                                                        <th>Product S/N</th>                            
+                                                                            
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -65,10 +63,10 @@ textarea {
                                                     @php $i = 1; @endphp
                                                     @foreach($barcodes as $barcode)          
                                                         <tr>
-                                                            <td><?php echo $i++; ?></td>                                                            
+                                                            <td>{{ $barcode->barcode }} </td>                                                            
                                                             <td>{{ $barcode->stocks->stock_in_no }} </td>
                                                             <td data-order="{{ Carbon\Carbon::parse($barcode->stocks->stock_date)}}">{{ Carbon\Carbon::parse($barcode->stocks->stock_date)->format('d/m/Y') }} </td>
-                                                            <td>{{ $barcode->barcode }} </td>
+                                                            
                                                            
                                                             
                                                         </tr>
@@ -90,7 +88,6 @@ textarea {
 {{-- page level scripts --}}
 @section('footer_scripts')
 <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-      <script type='text/javascript' src="{!! asset('joli/js/plugins/validationengine/jquery.validationEngine.js') !!}"></script>   
       <script>
             $(document).ready(function() {
 
@@ -98,7 +95,10 @@ textarea {
                     "order": [],
                     "columnDefs": [
                                 { targets: 'no-sort', orderable: false }
-                                ]
+                                ],
+                    "oLanguage": {
+                            "sSearch": "Search S/N"
+                        }            
                 });
 
                 

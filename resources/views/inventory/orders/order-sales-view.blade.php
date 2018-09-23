@@ -1,6 +1,14 @@
 @extends('layouts.joli.app')
 
 @section('content')
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb">
+        <li><a href="{{ url('home') }}">Home</a></li>
+        <li><a href="#">Order Management</a></li>
+        <li><a href="{{ url('inventory/order/sales') }}">Sales Order</a></li>
+        <li  class="active">Sales Order View</li>
+    </ul>
+    <!-- END BREADCRUMB -->   
 <div class="page-content-wrap">
         <div class="row">
                 <div class="col-sm-12">
@@ -25,14 +33,14 @@
 
 	<div class="col-md-12">
 
-        <div class="panel panel-success push-up-20">
-                <div class="panel-heading">
-                   
-                </div>
+        <div class="panel panel-success">
                 @if($order)
+                <div class="panel-heading">
+                        <h1 class="panel-title">Sales Order #: <strong style="text-transform: uppercase;">{{ str_replace("SO","INV",isset($order->order_no)? $order->order_no : "")}}</strong></h1>  
+                </div>
+               
             <div class="panel-body panel-body-pricing">
-                <div class="">
-                        <h1>Sales Order #: <strong style="text-transform: uppercase;">{{ str_replace("SO","INV",isset($order->order_no)? $order->order_no : "")}}</strong></h1>  
+
                     <table class="table">
                         <thead>
                             <tr>
@@ -76,7 +84,6 @@
                             </tbody>
                     </table>
 
-                </div>
 
                     {{-- {!! DNS1D::getBarcodeSVG($order->order_no, "C93") !!} --}}
                     
@@ -109,15 +116,18 @@
             
             
         </div>
-        <div class="panel">
+        <div class="panel panel-warning">
                 <div class="panel-heading">
-                       
-                   <a href="{{url('inventory/order/delivery/create/'.base64_encode(isset($order->order_no)? $order->order_no : ""))}}" class="btn btn-success">Generate DO</a> 
+                        <h3 class="panel-title">Delivery Order</h3>
+                       <div class="btn-group pull-right">
+                            <a href="{{url('inventory/order/delivery/create/'.base64_encode(isset($order->order_no)? $order->order_no : ""))}}" class="btn btn-success">Generate DO</a> 
+                       </div>
+                   
                     </div>
                 <div class="panel-body">
-                    <h4>Delivery</h4>
+                    
                     <div class="col-md-6">
-                            <table class="table">
+                            <table class="table" id="table-listing">
                                     <thead>
                                         <tr>
                                             <th>DO#</th>
@@ -142,18 +152,26 @@
 
     </div>
 </div>
-</div>
 @else
+<div class="panel panel-danger">
             <div class="alert alert-danger">
                     <ul>
                         <h1>Order not found</h1>
                     </ul>
             </div>
-                @endif
+        </div>
+ @endif
+</div>
+
 @stop
 @section('footer_scripts')
+<script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script>
-
+t = $('#table-listing').DataTable({
+            "oLanguage": {
+                            "sSearch": "Search DO"
+                        }
+        })
 </script>
 
 
