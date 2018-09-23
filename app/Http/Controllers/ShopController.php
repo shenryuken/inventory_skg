@@ -36,7 +36,7 @@ use App\Models\PaymentType;
 use App\Http\Controllers\Inventory\ProductUserController;
 
 use App\Traits\WalletTrait;
-use App\Models\SalesTrait;
+use App\Traits\SalesTrait;
 
 use Validator;
 use Session;

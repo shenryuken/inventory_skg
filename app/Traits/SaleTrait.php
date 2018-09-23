@@ -13,14 +13,14 @@ trait SalesTrait
 		$year = (new DateTime)->format("Y");
         $month = (new DateTime)->format("n");
 
-        $saleProduct = ProductSale::firstOrNew('product_id' =>[$item['product_id'], 'year' => $year , 'month' => $month] );
+        $saleProduct = ProductSale::firstOrNew(['product_id' => $item['product_id'], 'year' => $year , 'month' => $month] );
         $saleProduct->quantity = $item['total_quantity'];
-        $saleProduct->amount   = $saleProduct->amount + ($price*$item['total_quantity']):
+        $saleProduct->amount   = $saleProduct->amount + ($price*$item['total_quantity']);
         $saleProduct->save();
 
 	}
 
-	public function updateSalesData($$total_pv, $total_price)
+	public function updateSalesData($total_pv, $total_price)
 	{
 		$year = (new DateTime)->format("Y");
         $month = (new DateTime)->format("n"); 

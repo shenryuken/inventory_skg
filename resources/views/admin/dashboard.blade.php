@@ -8,6 +8,8 @@
 <?php $page_title = 'Admin Dashboard'; ?>
 
 <div class="row">
+    <?php
+    /*
     <div class="col-md-4">
 
         <div class="widget widget-primary widget-item-icon">
@@ -182,7 +184,8 @@
             </div>                                    
         </div>
         <!-- END USERS ACTIVITY BLOCK -->
-    </div>
+    </div>*/
+    ?>
 </div>                     
 
 @endsection
@@ -194,6 +197,8 @@
 <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/morris/raphael-min.js') }}"></script>
 <script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/morris/morris.min.js') }}"></script>
 <!-- END THIS PAGE PLUGINS-->    
+<?php
+/*
 <script type="text/javascript">
 
     var datasource1 = <?php echo json_encode($sales_stock_activity1);?>
@@ -230,7 +235,8 @@
     });
 
 </script>
-
+*/
+?>
 
 @endsection
 @section('footer_scripts')

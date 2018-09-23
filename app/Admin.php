@@ -6,6 +6,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Notifications\AdminResetPasswordNotification;
 
+use App\Models\Role;
+
 class Admin extends Authenticatable
 {
     use Notifiable;
