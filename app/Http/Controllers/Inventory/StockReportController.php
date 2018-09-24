@@ -91,10 +91,10 @@ class StockReportController extends Controller
                     $stock_in_total     = $stock_in_total + ($stock_adj_in);
                     $stock_out_total    = $stock_out_total + ($stock_adj_out);
     
-                    $product_name = isset($b->StockItem->first()->products->name) ? $b->StockItem->where('stock_adjustment_id',$b->id)->first()->products->name : "";
-                    $product_code = isset($b->StockItem->first()->products->code) ? $b->StockItem->where('stock_adjustment_id',$b->id)->first()->products->code : "";
-                    $supplier_name = isset($b->StockItem->first()->suppliers->company_name) ? $b->StockItem->where('stock_adjustment_id',$b->id)->first()->suppliers->company_name : "";
-                    $supplier_code = isset($b->StockItem->first()->suppliers->supplier_code) ? $b->StockItem->where('stock_adjustment_id',$b->id)->first()->suppliers->supplier_code : "";
+                    $product_name = isset($b->StockItem->where('stock_adjustment_id',$b->id)->first()->products->name) ? $b->StockItem->where('stock_adjustment_id',$b->id)->first()->products->name : "";
+                    $product_code = isset($b->StockItem->where('stock_adjustment_id',$b->id)->first()->products->code) ? $b->StockItem->where('stock_adjustment_id',$b->id)->first()->products->code : "";
+                    $supplier_name = isset($b->StockItem->where('stock_adjustment_id',$b->id)->first()->suppliers->company_name) ? $b->StockItem->where('stock_adjustment_id',$b->id)->first()->suppliers->company_name : "";
+                    $supplier_code = isset($b->StockItem->where('stock_adjustment_id',$b->id)->first()->suppliers->supplier_code) ? $b->StockItem->where('stock_adjustment_id',$b->id)->first()->suppliers->supplier_code : "";
 
                     $adjustment_type =  isset($b->stockAdjustmentType->adjustment) ? $b->stockAdjustmentType->adjustment : "";
                     $reports[] = [
