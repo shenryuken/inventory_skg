@@ -182,11 +182,11 @@ class StockReportController extends Controller
         $stocks = $products->get();   
 
             foreach($stocks as $key=>$value){
-		    
+		    $productId          = $value->id;
 		    $instore = $stock_item->where('product_id',$productId)->whereIn('status',['01'])->sum('quantity');
 		    $outstore = $stock_item->where('product_id',$productId)->whereIn('status',['04'])->sum('quantity');
                 
-                $productId          = $value->id;
+                
                 $totalserial_number = (float)$instore - (float)$outstore;
                 $adjustment         = $StockAdjustment->stockItem()->where('product_id',$productId)
                                                 ->get();
