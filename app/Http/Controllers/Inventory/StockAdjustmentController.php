@@ -84,7 +84,8 @@ class StockAdjustmentController extends Controller
         {
             $product_stock_array = [
                 'stock_adjustment_id'   => $stock->id,
-                'barcode'               => $serialNumberArray
+                'barcode'               => $serialNumberArray,
+		'product'               => $request->product
             ];
     
             $this->storeProductStocks($product_stock_array);
@@ -94,7 +95,7 @@ class StockAdjustmentController extends Controller
 
             return back()->with('success', 'Successfully saved!');
         }catch(\Exception $e){
-            return back();
+            return back()->withErrors(['msg', $e->getMessage()]);;
         }
         
 
@@ -123,7 +124,8 @@ class StockAdjustmentController extends Controller
             }else{
                 //Create non serial number
                 $product_stock_array = [
-                    'stock_adjustment_id'   => $product_stock_array['stock_adjustment_id'],
+		    'product_id'            => $product_supplier->product,
+                    'stock_adjustment_id'   => $product_stock_array['stock_adjustment_id'], //not null
                     'quantity'   => $product_supplier->quantity,
                     'status'                => '04',
                     'created_by'            => Auth::user()->id,
