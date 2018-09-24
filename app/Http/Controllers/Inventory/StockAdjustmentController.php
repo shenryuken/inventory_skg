@@ -85,7 +85,7 @@ class StockAdjustmentController extends Controller
             $product_stock_array = [
                 'stock_adjustment_id'   => $stock->id,
                 'barcode'               => $serialNumberArray,
-		'product'               => $request->product
+		'product'               => $request->input('product')
             ];
     
             $this->storeProductStocks($product_stock_array);
