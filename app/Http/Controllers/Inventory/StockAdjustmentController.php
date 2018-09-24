@@ -103,10 +103,10 @@ class StockAdjustmentController extends Controller
     public function storeProductStocks($product_stock_array){
         
         foreach($product_stock_array['barcode'] as $product_supplier){
-            if($product_supplier->barcode){
-            $stock_item = StockItem::where('barcode',$product_supplier->barcode)->where('status','01')->first();
+            if($product_supplier->barcode!=""){
+            	$stock_item = StockItem::where('barcode',$product_supplier->barcode)->where('status','01')->first();
 
-            if($stock_item){
+            	if($stock_item){
 
                 $new = $stock_item->replicate();
 
@@ -117,7 +117,7 @@ class StockAdjustmentController extends Controller
 
                 $stock_item->status = "99"; //moved
                 $stock_item->update();
-	    }
+	    				}
                 
 
             }else{
