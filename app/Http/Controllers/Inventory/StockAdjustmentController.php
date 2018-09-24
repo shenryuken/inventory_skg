@@ -124,7 +124,7 @@ class StockAdjustmentController extends Controller
             }else{
                 //Create non serial number
                 $product_stock_array = [
-		    'product_id'            => $product_supplier->product,
+		    'product_id'            => $product_stock_array->product,
                     'stock_adjustment_id'   => $product_stock_array['stock_adjustment_id'], //not null
                     'quantity'   => $product_supplier->quantity,
                     'status'                => '04',
