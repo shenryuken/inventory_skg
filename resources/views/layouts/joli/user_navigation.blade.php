@@ -42,6 +42,13 @@
             <li class="{{ Request::is('referrals/my-downline') ? 'active' : '' }}"><a href="{{ url('referrals/my-downline')}}">Referrals</a></li>                
         </ul>
     </li> 
+    <li class="xn-openable {{ Request::is('vault/*') ? 'active' : '' }}">
+        <a href="tables.html"><span class="fa fa-table"></span> <span class="xn-text">Vault</span></a>
+        <ul>                            
+            <li class="{{ Request::is('vault/my-wallet') ? 'active' : '' }}"><a href="{{ url('vault/my-wallet')}}">My Wallet</a></li>  
+            <li class="{{ Request::is('vault/transfer') ? 'active' : '' }}"><a href="{{ url('vault/transfer-point')}}">Transfer Point</a></li>         
+        </ul>
+    </li> 
     <li class="xn-openable">
         <a href="tables.html"><span class="fa fa-table"></span> <span class="xn-text">Order</span></a>
         <ul>                            
