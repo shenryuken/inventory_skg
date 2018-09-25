@@ -15,7 +15,7 @@ class Product extends Model
 
     public function Stocks()
     {
-        return $this->hasMany('App\Models\StockItem', 'product_id');
+        return $this->hasMany('App\Models\Stock', 'product_id');
     }
 
     public function returnGoods()

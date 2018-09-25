@@ -45,33 +45,34 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        $user       = Auth::guard('admin')->user();
-        $user_stats = $this->getUserStats();
+        // $user       = Auth::guard('admin')->user();
+        // $user_stats = $this->getUserStats();
         //$sales  = $this->getTotalSales();
         // $total_purchases = $this->totalPurchases();
         // $total_product_purchases = $this->totalProductPurchased();
 
-        $sale_stats           = $this->getSaleStats();
-        $sales_stock_activity = $this->getSaleStockActivity();
-        $last_month_bonus     = UserBonus::whereMonth('created_at', Carbon::now()->subMonth()->month)->sum('total_bonus');
+        // $sale_stats           = $this->getSaleStats();
+        // $sales_stock_activity = $this->getSaleStockActivity();
+        // $last_month_bonus     = UserBonus::whereMonth('created_at', Carbon::now()->subMonth()->month)->sum('total_bonus');
  
-        $bonus = [
-            'total_bonus'     => UserBonus::sum('total_bonus'),
-            'last_month_bonus'=> $last_month_bonus,
-            'retail_profit'   => UserBonus::sum('retail_profit'),
-            'direct_sponsor'  => UserBonus::sum('direct_sponsor'),
-            'personal_rebate' => UserBonus::sum('personal_rebate'),
-            'do_group_bonus'  => UserBonus::sum('do_group_bonus'),
-            'sdo_group_bonus' => UserBonus::sum('sdo_group_bonus'),
-            'do_cto_pool'     => UserBonus::sum('do_cto_pool'),
-            'sdo_cto_pool'    => UserBonus::sum('sdo_cto_pool'),
-            'sdo_sdo'         => UserBonus::sum('sdo_sdo'),
-        ];
+        // $bonus = [
+        //     'total_bonus'     => UserBonus::sum('total_bonus'),
+        //     'last_month_bonus'=> $last_month_bonus,
+        //     'retail_profit'   => UserBonus::sum('retail_profit'),
+        //     'direct_sponsor'  => UserBonus::sum('direct_sponsor'),
+        //     'personal_rebate' => UserBonus::sum('personal_rebate'),
+        //     'do_group_bonus'  => UserBonus::sum('do_group_bonus'),
+        //     'sdo_group_bonus' => UserBonus::sum('sdo_group_bonus'),
+        //     'do_cto_pool'     => UserBonus::sum('do_cto_pool'),
+        //     'sdo_cto_pool'    => UserBonus::sum('sdo_cto_pool'),
+        //     'sdo_sdo'         => UserBonus::sum('sdo_sdo'),
+        // ];
 
-        list($sales_stock_activity1, $sales_stock_activity2) = array_chunk($sales_stock_activity, ceil(count($sales_stock_activity) / 2));
+        // list($sales_stock_activity1, $sales_stock_activity2) = array_chunk($sales_stock_activity, ceil(count($sales_stock_activity) / 2));
 
-        return view('admin.dashboard', 
-                    compact('user', 'user_stats', 'sale_stats', 'bonus', 'sales_stock_activity1', 'sales_stock_activity2'));
+        // return view('admin.dashboard', 
+        //             compact('user', 'user_stats', 'sale_stats', 'bonus', 'sales_stock_activity1', 'sales_stock_activity2'));
+        return view('admin.dashboard');
     }
 
     public function edit($id)
