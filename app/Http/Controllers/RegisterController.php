@@ -94,13 +94,13 @@ class RegisterController extends Controller
             $member     = User::where('username', $introducer)->first();
             $rank       = Rank::where('name', $request->rank)->first();
 
-            // if (count($admin) == 1){
-            //     $table = 'admins';
-            // } else {
-            //     $table = 'users';
-            // } 
+            if ($admin == 1){
+                $table = 'admins';
+            } else {
+                $table = 'users';
+            } 
 
-            $table = count($admin) == 1 ? 'admins':'users';
+            //$table = count($admin) == 1 ? 'admins':'users';
             
             $request->validate([
                 'country'   => 'required',
