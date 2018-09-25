@@ -208,15 +208,15 @@
  
             // Update footer
             $( api.column( 7     ).footer() ).html(
-                '<strong>'+pageTotal1 +'</strong>'
+                '<strong>'+total1 +'</strong>'
             );
 
             $( api.column( 8 ).footer() ).html(
-                '<strong>'+pageTotal2 + '</strong>'
+                '<strong>'+total2 + '</strong>'
             );
 
             $( api.column( 9 ).footer() ).html(
-                '<strong>'+ (parseInt(pageTotal1) - parseInt(pageTotal2))  + '</strong>'
+                '<strong>'+ (parseInt(total1) - parseInt(total2))  + '</strong>'
             );
         },
 
