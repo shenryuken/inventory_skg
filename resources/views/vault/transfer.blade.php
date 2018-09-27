@@ -82,6 +82,10 @@
 </div>
 <div class="row">
     <div class="col-lg-12">
+        @component('components.notifications.errors')
+        @endcomponent
+
+        @include('components.notifications.messages')
         <div class="hpanel">
             <div class="panel-heading">
                 <div class="panel-tools">
@@ -91,7 +95,7 @@
                 Tranfer Point
             </div>
             <div class="panel-body">
-                <form class="form-horizontal" method="post" action="{{ url('vault/tranfer-point') }}">
+                <form class="form-horizontal" method="post" action="{{ url('vault/transfer-point') }}">
                 	{{csrf_field()}}
     
       				@include('components.forms.transfer-point')

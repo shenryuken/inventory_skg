@@ -88,13 +88,13 @@ class RegisterController extends Controller
 
     public function registerMember(Request $request)
     {
-        try{
+        // try{
             $introducer = $request->introducer;
             $admin      = Admin::where('username', $introducer)->first();
             $member     = User::where('username', $introducer)->first();
             $rank       = Rank::where('name', $request->rank)->first();
 
-            if ($admin == 1){
+            if ($admin){
                 $table = 'admins';
             } else {
                 $table = 'users';
@@ -135,7 +135,13 @@ class RegisterController extends Controller
                 'security_code'         => 'required',
             ]);
 
-            $hashedCode = Auth::guard('admin')->user()->security_code;
+            if($table == "admins")
+            {
+                $hashedCode = Auth::guard('admin')->user()->security_code;
+            } else {
+                $hashedCode = Auth::guard('web')->user()->security_code;
+            }
+            
 
             if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode))
             {
@@ -192,14 +198,16 @@ class RegisterController extends Controller
 
             // session()->forget('user');
             // session()->forget('profile');
+            $newUser = NewUser::truncate();
+            $newProfile = NewProfile::truncate();
 
             return back()->withInput()
                          ->with('fail', 'Failed to register! Please Check Your Security Code Is Correct Or Try Again. ');
-        }
-        catch(\Exception $e)
-        {
-            return $e->getMessage();
-        }
+        // }
+        // catch(\Exception $e)
+        // {
+        //     return $e->getMessage();
+        // }
     }
 
     public function firstTimePurchaseRegistration()

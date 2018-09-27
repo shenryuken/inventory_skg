@@ -3,10 +3,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Requests;
 use App\Models\Wallet;
 use App\Models\ActiveDo;
 use App\Models\UserBonus;
+
+use App\User;
 use Validator;
 use Session;
 
@@ -65,6 +68,51 @@ class WalletController extends Controller
 
     public function transferPoint()
     {
+    	return view('vault.transfer');
+    }
+
+    public function postTransferPoint(Request $request)
+    {
+    	$request->validate([
+               'point_to_transfer' => 'required',
+               'username'          => 'required|exists:users,username',
+               'security_code'     => 'required'
+            ]);
+    	
+    	$sender   = Auth::user()->username;
+    	$receiver = User::where('username', $request->username)->first();
+
+    	$hashedCode = Auth::guard('web')->user()->security_code;
+
+    	if(Auth::guard('web')->check() && Hash::check($request->security_code, $hashedCode))
+    	{
+    		$sender_wallet 		= Wallet::where('user_id', $receiver->id)->first();
+		    $receiver_wallet 	= Wallet::where('user_id', $receiver->id)->first(); 
+
+    		if($request->point_to_transfer <= $sender_wallet->p_wallet)
+    		{
+    			$sender_wallet 		= Wallet::where('user_id', $receiver->id)->first();
+		    	$receiver_wallet 	= Wallet::where('user_id', $receiver->id)->first();
+
+		    	$sender_wallet->p_wallet 	= $sender_wallet->p_wallet - $request->point_to_transfer;
+		    	$sender_wallet->save();
+
+		    	$receiver_wallet->p_wallet 	= $receiver_wallet->p_wallet + $request->point_to_transfer;
+		    	$receiver_wallet->save();
+
+		    	$point_transactions = new PointTransactions;
+		    	$point_transactions->from_user_id = $sender->id;
+		    	$point_transactions->to_user_id   = $receiver->id;
+		    	$point_transactions->save();
+
+		    	Session::flash('success', 'Successfully transfer '.$request->point_to_transfer.' points to '.$receiver->username); 
+    		}
+    		elseif ($request->point_to_transfer > $sender_wallet->p_wallet ) 
+    		{
+    			Session::flash('fail', 'Failed to transfer '.$request->point_to_transfer.' points to '.$receiver->username.'. Insufficient point!');
+    		}
+    	}
+
     	return view('vault.transfer');
     }
 }
