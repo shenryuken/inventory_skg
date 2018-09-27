@@ -11,7 +11,7 @@
 		<div class="form-group">
 			<label class="col-md-3 control-label">Point To Transfer</label>
 			<div class="col-md-3">
-				<input class="form-control" type="text" name="point-to-transfer">
+				<input class="form-control" type="text" name="point_to_transfer">
 			</div>
 		</div>
 
