@@ -260,7 +260,7 @@ class ShopController extends Controller
 
                 $cartItems[$key]['total_price_wm']      = $total_price_wm;
                 $cartItems[$key]['total_price_em']      = $total_price_em;
-                $cartItems[$key]['total_price_staff']   = $total_price_em;
+                $cartItems[$key]['total_price_staff']   = $total_price_staff;
 
                 $image = product_image::select('type','description','file_name','path')
                                         ->where('product_id',$cartItems[$key]['product_id'])
@@ -271,7 +271,7 @@ class ShopController extends Controller
 
                 $totalPrice_wm      = $totalPrice_wm + (float)str_replace(",", "", $cartItems[$key]['total_price_wm']);
                 $totalPrice_em      = $totalPrice_em + (float)str_replace(",", "", $cartItems[$key]['total_price_em']);
-                $totalPrice_staff   = $totalPrice_staff + (float)str_replace(",", "", $cartItems[$key]['total_price_em']);
+                $totalPrice_staff   = $totalPrice_staff + (float)str_replace(",", "", $cartItems[$key]['total_price_staff']);
 
             }
 
