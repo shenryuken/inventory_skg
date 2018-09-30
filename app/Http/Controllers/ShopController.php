@@ -442,9 +442,11 @@ class ShopController extends Controller
 
         try{
 
-            if(empty($addressData)){
+            if(Auth::guard('web')->check()){
+                if(empty($addressData)){
 
-                return redirect()->back()->with('message','No Address');
+                    return redirect()->back()->with('message','No Address');
+                }
             }
             // dd($addressData);
             $cartItems = OrderTransection::leftJoin('products','products.id','=','orders_transection.product_id')
