@@ -39,7 +39,7 @@
                         <img src="{{ asset('themes/Joli/img/skgwrldogo.png') }}"  height="50" width="200" alt="skgworld">
                         <h3>SKG WORLD SDN BHD</h3>
                         <hr>
-                        <h1 style="text-align: center;">Deliver Order</h1>                          
+                        <h1 style="text-align: center;">Delivery Order</h1>                          
                 
                 <div style="width:50%;float:left">
                 <p><span class="fa fa-caret-right"></span> <strong>Customer:</strong> {{ isset($delivery->salesOrder->user->username) ? $delivery->salesOrder->user->username : "" }}</p>

@@ -34,8 +34,10 @@ class StockAdjustmentController extends Controller
 		if(!$product_id){
 			$product = StockItem::all()->sum('quantity');	
 		}else{
-			$product = Product::find($product_id);	
-			$product = $product->StockItems()->where('stock_items.status','01')->sum('quantity');
+            $product = Product::find($product_id);	
+            $exist = $product->StockItems()->whereIn('stock_items.status',['01','99','98'])->sum('quantity');
+            $out = $product->StockItems()->whereIn('stock_items.status',['04','05'])->sum('quantity');
+			$product = floatval($exist) - floatval($out);
 		}
 		return $product;
 	}

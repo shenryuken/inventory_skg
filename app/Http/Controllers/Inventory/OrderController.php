@@ -191,7 +191,7 @@ class OrderController extends Controller
         $order_no = $request->input('order_no');
         
         if($order_no){
-            OrderHdr::where('id',$order_no)->update(['status'=>'04']);
+            Delivery::where('id',$order_no)->update(['status'=>'complete']);
         }
 
         return redirect('inventory/order/delivery/');

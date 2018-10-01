@@ -3152,7 +3152,7 @@ blockquote.pull-right {
   width: 50%;
   float: left;
   padding: 0px 0px 5px;
-  border-bottom: 1px solid #E5E5E5;
+  /* border-bottom: 1px solid #E5E5E5; */
   font-size: 12px;
   height: 38px;
 }
