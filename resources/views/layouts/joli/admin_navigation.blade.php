@@ -150,7 +150,7 @@
             
 
             <li class="xn-openable {{ Request::is('inventory/report/stock-balance') ? 'active' : '' }}">
-                <a href="{{ url('inventory//stock/report') }}"><span class="fa fa-book"></span> Report </a>
+                <a href="{{ url('inventory/report/stock-balance') }}"><span class="fa fa-book"></span> Report </a>
                 <ul>
                     <li class="{{ Request::is('inventory/report/stock-balance') ? 'active' : '' }}">
                         <a href="{{ url('inventory/report/stock-balance') }}"> Stock Balance Report </a>

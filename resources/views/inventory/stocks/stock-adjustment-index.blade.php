@@ -141,27 +141,30 @@
                                 </table>
                             </div>
                     </div>
-                    <div class="panel-body">  
-                        <div class="col-md-6">
-                        <table class="table">
-                            <thead>
-                                <h5>Stock Info</h5>
-                                <tr>
-                                    <th>In Stocks</th>
-                                    <th>Adjusting</th>
-                                    <th>Will Remain</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td id="instock_table"></td>
-                                    <td id="adjusting_table"></td>
-                                    <td id="remain_table"></td>
-                                </tr>
-                            </tbody>
-                        </table>  
+                    <div class="panel panel-colorful">
+                        <div class="panel-body">  
+                            <div class="col-md-6">
+                            <table class="table">
+                                <thead>
+                                    <h5>Stock Info</h5>
+                                    <tr>
+                                        <th>In Stocks</th>
+                                        <th>Adjusting</th>
+                                        <th>Will Remain</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="instock_table"></td>
+                                        <td id="adjusting_table"></td>
+                                        <td id="remain_table"></td>
+                                    </tr>
+                                </tbody>
+                            </table>  
+                        </div>
+                        </div>
                     </div>
-                    </div>
+                    
                     <div class="panel-footer">
                             {{-- <input type="button" id="clearBtn" class="btn btn-default hide" value="Clear Form"> --}}
                             <input type="button" id="modal_open" data-toggle="modal" data-target="#modal_basic" class="btn btn-primary pull-right" value="Save">
@@ -311,7 +314,6 @@ $(document).ready(function() {
         var product_input;
         $( "#product option:selected" ).each(function() {
         product_input = $( this ).val();
-        console.log(product_input)
         
         });
 
@@ -324,7 +326,6 @@ $(document).ready(function() {
 		data:data,	
 		url: "adjustment/stock_product"
 		}).done(function(result){
-            console.log(result)
             $('#instock_table').text(result)
 
 		});
