@@ -58,7 +58,7 @@ textarea {
                             </div>
                             <div class="panel-body"> 
                                     <div class="col-md-3">
-                                            <div class="widget widget-danger widget-item-icon widget-no-subtitle" data-container="body" data-toggle="popover" data-placement="top" data-html="true" data-content="@foreach($dashboards['totalLessStock'] as $product) {{$product->products->name}}<br /> @endforeach">
+                                            <div class="widget widget-danger widget-item-icon widget-no-subtitle" data-container="body" data-toggle="popover" data-placement="top" data-html="true" data-content="@foreach($dashboards['totalLessStock'] as $product) {{isset($product->products->name) ?$product->products->name:"" }}<br /> @endforeach">
                                                     <div class="widget-item-left">
                                                         <span class="glyphicon glyphicon-warning-sign"></span>
                                                     </div>                             
