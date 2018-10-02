@@ -225,20 +225,19 @@
 
             if (index == 0) {
                  balance = data[7] ||  0;
-                } else {
-                    var prev_row = this.api().row( index -1 ).data()
-                    balance = parseInt(prev_row[9]) + parseInt(data[7] || 0) - parseInt(data[8] || 0);
-                    
-                }
+            } else {
+                var prev_row = this.api().row( index -1 ).data()
+                balance = parseInt(prev_row[9]) + parseInt(data[7] || 0) - parseInt(data[8] || 0);
+            }
 
             data[9] = balance;
             $('td',row).eq(9).text(balance)
 
         },
                     "order": [],
-                    // "scrollY":        "200px",
-                    // "scrollCollapse": true,
-                    "paging":true,
+                    "scrollY":"450px",
+                    "scrollCollapse": true,
+                    "paging":false,
                     "columnDefs": [
                                 { targets: 'no-sort', orderable: false }
                                 ]                    

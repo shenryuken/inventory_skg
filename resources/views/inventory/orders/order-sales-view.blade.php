@@ -101,8 +101,8 @@
                     <tbody>
                             @foreach($items as $item)
                             <tr>
-                                <td>{{ isset($item->products->name) ? $item->products->name : "" }}</td>
-                                <td>{{ isset($item->products->price_wm) ? $item->products->price_wm : "" }}</td>
+                                <td>{{ isset($item->product->name) ? $item->product->name : "" }}</td>
+                                <td>{{ isset($item->product->price_wm) ? $item->product->price_wm : "" }}</td>
                                 <td>{{ isset($item->product_qty) ? $item->product_qty : "" }}</td>
                             </tr>
                             @endforeach
