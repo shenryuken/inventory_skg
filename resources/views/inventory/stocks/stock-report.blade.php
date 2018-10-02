@@ -220,13 +220,17 @@
             );
         },
 
-        "rowCallback": function ( row, data, index,dataIndex,displayIndex) {
+
+        "rowCallback": function ( row, data, index,displayIndex,dataIndex) {
+
             var balance = 0;
 
             if (index == 0) {
                  balance = data[7] ||  0;
             } else {
+
                 console.log(displayIndex)
+
                 var prev_row = this.api().row( dataIndex -1 ).data()
                 balance = parseInt(prev_row[9]) + parseInt(data[7] || 0) - parseInt(data[8] || 0);
             }
