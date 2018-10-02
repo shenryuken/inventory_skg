@@ -228,9 +228,10 @@
             if (index == 0) {
                  balance = data[7] ||  0;
             } else {
-		console.log(api)
-                var prev_row = api.row( index -1 ,{search:"applied"}).data()
 		
+                var prev_row = api.row( index -1).data()
+		console.log(api)
+		console.log(prev_row)
                 balance = parseInt(prev_row[9]) + parseInt(data[7] || 0) - parseInt(data[8] || 0);
             }
 
