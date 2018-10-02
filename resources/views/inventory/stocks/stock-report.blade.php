@@ -71,7 +71,7 @@
                         <div class="panel-body">
                                        
                                                  <div class="table-responsive">
-                                                     <table id="stock_bal_report" class="table table-bordered table-hover" style="font-size: 1.5em">
+                                                     <table id="stock_bal_report" class="table table-bordered table-hover">
                                                          <thead>
                                                              <tr>
                                                                  <th class="hidden"></th>
@@ -229,9 +229,7 @@
                  balance = data[7] ||  0;
             } else {
 
-                console.log(displayIndex)
-
-                var prev_row = this.api().row( displayIndex -1 ).data()
+                var prev_row = this.api().row( index -1 ,{search:"applied").data()
                 balance = parseInt(prev_row[9]) + parseInt(data[7] || 0) - parseInt(data[8] || 0);
             }
 
