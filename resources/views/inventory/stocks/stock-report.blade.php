@@ -229,7 +229,7 @@
                  balance = data[7] ||  0;
             } else {
 
-                var prev_row = this.api().row( index -1 ,{search:"applied").data()
+                var prev_row = this.api().row( index -1 ,{search:"applied"}).data()
                 balance = parseInt(prev_row[9]) + parseInt(data[7] || 0) - parseInt(data[8] || 0);
             }
 
