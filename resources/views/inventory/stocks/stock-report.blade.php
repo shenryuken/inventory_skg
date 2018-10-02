@@ -71,7 +71,7 @@
                         <div class="panel-body">
                                        
                                                  <div class="table-responsive">
-                                                     <table id="stock_bal_report" class="table table-bordered">
+                                                     <table id="stock_bal_report" class="table table-bordered table-hover" style="font-size: 1.5em">
                                                          <thead>
                                                              <tr>
                                                                  <th class="hidden"></th>
@@ -83,7 +83,7 @@
                                                                  <th>Description</th>
                                                                  <th class="success">Stock In</th>
                                                                  <th class="warning">Stock Out</th>
-                                                                 <th>Balance</th>
+                                                                 <th class="info">Balance</th>
                                                              </tr>
                                                          </thead>
                                                          <tbody>
@@ -98,13 +98,13 @@
                                                                     <td>{{ $report['description'] }}</td>								    
                                                                     <td  class="success">{{ $report['stock_in'] }}</td>                                                                    
                                                                     <td  class="warning" data-toggle="tooltip" data-original-title="{{ $report['adjustment_type'] }}" data-container="body" data-toggle="tooltip" data-placement="bottom" title="" title="">{{ $report['stock_out'] }}</td>
-                                                                    <td></td>
+                                                                    <td class="info"></td>
                                                                 </tr>
                                                              @endforeach
                                                             </tbody>
                                                         <tfoot>
                                                             <tr style="background-color: mistyrose;">
-                                                                <td><strong>Total</strong></td>
+                                                                <td><strong>Total & Balance</strong></td>
                                                                 <td class="hidden"></td>
                                                                 <td></td>
                                                                 <td></td>
@@ -220,13 +220,14 @@
             );
         },
 
-        "rowCallback": function ( row, data, index ) {
+        "rowCallback": function ( row, data, index,dataIndex,displayIndex) {
             var balance = 0;
 
             if (index == 0) {
                  balance = data[7] ||  0;
             } else {
-                var prev_row = this.api().row( index -1 ).data()
+                console.log(displayIndex)
+                var prev_row = this.api().row( dataIndex -1 ).data()
                 balance = parseInt(prev_row[9]) + parseInt(data[7] || 0) - parseInt(data[8] || 0);
             }
 
