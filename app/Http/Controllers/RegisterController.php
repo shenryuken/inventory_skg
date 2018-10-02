@@ -17,8 +17,8 @@ use App\Models\Rank;
 use App\Models\Bank;
 use App\Models\Product;
 use App\Models\Package;
-use App\Models\NewUser;
-use App\Models\NewProfile;
+use App\Models\Profile;
+use App\Models\Address;
 
 use App\Admin;
 use App\User;
@@ -29,6 +29,8 @@ use Carbon\Carbon;
 use DB;
 use Mail;
 use Cart;
+
+use App\Http\Controllers\ShopController;
 
 class RegisterController extends Controller
 {
@@ -62,12 +64,7 @@ class RegisterController extends Controller
             $admin->mobile_no       = $request->mobile_no;
             $admin->security_code   = bcrypt($request->password);
             $admin->save();
-            // $input = $request->all();
-
-            // $input['password'] = bcrypt($request->password);
-
-            // $admin = Admin::create($input);
-
+            
             $admin->assignRole($request->role);
 
             return back()->with('success', 'Successfully register staff: '. $admin->username);
@@ -105,7 +102,7 @@ class RegisterController extends Controller
             $request->validate([
                 'country'   => 'required',
                 'username'  => 'required|unique:users,username',
-                'password'  => 'required|min:6|confirmed',
+                //'password'  => 'required|min:6|confirmed',
                 'type'      => 'required',
                 'name'      => 'required',
                 'dob'       => 'required',
@@ -141,65 +138,37 @@ class RegisterController extends Controller
             } else {
                 $hashedCode = Auth::guard('web')->user()->security_code;
             }
+
+            $random_password        = str_random(8);
+            $hashed_random_password = Hash::make($random_password);
             
-
-            if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode))
+            if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode, $rank->id))
             {
-                // $user = new NewUser;
-                // $user->username   = $request->username;
-                // $user->password   = bcrypt($request->password);
-                // $user->security_code = bcrypt($request->password); 
-                // $user->email      = $request->email;
-                // $user->email_token   = Password::getRepository()->createNewToken();
-                // $user->mobile_no  = $request->mobile_no;
-                // $user->introducer = $request->introducer;
-                // $user->rank_id    = $rank->id;
-                // $user->save();
-
-                $this->saveToPreregisterTable($request->all(), $rank->id);
+                
+                //$this->saveToPreregisterTable($request->all(), $rank->id);
+                $user = $this->saveMemberToDb($request->all(), $hashed_random_password,  $rank->id);
                 $id = Auth::guard('admin')->user()->id;
 
-                // $profile = new NewProfile;     
-                // $profile->full_name = $request->name;
-                // $profile->dob       = $request->dob;
-                // $profile->gender    = $request->gender;
-                // $profile->marital_status = $request->marital_status;
-                // $profile->id_type   = $request->id_type;
-                // $profile->id_no     = $request->id_no;
-                // $profile->id_pic    = $request->id_pic;
-                // $profile->street    = $request->street;
-                // $profile->city      = $request->city;
-                // $profile->postcode  = $request->postcode;
-                // $profile->state     = $request->state;
-                // $profile->country   = $request->country;
-                // $profile->contact_no    = $request->mobile_no;
-                // $user->newprofile()->save($profile);
-
-                // Session::put('profile',$profile);
-
-                // $pids = $request->pid;
-                // $chck = 0;
-
-                // foreach($pids as $pid)
-                // {
-                //  $product = Product::find($pid);
-                //  Cart::add($product->id, 'Product: '.$product->name, $quantity, $product->wm_price);
-                // }
-
+                Mail::to($user->email)->send(new VerifyEmail($user, $random_password));
                 //return view('admin.firstTimePurchaseRegistration', compact('user'));
-                return redirect()->route('firstTimePurchaseRegistration', compact('user', 'id'));
+                //return redirect()->route('firstTimePurchaseRegistration', compact('user', 'id'));
+                return redirect('registers/member')->with('status', 'Activation code have been sent to this user - '.$user->username );
             }
             elseif (Auth::guard('web')->check() && Hash::check($request->security_code, $hashedCode)) 
             {    
-                $id = Auth::guard('web')->user()->id;
+                $user = $this->saveMemberToDb($request->all(), $hashed_random_password, $rank->id);
+                // $id = Auth::guard('web')->user()->id;
 
-                return redirect()->route('firstTimePurchaseRegistration', compact('user', 'id'));
+                Mail::to($user->email)->send(new VerifyEmail($user, $random_password));
+
+                // return redirect()->route('firstTimePurchaseRegistration', compact('user', 'id'));
+                return redirect('registers/member')->with('status', 'Activation code have been sent to this user - '.$user->username );
             }
 
             // session()->forget('user');
             // session()->forget('profile');
-            $newUser = NewUser::truncate();
-            $newProfile = NewProfile::truncate();
+            // $newUser = NewUser::truncate();
+            // $newProfile = NewProfile::truncate();
 
             return back()->withInput()
                          ->with('fail', 'Failed to register! Please Check Your Security Code Is Correct Or Try Again. ');
@@ -212,15 +181,30 @@ class RegisterController extends Controller
 
     public function firstTimePurchaseRegistration()
     {
-        $products = Product::all();
-        $packages = Package::all();
+        // $products = Product::all();
+        // $packages = Package::all();
 
-        return view('firstTimePurchaseRegistration', compact('products', 'packages'));
+        $data = (new ShopController)->skgMall();
+        // dd($data);
+        $product = $data['product'];
+        $count = $data['count'];
+        $id = $data['id'];
+
+        return view('firstTimePurchaseRegistration', compact('product', 'id','count'));
     }
 
     public function saveToPreregisterTable($request, $rank_id)
     {
-        $user = new NewUser;
+        if(Auth::guard('admin')->check() == true)
+        {
+            $guard = "admin";
+        }
+        else{
+           $guard = "web";
+        }
+
+        //$user = new NewUser;
+        $user = new User;
         $user->username      = $request['username'];
         $user->password      = bcrypt($request['password']);
         $user->security_code = bcrypt($request['password']); 
@@ -229,11 +213,12 @@ class RegisterController extends Controller
         $user->mobile_no     = $request['mobile_no'];
         $user->introducer    = $request['introducer'];
         $user->rank_id       = $rank_id;
+        $user->status        = "pre";
         $user->save();
 
         Session::put('uid',$user->id);
 
-        $profile = new NewProfile;     
+        $profile = new Profile;     
         $profile->full_name      = $request['name'];
         $profile->dob            = $request['dob'];
         $profile->gender         = $request['gender'];
@@ -247,8 +232,45 @@ class RegisterController extends Controller
         $profile->state          = $request['state'];
         $profile->country        = $request['country'];
         $profile->contact_no     = $request['mobile_no'];
+
+        $address = new Address;
+        $address->name      = $profile->name;
+        $address->street1   = $profile->street;
+        $address->street2   = "";
+        $address->poscode   = $profile->postcode;
+        $address->city      = $profile->city;
+        $address->state     = $profile->state;
+        $address->country   = $profile->country;
+        $address->reminder_flag = "x";
+        $address->created_by = Auth::guard($guard)->user()->id;
+        $address->created_at = \Carbon\Carbon::now();
         
-        $user->newprofile()->save($profile);
+        $user->profile()->save($profile);
+        $user->address()->save($address);
     }
 
+     public function verifyUser($token)
+    {
+        $verifyUser = VerifyUser::where('token', $token)->first();
+        
+        if(isset($verifyUser) ){
+            $user = $verifyUser->user;
+            if(!$user->verified) {
+                $verifyUser->user->verified = 1;
+                $verifyUser->user->save();
+                $status = "Your e-mail is verified. You can now login.";
+            }else{
+                $status = "Your e-mail is already verified. You can now login.";
+            }
+        }else{
+            return redirect('/login')->with('warning', "Sorry your email cannot be identified.");
+        }
+        return redirect('/login')->with('status', $status);
+    }
+
+    protected function registered(Request $request, $user)
+    {
+        $this->guard()->logout();
+        return redirect('/login')->with('status', 'We sent you an activation code. Check your email and click on the link to verify.');
+    }
 }

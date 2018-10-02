@@ -39,6 +39,11 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout', 'userLogout');
     }
 
+     public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
     public function login(Request $request)
     {
         //vallidate the form data
@@ -50,9 +55,14 @@ class LoginController extends Controller
         //Attempt to log the user in
         if(Auth::guard('web')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)) {
             //if successful, then redirect to their intended location
-            return redirect()->intended(route('users.dashboard'));
+            if(Auth::guard('web')->user()->verified == 1){
+                return redirect()->intended(route('users.dashboard'));
+            } else {
+                auth()->logout();
+                return back()->with('warning', 'You need to confirm your account. We have sent you an activation code, please check your email.');
+            }   
         }
-
+       
         //if unsuccessful, then redirect back to the login with the form data
         return redirect()->back()->withInput($request->only('email', 'remember'));
     }
@@ -61,5 +71,14 @@ class LoginController extends Controller
     {
         Auth::guard('web')->logout();
         return redirect('/');
+    }
+
+    public function authenticated(Request $request, $user)
+    {
+        if (!$user->verified) {
+            auth()->logout();
+            return back()->with('warning', 'You need to confirm your account. We have sent you an activation code, please check your email.');
+        }
+        return redirect()->intended($this->redirectPath());
     }
 }

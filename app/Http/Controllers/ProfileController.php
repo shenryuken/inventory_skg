@@ -110,6 +110,7 @@ class ProfileController extends Controller
     	$user    = User::find($id);
     	$profile = $user->profile;
     	$guard   = 'web';
+        //dd($profile);
 
     	return view('profiles.show', compact('profile', 'guard'));
     }
@@ -181,7 +182,7 @@ class ProfileController extends Controller
             if($saveImage){
 
                 $profile = $user->profile;
-                $profile->ic_image   = $filename;
+                $profile->id_pic   = $filename;
                 $profile->status_ic  = 'Waiting Approval';
                 $profile->save();
 

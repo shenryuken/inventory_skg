@@ -160,10 +160,10 @@
                                 <tr>
                                     <td>MyKad/Passport Status</td>
                                     <td>
-                                        @if($profile->status_ic == 'Pending')
-                                        Pending | <a href="{{ url('profile/upload-ic')}}">Click Here To Upload Your MyKad Or Passport </a>
+                                        @if($profile->status_ic === 'Not Update')
+                                            Not Update | <a href="{{ url('profile/upload-ic')}}">Click Here To Upload Your MyKad Or Passport </a>
                                         @else
-                                        {{ $profile->status_ic }}
+                                            {{ $profile->profileable->status_ic }}
                                         @endif
                                     </td>
                                 </tr>

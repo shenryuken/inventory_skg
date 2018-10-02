@@ -422,6 +422,8 @@ class ShopController extends Controller
 
         // dd($delivery_type);
 
+        
+
         $sessionData = session('STORE','default');
         $addressData = [];
         if(Auth::guard('admin')->check()){

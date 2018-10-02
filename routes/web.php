@@ -17,6 +17,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
+
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/users/logout', 'Auth\LoginController@userLogout')->name('users.logout');
 
@@ -410,3 +412,6 @@ Route::post('inventory/setting/deliverytype/check_existcode', 'Inventory\Configu
 
 ======================================================================================
 */
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

@@ -22,6 +22,8 @@ trait SalesTrait
 
 	public function updateSalesData($total_pv, $total_price)
 	{
+        dd($total_pv, $total_price);
+        
 		$year = (new DateTime)->format("Y");
         $month = (new DateTime)->format("n"); 
 

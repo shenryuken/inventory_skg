@@ -23,9 +23,14 @@
     </p>
 
     <p>
-        <a href="{{ url('/email/verify-email/'.$user->email_token) }}">
+        <a href="{{url('user/verify', $user->verifyUser->token)}}">
             Follow this link to verified your email.
         </a>
+    </p>
+    <p>
+        Email: {{ $user->email }}
+        Username: {{ $user->username }}
+        Password: {{ $random_password }} - This password for temporary only. Please change your password after lokgin.
     </p>
 </div>
 </body>

@@ -1,5 +1,7 @@
 <?php namespace App\Traits;
 
+use Illuminate\Support\Facades\Hash;
+use App\Mail\VerifyEmail;
 
 use App\Models\Rank;
 use App\Models\Referral;
@@ -13,6 +15,7 @@ use App\Models\Address;
 
 use App\Admin;
 use App\User;
+use App\VerifyUser;
 
 use Validator;
 use Session;
@@ -22,52 +25,61 @@ use Auth;
 
 trait RegisterMember
 {
-    public function saveMemberToDb($newUser)
+    public function saveMemberToDb($newUser, $hashed_random_password, $rank_id)
     {
-    
+        if(Auth::guard('web')->check())
+        {
+            $guard = 'web';
+        }elseif(Auth::guard('admin')->check()){
+            $guard = 'admin';
+        }
+
         $user = new User;
-        $user->username     = $newUser->username;
-        $user->password     = $newUser->password;
-        $user->email        = $newUser->email;
-        $user->mobile_no    = $newUser->mobile_no;
-        $user->introducer   = $newUser->introducer;
-        $user->rank_id      = $newUser->rank_id;
-        $user->security_code = $newUser->security_code;
+        $user->username     = $newUser['username'];
+        //$user->password     = $newUser->password;
+        $user->password     = $hashed_random_password;
+        $user->email        = $newUser['email'];
+        $user->mobile_no    = $newUser['mobile_no'];
+        $user->introducer   = $newUser['introducer'];
+        $user->rank_id      = $rank_id;
+        $user->security_code = Hash::make($newUser['security_code']);
         
         $profile = new Profile;     
-        $profile->full_name = $newUser->newProfile->name;
-        $profile->dob       = $newUser->newProfile->dob;
-        $profile->gender    = $newUser->newProfile->gender;
-        $profile->marital_status = $newUser->newProfile->marital_status;
-        $profile->id_type   = $newUser->newProfile->id_type;
-        $profile->id_no     = $newUser->newProfile->id_no;
-        $profile->id_pic    = $newUser->newProfile->id_pic;
-        $profile->street    = $newUser->newProfile->street;
-        $profile->city      = $newUser->newProfile->city;
-        $profile->postcode  = $newUser->newProfile->postcode;
-        $profile->state     = $newUser->newProfile->state;
-        $profile->country   = $newUser->newProfile->country;
-        $profile->contact_no    = $newUser->newProfile->mobile_no;
+        $profile->full_name = $newUser['name'];
+        $profile->dob       = $newUser['dob'];
+        $profile->gender    = $newUser['gender'];
+        $profile->marital_status = $newUser['marital_status'];
+        $profile->id_type   = $newUser['id_type'];
+        $profile->id_no     = $newUser['id_no'];
+        $profile->id_pic    = $newUser['id_pic'];
+        $profile->street    = $newUser['street'];
+        $profile->city      = $newUser['city'];
+        $profile->postcode  = $newUser['postcode'];
+        $profile->state     = $newUser['state'];
+        $profile->country   = $newUser['country'];
+        $profile->contact_no= $newUser['mobile_no'];
       
         $address = new Address;
-        $address->name      = $newUser->newProfile->name;
-        $address->street1   = $newUser->newProfile->street;
+        $address->name      = $newUser['name'];
+        $address->street1   = $newUser['street'];
         $address->street2   = "";
-        $address->poscode   = $newUser->newProfile->postcode;
-        $address->city      = $newUser->newProfile->city;
-        $address->state     = $newUser->newProfile->state;
-        $address->country   = $newUser->newProfile->country;
+        $address->poscode   = $newUser['postcode'];
+        $address->city      = $newUser['city'];
+        $address->state     = $newUser['state'];
+        $address->country   = $newUser['country'];
         $address->reminder_flag = "x";
-        $address->created_by = Auth::guard('admin')->user()->id;
+        $address->created_by = Auth::guard($guard)->user()->id;
         $address->created_at = \Carbon\Carbon::now();
 
         $user->save();
         $user->profile()->save($profile);
         $user->address()->save($address);
 
-        $newUser->newProfile()->delete();
-        $newUser->delete();
-        
+        $verifyUser = VerifyUser::create([
+            'user_id' => $user->id,
+            'token' => sha1(time()),
+        ]);
+
         $rank_id = $user->rank_id;
 
         if($rank_id < 4)
@@ -87,7 +99,7 @@ trait RegisterMember
             $this->registerSdo($id);
         }   
 
-        $admin = Admin::where('username', $newUser->introducer)->first();
+        $admin = Admin::where('username', $newUser['introducer'])->first();
 
         if($admin)
         {
@@ -117,6 +129,32 @@ trait RegisterMember
 
         return $user;
         
+    }
+
+    public function verifyUser($token)
+    {
+        $verifyUser = VerifyUser::where('token', $token)->first();
+
+        if(isset($verifyUser) ){
+            $user = $verifyUser->user;
+            if(!$user->verified) {
+                $verifyUser->user->verified = 1;
+                $verifyUser->user->save();
+                $status = "Your e-mail is verified. You can now login.";
+            }else{
+                $status = "Your e-mail is already verified. You can now login.";
+            }
+        }else{
+            return redirect('/login')->with('warning', "Sorry your email cannot be identified.");
+        }
+
+        return redirect('/login')->with('status', $status);
+    }
+
+    protected function registered(Request $request, $user)
+    {
+        $this->guard()->logout();
+        return redirect('/login')->with('status', 'We sent you an activation code. Check your email and click on the link to verify.');
     }
 
     public function registerDo($id)
