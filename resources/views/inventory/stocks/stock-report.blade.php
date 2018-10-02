@@ -220,7 +220,7 @@
             );
         },
 
-        "rowCallback": function ( row, data, index,dataIndex) {
+        "rowCallback": function ( row, data, index,displayIndex,dataIndex) {
             var balance = 0;
 
             if (index == 0) {
