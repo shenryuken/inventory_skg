@@ -3140,6 +3140,7 @@ blockquote.pull-right {
   border-bottom: 1px solid #E5E5E5 !important;
   margin-bottom: 5px;
 }
+.dataTables_scrollBody thead {visibility: collapse;}
 .dataTable div.checker,
 .dataTable div.radio {
   display: inherit;
