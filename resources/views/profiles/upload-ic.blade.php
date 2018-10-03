@@ -43,7 +43,7 @@ $page_title = 'Upload MyKad\Passport';
                     <div class="form-group">
                         <div class="col-md-12">
                             <label>Security Code</label><br/>
-                            <input type="text" type="password" name="security_code"/>
+                            <input type="password" name="security_code"/>
                         </div>
                     </div>
 				
