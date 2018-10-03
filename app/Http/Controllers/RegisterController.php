@@ -142,7 +142,7 @@ class RegisterController extends Controller
             $random_password        = str_random(8);
             $hashed_random_password = Hash::make($random_password);
             
-            if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode, $rank->id))
+            if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode))
             {
                 
                 //$this->saveToPreregisterTable($request->all(), $rank->id);
