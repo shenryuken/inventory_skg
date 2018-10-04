@@ -219,26 +219,28 @@
                 '<strong>'+ (parseInt(total1) - parseInt(total2))  + '</strong>'
             );
         },
+        "drawCallback": function( settings ) {
+        var api = this.api();
+ 
+        // Output the data for the visible rows to the browser's console
+        // console.log( api.rows( {page:'current'} ).data() );
+   
+        var balance = 0;
+        api.rows({page:'current'}).every( function ( rowIdx, tableLoop, rowLoop ) {
+            var d = this.data();
 
+            stock_in = parseInt(d[7]) || 0;
+            stock_out = parseInt(d[8]) || 0;
 
-        "rowCallback": function ( row, data, index,displayIndex,dataIndex) {
-	var api = this.api()
-            var balance = 0;
+            balance = balance + stock_in - stock_out;
+            $(this.cell(rowIdx, 9).node()).html(balance);
+           
+               
+            this.invalidate(); // invalidate the data DataTables has cached for this row
+        } );
 
-            if (index == 0) {
-                 balance = data[7] ||  0;
-            } else {
-		
-                var prev_row = api.row( index -1).data()
-		console.log(api)
-		console.log(prev_row)
-                balance = parseInt(prev_row[9]) + parseInt(data[7] || 0) - parseInt(data[8] || 0);
-            }
+    },
 
-            data[9] = balance;
-            $('td',row).eq(9).text(balance)
-
-        },
                     "order": [],
                     "scrollY":"450px",
                     "scrollCollapse": true,
