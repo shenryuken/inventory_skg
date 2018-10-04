@@ -44,6 +44,7 @@ textarea {
                     <div class="panel panel-default">
                             <div class="panel-heading">
                                     <h3 class="panel-title">Delivery Order Listing</h3>
+                                    <a href="{{url('inventory/order/sales')}}" class="btn btn-info pull-right"><i class="fa fa-list"></i> SO Listing </a>
                                     <div class="btn-group pull-right">
                                         <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i> Export Data</button>
                                         <ul class="dropdown-menu">                                            
