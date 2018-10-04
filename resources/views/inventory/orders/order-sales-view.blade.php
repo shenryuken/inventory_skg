@@ -108,9 +108,9 @@
                             @endforeach
                     </tbody>
                 </table>
-                <p><span class="fa fa-caret-right"></span> <strong>Total Items: {{ isset($item->total_items) ? $item->total_items : "0" }}</strong></p>
-                <p><span class="fa fa-caret-right"></span> <strong>Total Price: MYR  {{ isset($item->total_price) ? $item->total_price : "0" }}</strong></p>
-                <p><span class="fa fa-caret-right"></span> <strong>Delivery Price: MYR {{ isset($item->shipping_fee) ? $item->shipping_fee : "0" }}</strong></p>
+                <p><span class="fa fa-caret-right"></span> <strong>Total Items: {{ isset($item->product_qty) ? $item->sum('product_qty') : "0" }}</strong></p>
+                <p><span class="fa fa-caret-right"></span> <strong>Total Price: MYR  {{ isset($item->order->total_price) ? $item->order->total_price : "0" }}</strong></p>
+                <p><span class="fa fa-caret-right"></span> <strong>Delivery Price: MYR {{ isset($item->order->shipping_fee) ? $item->order->shipping_fee : "0" }}</strong></p>
 
             </div>
             
