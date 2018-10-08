@@ -51,7 +51,7 @@ trait RegisterMember
         $profile->marital_status = $newUser['marital_status'];
         $profile->id_type   = $newUser['id_type'];
         $profile->id_no     = $newUser['id_no'];
-        $profile->id_pic    = $newUser['id_pic'];
+        $profile->id_pic    = isset($newUser['id_pic']) ? $newUser['id_pic']:'';
         $profile->street    = $newUser['street'];
         $profile->city      = $newUser['city'];
         $profile->postcode  = $newUser['postcode'];
