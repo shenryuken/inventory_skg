@@ -19,7 +19,7 @@ class WalletController extends Controller
     {
 		$user     = Auth::user();
 		$wallet   = $user->wallet;
-		$user_bonus	= UserBonus::where('user_id',$user->id)->first();
+		$user_bonus	= UserBonus::where('user_id',$user->id)->latest();
 		$active_do 	= ActiveDo::where('user_id', $user->id)->first();
 		$qualified_bonus = [
 			'retail_profit' => 'no',

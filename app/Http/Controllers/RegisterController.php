@@ -111,7 +111,7 @@ class RegisterController extends Controller
                 'race'              => 'required',
                 'id_type'           => 'required',
                 'id_no'             => 'required',
-                'id_pic'            => 'image|mimes:jpeg,bmp,png|max:5120',
+                'id_pic'            => 'sometimes|image|mimes:jpeg,bmp,png|max:5120',
                 'introducer'        => 'required|exists:'.$table.',username',
                 'mobile_no'         => 'required',
                 'email'             => 'required',
@@ -152,7 +152,7 @@ class RegisterController extends Controller
                 Mail::to($user->email)->send(new VerifyEmail($user, $random_password));
                 //return view('admin.firstTimePurchaseRegistration', compact('user'));
                 //return redirect()->route('firstTimePurchaseRegistration', compact('user', 'id'));
-                return redirect('registers/member')->with('status', 'Activation code have been sent to this user - '.$user->username );
+                return redirect('registers/member')->with('status', 'Activation code have been sent to this user - '.$user->email );
             }
             elseif (Auth::guard('web')->check() && Hash::check($request->security_code, $hashedCode)) 
             {    
@@ -162,7 +162,7 @@ class RegisterController extends Controller
                 Mail::to($user->email)->send(new VerifyEmail($user, $random_password));
 
                 // return redirect()->route('firstTimePurchaseRegistration', compact('user', 'id'));
-                return redirect('registers/member')->with('status', 'Activation code have been sent to this user - '.$user->username );
+                return redirect('registers/member')->with('status', 'Activation code have been sent to this user - '.$user->email );
             }
 
             // session()->forget('user');

@@ -107,7 +107,7 @@
                             <td>1</td>
                             <td>Retail Profit</td>
                             <td>{{$qualified_bonus['retail_profit']}}</td>
-                            <td>{{ number_format($user_bonus->retail_profit, 2)}}</td>
+                            <td>{{ isset($user_bonus->retail_profit) ? number_format($user_bonus->retail_profit, 2):0 }}</td>
                             <td>MYR</td>
                             <td><a href="">View Details</a></td>  
                         </tr>
@@ -115,7 +115,7 @@
                             <td>2</td>
                             <td>Personal Rebate</td>
                             <td>{{$qualified_bonus['personal_rebate']}}</td>
-                            <td>{{ number_format($user_bonus->personal_rebate, 2)}}</td>
+                            <td>{{ isset($user_bonus->personal_rebate) ? number_format($user_bonus->personal_rebate, 2):0}}</td>
                             <td>MYR - Evoucher</td>
                             <td><a href="">View Details</a></td>  
                         </tr>
@@ -123,7 +123,7 @@
                             <td>3</td>
                             <td>Direct Sponsor</td>
                             <td>{{$qualified_bonus['direct_sponsor']}}</td>
-                            <td>{{ number_format($user_bonus->direct_sponsor, 2) }}</td>
+                            <td>{{ isset($user_bonus->direct_sponsor) ? number_format($user_bonus->direct_sponsor, 2):0 }}</td>
                             <td>MYR</td>
                             <td><a href="">View Details</a></td>  
                         </tr>
@@ -131,7 +131,7 @@
                             <td>4</td>
                             <td>3 Generations Group Bonus</td>
                             <td>{{$qualified_bonus['do_group_bonus']}}</td>
-                            <td>{{ number_format($user_bonus->do_group_bonus, 2) }}</td>
+                            <td>{{ isset($user_bonus->do_group_bonus) ? number_format($user_bonus->do_group_bonus, 2):0 }}</td>
                             <td>MYR</td>
                             <td><a href="">View Details</a></td>  
                         </tr>
@@ -139,7 +139,7 @@
                             <td>5</td>
                             <td>DO CTO Pool</td>
                             <td>{{$qualified_bonus['do_cto']}}</td>
-                            <td>{{ number_format($user_bonus->do_cto_pool, 2) }}</td>
+                            <td>{{ isset($user_bonus->do_cto_pool) ? number_format($user_bonus->do_cto_pool, 2):0 }}</td>
                             <td>MYR</td>
                             <td><a href="">View Details</a></td>  
                         </tr>
@@ -147,7 +147,7 @@
                             <td>6</td>
                             <td>SDO CTO Pool</td>
                             <td>{{$qualified_bonus['sdo_cto']}}</td>
-                            <td>{{ number_format($user_bonus->sdo_cto_pool, 2) }}</td>
+                            <td>{{ isset($user_bonus->sdo_cto_pool) ? number_format($user_bonus->sdo_cto_pool, 2):0 }}</td>
                             <td>MYR</td>
                             <td><a href="">View Details</a></td>  
                         </tr>
@@ -155,7 +155,7 @@
                             <td>7</td>
                             <td>SDO Group Bonus</td>
                             <td>{{$qualified_bonus['sdo']}}</td>
-                            <td>{{ number_format($user_bonus->sdo_group_bonus, 2) }}</td>
+                            <td>{{ isset($user_bonus->sdo_group_bonus) ? number_format($user_bonus->sdo_group_bonus, 2):0 }}</td>
                             <td>MYR</td>
                             <td><a href="">View Details</a></td>  
                         </tr>
@@ -163,7 +163,7 @@
                             <td>8</td>
                             <td>SDO To SDO Bonus</td>
                             <td>{{$qualified_bonus['sdo_to_sdo']}}</td>
-                            <td>{{ number_format($user_bonus->sdo_sdo, 2) }}</td>
+                            <td>{{ isset($user_bonus->sdo_sdo) ? number_format($user_bonus->sdo_sdo, 2):0 }}</td>
                             <td>MYR</td>
                             <td><a href="">View Details</a></td>  
                         </tr>
