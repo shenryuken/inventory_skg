@@ -7,9 +7,11 @@ use App\Models\Wallet;
 trait WalletTrait
 {
 
-	public function updateWallet($user_id, $total_pv)
+	public function updateWallet($input, $total_pv)
 	{
-		$wallet = Wallet::firstOrNew(['user_id'  => $input['user_id']] );
+		// dd($input);
+		$wallet = Wallet::firstOrNew(['user_id'  => $input]);
+		// dd($wallet);
 	    //$wallet->available_pv   = $wallet->available_pv + $pv;
 	    if(!$wallet->exists || $wallet->purchased == 0)
 	    {

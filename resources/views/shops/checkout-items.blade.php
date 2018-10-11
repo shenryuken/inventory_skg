@@ -117,13 +117,13 @@
                                         <div class="form-group">
                                             <label class="col-md-3 control-label"> Name </label>
                                             <div class="col-md-9">        
-                                                <input type="text" class="form-control contect-name" id="contect-name" value="" />
+                                                <input type="text" class="form-control contect-name" id="contect-name" value="" placeholder="Optional Name" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-md-3 control-label"> Contect No. </label>
                                             <div class="col-md-9">
-                                                <input type="text" class="form-control contect-no" id="contect-no" value="" />   
+                                                <input type="text" class="form-control contect-no" id="contect-no" value="" placeholder="Optional Contect No." />   
                                             </div>
                                         </div>
                                     </div>

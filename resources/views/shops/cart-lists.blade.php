@@ -77,9 +77,10 @@
                                                 </td>
                                                 @if(Auth::guard('admin')->check() == true)
                                                 <td class="col-sm-1 col-md-1"><strong>RM{{ $value['price_staff'] }}</strong></td>
+                                                <td class="col-sm-1 col-md-1 tot-price-staff"><strong>WM RM{{ $value['total_price_staff'] }}</strong></td>
                                                 @else
                                                 <td class="col-sm-1 col-md-1"><strong>WM RM{{ $value['price_wm'] }}<br>EM RM{{ $value['price_em'] }}</strong></td>
-                                                <td class="col-sm-1 col-md-1 column-tot-price"><strong>WM RM{{ $value['total_price_wm'] }}<br>EM RM{{ $value['total_price_em'] }}</strong></td>
+                                                <td class="col-sm-1 col-md-1 tot-price"><strong>WM RM{{ $value['total_price_wm'] }}<br>EM RM{{ $value['total_price_em'] }}</strong></td>
                                                 @endif
                                                 <td class="col-sm-1 col-md-1">
                                                     <button type="button" class="btn btn-danger remove-item">
@@ -135,7 +136,7 @@
                                             <tr id="row-total-price">
                                                 <td><h5>Total Price</h5></td>
                                                 @if(Auth::guard('admin')->check() == true)
-                                                <td id="col-total-price">RM{{ $returnData['totalPrice_staff'] }}</h5></td>
+                                                <td id="col-total-price-staff">RM{{ $returnData['totalPrice_staff'] }}</h5></td>
                                                 @else
                                                 <td id="col-total-price"><h5>WM RM{{ $returnData['totalPrice_wm'] }}<br>EM RM{{ $returnData['totalPrice_em'] }}</h5></td>
                                                 @endif
@@ -220,13 +221,20 @@
         for(var i=0;i<cartItems.length;i++){
             if(cartItems[i].product_id == productid){
 
+                newTotal_staff = parseFloat(cartItems[i].price_staff) * parseFloat(quantity);
                 newTotal_wm = parseFloat(cartItems[i].price_wm) * parseFloat(quantity);
                 newTotal_em = parseFloat(cartItems[i].price_em) * parseFloat(quantity);
+                
+                newTotal_staff = newTotal_staff.toFixed(2);
                 newTotal_wm = newTotal_wm.toFixed(2);
                 newTotal_em = newTotal_em.toFixed(2);
+                
+                cartItems[i].total_price_staff = newTotal_staff;
                 quantity = quantity.toString();
                 cartItems[i].total_price_wm = newTotal_wm;
                 cartItems[i].total_price_em = newTotal_em;
+                
+                newTotal_staff = newTotal_staff.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
                 cartItems[i].total_quantity = quantity;
                 newTotal_wm = newTotal_wm.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
                 newTotal_em = newTotal_em.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
@@ -235,13 +243,16 @@
         }
 
         // console.log(table.children('.column-tot-price'),cartItems)
+        table.children('.tot-price-staff').html('<strong>WM RM'+newTotal_staff);
         table.children('.column-tot-price').html('<strong>WM RM'+newTotal_wm+'<br>EM RM'+newTotal_em+'</strong>');
-
+        
+        var newTotal_price_staff = 0.00;
         var newTotal_price_wm = 0.00;
         var newTotal_price_em = 0.00;
-        console.log(cartItems)
+        // console.log(cartItems)
         for(var i=0;i<cartItems.length;i++){
 
+            newTotal_price_staff = newTotal_price_staff + parseFloat(cartItems[i].total_price_staff.replace(",",""));
             newTotal_price_wm = newTotal_price_wm + parseFloat(cartItems[i].total_price_wm.replace(",",""));
             newTotal_price_em = newTotal_price_em + parseFloat(cartItems[i].total_price_em.replace(",",""));
         }
@@ -249,6 +260,7 @@
         newTotal_price_wm = newTotal_price_wm.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
         newTotal_price_em = newTotal_price_em.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 
+        console.log($('#total-price').children('tbody').children('tr#row-total-price').children('td#col-total-price-staff').html('<h5>RM'+newTotal_price_staff+'</h5>'))
         console.log($('#total-price').children('tbody').children('tr#row-total-price').children('td#col-total-price').html('<h5>WM RM'+newTotal_price_wm+'<br>EM RM'+newTotal_price_em+'</h5>'))
         console.log($('#total-price').children('tbody').children('tr#row-grand-total').children('td#col-grand-total').html('<h4>WM RM'+newTotal_price_wm+'<br>EM RM'+newTotal_price_em+'</h4>'))
     }

@@ -951,7 +951,7 @@ class ShopController extends Controller
                         'created_by'    =>  $id,
                         'created_at'    => \Carbon\Carbon::now()
                     );
-
+                    // var_dump($item);
                     $order_item[] = $item;
 
                     $total_product_quantity = $total_product_quantity + $v->total_quantity;
@@ -980,7 +980,7 @@ class ShopController extends Controller
                     'created_at'    => \Carbon\Carbon::now()
 
                 ];
-
+                
                 if($sessionData == "SKG_STORE"){
 
                     $x = OrderHdr::insert($orderHdr);
@@ -990,6 +990,27 @@ class ShopController extends Controller
                             $y = OrderItem::insert($order_item[$key]);
                         }
                     }
+                    $total_pv = 0;
+                    foreach($cartItems as $k => $v){
+
+                        $promotion = $this->checkPromotion($v['product_id']);
+
+                        if($promotion){
+
+                            $price_staff = $promotion->price_staff;
+                        }
+                        else{
+
+                            $price_staff = $v['price_staff'];
+                        }
+
+                        $total_pv += $v['point'];
+
+                        $this->updateSalesDataByProduct($v,$price_staff);
+                    }
+
+                    $this->updateWallet($id, $total_pv);
+                    $this->updateSalesData($total_pv,$total_price);
                 }
                 else if($sessionData == "AGENT_STORE"){
 
