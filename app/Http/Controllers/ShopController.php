@@ -941,11 +941,28 @@ class ShopController extends Controller
 
                 foreach($cartItems as $k => $v){
 
+                    if($sessionData == "SKG_STORE"){
+
+                        $price = $v['price_staff'];
+                    }
+                    else if($sessionData == "AGENT_STORE"){
+
+                        if(strtolower($address->state) == strtolower("Sabah") 
+                            || strtolower($address->state) ==  strtolower("Sarawak")){
+
+                            $price = $v['price_em'];
+                        }
+                        else{
+                            $price = $v['price_wm'];
+                        }
+                    }
+
                     $item = Array(
 
                         'order_no'      => $order_no['data'],
                         'product_id'    => $v['product_id'],
                         'product_qty'   => $v['total_quantity'],
+                        'price'         => $price,
                         'product_typ'   => "",
                         'product_status'=> "01",
                         'created_by'    =>  $id,
