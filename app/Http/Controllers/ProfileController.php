@@ -37,7 +37,7 @@ class ProfileController extends Controller
     	$request->validate([
     		'_token'            => 'required',
     		'full_name' 		=> 'required',
-    		'icno'  	 		=> 'required',
+    		'id_no'  	 		=> 'required',
     		'street'    		=> 'required',
     		'postcode'   		=> 'required',
     		'city' 		 		=> 'required',
@@ -70,7 +70,7 @@ class ProfileController extends Controller
 
     	$request->validate([
     		'full_name' 		=> 'required',
-    		'icno'  	 		=> 'required',
+    		'id_no'  	 		=> 'required',
     		'street'    		=> 'required',
     		'postcode'   		=> 'required',
     		'city' 		 		=> 'required',
@@ -89,7 +89,7 @@ class ProfileController extends Controller
 
         if(Hash::check($request->security_code, $hashedCode)){
             $profile->full_name   = $request->full_name;
-            $profile->icno        = $request->icno;
+            $profile->id_no        = $request->id_no;
             $profile->street      = $request->street;
             $profile->postcode    = $request->postcode;
             $profile->city        = $request->city;
@@ -110,6 +110,7 @@ class ProfileController extends Controller
     	$user    = User::find($id);
     	$profile = $user->profile;
     	$guard   = 'web';
+        //dd($profile);
 
     	return view('profiles.show', compact('profile', 'guard'));
     }
@@ -181,7 +182,7 @@ class ProfileController extends Controller
             if($saveImage){
 
                 $profile = $user->profile;
-                $profile->ic_image   = $filename;
+                $profile->id_pic   = $filename;
                 $profile->status_ic  = 'Waiting Approval';
                 $profile->save();
 
@@ -261,6 +262,72 @@ class ProfileController extends Controller
 
         return back()->with('fail', 'Action Failed! Please make sure your security code is correct.');
         
+    }
+
+    public function showChangePasswordForm()
+    {
+        return view('profiles.change-password-form');
+    }
+
+    public function updateChangePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required',
+            'new_password' => 'required|min:8',
+            'confirm_new_password' => 'required|same:new_password'
+
+        ]);
+
+        if(Auth::check())
+        {
+            if(Hash::check($request->old_password, Auth::guard('web')->user()->password))
+            {
+                $user = User::find(Auth::guard('web')->user()->id);
+                $user->password = Hash::make($request->new_password);
+                $user->save();
+
+                Session::flash('success', 'Successfully change password'); 
+            }
+            else
+            {
+                Session::flash('fail', 'Failed to change the password! Please try again later!'); 
+            }
+        }
+
+        return redirect()->back();
+    }
+
+    public function showChangeSecurityCodeForm()
+    {
+        return view('profiles.change-securitycode-form');
+    }
+
+    public function updateChangeSecurityCode(Request $request)
+    {
+        $request->validate([
+            'old_security_code' => 'required',
+            'new_security_code' => 'required|min:6',
+            'confirm_new_security_code' => 'required|same:new_security_code'
+
+        ]);
+
+        if(Auth::check())
+        {
+            if(Hash::check($request->old_security_code, Auth::guard('web')->user()->security_code))
+            {
+                $user = User::find(Auth::guard('web')->user()->id);
+                $user->security_code = Hash::make($request->new_security_code);
+                $user->save();
+
+                Session::flash('success', 'Successfully change security code'); 
+            }
+            else
+            {
+                Session::flash('fail', 'Failed to change the security code! Please try again later!'); 
+            }
+        }
+
+        return redirect()->back();
     }
 
 }

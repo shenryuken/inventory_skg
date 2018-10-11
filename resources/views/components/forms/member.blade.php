@@ -22,7 +22,7 @@
 			</div>
 		</div>
 		
-		<div class="form-group">
+		<!-- <div class="form-group">
 			<label class="col-md-3 control-label">Password *</label>
 			<div class="col-md-2">
 				<div class="input-group">
@@ -36,7 +36,7 @@
 				<input class="form-control" type="password" name="password_confirmation" onkeyup="checkPass(); return false;" id="pass2">
 				<span id="confirmMessage" class="confirmMessage"></span>
 			</div>
-		</div>
+		</div> -->
 	</div>
 	
 	<!-- Personal Information -->

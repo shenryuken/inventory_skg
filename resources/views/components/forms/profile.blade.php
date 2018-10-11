@@ -22,7 +22,7 @@
 	<div class="form-group">
 		<label for="icno" class="col-sm-2 control-label">MyKad/Passport No.</label>
 		<div class="col-sm-10">
-			<input type="text" class="form-control" name="icno" id="icno" placeholder="Your Mykad/Passport No">
+			<input type="text" class="form-control" name="id_no" id="id_no" placeholder="Your Mykad/Passport No">
 		</div>
 	</div>
 	<div class="form-group">

@@ -1,3 +1,9 @@
+@extends('layouts.joli.app')
+{{-- Page title --}}
+@section('title')
+    MyKad\Passport Status Index
+    @parent
+@stop
 <?php $page_title = 'Create My Profile'; ?>
 @section('content') 
 
@@ -28,3 +34,4 @@
 </div>
 
 @endsection
+

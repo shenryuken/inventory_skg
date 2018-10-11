@@ -18,4 +18,9 @@ class OrderItem extends Model
     {
         return $this->belongsTo('App\Models\Product');
     }
+
+    public function order()
+    {
+        return $this->belongsTo('App\Models\OrderHdr','order_hdr_id','id');
+    }
 }

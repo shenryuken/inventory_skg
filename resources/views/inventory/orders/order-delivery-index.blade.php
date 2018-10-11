@@ -44,8 +44,8 @@ textarea {
                     <div class="panel panel-default">
                             <div class="panel-heading">
                                     <h3 class="panel-title">Delivery Order Listing</h3>
+                                    <a href="{{url('inventory/order/sales')}}" class="btn btn-info pull-right"><i class="fa fa-list"></i> SO Listing </a>
                                     <div class="btn-group pull-right">
-                                        <a href="#" class="btn btn-success">Pick Up DO</a>
                                         <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i> Export Data</button>
                                         <ul class="dropdown-menu">                                            
                                             <li><a href="#" onClick ="$('#sales-order').tableExport({type:'csv',escape:'false'});"><img src="{{ asset('themes/Joli/img/icons/csv.png') }}" width="24"/> CSV</a></li>
@@ -81,16 +81,17 @@ textarea {
                                                 {{-- <td>{{ $order->globalstatus->description }}</td> --}}
                                                 <td>
                                                     {{-- <a href="{{ url('inventory/order/delivery/edit/'.$delivery->delivery_number) }}" class="btn btn-info">Update</a> --}}
-                                                    <a href="{{ url('inventory/order/delivery/view/'.(isset($delivery->delivery_number) ? base64_encode($delivery->delivery_number) : "")) }}" class="btn btn-default">View Order</a>
-                                                @if($order_status == '02' || $order_status == '03')
-                                                <form method="post" action="{{ url('inventory/order/delivery/complete')}}">
+                                                   
+                                                <form method="post" action="{{ url('inventory/order/delivery/complete')}}" role="form"">
                                                     {{ csrf_field() }}
-                                                <input type="hidden" value="{{$delivery->salesOrder->id}}" name="order_no">
-                                                    <button type="submit"  class="btn btn-info">Complete Order</button>   
-                                                </form> 
-                                                
+                                                    <a href="{{ url('inventory/order/delivery/view/'.(isset($delivery->delivery_number) ? base64_encode($delivery->delivery_number) : "")) }}" class="btn btn-default">Order Note</a>
+                                                    @if($delivery->status == 'pending')
+                                                    <input type="hidden" value="{{$delivery->id}}" name="order_no">
+                                                    <button type="submit"  class="btn btn-info">Pickup</button>   
                                                 @endif
                                                 </td>
+                                                 </form> 
+                                            </tr>
                                             @endforeach
                                         </tbody>
                                 </table>

@@ -24,7 +24,13 @@
         <div class="alert alert-danger">
           <p>{{ $message }}</p>
         </div>
-    @endif         
+    @endif    
+
+    @if ($message = Session::get('status'))
+        <div class="alert alert-success">
+          <p>{{ $message }}</p>
+        </div>
+    @endif     
 
     <form class="form-horizontal" method="post" action="{{ url('registers/member') }}" enctype="multipart/form-data">
       {{csrf_field()}}

@@ -71,7 +71,7 @@
                         <div class="panel-body">
                                        
                                                  <div class="table-responsive">
-                                                     <table id="stock_bal_report" class="table table-bordered">
+                                                     <table id="stock_bal_report" class="table table-bordered table-hover">
                                                          <thead>
                                                              <tr>
                                                                  <th class="hidden"></th>
@@ -83,28 +83,28 @@
                                                                  <th>Description</th>
                                                                  <th class="success">Stock In</th>
                                                                  <th class="warning">Stock Out</th>
-                                                                 <th>Balance</th>
+                                                                 <th class="info">Balance</th>
                                                              </tr>
                                                          </thead>
                                                          <tbody>
-                                                             @foreach($reports as $report )
+                                                             @for($i=0;$i<count($reports);$i++)
                                                                 <tr>
-                                                                    <td class="hidden">{{ $report['server_date'] }}</td>
-                                                                    <td>{{ $report['date'] }}</td>
-                                                                    <td>{{ $report['product_name'] }}</td>
-                                                                    <td>{{ $report['product_code'] }}</td>
-                                                                    <td>{{ $report['supplier_name'] }}</td>
-                                                                    <td>{{ $report['supplier_code'] }}</td>
-                                                                    <td>{{ $report['description'] }}</td>								    
-                                                                    <td  class="success">{{ $report['stock_in'] }}</td>                                                                    
-                                                                    <td  class="warning" data-toggle="tooltip" data-original-title="{{ $report['adjustment_type'] }}" data-container="body" data-toggle="tooltip" data-placement="bottom" title="" title="">{{ $report['stock_out'] }}</td>
-                                                                    <td></td>
+                                                                    <td class="hidden">{{ $reports[$i]['server_date'] }}</td>
+                                                                    <td>{{ $reports[$i]['date'] }}</td>
+                                                                    <td>{{ $reports[$i]['product_name'] }}</td>
+                                                                    <td>{{ $reports[$i]['product_code'] }}</td>
+                                                                    <td>{{ $reports[$i]['supplier_name'] }}</td>
+                                                                    <td>{{ $reports[$i]['supplier_code'] }}</td>
+                                                                    <td>{{ $reports[$i]['description'] }}</td>								    
+                                                                    <td  class="success">{{ $reports[$i]['stock_in'] }}</td>                                                                    
+                                                                    <td  class="warning" data-toggle="tooltip" data-original-title="{{ $reports[$i]['adjustment_type'] }}" data-container="body" data-toggle="tooltip" data-placement="bottom" title="" title="">{{ $reports[$i]['stock_out'] }}</td>
+                                                                    <td class="info"></td>
                                                                 </tr>
-                                                             @endforeach
+                                                             @endfor
                                                             </tbody>
                                                         <tfoot>
                                                             <tr style="background-color: mistyrose;">
-                                                                <td><strong>Total</strong></td>
+                                                                <td><strong>Total & Balance</strong></td>
                                                                 <td class="hidden"></td>
                                                                 <td></td>
                                                                 <td></td>
@@ -158,6 +158,7 @@
 
 
     $(document).ready(function($) {
+        var groupColumn = 1;
         $.fn.datepicker.defaults.format = "dd/mm/yyyy";
         var d = new Date();
         var early_month = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +"01"
@@ -219,28 +220,86 @@
                 '<strong>'+ (parseInt(total1) - parseInt(total2))  + '</strong>'
             );
         },
+        "drawCallback": function( settings ) {
+        var api = this.api();
 
-        "rowCallback": function ( row, data, index ) {
-            var balance = 0;
+   
+        var balance = 0;
 
-            if (index == 0) {
-                 balance = data[7] ||  0;
-                } else {
-                    var prev_row = this.api().row( index -1 ).data()
-                    balance = parseInt(prev_row[9]) + parseInt(data[7] || 0) - parseInt(data[8] || 0);
-                    
+        var colorID = 0;
+
+        var color_list = ['#a6cee3',
+                        '#1f78b4',
+                        '#b2df8a',
+                        '#33a02c',
+                        '#fb9a99',
+                        '#e31a1c',
+                        '#fdbf6f',
+                        '#ff7f00',
+                        '#cab2d6',
+                        '#6a3d9a',
+                        '#ffff99',
+                        '#b15928',
+                        '#8dd3c7',
+                        '#ffffb3',
+                        '#bebada',
+                        '#fb8072',
+                        '#80b1d3',
+                        '#fdb462',
+                        '#b3de69',
+                        '#fccde5',
+                        '#d9d9d9',
+                        '#bc80bd',
+                        '#ccebc5',
+                        '#ffed6f'];
+       
+
+        api.rows({page:'current'}).every( function ( rowIdx, tableLoop, rowLoop ) {
+            var d = this.data();
+
+            stock_in = parseInt(d[7]) || 0;
+            stock_out = parseInt(d[8]) || 0;
+
+            balance = balance + stock_in - stock_out;
+            $(this.cell(rowIdx, 9).node()).html(balance);
+
+            if(rowIdx !== 0)
+            {
+                d2 = this.rows(rowIdx-1,{page:'current'}).data();
+              if(d[1]!= d2[1] )
+              {
+                colorID++;
+                //   console.log(this.row())
+                //   console.log(d2.data()[1])
+              }
+            }
+
+            this.invalidate(); // invalidate the data DataTables has cached for this row
+        } );
+
+         var rows = api.rows( {page:'current'} ).nodes();
+            var last=null;
+
+        api.column(groupColumn, {page:'current'} ).data().each( function ( group, i ) {
+                if ( last !== group ) {
+                    $(rows).eq( i ).before(
+                        '<tr class="group success"><td colspan="9">'+group+'</td></tr>'
+                    );
+ 
+                    last = group;
                 }
+            } );
 
-            data[9] = balance;
-            $('td',row).eq(9).text(balance)
+    },
 
-        },
                     "order": [],
-                    // "scrollY":        "200px",
-                    // "scrollCollapse": true,
-                    "paging":true,
+                    "scrollY":"450px",
+                    "scrollCollapse": true,
+                    "paging":false,
                     "columnDefs": [
-                                { targets: 'no-sort', orderable: false }
+                                { targets: 'no-sort', orderable: false },
+                                // { "visible": false, "targets": groupColumn }
+
                                 ]                    
                 });
 

@@ -164,15 +164,26 @@ class StockReportController extends Controller
         $stock_item      = new StockItem;
 
         //minidashboard
-		#1 Total Product in stock
-		$totalActiveStock = $stock_item->where('status','01')->sum('quantity');
+        #1 Total Product in stock
+        $stock_in = $stock_item->whereIn('status',['01','99','98'])->sum('quantity');
+        $stock_out = $stock_item->where('status',['04','05'])->sum('quantity');
+		$totalActiveStock =floatval($stock_in) - floatval($stock_out);
 
-		#2 Total Less Stock
-        $totalLessStock = $stock_item->selectRaw('SUM(quantity) as qty,product_id')
+        #2 Total Less Stock
+        // select 
+        // a.ID as employee, 
+        // coalesce(sum(case when type = 5 then amount end), 0) as other, 
+        // coalesce(sum(case when seniortype = 10 then amount end), 0) as senior, 
+        // coalesce(sum(case when type = 5 then amount end), 0) -
+        // coalesce(sum(case when seniortype = 10 then amount end), 0) as result
+        // from gndsale
+        // group by a.id
+        // having sum(type = 5) > 0 and sum(seniortype = 10) > 0;
+
+        $totalLessStock = $stock_item->selectRaw('(coalesce(sum(case when status = "01" then quantity end), 0) +coalesce(sum(case when status = "99" then quantity end), 0)+coalesce(sum(case when status = "98" then quantity end), 0) - coalesce(sum(case when status = "04" then quantity end), 0) - coalesce(sum(case when status = "05" then quantity end), 0)) as qty,product_id')
                         ->groupBy('product_id')
-                        ->havingRaw('SUM(quantity) <= '.$minStock )
-                        ->first();
-
+                        ->havingRaw('qty <= '.$minStock )
+                        ->get();
         #3 Last Adjustment
         $stock_adjustments = $StockAdjustment->selectRaw('MAX(created_at) as last_adjust')->value('last_adjust');
 
@@ -211,7 +222,7 @@ class StockReportController extends Controller
         
         $dashboards = [            
             'totalActiveStock'  => $totalActiveStock,
-            'totalLessStock'    => $totalLessStock ? $totalLessStock->qty : 0,
+            'totalLessStock'    => $totalLessStock,
             'lastAdjustment'    => Carbon::parse($stock_adjustments)->format('Y-m-d'),
             'totalProduct'      => $totalProduct
         ];
@@ -312,11 +323,11 @@ class StockReportController extends Controller
         if(strtoupper($product_id) == "ALL"){
             $product        = (object)[];
             $product->name  = "All";
-            $barcodes       = StockItem::where('quantity','1')->distinct('barcode')->get();
+            $barcodes       = StockItem::where('quantity','1')->where('status','01')->distinct('barcode')->get();
 
         }else{
             $product    = Product::find($product_id);
-            $barcodes   = StockItem::where('product_id',$product_id)->distinct('barcode')->where('quantity','1')->get();
+            $barcodes   = StockItem::where('product_id',$product_id)->distinct('barcode')->where('status','01')->where('quantity','1')->get();
         }
         
 

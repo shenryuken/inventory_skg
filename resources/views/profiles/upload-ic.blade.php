@@ -40,6 +40,12 @@ $page_title = 'Upload MyKad\Passport';
 							<input type="file" multiple id="file-simple" name="ic_image"/>
 						</div>
 					</div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label>Security Code</label><br/>
+                            <input type="password" name="security_code"/>
+                        </div>
+                    </div>
 				
 			</div>
 			<div class="panel-footer">

@@ -17,6 +17,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
+
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/users/logout', 'Auth\LoginController@userLogout')->name('users.logout');
 
@@ -82,6 +84,12 @@ Route::get('admin/profile/{id}', 'ProfileController@showAdmin');
 
 Route::get('profile/upload-avatar', 'ProfileController@uploadAvatar');
 Route::post('profile/upload-avatar', 'ProfileController@postUploadAvatar');
+
+Route::get('profile/change-password-form', 'ProfileController@showChangePasswordForm');
+Route::put('profile/change-password-form', 'ProfileController@updateChangePassword')->name('update.change-password');
+
+Route::get('profile/change-securitycode-form', 'ProfileController@showChangeSecurityCodeForm');
+Route::put('profile/change-securitycode-form', 'ProfileController@updateChangeSecurityCode')->name('update.change-securitycode');
 
 Route::get('profile/upload-ic', 'ProfileController@uploadIc');
 Route::post('profile/upload-ic', 'ProfileController@postUploadIc')->name('upload.ic.post');
@@ -410,3 +418,6 @@ Route::post('inventory/setting/deliverytype/check_existcode', 'Inventory\Configu
 
 ======================================================================================
 */
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

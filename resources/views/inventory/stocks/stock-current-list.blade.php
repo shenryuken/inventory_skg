@@ -58,12 +58,12 @@ textarea {
                             </div>
                             <div class="panel-body"> 
                                     <div class="col-md-3">
-                                            <div class="widget widget-danger widget-item-icon widget-no-subtitle">
+                                            <div class="widget widget-danger widget-item-icon widget-no-subtitle" data-container="body" data-toggle="popover" data-placement="top" data-html="true" data-content="@foreach($dashboards['totalLessStock'] as $product) {{isset($product->products->name) ?$product->products->name:"" }}<br /> @endforeach">
                                                     <div class="widget-item-left">
                                                         <span class="glyphicon glyphicon-warning-sign"></span>
                                                     </div>                             
                                                     <div class="widget-data">
-                                                        <div class="widget-big-int num-count">{{$dashboards['totalLessStock']}}</div>
+                                                        <div class="widget-big-int num-count">{{ count($dashboards['totalLessStock'])}}</div>
                                                         <div class="widget-title">Product low in stocks</div>
                                                         <div class="widget-subtitle"></div>
                                                     </div>      
@@ -128,7 +128,7 @@ textarea {
                                             <table class="table table-hover table-striped" id="table_listing">
                                                 <thead>
                                                         <tr>
-                                                                <th  class="no-sort">Name</th>
+                                                                <th  class="no-sort">No</th>
                                                                 <th >Code</th>
                                                                 <th >Product Name</th>
                                                                 <th >Stock left</th>   
@@ -142,7 +142,7 @@ textarea {
                                                     @foreach($data as $stock)       
                                                                               
                                                         <tr>
-                                                            <td><?php echo $i++; ?></td>
+                                                            <td></td>
                                                             <td>{{ $stock['product_code'] }} </td>
                                                             <td>{{ $stock['product_name'] }} </td>
                                                             <td>{{ $stock['stocksCount']}} </td>
@@ -224,9 +224,20 @@ textarea {
                 var t = $('#table_listing').DataTable({
                     "order": [],
                     "columnDefs": [
-                                { targets: 'no-sort', orderable: false }
+                                { targets: 'no-sort', orderable: false },
+                                {
+                                    "searchable": false,
+                                    "orderable": false,
+                                    "targets": 0
+                                }
                                 ]
                 });
+
+                 t.on( 'order.dt search.dt', function () {
+                    t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+                        cell.innerHTML = i+1;
+                    } );
+                } ).draw();
             })
     
     function fn_clear(){

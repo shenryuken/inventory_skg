@@ -27,7 +27,12 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-     public function profile()
+    public function verifyUser()
+    {
+        return $this->hasOne('App\VerifyUser');
+    }
+
+    public function profile()
     {
         return $this->morphOne('App\Models\Profile', 'profileable');
     }
