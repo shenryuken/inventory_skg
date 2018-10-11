@@ -257,6 +257,7 @@
             newTotal_price_em = newTotal_price_em + parseFloat(cartItems[i].total_price_em.replace(",",""));
         }
 
+        newTotal_price_staff = newTotal_price_staff.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
         newTotal_price_wm = newTotal_price_wm.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
         newTotal_price_em = newTotal_price_em.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 
