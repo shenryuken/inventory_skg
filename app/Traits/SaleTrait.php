@@ -23,7 +23,7 @@ trait SalesTrait
 	{
 		$year = (new \DateTime)->format("Y");
         $month = (new \DateTime)->format("n"); 
-        dd($total_pv, $total_price);
+        // dd($total_pv, $total_price);
         
 
     	$sale = Sale::firstOrNew(['year' => $year , 'month' => $month]);
