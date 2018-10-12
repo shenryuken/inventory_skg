@@ -11,7 +11,7 @@
 
 	@if(Auth::guard('admin')->check())
 	
-	<form method="post" action="{{url('user/assignrank')}}">
+	<form method="post" action="{{url('users/assignrank')}}">
 		{{ csrf_field() }}
 		<input type="hidden" name="user_id" value="{{ $user->id }}">
 		<div class="panel panel-default">
