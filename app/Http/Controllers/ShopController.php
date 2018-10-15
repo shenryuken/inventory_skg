@@ -1203,13 +1203,13 @@ class ShopController extends Controller
         try{
 
             if($sessionData == "SKG_STORE"){
-                $orderHdr = OrderHdr::leftJoin('delivery_type','delivery_type.id','=','orders_hdr.delivery_type')
+                $orderHdr = OrderHdr::leftJoin('delivery_type','delivery_type.delivery_code','=','orders_hdr.delivery_type')
                             ->select('orders_hdr.order_no','orders_hdr.agent_id','orders_hdr.agent_id','orders_hdr.invoice_no','orders_hdr.total_items','orders_hdr.total_price','orders_hdr.delivery_type','orders_hdr.purchase_date','orders_hdr.status','orders_hdr.name','orders_hdr.contect_no','delivery_type.delivery_code','delivery_type.type_description')
                             ->where('order_no','=',$order_no)
                             ->first();
             }
             else if($sessionData == "AGENT_STORE"){
-                $orderHdr = AgentOrderHdr::leftJoin('delivery_type','delivery_type.delivery_id','=','agent_order_hdr.delivery_type')
+                $orderHdr = AgentOrderHdr::leftJoin('delivery_type','delivery_type.delivery_code','=','agent_order_hdr.delivery_type')
                             ->select('agent_order_hdr.order_no','agent_order_hdr.agent_id','agent_order_hdr.agent_id','agent_order_hdr.invoice_no','agent_order_hdr.total_items','agent_order_hdr.total_price','agent_order_hdr.delivery_type','agent_order_hdr.purchase_date','agent_order_hdr.status','orders_hdr.name','orders_hdr.contect_no','delivery_type.delivery_code','delivery_type.type_description')
                             ->where('order_no','=',$order_no)
                             ->first();
