@@ -986,7 +986,7 @@ class ShopController extends Controller
                     'gst'           => 0,
                     'shipping_fee'  => $shipping_fee,
                     'total_price'   => $total_price,
-                    'delivery_type' => (int)$delivery_type,
+                    'delivery_type' => $delivery_type,
                     'purchase_date' => $date->format('Y-m-d'),
                     'status'        => "01",
                     'bill_address'  => (int)$billing_id,
