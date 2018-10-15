@@ -60,9 +60,9 @@
 				
 				<select name="rank" class="form-control">
 					@foreach($ranks as $rank)
-					
-					<option value="{{ $rank->name }}">{{ $rank->name }}</option>
-					
+						@if($rank->name != "Senior District Officer")
+						<option value="{{ $rank->name }}">{{ $rank->name }}</option>
+						@endif
 					@endforeach
 				</select>
 				

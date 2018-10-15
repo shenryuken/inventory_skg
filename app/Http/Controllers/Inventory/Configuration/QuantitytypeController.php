@@ -13,6 +13,7 @@ use App\Models\QuantityType;
 use App\Admin;
 use App\User;
 use App\Models\Role;
+
 class QuantitytypeController extends Controller
 {
 	private $statusArr = array( 

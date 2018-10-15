@@ -16,7 +16,7 @@
 		<input type="hidden" name="user_id" value="{{ $user->id }}">
 		<div class="panel panel-default">
 			<div class="panel-heading ui-draggable-handle">
-				<h3 class="panel-title"><strong>Update</strong></h3>
+				<h3 class="panel-title"><strong>Update Rank- {{ $user->username }}</strong></h3>
 				<ul class="panel-controls">
 					<li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
 				</ul>
@@ -27,7 +27,9 @@
 					<div class="col-md-6 col-xs-12">
 						<select name="rank" class="form-control">
 							@foreach($ranks as $rank)
-							<option value="{{$rank->name}}">{{ $rank->name }}</option>
+								@if($rank->name != "Senior District Officer")
+								<option value="{{ $rank->name }}">{{ $rank->name }}</option>
+								@endif
 							@endforeach
 						</select>
 					</div>
