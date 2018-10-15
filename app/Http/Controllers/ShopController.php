@@ -986,7 +986,7 @@ class ShopController extends Controller
                     'gst'           => 0,
                     'shipping_fee'  => $shipping_fee,
                     'total_price'   => $total_price,
-                    'delivery_type' => (int)$delivery_type,
+                    'delivery_type' => $delivery_type,
                     'purchase_date' => $date->format('Y-m-d'),
                     'status'        => "01",
                     'bill_address'  => (int)$billing_id,
@@ -1204,15 +1204,13 @@ class ShopController extends Controller
 
             if($sessionData == "SKG_STORE"){
                 $orderHdr = OrderHdr::leftJoin('delivery_type','delivery_type.id','=','orders_hdr.delivery_type')
-                            ->leftJoin('global_status','global_status.status','=','orders_hdr.status')
-                            ->select('orders_hdr.order_no','orders_hdr.agent_id','orders_hdr.agent_id','orders_hdr.invoice_no','orders_hdr.total_items','orders_hdr.total_price','orders_hdr.delivery_type','orders_hdr.purchase_date','orders_hdr.status','orders_hdr.name','orders_hdr.contect_no','delivery_type.delivery_code','delivery_type.type_description','global_status.description')
+                            ->select('orders_hdr.order_no','orders_hdr.agent_id','orders_hdr.agent_id','orders_hdr.invoice_no','orders_hdr.total_items','orders_hdr.total_price','orders_hdr.delivery_type','orders_hdr.purchase_date','orders_hdr.status','orders_hdr.name','orders_hdr.contect_no','delivery_type.delivery_code','delivery_type.type_description')
                             ->where('order_no','=',$order_no)
                             ->first();
             }
             else if($sessionData == "AGENT_STORE"){
                 $orderHdr = AgentOrderHdr::leftJoin('delivery_type','delivery_type.delivery_id','=','agent_order_hdr.delivery_type')
-                            ->leftJoin('global_status','global_status.status','=','agent_order_hdr.status')
-                            ->select('agent_order_hdr.order_no','agent_order_hdr.agent_id','agent_order_hdr.agent_id','agent_order_hdr.invoice_no','agent_order_hdr.total_items','agent_order_hdr.total_price','agent_order_hdr.delivery_type','agent_order_hdr.purchase_date','agent_order_hdr.status','orders_hdr.name','orders_hdr.contect_no','delivery_type.delivery_code','delivery_type.type_description','global_status.description')
+                            ->select('agent_order_hdr.order_no','agent_order_hdr.agent_id','agent_order_hdr.agent_id','agent_order_hdr.invoice_no','agent_order_hdr.total_items','agent_order_hdr.total_price','agent_order_hdr.delivery_type','agent_order_hdr.purchase_date','agent_order_hdr.status','orders_hdr.name','orders_hdr.contect_no','delivery_type.delivery_code','delivery_type.type_description')
                             ->where('order_no','=',$order_no)
                             ->first();
             }
@@ -1224,7 +1222,7 @@ class ShopController extends Controller
 
             $data = GlobalStatus::leftJoin('delivery_status_assign','delivery_status_assign.delivery_status','=','global_status.status')
                                     ->select('global_status.id','global_status.status','global_status.description','delivery_status_assign.sequence')
-                                    ->where('table','order_hdr')
+                                    ->where('global_status.table','order_hdr')
                                     ->where('delivery_status_assign.delivery_code',$orderHdr->delivery_code)
                                     ->orderBy('delivery_status_assign.sequence','ASC')
                                     ->get();
