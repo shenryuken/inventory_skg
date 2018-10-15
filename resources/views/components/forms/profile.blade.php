@@ -16,7 +16,7 @@
 	<div class="form-group">
 		<label for="full_name" class="col-sm-2 control-label" >Full Name</label>
 		<div class="col-sm-10">
-			<input type="text" class="form-control" id="full_name" name="full_name" placeholder="Your Full Name" style="text-transform: capitalize">
+			<input type="text" class="form-control" id="full_name" name="full_name" placeholder="Your Full Name" style="text-transform: capitalize" value="{{ }}">
 		</div>
 	</div>
 	<div class="form-group">
