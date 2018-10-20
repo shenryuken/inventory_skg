@@ -230,21 +230,21 @@
                 newTotal_em = newTotal_em.toFixed(2);
                 
                 cartItems[i].total_price_staff = newTotal_staff;
-                quantity = quantity.toString();
                 cartItems[i].total_price_wm = newTotal_wm;
                 cartItems[i].total_price_em = newTotal_em;
+                quantity = quantity.toString();
                 
                 newTotal_staff = newTotal_staff.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-                cartItems[i].total_quantity = quantity;
                 newTotal_wm = newTotal_wm.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
                 newTotal_em = newTotal_em.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+                cartItems[i].total_quantity = quantity;
                 break;
             }
         }
 
         // console.log(table.children('.column-tot-price'),cartItems)
         table.children('.tot-price-staff').html('<strong>WM RM'+newTotal_staff);
-        table.children('.column-tot-price').html('<strong>WM RM'+newTotal_wm+'<br>EM RM'+newTotal_em+'</strong>');
+        table.children('.tot-price').html('<strong>WM RM'+newTotal_wm+'<br>EM RM'+newTotal_em+'</strong>');
         
         var newTotal_price_staff = 0.00;
         var newTotal_price_wm = 0.00;
