@@ -9,9 +9,11 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
         <!-- Styles -->
         <style>
+            /*
             html, body {
                 background-color: #fff;
                 color: #636b6f;
@@ -20,7 +22,7 @@
                 height: 100vh;
                 margin: 0;
             }
-
+*/
             .full-height {
                 height: 100vh;
             }
@@ -62,6 +64,36 @@
             .m-b-md {
                 margin-bottom: 30px;
             }
+            
+
+            html {
+                    font-size: 14px;
+                    background-color: #efef;
+                    color: #636b6f;
+                    font-family: 'Raleway', sans-serif;
+                    font-weight: 100;
+                    height: 100vh;
+                    margin: 0;
+                    }
+                    @media (min-width: 768px) {
+                    html {
+                        font-size: 16px;
+                    }
+                    }
+
+                    .container {
+                    max-width: 960px;
+                    }
+
+                    .pricing-header {
+                    max-width: 700px;
+                    }
+
+                    .card-deck .card {
+                    min-width: 220px;
+                    }
+
+            
         </style>
     </head>
     <body>
@@ -70,23 +102,69 @@
                 <div class="top-right links">
                     @auth
                         <a href="{{ url('/home') }}">Home</a>
-                    @else
+                    {{-- @else
                         <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
+                        <a href="{{ route('register') }}">Register</a> --}}
                     @endauth
                 </div>
             @endif
 
             <div class="container">
+                    <div class="card-deck mb-3 text-center">
+                      <div class="card mb-4 shadow-sm">
+                        <div class="card-header">
+                          <h1 class="my-0 font-weight-normal">Agent</h1>
+                        </div>
+                        <div class="card-body">
+                          <h1 class="card-title pricing-card-title"></h1>
+                          
+                          <a href="{{url('login')}}" class="btn btn-lg btn-block btn-outline-primary">Login</a>
+                        </div>
+                      </div>
+
+                      <div class="card mb-4 shadow-sm">
+                            <div class="card-header">
+                              <h1 class="my-0 font-weight-normal">Admin</h1>
+                            </div>
+                            <div class="card-body">
+                              <h1 class="card-title pricing-card-title"></h1>
+                              
+                              <a href="{{url('admin/login')}}" class="btn btn-lg btn-block btn-outline-primary">Login</a>
+                            </div>
+                          </div>
+                       
+                       
+                    </div>
+
+            {{-- <div class="container">
                 <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
+                        <div class="col-md-4">
+                                <div class="card mb-4 shadow-sm">
+                                  <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap">
+                                  <div class="card-body">
+                                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                      <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                      </div>
+                                      <small class="text-muted">9 mins</small>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                    {{-- <div class="col-md-8 col-md-offset-2">
                         <div class="panel">
-                            @component('components.who')
-                            @endcomponent
+                            <a href="{{url('admin/login')}}">Admin</a>
                         </div>
                     </div>
+                    <div class="col-md-8 col-md-offset-2">
+                            <div class="panel">
+                                <a href="{{url('/login')}}">Agent</a>
+                            </div>
+                        </div> --}}
                 </div>
-            </div>
+            </div> --}}
         </div>
     </body>
 </html>

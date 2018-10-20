@@ -69,7 +69,7 @@ class OrderController extends Controller
 
         try{
             $delivery   = Delivery::where('delivery_number',$order_no)->first();
-            $items      = DeliveryItem::where('delivery_id',$delivery->id)->get();
+            $items      = DeliveryItem::where('delivery_id',$delivery->id)->groupBy('product_id')->get();
             // var_dump($items->products->name);
         
         
