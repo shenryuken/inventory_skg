@@ -84,7 +84,7 @@
                                                          </thead>
                                                          <tbody>
                                                              @foreach($reports as $report )
-                                                             @foreach($report->orderItems as $rep)
+                                                             @foreach(isset($report->orderItems)?$report->orderItems:[]  as $rep)
                                                                 <tr>
                                                                     <td class="hidden">{{ isset($report->purchase_date) ? $report->purchase_date : ""}}</td>
                                                                     <td>{{ isset($report->purchase_date) ? $report->purchase_date : "" }}</td>
@@ -203,7 +203,7 @@
             );
 
             $( api.column( 5 ).footer() ).html(
-                '<strong>'+pageTotal2 + '</strong>'
+                '<strong>'+pageTotal2.toFixed(2) + '</strong>'
             );
 
             // $( api.column( 9 ).footer() ).html(
