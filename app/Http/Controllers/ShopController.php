@@ -918,6 +918,7 @@ class ShopController extends Controller
                 $address        = $user->address->where('id',$billing_id)->first();
             }
 
+            // dd($address);
             // dd($$request->get('billing_id'),$request->get('shipping_id'));
         try{
 
@@ -941,12 +942,10 @@ class ShopController extends Controller
 
                 foreach($cartItems as $k => $v){
 
-                    if($sessionData == "SKG_STORE"){
-
+                    if(Auth::guard('admin')->check()){
                         $price = $v['price_staff'];
                     }
-                    else if($sessionData == "AGENT_STORE"){
-
+                    else{
                         if(strtolower($address->state) == strtolower("Sabah") 
                             || strtolower($address->state) ==  strtolower("Sarawak")){
 
