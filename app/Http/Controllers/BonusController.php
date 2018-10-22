@@ -168,7 +168,8 @@ class BonusController extends Controller
         $total_pv2      = Store::sum('pv');
         $total_pv       = $total_pv1 + $total_pv2;
 
-        $sale   = Sale::where('year', $year)->where('month', $month)->first();
+        //$sale   = Sale::where('year', $year)->where('month', $month)->first();
+        $sale                = Sale::firstOrCreate([]);
         $sale->re_total_sale = $total_sales;
         $sale->re_total_pv   = $total_pv;
         $sale->save();
