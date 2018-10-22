@@ -18,6 +18,7 @@ use Fpdf;
 use Storage;
 use Response;
 use App\Classes\GlobalNumberRange;
+use Log;
 
 
 class OrderController extends Controller
@@ -69,7 +70,7 @@ class OrderController extends Controller
 
         try{
             $delivery   = Delivery::where('delivery_number',$order_no)->first();
-            $items      = DeliveryItem::where('delivery_id',$delivery->id)->get();
+            $items      = DeliveryItem::where('delivery_id',$delivery->id)->groupBy('product_id')->get();
             // var_dump($items->products->name);
         
         
@@ -136,7 +137,7 @@ class OrderController extends Controller
                 $this->storeProductStocks($product_stock_array);
 
             if($delivery_id){
-                // OrderHdr::where('id',$order_no)->update(['status'=>'02','shipping_fee'=>$request->get('shipping_fee')]);
+                OrderHdr::where('id',$order_no)->update(['status'=>'02']);
             }
             
 
@@ -189,9 +190,21 @@ class OrderController extends Controller
     public function deliveryComplete(Request $request)
     {
         $order_no = $request->input('order_no');
+
+        $deliveryOrder = Delivery::where('id',$order_no);
+        $sales_order_id = $deliveryOrder->pluck('order_id');
+
+        $delivery_id = Delivery::where('order_id',$sales_order_id)->get()->toArray();
         
         if($order_no){
-            Delivery::where('id',$order_no)->update(['status'=>'complete']);
+            $deliveryOrder->update(['status'=>'complete']);
+            $delivery_qty = DeliveryItem::whereIn('delivery_id',$delivery_id)->sum('quantity'); 
+            $order_qty = OrderHdr::where('id',$sales_order_id)->sum('total_items');
+
+            if($delivery_qty == $order_qty){ //if Delivery item equal with ordered item, the order will complete
+                OrderHdr::where('id',$order_no)->update(['status'=>'05']);
+            }
+            
         }
 
         return redirect('inventory/order/delivery/');

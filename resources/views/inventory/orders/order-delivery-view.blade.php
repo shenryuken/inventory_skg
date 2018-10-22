@@ -1,4 +1,4 @@
-@extends('layouts.joli.app')
+@extends('layouts.joli.app')    
 <style>
     page {
   background: white;
@@ -31,6 +31,8 @@ page[size="A5"][layout="landscape"] {
   width: 21cm;
   height: 14.8cm;  
 }
+
+p {font-size:12px !important;}
 @media print {
   body, page {
     margin: 0;
@@ -84,8 +86,8 @@ page[size="A5"][layout="landscape"] {
                                     <hr>
                                     <h1 style="text-align: center;">Delivery Order</h1>                          
                             
-                            <div style="width:50%;float:left">
-                            <p><span class="fa fa-caret-right"></span> <strong>Customer:</strong> {{ isset($delivery->salesOrder->user->username) ? $delivery->salesOrder->user->username : "" }}</p>
+                            <div style="width:50%;float:left;font-size:12px;">
+                            <p style=""><span class="fa fa-caret-right"></span> <strong>Customer:</strong> {{ isset($delivery->salesOrder->user->username) ? $delivery->salesOrder->user->username : "" }}</p>
                             <p><span class="fa fa-caret-right"></span> <strong>Tel:</strong> {{ isset($delivery->salesOrder->tel) ? $delivery->salesOrder->tel : "" }}</p>                
                             <p><span class="fa fa-caret-right"></span> <strong>Purchase Date:</strong> {{ Carbon\Carbon::parse(isset($delivery->salesOrder->purchase_date) ?$delivery->salesOrder->purchase_date: "")->format('d/m/Y') }}</p>
                             
@@ -105,7 +107,7 @@ page[size="A5"][layout="landscape"] {
             
                             
                         </div>
-                        <div style="width:50%;float:right;">
+                        <div style="width:50%;float:right;font-size:12px;">
                                 <p><span class="fa fa-caret-right"></span> <strong>Delivery Order:</strong>#{{ isset($delivery->delivery_number) ? $delivery->delivery_number : ""}}</p>
                                 <p><span class="fa fa-caret-right"></span> <strong>Consignment Note (C/N):</strong> {{ isset($delivery->courier_consignment) ? $delivery->courier_consignment : "" }}</p>
                                 <p><span class="fa fa-caret-right"></span> <strong>Courier:</strong> {{ isset($delivery->courier->courier_name) ? $delivery->courier->courier_name : "" }}</p>
@@ -124,16 +126,16 @@ page[size="A5"][layout="landscape"] {
                                         @foreach($items as $item)
                                         <tr>
                                             <td>{{ isset($item->products->name) ? $item->products->name : "" }}</td>                               
-                                            <td>{{ isset($item->quantity) ? $item->quantity : "" }}</td>
+                                            <td>{{ isset($item->quantity) ? $item->where('product_id',$item->product_id)->sum('quantity') : "" }}</td>
                                             <td>RM(WM){{ isset($item->products->price_wm) ? $item->products->price_wm : "" }}</td>
                                         </tr>
                                         @endforeach
                                 </tbody>
                             </table>
                             <div  style="float: right!important;">
-                            <p ><span class="fa fa-caret-right"></span> <strong>Total Items:{{ isset($item->product_qty) ? $item->sum('product_qty') : "0" }}</strong></p>
-                            <p><span class="fa fa-caret-right"></span> <strong>Total Price: MYR {{ isset($item->order->total_price) ? $item->order->total_price : "0" }}</strong></p>
-                            <p><span class="fa fa-caret-right"></span> <strong>Delivery Price: MYR {{ isset($item->order->shipping_fee) ? $item->order->shipping_fee : "0" }}</strong></p>
+                            <p ><span class="fa fa-caret-right"></span> <strong>Total Items:{{ isset($delivery->deliveryItem) ? $delivery->deliveryItem->sum('quantity') : "0" }}</strong></p>
+                            <p><span class="fa fa-caret-right"></span> <strong>Total Price: MYR {{ isset($delivery->salesOrder->total_price) ? $delivery->salesOrder->total_price : "0" }}</strong></p>
+                            <p><span class="fa fa-caret-right"></span> <strong>Delivery Price: MYR {{ isset($delivery->salesOrder->shipping_fee) ? $delivery->salesOrder->shipping_fee : "0" }}</strong></p>
                             </div>
                         </div>
 

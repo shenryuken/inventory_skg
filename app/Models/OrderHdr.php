@@ -16,7 +16,7 @@ class OrderHdr extends Model
 
     public function orderItems()
     {
-        return $this->hasMany('App\Models\OrderItem');
+        return $this->hasMany('App\Models\OrderItem', 'order_no', 'order_no');
     }
 
 

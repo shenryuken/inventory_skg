@@ -102,15 +102,15 @@
                             @foreach($items as $item)
                             <tr>
                                 <td>{{ isset($item->product->name) ? $item->product->name : "" }}</td>
-                                <td>{{ isset($item->product->price_wm) ? $item->product->price_wm : "" }}</td>
+                                <td>{{ isset($item->price) ? $item->price : "" }}</td>
                                 <td>{{ isset($item->product_qty) ? $item->product_qty : "" }}</td>
                             </tr>
                             @endforeach
                     </tbody>
                 </table>
-                <p><span class="fa fa-caret-right"></span> <strong>Total Items: {{ isset($item->product_qty) ? $item->sum('product_qty') : "0" }}</strong></p>
-                <p><span class="fa fa-caret-right"></span> <strong>Total Price: MYR  {{ isset($item->order->total_price) ? $item->order->total_price : "0" }}</strong></p>
-                <p><span class="fa fa-caret-right"></span> <strong>Delivery Price: MYR {{ isset($item->order->shipping_fee) ? $item->order->shipping_fee : "0" }}</strong></p>
+                <p><span class="fa fa-caret-right"></span> <strong>Total Items: {{ isset($order->total_items) ? $order->total_items : "0" }}</strong></p>
+                <p><span class="fa fa-caret-right"></span> <strong>Total Price: MYR  {{ isset($order->total_price) ? $order->total_price : "0" }}</strong></p>
+                <p><span class="fa fa-caret-right"></span> <strong>Delivery Price: MYR {{ isset($order->shipping_fee) ? $order->shipping_fee : "0" }}</strong></p>
 
             </div>
             

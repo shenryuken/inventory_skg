@@ -177,6 +177,7 @@
 <script type="text/javascript">
 
     var baseUrl = window.location.origin;
+    var cartItems = {!! json_encode($cartItems) !!};
 
     $(".btn-minus").on("click",function(){
         console.log($(this).closest('.qty').find('input.quantity').val())
@@ -215,41 +216,47 @@
 
     function fn_calculate_order(table,quantity,productid){
 
-        var cartItems = {!! json_encode($cartItems) !!};
+        // var cartItems = {!! json_encode($cartItems) !!};
+
+        var newTotal_staff = 0.00;
         var newTotal_wm = 0.00;
         var newTotal_em = 0.00;
+        quantity = parseInt(quantity);
+        console.log(quantity)
+
         for(var i=0;i<cartItems.length;i++){
             if(cartItems[i].product_id == productid){
 
-                newTotal_staff = parseFloat(cartItems[i].price_staff) * parseFloat(quantity);
-                newTotal_wm = parseFloat(cartItems[i].price_wm) * parseFloat(quantity);
-                newTotal_em = parseFloat(cartItems[i].price_em) * parseFloat(quantity);
+                newTotal_staff = parseFloat(cartItems[i].price_staff) * parseInt(quantity);
+                newTotal_wm = parseFloat(cartItems[i].price_wm) * parseInt(quantity);
+                newTotal_em = parseFloat(cartItems[i].price_em) * parseInt(quantity);
                 
                 newTotal_staff = newTotal_staff.toFixed(2);
                 newTotal_wm = newTotal_wm.toFixed(2);
                 newTotal_em = newTotal_em.toFixed(2);
-                
+
                 cartItems[i].total_price_staff = newTotal_staff;
-                quantity = quantity.toString();
                 cartItems[i].total_price_wm = newTotal_wm;
                 cartItems[i].total_price_em = newTotal_em;
+                quantity = quantity.toString();
                 
                 newTotal_staff = newTotal_staff.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-                cartItems[i].total_quantity = quantity;
                 newTotal_wm = newTotal_wm.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
                 newTotal_em = newTotal_em.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+                cartItems[i].total_quantity = quantity;
+
+                table.children('.tot-price-staff').html('<strong>WM RM'+newTotal_staff);
+                table.children('.tot-price').html('<strong>WM RM'+newTotal_wm+'<br>EM RM'+newTotal_em+'</strong>');
                 break;
             }
         }
 
         // console.log(table.children('.column-tot-price'),cartItems)
-        table.children('.tot-price-staff').html('<strong>WM RM'+newTotal_staff);
-        table.children('.column-tot-price').html('<strong>WM RM'+newTotal_wm+'<br>EM RM'+newTotal_em+'</strong>');
         
         var newTotal_price_staff = 0.00;
         var newTotal_price_wm = 0.00;
         var newTotal_price_em = 0.00;
-        // console.log(cartItems)
+        console.log(cartItems)
         for(var i=0;i<cartItems.length;i++){
 
             newTotal_price_staff = newTotal_price_staff + parseFloat(cartItems[i].total_price_staff.replace(",",""));
