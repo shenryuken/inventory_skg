@@ -46,6 +46,12 @@
             </li>                
         </ul>
     </li>  
+    <li class="xn-openable {{ Request::is('vault/*') ? 'active' : '' }}">
+        <a href="#" class="arrow"><span class="fa fa-table"></span> <span class="xn-text">Vault</span></a>
+        <ul>                              
+            <li class="{{ Request::is('vault/transfer') ? 'active' : '' }}"><a href="{{ url('vault/transfer-point')}}">Transfer Point</a></li>         
+        </ul>
+    </li>
     <li class="xn-openable {{ Request::is('admin/lists') ? 'active' : '' || Request::is('registers/staff') ? 'active' : '' }}">
         <a href="#" class="arrow"><span class="fa fa-group"></span> <span class="xn-text">Staff</span></a>
         <ul>                            

@@ -8,10 +8,12 @@ use App\Http\Requests;
 use App\Models\Wallet;
 use App\Models\ActiveDo;
 use App\Models\UserBonus;
+use App\Models\PointTransaction;
 
 use App\User;
 use Validator;
 use Session;
+use Carbon\Carbon;
 
 class WalletController extends Controller
 {
@@ -79,14 +81,23 @@ class WalletController extends Controller
                'security_code'     => 'required'
             ]);
     	
-    	$sender   = Auth::user()->username;
-    	$receiver = User::where('username', $request->username)->first();
+    	if(Auth::guard('admin')->check())
+    	{
+    		$sender   = Auth::guard('admin')->user();
+    		$hashedCode = Auth::guard('admin')->user()->security_code;
+    	}
+    	elseif(Auth::guard('admin')->check())
+    	{
+    		$sender   = Auth::guard('web')->user();
+    		$hashedCode = Auth::guard('web')->user()->security_code;
+    	}
 
-    	$hashedCode = Auth::guard('web')->user()->security_code;
+    	$receiver 	= User::where('username', $request->username)->first();
+    	
 
     	if(Auth::guard('web')->check() && Hash::check($request->security_code, $hashedCode))
     	{
-    		$sender_wallet 		= Wallet::where('user_id', $receiver->id)->first();
+    		$sender_wallet 		= Wallet::where('user_id', Auth::guard('web')->user()->id)->first();
 		    $receiver_wallet 	= Wallet::where('user_id', $receiver->id)->first(); 
 
     		if($request->point_to_transfer <= $sender_wallet->p_wallet)
@@ -103,6 +114,7 @@ class WalletController extends Controller
 		    	$point_transactions = new PointTransactions;
 		    	$point_transactions->from_user_id = $sender->id;
 		    	$point_transactions->to_user_id   = $receiver->id;
+		    	$point_transactions->status       = "Success";
 		    	$point_transactions->save();
 
 		    	Session::flash('success', 'Successfully transfer '.$request->point_to_transfer.' points to '.$receiver->username); 
@@ -111,6 +123,38 @@ class WalletController extends Controller
     		{
     			Session::flash('fail', 'Failed to transfer '.$request->point_to_transfer.' points to '.$receiver->username.'. Insufficient point!');
     		}
+    	}
+    	elseif(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode))
+    	{
+		    $receiver_wallet 	= Wallet::where('user_id', $receiver->id)->first(); 
+
+	    	$receiver_wallet->p_wallet 	= $receiver_wallet->p_wallet + $request->point_to_transfer;
+	    	$receiver_wallet->save();
+
+	    	if($receiver_wallet){
+	    		$point_transactions = new PointTransaction;
+	    		$point_transactions->date_time_sent= Carbon::now();
+		    	$point_transactions->from_admin_id = $sender->id;
+		    	$point_transactions->to_user_id    = $receiver->id;
+		    	$point_transactions->point 		   = $request->point_to_transfer;
+		    	$point_transactions->status        = "Success";
+		    	$point_transactions->save();
+
+		    	Session::flash('success', 'Successfully transfer '.$request->point_to_transfer.' points to '.$receiver->username); 
+	    	}
+	    	else 
+	    	{
+	    		$point_transactions = new PointTransaction;
+	    		$point_transactions->date_time_sent= Carbon::now();
+		    	$point_transactions->from_admin_id = $sender->id;
+		    	$point_transactions->to_user_id    = $receiver->id;
+		    	$point_transactions->point 		   = $request->point_to_transfer;
+		    	$point_transactions->status        = "Failed";
+		    	$point_transactions->save();
+
+		    	Session::flash('fail', 'Failed to transfer '.$request->point_to_transfer.' points to '.$receiver->username.'. Please try again!');
+	    	}
+	    	
     	}
 
     	return view('vault.transfer');

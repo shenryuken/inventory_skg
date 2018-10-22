@@ -42,19 +42,33 @@ trait RegisterMember
         $user->mobile_no    = $newUser['mobile_no'];
         $user->introducer   = $newUser['introducer'];
         $user->rank_id      = $rank_id;
-        $user->security_code = Hash::make($newUser['security_code']);
+        $user->security_code = $hashed_random_password;
         
-        $profile = new Profile;     
-        $profile->full_name = $newUser['name'];
-        $profile->dob       = $newUser['dob'];
-        $profile->gender    = $newUser['gender'];
-        $profile->marital_status = $newUser['marital_status'];
-        $profile->id_type   = $newUser['id_type'];
-        $profile->id_no     = $newUser['id_no'];
-        $profile->id_pic    = isset($newUser['id_pic']) ? $newUser['id_pic']:'';
+        $profile = new Profile;
+        
+        if( $newUser['type'] == 'personal')
+        {
+            $profile->full_name = $newUser['name'];
+            $profile->dob       = $newUser['dob'];
+            $profile->gender    = $newUser['gender'];
+            $profile->marital_status = $newUser['marital_status'];
+            $profile->id_type   = $newUser['id_type'];
+            $profile->id_no     = $newUser['id_no'];
+            $profile->id_pic    = isset($newUser['id_pic']) ? $newUser['id_pic']:'';
+        } 
+        elseif ($newUser['type'] == 'business') 
+        { 
+            $profile->company_name            = $newUser['company_name'];
+            $profile->company_registration_no = $newUser['company_registration_no'];
+            $profile->company_reg_cert        = isset($newUser['comp_reg_cert_img']) ? $newUser['comp_reg_cert_img']:'';
+            $profile->company_logo            = isset($newUser['comp_logo_img']) ? $newUser['comp_logo_img']:'';
+            $profile->cert_status             = isset($newUser['comp_reg_cert_img']) ? 'Waiting Approval':'';;
+        }     
+       
         $profile->street    = $newUser['street'];
-        $profile->city      = $newUser['city'];
+        $profile->street2   = $newUser['street2'];
         $profile->postcode  = $newUser['postcode'];
+        $profile->city      = $newUser['city'];
         $profile->state     = $newUser['state'];
         $profile->country   = $newUser['country'];
         $profile->contact_no= $newUser['mobile_no'];
@@ -62,7 +76,7 @@ trait RegisterMember
         $address = new Address;
         $address->name      = $newUser['name'];
         $address->street1   = $newUser['street'];
-        $address->street2   = "";
+        $address->street2   = $newUser['street2'];
         $address->poscode   = $newUser['postcode'];
         $address->city      = $newUser['city'];
         $address->state     = $newUser['state'];

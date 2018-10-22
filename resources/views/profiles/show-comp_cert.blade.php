@@ -3,25 +3,9 @@
 <?php $page_title = 'User - Update Mykad\Passport'; ?>
 @section('content')
 <div class="col-md-12">
-	@if (count($errors) > 0)
-	<div class="alert alert-danger">
-		<ul>
-			@foreach ($errors->all() as $error)
-			<li>{{ $error }}</li>
-			@endforeach
-		</ul>
-	</div>
-	@endif
-	@if ($message = Session::get('success'))
-	<div class="alert alert-success">
-		<p>{{ $message }}</p>
-	</div>
-	@endif
-    @if ($message = Session::get('fail'))
-    <div class="alert alert-danger">
-        <p>{{ $message }}</p>
-    </div>
-    @endif
+	@include('components.notifications.errors')
+        
+    @include('components.notifications.messages')
 </div>
 <div class="row">
     {{-- <div class="col-md-5  toppad  pull-right col-md-offset-3 ">
@@ -39,28 +23,28 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                	@if(!empty($profile->id_pic))
-                    <div class="col-md-12 col-lg-12 " align="center"> <img alt="User Pic" src="{{ asset('app/mykad/'.$profile->id_pic) }}" class="img-responsive">
+                	@if(!empty($profile->company_reg_cert))
+                    <div class="col-md-12 col-lg-12 " align="center"> <img alt="User Pic" src="{{ asset('app/comp_cert/'.$profile->company_reg_cert) }}" class="img-responsive">
                     </div>
                     @else
-						No MyKad Is Found For This User
+						No Company Registration Cert Found For This User.
                     @endif
                 </div>
             </div>
-            <form action="{{ route('profile.update-ic-status')}}" method="post">
+            <form action="{{ route('profile.update-comp_cert-status')}}" method="post">
             	{{ csrf_field() }}
             	<input type="hidden" name="_method" value="PUT">
             	<input type="hidden" name="id" value="{{ $profile->id }}">
             <div class="panel-footer">
-            	@if(Auth::guard('admin')->check() && $profile->status_ic == 'Waiting Approval')
+            	@if(Auth::guard('admin')->check() && $profile->cert_status == 'Waiting Approval')
                 <input type="password" name="security_code" placeholder="Security Code Here">
                 <input type="submit" name="status" value="Approve" class="btn btn-sm btn-primary">
                 <input type="submit" name="status" value="Reject" class="btn btn-sm btn-danger">
                 @elseif(Auth::check() && Auth::user()->email == $profile->profileable->email)
-                <a href="{{ url('profile/upload-ic')}}"	data-original-title="Upload MyKad or Passport" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-arrow-up"></i>Upload Mykad</a>
+                <a href="{{ url('profile/upload-company-cert')}}"	data-original-title="Upload Company Registration Certificate" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-arrow-up"></i>Upload Company Registration Certificate</a>
                 @else
                 	@php
-                		$label = $profile->status_ic; 
+                		$label = $profile->cert_status; 
 
                 		switch ($label) {
                 			case 'Approved':
@@ -75,8 +59,7 @@
                 		}
                 	@endphp
 
-
-                	<strong>Status : </strong> <span class="label label-{{$label}} label-form">{{ $profile->status_ic }}</span>
+                	<strong>Status : </strong> <span class="label label-{{$label}} label-form">{{ $profile->cert_status }}</span>
                 @endif
             </div> 
             </form>

@@ -22,13 +22,14 @@ use App\Models\Address;
 
 use App\Admin;
 use App\User;
+use Carbon\Carbon;
 
 use Validator;
 use Session;
-use Carbon\Carbon;
 use DB;
 use Mail;
 use Cart;
+use Image;
 
 use App\Http\Controllers\ShopController;
 
@@ -104,18 +105,27 @@ class RegisterController extends Controller
                 'username'  => 'required|unique:users,username',
                 //'password'  => 'required|min:6|confirmed',
                 'type'      => 'required',
-                'name'      => 'required',
-                'dob'       => 'required',
-                'gender'    => 'required',
-                'marital_status'    => 'required',
-                'race'              => 'required',
-                'id_type'           => 'required',
-                'id_no'             => 'required',
+                //personal
+                'name'      => 'required_if:type,==,personal',
+                'dob'       => 'required_if:type,==,personal',
+                'gender'    => 'required_if:type,==,personal',
+                'marital_status'    => 'required_if:type,==,personal',
+                'race'              => 'required_if:type,==,personal',
+                'id_type'           => 'required_if:type,==,personal',
+                'id_no'             => 'required_if:type,==,personal',
                 'id_pic'            => 'sometimes|image|mimes:jpeg,bmp,png|max:5120',
+                //end personal
+                //business
+                'company_name'      => 'required_if:type,==,business',
+                'company_registration_no' => 'required_if:type,==,business',
+                'comp_reg_cert'     => 'sometimes|image|mimes:jpeg,bmp,png|max:5120',
+                'company_logo'      => 'sometimes|image|mimes:jpeg,bmp,png|max:5120',
+                //end business
                 'introducer'        => 'required|exists:'.$table.',username',
                 'mobile_no'         => 'required',
                 'email'             => 'required',
                 'street'            => 'required',
+                'street2'           => '',
                 'city'              => 'required',
                 'postcode'          => 'required',
                 'state'             => 'required',
@@ -144,7 +154,33 @@ class RegisterController extends Controller
             
             if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode))
             {
+                if($request->hasFile('id_pic'))
+                {
+                    $ic_image        = $request->file('id_pic');
+                    $filename_mykad  = time() . '.' . $ic_image->getClientOriginalExtension();
+                    $saveImage       = Image::make($ic_image)->resize(400, 300)->save( public_path('/app/mykad/' . $filename_mykad ) );
+
+                    $request->request->add(['id_pic_image' => $filename_mykad]);
+                }
+
+                if($request->hasFile('comp_reg_cert'))
+                {
+                    $comp_cert      = $request->file('comp_reg_cert');
+                    $filename_cert  = time() . '.' . $comp_cert->getClientOriginalExtension();
+                    $save_cert      = Image::make($comp_cert)->resize(400, 300)->save( public_path('/app/comp_cert/' . $filename_cert ) );
+
+                    $request->request->add(['comp_reg_cert_img' => $filename_cert]);
+                }
                 
+                if($request->hasFile('company_logo'))
+                {
+                    $comp_logo      = $request->file('company_logo');
+                    $filename_logo  = time() . '.' . $comp_logo->getClientOriginalExtension();
+                    $save_logo      = Image::make($comp_logo)->resize(400, 300)->save( public_path('/app/comp_logo/' . $filename_logo ) );
+                    $request->request->add(['comp_logo_img' => $filename_logo]);
+                }
+     
+               
                 //$this->saveToPreregisterTable($request->all(), $rank->id);
                 $user = $this->saveMemberToDb($request->all(), $hashed_random_password,  $rank->id);
                 $id = Auth::guard('admin')->user()->id;

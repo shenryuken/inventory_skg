@@ -182,7 +182,7 @@ class ProfileController extends Controller
             if($saveImage){
 
                 $profile = $user->profile;
-                $profile->id_pic   = $filename;
+                $profile->id_pic     = $filename;
                 $profile->status_ic  = 'Waiting Approval';
                 $profile->save();
 
@@ -257,6 +257,50 @@ class ProfileController extends Controller
             $profile->save();
 
             return redirect()->back()->with('success', 'MyKad\Passport successfully validate: '.$request->status);
+        }
+            
+
+        return back()->with('fail', 'Action Failed! Please make sure your security code is correct.');
+        
+    }
+
+    public function showCompCertStatus($id)
+    {
+        $profile = Profile::find($id);
+        
+        if(!is_null($profile))
+        {
+            return view('profiles.show-comp_cert', compact('profile'));
+        }
+
+        return back()->with('fail', 'There is no profile found for '.$user->username);
+    }
+
+    public function updateCompCertStatus(Request $request)
+    {
+        $status = 'Pending';
+
+        switch ($request->cert_status) {
+            case 'Approve':
+                $status = 'Approved';
+                break;
+            case 'Reject':
+                $status = 'Not Valid';
+                break;
+            default:
+                $status = 'Pending';
+                break;
+        }
+
+        $hashedCode = Auth::guard('admin')->user()->security_code;
+
+        if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode))
+        {
+            $profile = Profile::find($request->id);
+            $profile->status_ic = $status;
+            $profile->save();
+
+            return redirect()->back()->with('success', 'Company registration certificate successfully validate: '.$request->cert_status);
         }
             
 
