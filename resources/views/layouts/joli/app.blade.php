@@ -139,6 +139,7 @@
         <!-- begin page level js -->
         @yield('footer_scripts')
         <!-- end page level js -->
+        
     <!-- END SCRIPTS -->         
     </body>
 </html>

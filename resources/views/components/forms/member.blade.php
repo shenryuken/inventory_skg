@@ -47,14 +47,14 @@
 		<div class="form-group">
 			<label class="col-md-3  control-label">Type *</label>
 			<div class="col-md-1">
-				<select name="type" class="form-control">
-					<option value="PERSONAL">PERSONAL</option>
-					<option value="BUSINESS">BUSINESS</option>
+				<select name="type" class="form-control" id="type">
+					<option value="personal" selected>PERSONAL</option>
+					<option value="business">BUSINESS</option>
 				</select>
 				{{-- <span class="help-block">This is sample of text field</span> --}}
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group " >
 			<label class="col-md-3  control-label">Rank *</label>
 			<div class="col-md-2">
 				
@@ -69,7 +69,8 @@
 				{{-- <span class="help-block">This is sample of text field</span> --}}
 			</div>
 		</div>
-		<div class="form-group">
+		<!--// Personal Info //-->
+		<div class="form-group personal" style="display:show">
 			<label class="col-md-3  control-label">Name *</label>
 			<div class="col-md-3">
 				
@@ -78,13 +79,14 @@
 				{{-- <span class="help-block">This is sample of text field</span> --}}
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group personal" style="display:show">
 			<label class="col-md-3 control-label">Date Of Birth *</label>
 			<div class="col-md-2">
-				<input class="form-control datepicker" id="dp-4" value="06-06-2014" data-date="06-06-2014" type="text" name="dob" data-date-format="dd-mm-yyyy" data-date-viewmode="months">
+				<input class="form-control" type="date" id="datepicker" name="dob">
 			</div>
 		</div>
-		<div class="form-group">
+		
+		<div class="form-group personal" style="display:show">
 			<label class="col-md-3  control-label">Gender *</label>
 			<div class="col-md-2">
 				
@@ -96,7 +98,7 @@
 				{{-- <span class="help-block">This is sample of text field</span> --}}
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group personal" style="display:show">
 			<label class="col-md-3 control-label">Marital Status *</label>
 			<div class="col-md-2">
 				
@@ -108,7 +110,7 @@
 				{{-- <span class="help-block">This is sample of text field</span> --}}
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group personal" style="display:show">
 			<label class="col-md-3  control-label">Race *</label>
 			<div class="col-md-2">
 				
@@ -122,7 +124,7 @@
 				{{-- <span class="help-block">This is sample of text field</span> --}}
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group personal" style="display:show">
 			<label class="col-md-3 control-label">ID Type *</label>
 			<div class="col-md-2">
 				
@@ -134,7 +136,7 @@
 				{{-- <span class="help-block">This is sample of text field</span> --}}
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group personal" style="display:show">
 			<label class="col-md-3  control-label">ID No *</label>
 			<div class="col-md-2 ">
 				
@@ -143,7 +145,7 @@
 				{{-- <span class="help-block">This is sample of text field</span> --}}
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group personal" style="display:show">
 			<label class="col-md-3 control-label">Upload ID</label>
 			<div class="col-md-3 ">
 				
@@ -151,7 +153,40 @@
 				
 			</div>
 		</div>
-		
+		<!--// END Personal Information //-->
+		<!--// Business Info //-->
+		<div class="form-group business" style="display:none">
+			<label class="col-md-3  control-label">Company Name *</label>
+			<div class="col-md-3">
+				
+				<input class="form-control" type="text" name="company_name" id="company_name" onchange="copyTextValue(this);" value="{{ old('company_name')}}">
+				
+				{{-- <span class="help-block">This is sample of text field</span> --}}
+			</div>
+		</div>
+		<div class="form-group business" style="display:none">
+			<label class="col-md-3  control-label">Registration No. *</label>
+			<div class="col-md-3">
+				
+				<input class="form-control" type="text" name="company_registration_no"  value="{{ old('company_registration_no')}}">
+				
+				{{-- <span class="help-block">This is sample of text field</span> --}}
+			</div>
+		</div>
+		<div class="form-group business" style="display:none">
+			<label class="col-md-3 control-label">Upload Company Registration Cert. *</label>
+			<div class="col-md-3 ">
+				<input type="file" multiple id="file-simple" name="comp_reg_cert" value="{{ old('comp_reg_cert') }}" />
+			</div>
+		</div>
+		<div class="form-group business" style="display:none">
+			<label class="col-md-3 control-label">Upload Company Logo</label>
+			<div class="col-md-3 ">
+				<input type="file" multiple id="file-simple" name="company_logo" value="{{ old('company_logo') }}" />
+			</div>
+		</div>
+		<!--// End Business Info //-->
+
 		<div class="form-group">
 			<label class="col-md-3  control-label">Introducer *</label>
 			<div class="col-md-2">
@@ -170,7 +205,7 @@
 		<button class="btn btn-default">Clear Form</button>
 		<button class="btn btn-primary pull-right">Submit</button>
 	</div> --}}
-	<!-- END Personal Information -->
+	
 	<!-- Contact Info -->
 	
 	<div class="panel-heading ui-draggable-handle">
@@ -216,10 +251,10 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-md-3 control-label">City *</label>
+			<label class="col-md-3  control-label">Street 2</label>
 			<div class="col-md-3">
 				
-				<input class="form-control" type="text" name="city" value="{{ old('city') }}">
+				<input class="form-control" type="text" name="street2" value="{{ old('street2') }}">
 				
 				{{-- <span class="help-block">This is sample of text field</span> --}}
 			</div>
@@ -233,7 +268,16 @@
 				{{-- <span class="help-block">This is sample of text field</span> --}}
 			</div>
 		</div>
-		
+		<div class="form-group">
+			<label class="col-md-3 control-label">City *</label>
+			<div class="col-md-3">
+				
+				<input class="form-control" type="text" name="city" value="{{ old('city') }}">
+				
+				{{-- <span class="help-block">This is sample of text field</span> --}}
+			</div>
+		</div>
+	
 		<div class="form-group">
 			<label class="col-md-3  control-label">State *</label>
 			<div class="col-md-3">
@@ -292,10 +336,10 @@
 		<div class="form-group">
 			<label class="col-md-3 control-label">Account Type *</label>
 			<div class="col-md-2">
-				<div class="input-group">
-					<input class="form-control" type="text" name="account_type" value="{{ old('account_type') }}">
-				</div>
-				{{-- <span class="help-block">This is sample of text field</span> --}}
+				<select name="account_type" class="form-control">
+					<option value="saving">Saving</option>
+					<option value="current">Current</option>
+				</select>
 			</div>
 		</div>
 	</div>

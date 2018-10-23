@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Baum\Node;
 use Illuminate\Support\Facades\Password;
-use Mail;
 use App\Mail\VerifyEmail;
 
 use App\User;
@@ -23,6 +22,7 @@ use App\Models\AgentPayment;
 
 use Validator;
 use Session;
+use Mail;
 
 class UserController extends Controller
 {
@@ -66,7 +66,9 @@ class UserController extends Controller
         $user           = Auth::user();
         $wallet         = $user->wallet;
         $total_sales    = AgentPayment::where('agent_id', $user->id)->sum('amount');
-        $uplines        = Referral::where('user_id', $user->id)->first()->getAncestors();
+        //$uplines        = Referral::where('user_id', $user->id)->first()->getAncestors();
+        $node           = Referral::where('user_id', $user->id)->first();
+        $uplines        = $node->parent()->get();
         $downlines      = Referral::where('user_id', $user->id)->first()->getImmediateDescendants();
      //    $evoucher   = $user->wallet ? $user->wallet->evoucher: 0;
      //    $root       = Referral::where('user_id', $user->id)->first();

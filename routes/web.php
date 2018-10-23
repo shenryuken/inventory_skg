@@ -96,6 +96,12 @@ Route::post('profile/upload-ic', 'ProfileController@postUploadIc')->name('upload
 Route::get('profile/ic-status-index', 'ProfileController@icStatusIndex');
 Route::get('profile/show-ic/{id}', 'ProfileController@showIcStatus');
 Route::put('profile/update-ic-status', 'ProfileController@updateIcStatus')->name('profile.update-ic-status');
+
+Route::get('profile/show-comp_cert/{id}', 'ProfileController@showCompCertStatus');
+Route::put('profile/update-comp_cert-status', 'ProfileController@updateCompCertStatus')->name('profile.update-comp_cert-status');
+
+
+
 Route::put('profile/{id}', 'ProfileController@update')->name('profile.update');
 Route::post('profile', 'ProfileController@store');
 

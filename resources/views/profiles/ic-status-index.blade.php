@@ -106,8 +106,10 @@
                                     {{ $user->profile->status_ic or 'Not Update'}}
                                 </td>
                                 <td>
-                                @if(!is_null($user->profile))
-                                    <a href="{{ url('profile/show-ic/'.$user->profile->id)}}">View</a>
+                                @if(!is_null($user->profile) && $user->type == 'personal' )
+                                    <a href="{{ url('profile/show-ic/'.$user->profile->id)}}">View Mykad</a>
+                                @elseif(!is_null($user->profile) && $user->type == 'business')
+                                    <a href="{{ url('profile/show-comp_cert/'.$user->profile->id)}}">View Company Registration Cert.</a>
                                 @else
                                     No Profile Found
                                 @endif

@@ -10,9 +10,8 @@
 <div class="row">
     <div class="col-md-12">
 
-        @component('components.notifications.errors')
-        @endcomponent
-
+        @include('components.notifications.errors')
+        
         @include('components.notifications.messages')
  
         <form class="form-horizontal" method="post" action="{{ route('update.change-password') }}">
