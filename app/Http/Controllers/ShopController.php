@@ -421,9 +421,6 @@ class ShopController extends Controller
     public function checkoutItems($agent_id = null,$deliveryType = null){
 
         // dd($delivery_type);
-
-        
-
         $sessionData = session('STORE','default');
         $addressData = [];
         if(Auth::guard('admin')->check()){
@@ -460,6 +457,12 @@ class ShopController extends Controller
                                             ->get()->toArray();
 
             // dd($addressData);
+            $totalPrice_em      = 0.00;
+            $totalPrice_wm      = 0.00;
+            $grandTotalPrice_em = 0.00;
+            $grandTotalPrice_wm = 0.00;
+            $shipping_fee_em    = 0.00;
+            $shipping_fee_wm    = 0.00;
             $totalPrice         = 0.00;
             $grandTotalPrice    = 0.00;
             $shipping_fee       = 0.00;
@@ -483,23 +486,31 @@ class ShopController extends Controller
 
                 if(Auth::guard('admin')->check()){
 
-                    $cartItems[$key]['price']       = $this->fn_calc_gst_price($price_staff);
-                    $total_price                    = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price']);
+                    $cartItems[$key]['price_staff'] = $this->fn_calc_gst_price($price_staff);
+                    $total_price                    = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price_staff']);
                     $cartItems[$key]['total_price'] = $total_price;
+
+                    $totalPrice = $totalPrice + (float)str_replace(",", "", $cartItems[$key]['total_price']);
+                    $totalPrice = round($totalPrice,2);
                 }
                 else{
 
-                    if(strtolower($addressData->state) == strtolower("Sabah") || strtolower($addressData->state) ==  strtolower("Sarawak")){
+                    // if(strtolower($addressData->state) == strtolower("Sabah") || strtolower($addressData->state) ==  strtolower("Sarawak")){
 
-                        $cartItems[$key]['price']       = $this->fn_calc_gst_price($price_em);
-                        $total_price                    = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price']);
-                        $cartItems[$key]['total_price'] = $total_price;
-                    }
-                    else{
-                        $cartItems[$key]['price']       = $this->fn_calc_gst_price($price_wm);
-                        $total_price                    = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price']);
-                        $cartItems[$key]['total_price'] = $total_price;
-                    }
+                        $cartItems[$key]['price_em']       = $this->fn_calc_gst_price($price_em);
+                        $total_price_em                    = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price_em']);
+                        $cartItems[$key]['total_price_em'] = $total_price_em;
+                    // }
+                    // else{
+                        $cartItems[$key]['price_wm']       = $this->fn_calc_gst_price($price_wm);
+                        $total_price_wm                    = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price_wm']);
+                        $cartItems[$key]['total_price_wm'] = $total_price_wm;
+                    // }
+
+                    $totalPrice_em = $totalPrice_em + (float)str_replace(",", "", $cartItems[$key]['total_price_em']);
+                    $totalPrice_wm = $totalPrice_wm + (float)str_replace(",", "", $cartItems[$key]['total_price_wm']);
+                    $totalPrice_em = round($totalPrice_em,2);
+                    $totalPrice_wm = round($totalPrice_wm,2);
                 }
 
                 $prdimage = Product_image::select('type','description','file_name','path')
@@ -507,41 +518,8 @@ class ShopController extends Controller
                                         ->orderBy('status','desc')
                                         ->first();
                 // dd($prdimage['path']);
-
                 $cartItems[$key]['image'] = ($prdimage['path'] == null ? '' : $prdimage['path']);
-
-                $totalPrice = $totalPrice + (float)str_replace(",", "", $cartItems[$key]['total_price']);
-                $totalPrice = round($totalPrice,2);
-
             }
-
-            // dd($cartItems,$prdimage,$totalPrice);
-            //shipping fee
-
-            if($totalPrice != 0.00){
-                if($totalPrice < 300.00){
-
-                    $shipping_fee = number_format(10.00,2);
-                }
-                else{
-
-                    $shipping_fee = number_format(0.00,2);
-                }
-            }
-            else{
-
-                 $shipping_fee = number_format(0.00,2);
-            }
-
-            //total price
-            $totalPrice = round($totalPrice,2);
-            //gandtotal price
-            $grandTotalPrice = (float)$totalPrice + (float)$shipping_fee;
-            
-            $grandTotalPrice = round($grandTotalPrice,2);
-
-            $totalPrice      = number_format($totalPrice,2);
-            $grandTotalPrice = number_format($grandTotalPrice,2);
 
             if($addressData != null){
                 if($deliveryType == "01"){
@@ -580,17 +558,111 @@ class ShopController extends Controller
                         'code'      => ""
                     ];
             }
+            // dd($cartItems,$prdimage,$totalPrice);
+            //shipping fee
+            if(Auth::guard('admin')->check()){
 
-            $returnData = [
+                if($totalPrice != 0.00){
+                    if($totalPrice < 300.00){
 
-                'agent_id'          => $agent_id,
-                'grandTotalPrice'   => $grandTotalPrice,
-                'totalPrice'        => $totalPrice,
-                'shippingPrice'     => $shipping_fee,
-                'address'           => $address,
-                'deliveryType'      =>$deliveryType
-            ];
+                        $shipping_fee = number_format(10.00,2);
+                    }
+                    else{
 
+                        $shipping_fee = number_format(0.00,2);
+                    }
+                }
+                else{
+
+                     $shipping_fee = number_format(0.00,2);
+                }
+
+                //total price
+                $totalPrice = round($totalPrice,2);
+                //gandtotal price
+                $grandTotalPrice = (float)$totalPrice + (float)$shipping_fee;
+                
+                $grandTotalPrice = round($grandTotalPrice,2);
+
+                $totalPrice      = number_format($totalPrice,2);
+                $grandTotalPrice = number_format($grandTotalPrice,2);
+
+                $returnData = [
+
+                    'agent_id'          => $agent_id,
+                    'grandTotalPrice'   => $grandTotalPrice,
+                    'totalPrice'        => $totalPrice,
+                    'shipping_fee'      => $shipping_fee,
+                    'address'           => $address,
+                    'deliveryType'      =>$deliveryType
+                ];
+            }
+            else if(Auth::guard('web')->check()){
+
+                if($totalPrice_em != 0.00){
+                    if($totalPrice_em < 300.00){
+
+                        $shipping_fee_em = number_format(10.00,2);
+                    }
+                    else{
+
+                        $shipping_fee_em = number_format(0.00,2);
+                    }
+                }
+                else{
+
+                     $shipping_fee_em = number_format(0.00,2);
+                }
+
+                if($totalPrice_wm != 0.00){
+                    if($totalPrice_wm < 300.00){
+
+                        $shipping_fee_wm = number_format(10.00,2);
+                    }
+                    else{
+
+                        $shipping_fee_wm = number_format(0.00,2);
+                    }
+                }
+                else{
+
+                     $shipping_fee_wm = number_format(0.00,2);
+                }
+
+                //total price
+                $totalPrice_em = round($totalPrice_em,2);
+                $totalPrice_wm = round($totalPrice_wm,2);
+                //gandtotal price
+                $grandTotalPrice_em = (float)$totalPrice_em + (float)$shipping_fee_em;
+                $grandTotalPrice_wm = (float)$totalPrice_wm + (float)$shipping_fee_wm;
+                
+                $grandTotalPrice_em = round($grandTotalPrice_em,2);
+                $grandTotalPrice_wm = round($grandTotalPrice_wm,2);
+
+                $totalPrice_em      = number_format($totalPrice_em,2);
+                $grandTotalPrice_em = number_format($grandTotalPrice_em,2);
+                $totalPrice_wm      = number_format($totalPrice_wm,2);
+                $grandTotalPrice_wm = number_format($grandTotalPrice_wm,2);
+
+                
+
+                $returnData = [
+
+                    'agent_id'             => $agent_id,
+                    'grandTotalPrice_em'   => $grandTotalPrice_em,
+                    'totalPrice_em'        => $totalPrice_em,
+                    'grandTotalPrice_wm'   => $grandTotalPrice_wm,
+                    'totalPrice_wm'        => $totalPrice_wm,
+                    'shipping_fee_em'      => $shipping_fee_em,
+                    'shipping_fee_wm'      => $shipping_fee_wm,
+                    'address'              => $address,
+                    'deliveryType'         => $deliveryType,
+                    'state'                => $addressData->state,
+                    // 'shipping_fee'         => 0,
+                    // 'totalPrice'           => 0,
+                    // 'grandTotalPrice'      => 0,  
+                ];
+            }
 
             $return['message']  = "succssfuly retrived";
             $return['status']   = "01";
@@ -662,6 +734,7 @@ class ShopController extends Controller
                     'code'      => $value['applicable_id'],
                     'name'      => $value->name,
                     'address'   => $value['street1'].",".$value['street2'].",".$value['poscode'].",".$value['city'].",".$value['state'].",".$value['country'],
+                    'state' => $value['state']
                 );
 
                 $address[] = $addressData;
@@ -890,8 +963,8 @@ class ShopController extends Controller
             $agent_id       = (!empty($request->get('agent_id')) ? $request->get('agent_id') : '');
             $shipping_id    = (!empty($request->get('shipping_id')) ? $request->get('shipping_id') : '');
             $billing_id     = (!empty($request->get('billing_id')) ? $request->get('billing_id') : '');
-            $total_price    = (!empty($request->get('total_price')) ? $request->get('total_price') : '');
-            $shipping_fee   = (!empty($request->get('shipping_fee')) ? $request->get('shipping_fee') : '');
+            // $total_price    = (!empty($request->get('total_price')) ? $request->get('total_price') : '');
+            // $shipping_fee   = (!empty($request->get('shipping_fee')) ? $request->get('shipping_fee') : '');
             $delivery_type  = (!empty($request->get('delivery_type')) ? $request->get('delivery_type') : '');
             $name           = (!empty($request->get('name')) ? $request->get('name') : '');
             $contect_no     = (!empty($request->get('contect_no')) ? $request->get('contect_no') : '');
@@ -938,6 +1011,8 @@ class ShopController extends Controller
                 // dd($order_no);
                 $order_item             = [];
                 $total_product_quantity = 0;
+                $total_price            = 0;
+                $shipping_fee           = 0;
                 $date                   = new \DateTime();
 
                 foreach($cartItems as $k => $v){
@@ -971,8 +1046,20 @@ class ShopController extends Controller
                     $order_item[] = $item;
 
                     $total_product_quantity = $total_product_quantity + $v->total_quantity;
+                    $total_price += (float)$price;
                 }
 
+                if($total_price < 300.00){
+
+                    $shipping_fee = number_format(10.00,2);
+                }
+                else{
+
+                    $shipping_fee = number_format(0.00,2);
+                }
+
+                $total_price = number_format($total_price,2);
+                
                 $total_price = str_replace(",", "", $total_price);
 
                 $orderHdr = [

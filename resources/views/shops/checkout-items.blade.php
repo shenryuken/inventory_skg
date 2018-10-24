@@ -66,8 +66,23 @@
                                                 <td class="col-md-2 quantity-item" style="text-align: center">
                                                     <p>{{ $value['total_quantity'] }}</p>
                                                 </td>
-                                                <td class="col-sm-1 col-md-1"><strong>RM{{ $value['price'] }}</strong></td>
+                                                @if(Auth::guard('admin')->check())
+                                                <td class="col-sm-1 col-md-1"><strong>RM{{ $value['price_staff'] }}</strong></td>
                                                 <td class="col-sm-1 col-md-1"><strong>RM{{ $value['total_price'] }}</strong></td>
+                                                @else
+                                                <td class="col-sm-1 col-md-1" id="price-em">
+                                                    <strong>RM{{ $value['price_em'] }}</strong>
+                                                </td>
+                                                <td class="col-sm-1 col-md-1" id="total-price-em">
+                                                    <strong>RM{{ $value['total_price_em'] }}</strong>
+                                                </td>
+                                                <td class="col-sm-1 col-md-1" id="price-wm">
+                                                    <strong>RM{{ $value['price_wm'] }}</strong>
+                                                </td>
+                                                <td class="col-sm-1 col-md-1" id="total-price-wm">
+                                                    <strong>RM{{ $value['total_price_wm'] }}</strong>
+                                                </td>
+                                                @endif
                                                 <td hidden="">
                                                     <button type="button" class="btn btn-danger remove-item">
                                                         <i class="glyphicon glyphicon-trash"></i>Remove
@@ -132,18 +147,26 @@
                                         <tbody>
                                             <tr>
                                                 <td><h5>Shipping Fee</h5></td>
-                                                <td><h5>RM{{ $returnData['shippingPrice'] }}</h5></td>
+                                                <td id="shipping-fee">
+                                                    <h5>RM{{ isset($returnData['shipping_fee']) ? $returnData['shipping_fee'] : ''}}</h5>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td><h5>Total Price</h5></td>
-                                                <td><h5>RM{{ $returnData['totalPrice'] }}</h5></td>
+                                                <td id="total-price">
+                                                    <h5>RM{{ isset($returnData['totalPrice']) ? $returnData['totalPrice'] : '' }}</h5>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2"><hr></td>
                                             </tr>
                                             <tr>
                                                 <td><h4>Grand Total</h4></td>
-                                                <td><h4>RM{{ $returnData['grandTotalPrice'] }}</h4></td>
+                                                <td id="grand-total-price">
+                                                    <h4>
+                                                    RM{{ isset($returnData['grandTotalPrice']) ? $returnData['grandTotalPrice'] : ''}}
+                                                    </h4>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td><h4>Amount</h4></td>
@@ -175,8 +198,7 @@
     </div>
 </div>
 
-@endsection
-@section('footer_scripts')
+
 <!-- Modal -->
 <div class="modal fade" id="ModalAddress" role="dialog">
     <div class="modal-dialog">
@@ -208,6 +230,8 @@
     </div>
 </div>
 
+@endsection
+@section('footer_scripts')
 <script type="text/javascript">
 
     var gv_address = [];
@@ -226,94 +250,101 @@
     
     $(document).ready(function(){
 
+        @if(Auth::guard('web')->check())
+        var state = "{{ isset($returnData['state']) ? $returnData['state'] : '' }}";
+        if(state != ""){
+            fn_get_price_state(state);
+        }
+        @endif
+
         $(window).resize(function() {
             /* Same as before */ 
         }).resize();
 
-    $(".createButton").click(function(){
+        $(".createButton").click(function(){
 
-        $("#CreateAddress").modal();
-        $('#ModalAddress .close').click();
+            $("#CreateAddress").modal();
+            $('#ModalAddress .close').click();
 
+        });
+
+        $(".editbutton").click(function(){
+
+            // var agent_id = "{{ $returnData['agent_id'] }}";
+
+            gv_type = "";
+            gv_type = $(this).data('code');
+
+            if(gv_type == "shipping"){
+                $('a.billings-same').hide();
+            }
+            else if(gv_type == "billing"){
+                $('.billings-same').show();
+            }
+
+            fn_get_address(agent_id);
+            // var data = {
+            //     _token : "{!! csrf_token() !!}",
+            //     agent_id : agent_id
+            // };
+
+            // $.ajax({
+
+            //     url : "/agent/get_address",
+            //     dataType : "json",
+            //     type : "GET",
+            //     data: data,
+            //     contentType : "application/json"
+
+            // }).done(function(response,jqXHR, textStatus){
+            //     // console.log(response)
+            //     gv_address = response.address;
+            //     if(response.return.status == "01"){
+            //         var tag = "";
+            //         for(var i=0;i<response.address.length;i++){
+
+            //             tag += "<div class='address-field'>";
+            //             tag += "<p>"+(i+1)+"#</p>";
+            //             tag += "<input type='hidden' class='address-id' value="+ response.address[i].id +">";
+            //             tag += "<input type='hidden' class='address-code' value="+ response.address[i].address_code +">";
+            //             tag += "<p class='name'>"+response.address[i].name+"</p>";
+            //             tag += "<p class='address'>"+response.address[i].address+"</p>";
+            //             tag += "</diV>";
+                       
+            //         }
+            //          $('div.address-row').html(tag);
+            //     }
+
+            // }).fail(function(){
+
+            // });
+
+            setTimeout(function(){
+                $("#ModalAddress").modal();
+            },500);
+            
+        });
+
+
+        $('.poscode').keyup(function() {
+            var value = $(this).val();
+            value = value.replace(/[^\d]/g, '');
+            $(this).val(value);
+        });
     });
-
-    $(".editbutton").click(function(){
-
-        // var agent_id = "{{ $returnData['agent_id'] }}";
-
-        gv_type = "";
-        gv_type = $(this).data('code');
-
-        if(gv_type == "shipping"){
-            $('a.billings-same').hide();
-        }
-        else if(gv_type == "billing"){
-            $('.billings-same').show();
-        }
-
-        fn_get_address(agent_id);
-        // var data = {
-        //     _token : "{!! csrf_token() !!}",
-        //     agent_id : agent_id
-        // };
-
-        // $.ajax({
-
-        //     url : "/agent/get_address",
-        //     dataType : "json",
-        //     type : "GET",
-        //     data: data,
-        //     contentType : "application/json"
-
-        // }).done(function(response,jqXHR, textStatus){
-        //     // console.log(response)
-        //     gv_address = response.address;
-        //     if(response.return.status == "01"){
-        //         var tag = "";
-        //         for(var i=0;i<response.address.length;i++){
-
-        //             tag += "<div class='address-field'>";
-        //             tag += "<p>"+(i+1)+"#</p>";
-        //             tag += "<input type='hidden' class='address-id' value="+ response.address[i].id +">";
-        //             tag += "<input type='hidden' class='address-code' value="+ response.address[i].address_code +">";
-        //             tag += "<p class='name'>"+response.address[i].name+"</p>";
-        //             tag += "<p class='address'>"+response.address[i].address+"</p>";
-        //             tag += "</diV>";
-                   
-        //         }
-        //          $('div.address-row').html(tag);
-        //     }
-
-        // }).fail(function(){
-
-        // });
-
-        setTimeout(function(){
-            $("#ModalAddress").modal();
-        },500);
-        
-    });
-
-
-    $('.poscode').keyup(function() {
-        var value = $(this).val();
-        value = value.replace(/[^\d]/g, '');
-        $(this).val(value);
-    });
-});
     
     $('.place-order-item').click(function(){
 
         var agent_id = "{{ $returnData['agent_id'] }}";
         var shipping_id = $('.shipping-id').val();
         var billing_id = $('.billing-id').val();
-        var total_price = "{{ $returnData['grandTotalPrice'] }}";
-        var shipping_fee = "{{ $returnData['shippingPrice'] }}";
         var delivery_type = "{{ $returnData['deliveryType'] }}";
         var name = $('#contect-name').val();
         var contect_no = $('#contect-no').val();
 
-        console.log(agent_id,shipping_id, billing_id,total_price,shipping_fee,name,contect_no);
+        // console.log(total_price,shipping_fee)
+
+        // console.log(agent_id,shipping_id, billing_id,total_price,shipping_fee,name,contect_no);
 
          var data = {
 
@@ -321,8 +352,6 @@
             agent_id   :  agent_id,
             shipping_id : shipping_id,
             billing_id : billing_id,
-            total_price : total_price,
-            shipping_fee : shipping_fee,
             delivery_type : delivery_type,
             name : name,
             contect_no : contect_no
@@ -373,7 +402,6 @@
         console.log($(this).find('.address-id').val())
         console.log($(this).find('.address-code').val())
 
-
         var address_id = $(this).find('.address-id').val();
         var address_code = $(this).find('.address-code').val();
 
@@ -386,6 +414,10 @@
                     $('.shipping-code').val(gv_address[i].code);
                     $('.shipping-name').text(gv_address[i].name)
                     $('.shipping-address').text(gv_address[i].address)
+
+                    @if(Auth::guard('web')->check())
+                        fn_get_price_state(gv_address[i].state);
+                    @endif
                 }
                 else if(gv_type == "billing"){
 
@@ -521,6 +553,50 @@
         }).fail(function(){
 
         });
+    }
+
+    function fn_get_price_state(state){
+
+        var item = $('.item-body').children('tr');
+
+        if(state.toLowerCase() == "sabah" || state.toLowerCase() == "sarawak"){
+
+            for(var i=0;i<item.length;i++){
+
+                console.log(item.find('tr').eq(i))
+                item.eq(i).children('#price-em').show();
+                item.eq(i).children('#total-price-em').show();
+
+                item.eq(i).children('#price-wm').hide();
+                item.eq(i).children('#total-price-wm').hide();
+            }
+
+            var shipping = "{{ isset($returnData['shipping_fee_em']) ? $returnData['shipping_fee_em'] : '' }}";
+            var total_price = "{{ isset($returnData['totalPrice_em']) ? $returnData['totalPrice_em'] : '' }}";
+            var grand_total_price = "{{ isset($returnData['grandTotalPrice_em']) ? $returnData['grandTotalPrice_em'] : '' }}";
+
+            $('#shipping-fee').html("<h5>RM"+shipping+"</h5>");
+            $('#total-price').html("<h5>RM"+total_price+"</h5>");
+            $('#grand-total-price').html("<h4>RM"+grand_total_price+"</h4>");
+        }
+        else{
+
+            for(var i=0;i<item.length;i++){
+                item.eq(i).children('#price-em').hide();
+                item.eq(i).children('#total-price-em').hide();
+
+                item.eq(i).children('#price-wm').show();
+                item.eq(i).children('#total-price-wm').show();
+            }
+
+            var shipping = "{{ isset($returnData['shipping_fee_wm']) ? $returnData['shipping_fee_wm'] : '' }}";
+            var total_price = "{{ isset($returnData['totalPrice_wm']) ? $returnData['totalPrice_wm'] : '' }}";
+            var grand_total_price = "{{ isset($returnData['grandTotalPrice_wm']) ? $returnData['grandTotalPrice_wm'] : '' }}";
+
+            $('#shipping-fee').html("<h5>RM"+shipping+"</h5>");
+            $('#total-price').html("<h5>RM"+total_price+"</h5>");
+            $('#grand-total-price').html("<h4>RM"+grand_total_price+"</h4>");
+        }
     }
 
 </script>

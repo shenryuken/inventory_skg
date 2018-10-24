@@ -82,7 +82,7 @@
                                             </li> -->
                                         </ul>
                                         
-                                        <div class="stepContainer" style="height: 54px;" hidden>
+                                        <div class="stepContainer" style="height: 54px; display: none;">
                                             <div id="step-1" class="content" style="display: none;">   
                                                 <h4>Step 1 Content</h4>
                                                 <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>
@@ -100,7 +100,7 @@
                                                 <p>Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>
                                             </div>
                                         </div>
-                                        <div class="actionBar" hidden>
+                                        <div class="actionBar" style="display: none;">
                                             <div class="loader">Loading</div>
                                             <a href="#" class="btn btn-primary pull-right disabled">Finish</a>
                                             <a href="#" class="btn btn-default pull-right">Next</a>
