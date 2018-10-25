@@ -149,8 +149,9 @@ class RegisterController extends Controller
                 $hashedCode = Auth::guard('web')->user()->security_code;
             }
 
-            $random_password        = str_random(8);
-            $hashed_random_password = Hash::make($random_password);
+            // $random_password        = str_random(8);
+            // $hashed_random_password = Hash::make($random_password);
+            $defaultPassword = $this->defaultPassword($request->id_no);
             
             if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode))
             {
@@ -182,20 +183,20 @@ class RegisterController extends Controller
      
                
                 //$this->saveToPreregisterTable($request->all(), $rank->id);
-                $user = $this->saveMemberToDb($request->all(), $hashed_random_password,  $rank->id);
+                $user = $this->saveMemberToDb($request->all(), $defaultPassword['hashed_password'],  $rank->id);
                 $id = Auth::guard('admin')->user()->id;
 
-                Mail::to($user->email)->send(new VerifyEmail($user, $random_password));
+                Mail::to($user->email)->send(new VerifyEmail($user, $$defaultPassword['password']));
                 //return view('admin.firstTimePurchaseRegistration', compact('user'));
                 //return redirect()->route('firstTimePurchaseRegistration', compact('user', 'id'));
                 return redirect('registers/member')->with('status', 'Activation code have been sent to this user - '.$user->email );
             }
             elseif (Auth::guard('web')->check() && Hash::check($request->security_code, $hashedCode)) 
             {    
-                $user = $this->saveMemberToDb($request->all(), $hashed_random_password, $rank->id);
+                $user = $this->saveMemberToDb($request->all(), $defaultPassword['hashed_password'], $rank->id);
                 // $id = Auth::guard('web')->user()->id;
 
-                Mail::to($user->email)->send(new VerifyEmail($user, $random_password));
+                Mail::to($user->email)->send(new VerifyEmail($user, $defaultPassword['password']));
 
                 // return redirect()->route('firstTimePurchaseRegistration', compact('user', 'id'));
                 return redirect('registers/member')->with('status', 'Activation code have been sent to this user - '.$user->email );

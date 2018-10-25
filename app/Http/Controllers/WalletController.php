@@ -86,7 +86,7 @@ class WalletController extends Controller
     		$sender   = Auth::guard('admin')->user();
     		$hashedCode = Auth::guard('admin')->user()->security_code;
     	}
-    	elseif(Auth::guard('admin')->check())
+    	elseif(Auth::guard('web')->check())
     	{
     		$sender   = Auth::guard('web')->user();
     		$hashedCode = Auth::guard('web')->user()->security_code;
@@ -100,7 +100,7 @@ class WalletController extends Controller
     		$sender_wallet 		= Wallet::where('user_id', Auth::guard('web')->user()->id)->first();
 		    $receiver_wallet 	= Wallet::where('user_id', $receiver->id)->first(); 
 
-    		if($request->point_to_transfer <= $sender_wallet->p_wallet)
+    		if($request->point_to_transfer <= $sender_wallet->p_wallet && $request->point_to_transfer > 0)
     		{
     			$sender_wallet 		= Wallet::where('user_id', $receiver->id)->first();
 		    	$receiver_wallet 	= Wallet::where('user_id', $receiver->id)->first();
@@ -111,17 +111,23 @@ class WalletController extends Controller
 		    	$receiver_wallet->p_wallet 	= $receiver_wallet->p_wallet + $request->point_to_transfer;
 		    	$receiver_wallet->save();
 
-		    	$point_transactions = new PointTransactions;
-		    	$point_transactions->from_user_id = $sender->id;
+		    	$point_transactions = new PointTransaction;
+		    	$point_transactions->date_time_sent= Carbon::now();
+		    	$point_transactions->point_transactionable_type = 'App\User';
+		    	$point_transactions->point_transactionable_id   = $sender->id;
 		    	$point_transactions->to_user_id   = $receiver->id;
 		    	$point_transactions->status       = "Success";
 		    	$point_transactions->save();
 
 		    	Session::flash('success', 'Successfully transfer '.$request->point_to_transfer.' points to '.$receiver->username); 
     		}
-    		elseif ($request->point_to_transfer > $sender_wallet->p_wallet ) 
+    		elseif ($request->point_to_transfer > $sender_wallet->p_wallet) 
     		{
     			Session::flash('fail', 'Failed to transfer '.$request->point_to_transfer.' points to '.$receiver->username.'. Insufficient point!');
+    		}
+    		elseif($request->point_to_transfer > 0)
+    		{
+    			Session::flash('fail', 'This transaction not valid. Point to transfer must be greater than 0 and less than '. $sender_wallet->p_wallet);
     		}
     	}
     	elseif(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode))
@@ -134,7 +140,8 @@ class WalletController extends Controller
 	    	if($receiver_wallet){
 	    		$point_transactions = new PointTransaction;
 	    		$point_transactions->date_time_sent= Carbon::now();
-		    	$point_transactions->from_admin_id = $sender->id;
+	    		$point_transactions->point_transactionable_type = 'App\Admin';
+		    	$point_transactions->point_transactionable_id   = $sender->id;
 		    	$point_transactions->to_user_id    = $receiver->id;
 		    	$point_transactions->point 		   = $request->point_to_transfer;
 		    	$point_transactions->status        = "Success";
@@ -146,7 +153,8 @@ class WalletController extends Controller
 	    	{
 	    		$point_transactions = new PointTransaction;
 	    		$point_transactions->date_time_sent= Carbon::now();
-		    	$point_transactions->from_admin_id = $sender->id;
+		    	$point_transactions->point_transactionable_type = 'App\Admin';
+		    	$point_transactions->point_transactionable_id   = $sender->id;
 		    	$point_transactions->to_user_id    = $receiver->id;
 		    	$point_transactions->point 		   = $request->point_to_transfer;
 		    	$point_transactions->status        = "Failed";
@@ -158,5 +166,19 @@ class WalletController extends Controller
     	}
 
     	return view('vault.transfer');
+    }
+
+    public function transferPointHistory()
+    {
+    	if(Auth::guard('admin')->check())
+    	{
+    		$pointTransactions = PointTransaction::all();
+    	}elseif (Auth::guard('web')->check()) {
+    		$pointTransactions = PointTransaction::where('to_user_id', Auth::user()->id)
+    												->orWhere('point_transactionable_id', Auth::user()->id)
+    												->get();
+    	}
+    	
+    	return view('vault.transfer-point-history', compact('pointTransactions'));
     }
 }

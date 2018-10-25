@@ -25,7 +25,7 @@ use Auth;
 
 trait RegisterMember
 {
-    public function saveMemberToDb($newUser, $hashed_random_password, $rank_id)
+    public function saveMemberToDb($newUser, $defaultPassword, $rank_id)
     {
         if(Auth::guard('web')->check())
         {
@@ -35,14 +35,15 @@ trait RegisterMember
         }
 
         $user = new User;
+        $user->type         = $newUser['type'];
         $user->username     = $newUser['username'];
         //$user->password     = $newUser->password;
-        $user->password     = $hashed_random_password;
+        $user->password     = $defaultPassword;
         $user->email        = $newUser['email'];
         $user->mobile_no    = $newUser['mobile_no'];
         $user->introducer   = $newUser['introducer'];
         $user->rank_id      = $rank_id;
-        $user->security_code = $hashed_random_password;
+        $user->security_code = $defaultPassword;
         
         $profile = new Profile;
         
@@ -305,6 +306,19 @@ trait RegisterMember
         }
 
         return $rank_id;
+    }
+
+    public function defaultPassword($id_no)
+    {
+        $last_six_id_no = substr("$id_no", -6);
+        $password = Hash::make($last_six_id_no);
+
+        $data = [
+            'password'          => $last_six_id_no,
+            'hashed_password'   => $password
+        ];
+
+        return $data;
     }
 
 }

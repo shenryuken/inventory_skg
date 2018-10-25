@@ -234,9 +234,9 @@ class ProfileController extends Controller
 
     public function updateIcStatus(Request $request)
     {
-        $status = 'Pending';
+        $status = $request->status;
 
-        switch ($request->status) {
+        switch ($status) {
             case 'Approve':
                 $status = 'Approved';
                 break;
@@ -278,9 +278,9 @@ class ProfileController extends Controller
 
     public function updateCompCertStatus(Request $request)
     {
-        $status = 'Pending';
+        $status = $request->status;
 
-        switch ($request->cert_status) {
+        switch ($status) {
             case 'Approve':
                 $status = 'Approved';
                 break;
@@ -297,7 +297,7 @@ class ProfileController extends Controller
         if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode))
         {
             $profile = Profile::find($request->id);
-            $profile->status_ic = $status;
+            $profile->cert_status = $status;
             $profile->save();
 
             return redirect()->back()->with('success', 'Company registration certificate successfully validate: '.$request->cert_status);

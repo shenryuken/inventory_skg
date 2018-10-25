@@ -13,5 +13,5 @@ class Profile extends Model
     public function profileable()
     {
         return $this->morphTo();
-    }
+    }  
 }

@@ -86,4 +86,9 @@ class Admin extends Authenticatable
     //==========================================================
     // END ACL
     //==========================================================
+
+    public function pointTransfers()
+    {
+        return $this->morphMany('App\Models\PointTransfer', 'point_transferable');
+    }
 }

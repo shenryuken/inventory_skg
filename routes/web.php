@@ -279,6 +279,7 @@ Route::get('orders', 'OrderController@index');
 Route::get('vault/my-wallet', 'WalletController@mywallet');
 Route::get('vault/transfer-point', 'WalletController@transferPoint');
 Route::post('vault/transfer-point', 'WalletController@postTransferPoint');
+Route::get('vault/transfer-point-history', 'WalletController@transferPointHistory');
 /*
 ======================================================================================
  End Wallet  
