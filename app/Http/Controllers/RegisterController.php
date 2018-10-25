@@ -142,7 +142,7 @@ class RegisterController extends Controller
                 'security_code'         => 'required',
             ]);
 
-            if($table == "admins")
+            if(Auth::guard('admin')->check())
             {
                 $hashedCode = Auth::guard('admin')->user()->security_code;
             } else {
@@ -186,7 +186,7 @@ class RegisterController extends Controller
                 $user = $this->saveMemberToDb($request->all(), $defaultPassword['hashed_password'],  $rank->id);
                 $id = Auth::guard('admin')->user()->id;
 
-                Mail::to($user->email)->send(new VerifyEmail($user, $$defaultPassword['password']));
+                Mail::to($user->email)->send(new VerifyEmail($user, $defaultPassword['password']));
                 //return view('admin.firstTimePurchaseRegistration', compact('user'));
                 //return redirect()->route('firstTimePurchaseRegistration', compact('user', 'id'));
                 return redirect('registers/member')->with('status', 'Activation code have been sent to this user - '.$user->email );
