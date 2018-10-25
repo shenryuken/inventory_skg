@@ -107,4 +107,9 @@ class User extends Authenticatable
     {
         return $this->morphMany('App\Models\Address', 'applicable');
     }
+
+    public function pointTransfers()
+    {
+        return $this->morphMany('App\Models\PointTransaction', 'point_transactionable');
+    }
 }

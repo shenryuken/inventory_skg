@@ -57,8 +57,15 @@
     <li class="xn-openable {{ Request::is('vault/*') ? 'active' : '' }}">
         <a href="#"><span class="fa fa-table"></span> <span class="xn-text">Vault</span></a>
         <ul>                            
-            <li class="{{ Request::is('vault/my-wallet') ? 'active' : '' }}"><a href="{{ url('vault/my-wallet')}}">My Wallet</a></li>  
-            <li class="{{ Request::is('vault/transfer') ? 'active' : '' }}"><a href="{{ url('vault/transfer-point')}}">Transfer Point</a></li>         
+            <li class="{{ Request::is('vault/my-wallet') ? 'active' : '' }}">
+                <a href="{{ url('vault/my-wallet')}}">My Wallet</a>
+            </li>  
+            <li class="{{ Request::is('vault/transfer') ? 'active' : '' }}">
+                <a href="{{ url('vault/transfer-point')}}">Transfer Point</a>
+            </li>   
+            <li class="{{ Request::is('vault/transfer') ? 'active' : '' }}">
+                <a href="{{ url('vault/transfer-point-history')}}">Transfer Point History</a>
+            </li>      
         </ul>
     </li> 
     <li class="xn-openable">
