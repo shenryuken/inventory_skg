@@ -28,6 +28,7 @@ $page_title = 'Upload MyKad\Passport';
 
     @endif
 	<div class="col-md-12">
+        @if(is_null($user->profile->id_pic))
 		<form enctype="multipart/form-data" class="form-horizontal" method="post" action="{{ route('upload.ic.post')}}">
 		<div class="panel panel-default">
 			<div class="panel-body">
@@ -46,13 +47,27 @@ $page_title = 'Upload MyKad\Passport';
                             <input type="password" name="security_code"/>
                         </div>
                     </div>
+
+
 				
 			</div>
 			<div class="panel-footer">
 				<button type="submit" class="btn btn-info pull-right" v-on:click="click" :disabled="clicked">Update</button>
 			</div>
 		</div>
+        
 		</form>
+        @else
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-md-12 col-lg-12 " align="center"> <img alt="User Pic" src="{{ asset('app/mykad/'.$user->profile->id_pic) }}" class="img-responsive">
+                </div>
+            </div>
+            <div class="panel-footer">
+                <a class="btn btn-info pull-right" href="{{URL::previous()}}">Back</a>
+            </div>
+        </div>
+        @endif
 		
 	</div>
 </div>

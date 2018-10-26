@@ -154,8 +154,15 @@ class ProfileController extends Controller
 
     public function uploadIc()
     {
-        $user = Auth::user();
-        return view('profiles.upload-ic', compact('user'));
+        $user   = Auth::user();
+        $image  = '';
+
+        if(!is_null($user->profile->id_pic) )
+        {
+            $image = $user->profile->id_pic;
+        }
+        
+        return view('profiles.upload-ic', compact('user','image'));
     }
 
     public function postUploadIc(Request $request)

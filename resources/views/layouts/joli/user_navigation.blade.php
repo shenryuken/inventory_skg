@@ -35,12 +35,23 @@
     <li class="xn-openable {{ Request::is('registers/*') ? 'active' : '' }}">
         <a href="tables.html"><span class="fa fa-table"></span> <span class="xn-text">My Profiles</span></a>
         <ul>        
+            <li class="{{ Request::is('user/profile/'.Auth::user()->profile->id) ? 'active' : '' }}">
+                <a href="{{ url('user/profile/'.Auth::user()->id)}}">Profile</a>
+            </li>
             @if(Auth::user()->verified == 1)                    
-            <li class="{{ Request::is('profile/change-password-form') ? 'active' : '' }}"><a href="{{ url('profile/change-password-form')}}">Change Password</a></li>
-            <li class="{{ Request::is('profile/change-securitycode-form') ? 'active' : '' }}"><a href="{{ url('profile/change-securitycode-form')}}">Change Security Code</a></li>
+            <li class="{{ Request::is('profile/change-password-form') ? 'active' : '' }}">
+                <a href="{{ url('profile/change-password-form')}}">Change Password</a>
+            </li>
+            <li class="{{ Request::is('profile/change-securitycode-form') ? 'active' : '' }}">
+                <a href="{{ url('profile/change-securitycode-form')}}">Change Security Code</a>
+            </li>
             @endif
-            <li class="{{ Request::is('referrals/hierarchy/*') ? 'active' : '' }}"><a href="{{ url('referrals/hierarchy/'.Auth::user()->id)}}">Org Chart</a></li>
-            <li class="{{ Request::is('referrals/my-downline') ? 'active' : '' }}"><a href="{{ url('referrals/my-downline')}}">Referrals</a></li>                
+            <li class="{{ Request::is('referrals/hierarchy/*') ? 'active' : '' }}">
+                <a href="{{ url('referrals/hierarchy/'.Auth::user()->id)}}">Org Chart</a>
+            </li>
+            <li class="{{ Request::is('referrals/my-downline') ? 'active' : '' }}">
+                <a href="{{ url('referrals/my-downline')}}">Referrals</a>
+            </li>                
         </ul>
     </li>
     <!--End Profile menu -->

@@ -20,8 +20,8 @@
     <form class="form-horizontal" method="post" action="{{ route('profile.update', $profile->id) }}">
       {{ csrf_field() }}
 
-      @component('components.forms.profile')
-      @endcomponent
+      @include('components.forms.profile')
+    
 
     </form>
     @else
