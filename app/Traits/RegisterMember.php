@@ -55,7 +55,8 @@ trait RegisterMember
             $profile->marital_status = $newUser['marital_status'];
             $profile->id_type   = $newUser['id_type'];
             $profile->id_no     = $newUser['id_no'];
-            $profile->id_pic    = isset($newUser['id_pic']) ? $newUser['id_pic']:'';
+            $profile->id_pic    = isset($newUser['id_pic_image']) ? $newUser['id_pic_image']:'';
+            $profile->status_ic = isset($newUser['id_pic_image']) ? 'Waiting Approval':'Not Update';
         } 
         elseif ($newUser['type'] == 'business') 
         { 
