@@ -151,8 +151,13 @@ class RegisterController extends Controller
 
             // $random_password        = str_random(8);
             // $hashed_random_password = Hash::make($random_password);
-            $defaultPassword = $this->defaultPassword($request->id_no);
             
+            //default password
+            $defaultPassword = $this->defaultPassword($request->id_no);
+            if($request->type == 'business')
+                $defaultPassword = $this->defaultPassword($request->company_registration_no);
+            //end default password
+
             if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode))
             {
                 if($request->hasFile('id_pic'))
