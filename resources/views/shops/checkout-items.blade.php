@@ -175,9 +175,12 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td hidden="">
-                                                    <button type="button" class="btn btn-default continue-shopping">
-                                                        Continue Shopping <i class="glyphicon glyphicon-shopping-cart"></i>
+                                                <td colspan="2"><hr></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <button type="button" class="btn btn-default go-cart-list">
+                                                        Cart list <i class="glyphicon fa fa-list"></i>
                                                     </button>
                                                 </td>
                                                 <td>
@@ -514,6 +517,11 @@
 
          $('#ModalAddress .close').click();
     });
+
+    $('.go-cart-list').click(function(){
+        var agent_id = "{{ $returnData['agent_id'] }}";
+        window.location.href = "{{ url('shop/get-cart-items') }}"+"/"+agent_id
+    })
 
 
     function fn_get_address(agent_id){
