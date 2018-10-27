@@ -64,7 +64,7 @@ $page_title = 'Upload MyKad\Passport';
                 </div>
             </div>
             <div class="panel-footer">
-                <a class="btn btn-info pull-right" href="{{URL::previous()}}">Back</a>
+                <a class="btn btn-info pull-right" href="{{url('user/profile'..$user->profile->id)}}">Back</a>
             </div>
         </div>
         @endif

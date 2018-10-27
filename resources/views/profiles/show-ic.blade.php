@@ -43,7 +43,7 @@
                     <div class="col-md-12 col-lg-12 " align="center"> <img alt="User Pic" src="{{ asset('app/mykad/'.$profile->id_pic) }}" class="img-responsive">
                     </div>
                     @else
-						No MyKad Is Found For This User
+						No MyKad Is Found For This User.  
                     @endif
                 </div>
             </div>
@@ -56,7 +56,7 @@
                 <input type="password" name="security_code" placeholder="Security Code Here">
                 <input type="submit" name="status" value="Approve" class="btn btn-sm btn-primary">
                 <input type="submit" name="status" value="Reject" class="btn btn-sm btn-danger">
-                @elseif(Auth::check() && Auth::user()->email == $profile->profileable->email)
+                @elseif((Auth::check() && Auth::user()->email == $profile->profileable->email) && $profile->status_ic == 'Not Update')
                 <a href="{{ url('profile/upload-ic')}}"	data-original-title="Upload MyKad or Passport" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-arrow-up"></i>Upload Mykad</a>
                 @else
                 	@php
@@ -66,7 +66,7 @@
                 			case 'Approved':
                 				$label = 'success';
                 				break;
-                			case 'Reject':
+                			case 'Not Valid':
                 				$label = 'danger';
                 				break;
                 			default:
@@ -77,6 +77,11 @@
 
 
                 	<strong>Status : </strong> <span class="label label-{{$label}} label-form">{{ $profile->status_ic }}</span>
+                    @if(Auth::check() && Auth::user()->email == $profile->profileable->email)
+                    <a href="{{ url('user/profile/'.$profile->id) }}">Back</a>
+                    @else
+                    <a href="{{ url('profile/ic-status-index') }}">Back</a>
+                    @endif
                 @endif
             </div> 
             </form>
