@@ -163,7 +163,9 @@
                                         @if($profile->status_ic === 'Not Update')
                                             Not Update | <a href="{{ url('profile/upload-ic')}}">Click Here To Upload Your MyKad Or Passport </a>
                                         @else
-                                            {{ $profile->status_ic }}
+                                            {{ $profile->status_ic }} 
+                                            | 
+                                            <a href="{{ url('profile/show-ic/'.$profile->id) }}">View MyKad</a>
                                         @endif
                                     </td>
                                 </tr>
