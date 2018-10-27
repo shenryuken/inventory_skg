@@ -27,7 +27,7 @@
                         <tr>
                             <th>Username</th>
                             <th>Rank</th>
-                            <th>Sponsor</th>
+                            <th>Introducer</th>
                             <th>Date Registered</th>
                             <th>IC Verify</th>
                             <th>Email Verify</th>
@@ -104,14 +104,14 @@
             <div class="panel-heading ui-draggable-handle">
                 <h3>
                     <span class="fa fa-credit-card"></span> 
-                    <span class="xn-text">My Wallet</span>
+                    <span class="xn-text">Vault</span>
                 </h3>  
             </div>
             <div class="panel-body">
                 <table class="table text-uppercase">
                     <thead>
                         <tr>
-                            <th>P-Wallet</th>
+                            <th>MO-Vault</th>
                             <th>PV</th>
                         </tr>
                     </thead>
