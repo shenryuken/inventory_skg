@@ -93,17 +93,20 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Items</th>
-                            <th>Price</th>
+                            <th>Items</th>                            
                             <th>Quantity</th>
+                            <th>Price Per Item</th>
+                            <th>PV</th>
                         </tr>
                     </thead>
                     <tbody>
                             @foreach($items as $item)
                             <tr>
                                 <td>{{ isset($item->product->name) ? $item->product->name : "" }}</td>
-                                <td>{{ isset($item->price) ? $item->price : "" }}</td>
                                 <td>{{ isset($item->product_qty) ? $item->product_qty : "" }}</td>
+                                <td>{{ isset($item->price) ? $item->price : "" }}</td>
+                                <td>{{ isset($item->product->point) ? $item->product->point : "" }}</td>
+                               
                             </tr>
                             @endforeach
                     </tbody>
@@ -111,6 +114,7 @@
                 <p><span class="fa fa-caret-right"></span> <strong>Total Items: {{ isset($order->total_items) ? $order->total_items : "0" }}</strong></p>
                 <p><span class="fa fa-caret-right"></span> <strong>Total Price: MYR  {{ isset($order->total_price) ? $order->total_price : "0" }}</strong></p>
                 <p><span class="fa fa-caret-right"></span> <strong>Delivery Price: MYR {{ isset($order->shipping_fee) ? $order->shipping_fee : "0" }}</strong></p>
+                <p><span class="fa fa-caret-right"></span> <strong>Total PV:  {{ isset($order->orderItems) ? $order->orderItems->where('order_no',$order->order_no)->sum('pv') : "0" }}</strong></p>
 
             </div>
             
@@ -120,8 +124,10 @@
                 <div class="panel-heading">
                         <h3 class="panel-title">Delivery Order</h3>
                        <div class="btn-group pull-right">
+                           @if($order->status == '01')
                             <a href="{{url('inventory/order/delivery/create/'.base64_encode(isset($order->order_no)? $order->order_no : ""))}}" class="btn btn-success">Generate DO</a> 
-                       </div>
+                            @endif
+                        </div>
                    
                     </div>
                 <div class="panel-body">

@@ -14,7 +14,7 @@ class Delivery extends Model
 
     public function deliveryItem()
     {
-        return $this->hasMany('App\Models\DeliveryItem');
+        return $this->hasMany('App\Models\DeliveryItem','delivery_id','id');
     }
 
     public function courier()

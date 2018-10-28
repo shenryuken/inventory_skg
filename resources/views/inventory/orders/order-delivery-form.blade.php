@@ -40,7 +40,7 @@
 <input class="hidden" value="{{ isset($order->user->id) ?  $order->user->id : "" }}" readonly>
 
 <div class="row">
-	<div class="col-md-6">
+	<div class="col-md-12">
 		<div class="panel panel-default">
 		    <div class="panel-heading ui-draggable-handle">
                     <div class="panel-title-box">
@@ -114,141 +114,145 @@
                     </div>
     
              </div>
-            </div>
-    </div>
 
-    <div class="col-md-6">        
-            <div class="panel panel-default"> 
-                      <div class="panel-heading">   
-                            <h3 class="panel-title"><strong>Ordered Items</strong></h3>              
-                     </div>
-                     <div class="panel-body scroll" style="height: 150px;"> 
-                           
-                                    
-                            @foreach($items as $item)   
-                            <p>{{ isset($item->product->code) ? $item->product->code : "" }}
-                            {{ isset($item->product->name) ? $item->product->name : "" }}
-                            x {{ isset($item->product_qty) ? $item->product_qty : "" }}</p>
-                            @endforeach      
-                            </div>
-            </div>
-    </div>
-</div>
-<div class="row">
-        <div class="col-md-6">        
-             <div class="panel panel-default"> 
-            <div class="panel-heading ui-draggable-handle">
-                    <h3 class="panel-title"><strong>Courier</strong></h3>
-                  </div>
-                  <div class="panel-body">
-                    
-                        <div class="form-group">
-                          <label class="col-xs-4 control-label">Courier Service</label>
-                          <div class="col-xs-8">
-                              <select class="form-control" name="courier_id">
-                              @foreach($couriers as $courier)
-                              <option value=""></option>
-                                <option value="{{ $courier->id}}">{{ $courier->courier_name }}</option>
-                              @endforeach
-                              </select>
-                          </div>
-                        </div>
-        
-                        <div class="form-group">
-                          <label for="inputPassword3" class="col-xs-4 control-label">Consigment Note (C/N)</label>
-        
-                          <div class="col-xs-8">
-                            <input class="form-control" name="consignment_note" type="text">
-                          </div>
-                        </div>
-        
-                        <div class="form-group">
-                                <label class="col-md-4 control-label">Fee (RM)</label>
-                                <div class="col-md-8">                                    
-                                        <input class="form-control" name="shipping_fee" value="{{isset($order->shipping_fee) ?  $order->shipping_fee : ""}}"" type="text">
-                                </div>  
-                        </div>
-        
-                      </div>
+             <div class="panel-heading">   
+                    <h3 class="panel-title"><strong>Ordered Items</strong></h3>              
              </div>
-        </div>
-        
-        <div class="col-md-6">        
-                <div class="panel panel-default"> 
-                          <div class="panel-heading ui-draggable-handle">
-                                <h3 class="panel-title"><strong>Add Item(s)</strong></h3>
+             <div class="panel-body scroll" style="height: 150px;"> 
+                   
+                            
+                    @foreach($items as $item)   
+                    @if($item->product->type == '1' || $item->product->type == '3')
+                    <p>{{ isset($item->product->code) ? $item->product->code : "" }}
+                    {{ isset($item->product->name) ? $item->product->name : "" }}
+                    x {{ isset($item->product_qty) ? $item->product_qty : "" }}</p>
+                    @elseif($item->product->type == '2')   
+                        <p>{{ isset($item->product->code) ? $item->product->code : "" }}</p>      
+                        <ul>                   
+                            @foreach($item->product->packages as $package)
+                            <li>{{ isset($package->products->code) ? $package->products->code : "" }}
+                                    {{ isset($package->products->name) ? $package->products->name : "" }}
+                                    x {{ isset($item->product_qty) ? $item->product_qty : "" }}</li>
+                            @endforeach
+                        </ul>
+                    @endif
+                    @endforeach      
+                    </div>
 
-                              </div>
-                          <div class="panel-body">    
-                                <div class="form-horizontal"> 
-                                        <div class="form-group">
-                                                <div class="col-md-6">
-                                            <p>Please choose either one input</p>
-                                                </div>
-                                        </div>
-                                        <div class="form-group" style=" background-color:cadetblue;padding:5px; ">
-                                                <div class="col-md-6">
-                                                    <div class="has-success has-feedback">
-                                                        <label for="Barcode"><input type="radio" name="optradio" checked class="hidden">Product S/N</label>                        
-                                                        <input type="text" class="form-control" id="input_barcode">
-                                                        <span class="glyphicon glyphicon-barcode form-control-feedback"></span>
-                                                </div>
-                                                </div>  
-                                            </div>
-                                    <div class="form-group" style="  background-color:aquamarine;padding:5px;">                                        
-                                        <div class="col-md-2">    
-                                            <label class="col-md-2">Products</label>                                                                            
-                                            <select class="form-control select" data-live-search="true" id="input_product">
-                                                @foreach($products as $product)
-                                                <option value="{{$product->code}}" >{{$product->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="col-md-2">
-                                                <div class="has-warning">
-                                                    <label for="Quantity"><input type="radio" name="optradio" class="hidden">Quantity</label>                        
-                                                    <input type="number" class="form-control" id="input_quantity">
-                                                </div>
-                                            </div> 
-                                            <div class="col-md-2 push-up-20">                                                   
-                                                    <button class="btn btn-primary" id="add_item" type="button"> <i class="fa fa-plus-circle" ></i>
-                                                        Add item
-                                                        </button>    
-                                            </div>
-                                    </div>
-                                
-                                    <div class="form-group" >                                        
-                                            <div class="col-md-12">    
-                                <div class="table-responsive">
-                                        <table class="table" id="table_listing">
-                                            <thead>
-                                                <tr>
-                                                    {{-- <th width="5px"></th> --}}
-                                                    <th>Serial Number</th> 
-                                                    <th>Product Code</th>
-                                                    {{-- <th>Product Name</th> --}}
-                                                    <th>Quantity</th>
-                                                    <th></th>                                     
-                                                                                                
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                            </div>
-                                    </div>
+                    <div class="panel-heading ui-draggable-handle">
+                            <h3 class="panel-title"><strong>Courier</strong></h3>
+                          </div>
+                          <div class="panel-body">
+                            
+                                <div class="form-group">
+                                  <label class="col-xs-2 control-label">Courier Service</label>
+                                  <div class="col-xs-2">
+                                      <select class="form-control" name="courier_id">
+                                      @foreach($couriers as $courier)
+                                      <option value=""></option>
+                                        <option value="{{ $courier->id}}">{{ $courier->courier_name }}</option>
+                                      @endforeach
+                                      </select>
+                                  </div>
+                                {{-- </div>
+                
+                                <div class="form-group"> --}}
+                                  <label for="inputPassword3" class="col-xs-2 control-label">Consigment Note (C/N)</label>
+                
+                                  <div class="col-xs-2">
+                                    <input class="form-control" name="consignment_note" type="text">
+                                  </div>
+                                {{-- </div>
+                
+                                <div class="form-group"> --}}
+                                        <label class="col-md-2 control-label">Fee (RM)</label>
+                                        <div class="col-md-2">                                    
+                                                <input class="form-control" name="shipping_fee" value="{{isset($order->shipping_fee) ?  $order->shipping_fee : ""}}"" type="text">
+                                        </div>  
                                 </div>
-                                    <textarea style="resize: none;" class="form-control hidden" name="serial_number_scan_json" id="serial_number_scan_json" >{{ old('serial_number_scan_json') }}</textarea>
-                            </div>
-            
-            <div class="panel-footer">
-                {{-- <button class="btn btn-default">Clear Form</button> --}}
-                <a href="{{url('/inventory/order/sales')}}" type="button" class="btn btn-default pull-right"> Cancel</a>
-                <button type="submit" class="btn btn-info pull-right" id="save-btn">Save</button>
-              </div>
-   		</div>
-	</div>
+                
+                              </div>
+
+                              <div class="panel-heading ui-draggable-handle">
+                                    <h3 class="panel-title"><strong>Add Item(s) for delivery</strong></h3>
+    
+                                  </div>
+                              <div class="panel-body">    
+                                    <div class="form-horizontal"> 
+                                            <div class="form-group">
+                                                    <div class="col-md-6">
+                                                <p>Please choose either one input.</p>
+                                                    </div>
+                                            </div>
+                                            <div class="form-group">
+                                                    <div class="col-md-6">
+                                                        <div class="has-success has-feedback">
+                                                            <label for="Barcode"><input type="radio" name="optradio" checked class="hidden">Scan Product S/N</label>                        
+                                                            <input type="text" class="form-control" id="input_barcode">
+                                                            <span class="glyphicon glyphicon-barcode form-control-feedback"></span>
+                                                    </div>
+                                                    </div>  
+                                                </div>
+                                                <div class="form-group">  
+                                                        <div class="col-md-12" style="background-color:dimgray;color:white;">
+                                                        <span >For no S/N products</span> 
+                                                        </div>   
+                                                </div>
+                                        <div class="form-group">  
+                                                                              
+                                            <div class="col-md-2">    
+                                                <label class="col-md-2">Products</label>                                                                            
+                                                <select class="form-control select" data-live-search="true" id="input_product">
+                                                    @foreach($products as $product)
+                                                    <option value="{{$product->code}}" >{{$product->name}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                    <div class="has-warning">
+                                                        <label for="Quantity"><input type="radio" name="optradio" class="hidden">Quantity</label>                        
+                                                        <input type="number" class="form-control" id="input_quantity" min="0">
+                                                    </div>
+                                                </div> 
+                                                <div class="col-md-2 push-up-20">                                                   
+                                                        <button class="btn btn-primary" id="add_item" type="button"> <i class="fa fa-plus-circle" ></i>
+                                                            Add item
+                                                            </button>    
+                                                </div>
+                                        </div>
+                                    
+                                        <div class="form-group" >                                        
+                                                <div class="col-md-12">    
+                                    <div class="table-responsive">
+                                            <table class="table" id="table_listing">
+                                                <thead>
+                                                    <tr>
+                                                        {{-- <th width="5px"></th> --}}
+                                                        <th>Serial Number</th> 
+                                                        <th>Product Code</th>
+                                                        {{-- <th>Product Name</th> --}}
+                                                        <th>Quantity</th>
+                                                        <th></th>                                     
+                                                                                                    
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                        <textarea style="resize: none;" class="form-control hidden" name="serial_number_scan_json" id="serial_number_scan_json" >{{ old('serial_number_scan_json') }}</textarea>
+                                </div>
+
+                                <div class="panel-footer">
+                                        {{-- <button class="btn btn-default">Clear Form</button> --}}
+                                        <a href="{{url('/inventory/order/sales')}}" type="button" class="btn btn-default pull-right"> Cancel</a>
+                                        <button type="submit" class="btn btn-info pull-right" id="save-btn">Save</button>
+                                      </div>
+            </div>
+    </div>
 </div>
 </form>
 </div>
@@ -312,6 +316,7 @@ $(document).ready(function() {
     //Init datatable
     window.t = $('#table_listing').DataTable({
         "bLengthChange": false,
+        "searching":false,
         "columnDefs": [
                         { "orderable": false, "targets": [0,1,2,3] }
                         ]
@@ -427,8 +432,19 @@ $(document).ready(function() {
 
     function checkIfArrayIsUnique(input) {        
         var myArray = getSerialNumber();
-        myArray.push(input)        
-        return myArray.length === new Set(myArray).size;
+        //clean without blank 
+        var noBlankArray = [];
+        for(var x=0;x<myArray.length;x++)
+        {
+            if(myArray[x].barcode_arr  != "")
+            noBlankArray.push({
+                barcode : myArray[x].barcode_arr,
+                quantity : myArray[x].qty,
+                product_code : myArray[x].product_code
+            })
+        }
+        noBlankArray.push(input)        
+        return noBlankArray.length === new Set(noBlankArray).size;
     }
 
     function getSerialNumber(){

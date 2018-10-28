@@ -41,7 +41,7 @@ class OrderController extends Controller
     public function salesIndex()
     {
         
-        $agent_order = OrderHdr::where('status','01')->get();
+        $agent_order = OrderHdr::get();
 
         return view('inventory.orders.order-sales-index',[ 'agent_order' => $agent_order]);
     }
@@ -70,9 +70,7 @@ class OrderController extends Controller
 
         try{
             $delivery   = Delivery::where('delivery_number',$order_no)->first();
-            $items      = DeliveryItem::where('delivery_id',$delivery->id)->groupBy('product_id')->get();
-            // var_dump($items->products->name);
-        
+            $items = $delivery->deliveryItem;
         
     }catch(\Exception $e){
         // return back()->withError($e->getMessage());
@@ -92,8 +90,8 @@ class OrderController extends Controller
     public function deliveryCreate($order_no)
     {
         $order_no = base64_decode($order_no);
-        $order      = OrderHdr::where('order_no',$order_no)->where('status','01')->first();
-        $items      = OrderItem::where('order_no',$order_no)->get();
+        $order      = OrderHdr::where('order_no',$order_no)->first();
+        $items      = $order->orderItems;
         $couriers   = Courier::all();
         $products = Product::all();
         // var_dump($items->products->name);
@@ -103,86 +101,107 @@ class OrderController extends Controller
 
     public function deliveryStore(Request $request)
     {
-        $postData = $this->validate($request,[
-            'order_no' => 'required',
-            // 'courier_id' => 'required',
-
-            // 'consignment_note' =>  'required'            
-        ]);
-
-        $order_no = $request->get('order_no');
-
-        $delivery_no = (new GlobalNumberRange)->generate_orderno("DO");
-
-			$data = [
-				'order_id'	           => $order_no,
-                'delivery_number'	   => $delivery_no['data'],
-                'courier_id'           => $request->get('courier_id') ? $request->get('courier_id') : "",
-                'courier_consignment'  => 	$request->get('consignment_note') ? $request->get('consignment_note') : "",		
-				'created_by'	       => Auth::user()->id,
-				'created_at'	       => Carbon::now(new \DateTimeZone('Asia/Kuala_Lumpur'))
-            ];
-
-            $delivery = new Delivery($data);
-            $delivery->save();
-            $delivery_id = $delivery->id;
-            
-            $serialNumberArray = json_decode($request->input('serial_number_scan_json'));
-
-            $product_stock_array = [
-                'delivery_id'   => $delivery_id,
-                'barcode'       => $serialNumberArray,
-            ];
+        try{
+            $postData = $this->validate($request,[
+                'order_no' => 'required',
+                // 'courier_id' => 'required',
     
-                $this->storeProductStocks($product_stock_array);
+                // 'consignment_note' =>  'required'            
+            ]);
+    
+            $order_no = $request->get('order_no');
+    
+            $delivery_no = (new GlobalNumberRange)->generate_orderno("DO");
+    
+                $data = [
+                    'order_id'	           => $order_no,
+                    'delivery_number'	   => $delivery_no['data'],
+                    'courier_id'           => $request->get('courier_id') ? $request->get('courier_id') : "",
+                    'courier_consignment'  => 	$request->get('consignment_note') ? $request->get('consignment_note') : "",		
+                    'created_by'	       => Auth::user()->id,
+                    'created_at'	       => Carbon::now(new \DateTimeZone('Asia/Kuala_Lumpur'))
+                ];
+    
+                $delivery = new Delivery($data);
+                $delivery->save();
+                $delivery_id = $delivery->id;
+                
+                $serialNumberArray = json_decode($request->input('serial_number_scan_json'));
+    
+                $product_stock_array = [
+                    'delivery_id'   => $delivery_id,
+                    'barcode'       => $serialNumberArray,
+                ];
+        
+                    $this->storeProductStocks($product_stock_array);
+    
+                if($delivery_id){
+                    OrderHdr::where('id',$order_no)->update(['status'=>'02']);
+                }
+                
+    
+            Session::flash('message', 'Successfully created delivery order');
+            return redirect('inventory/order/delivery/');
 
-            if($delivery_id){
-                OrderHdr::where('id',$order_no)->update(['status'=>'02']);
-            }
-            
-
-        Session::flash('message', 'Successfully created delivery order');
-        return redirect('inventory/order/delivery/');
+        }
+        catch(Exception $e){
+            Session::flash('message', 'Error');
+            return Redirect::back();
+        }
+      
+        
     }
 
     public function storeProductStocks($product_stock_array){
         
+        try{
         foreach($product_stock_array['barcode'] as $product_supplier){
             $product = new Product;
             $product_query = $product->where('code',$product_supplier->product_code)->first();
-            $data_item = [
-                'product_id'    => $product_query->id,
-                'delivery_id'   => $product_stock_array['delivery_id'],
-                'barcode'       => $product_supplier->barcode,
-                'quantity'      => $product_supplier->quantity,
-                'created_by'    => Auth::user()->id,
-                'updated_at'    => Carbon::now()    
-            ];
+            if($product_query){
+                $data_item = [
+                    'product_id'    => $product_query->id,
+                    'delivery_id'   => $product_stock_array['delivery_id'],
+                    'barcode'       => $product_supplier->barcode,
+                    'quantity'      => $product_supplier->quantity,
+                    'created_by'    => Auth::user()->id,
+                    'updated_at'    => Carbon::now()    
+                ];
+    
+                if($product_supplier->barcode){
+                    try{
+                        $stock_item = StockItem::where('barcode',$product_supplier->barcode)->first();
+    
+                        if($stock_item){
+            
+                            $new = $stock_item->replicate();
+            
+                            $new->status = "05"; //adjust out sell
+                            // $new->stock_adjustment_id = $product_stock_array['stock_adjustment_id'];
+                            $new->updated_by = Auth::user()->id;
+                            $new->save();
+            
+                            $stock_item->status = "98"; //sold
+                            $stock_item->update();
+                        }
+                            
+                                    }catch(Exception $e){
+                    
+                                    }
+                }else{
+                    Session::flash('message', 'Error');
+                    return Redirect::back();
+                }
+    
+                $delivery_item = new DeliveryItem($data_item);
+                $delivery_item->save();
 
-            if($product_supplier->barcode){
-                try{
-                    $stock_item = StockItem::where('barcode',$product_supplier->barcode)->first();
-
-                    if($stock_item){
-        
-                        $new = $stock_item->replicate();
-        
-                        $new->status = "05"; //adjust out sell
-                        // $new->stock_adjustment_id = $product_stock_array['stock_adjustment_id'];
-                        $new->updated_by = Auth::user()->id;
-                        $new->save();
-        
-                        $stock_item->status = "98"; //sold
-                        $stock_item->update();
-                    }
-                        
-                                }catch(Exception $e){
-                
-                                }
             }
-
-            $delivery_item = new DeliveryItem($data_item);
-            $delivery_item->save();
+            
+        }
+    }catch(Exception $e){
+           
+            return false;
         }
         
     }
