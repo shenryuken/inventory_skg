@@ -10,7 +10,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
+    padding-top: 50px; /* Location of the box */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -110,44 +110,50 @@ body {font-family: Arial, Helvetica, sans-serif;}
                                             </div>
                                         </div>
                                         <div class="form-group address-group">
-                                            <label class="col-md-3 control-label" id="address_label"> Name </label>
-                                            <div class="col-md-9" id="" >        
+                                            <label class="col-md-4 control-label" id="address_label"> Name </label>
+                                            <div class="col-md-8" id="" >        
                                                 <input type="text" class="form-control name" name="name" id="name" value=""/>
                                             </div>
                                         </div>
                                         <div class="form-group address-group">
-                                            <label class="col-md-3 control-label" id="address_label"> Street 1 </label>
-                                            <div class="col-md-9" id="" >        
+                                            <label class="col-md-4 control-label" id="address_label"> Contect No </label>
+                                            <div class="col-md-8" id="" >        
+                                                <input type="text" class="form-control contect-no" name="contect-no" id="contect-no" value=""/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group address-group">
+                                            <label class="col-md-4 control-label" id="address_label"> Street 1 </label>
+                                            <div class="col-md-8" id="" >        
                                                 <input type="text" class="form-control street1" name="street1" id="street1" value=""/>
                                             </div>
                                         </div>
                                         <div class="form-group address-group">
-                                            <label class="col-md-3 control-label" id="address_label"> Street 2 </label>
-                                            <div class="col-md-9" id="" >        
+                                            <label class="col-md-4 control-label" id="address_label"> Street 2 </label>
+                                            <div class="col-md-8" id="" >        
                                                 <input type="text" class="form-control street2" name="street2" id="street2" value=""/>
                                             </div>
                                         </div>
                                         <div class="form-group address-group">
-                                            <label class="col-md-3 control-label" id="poscode_label"> Poscode </label>
-                                            <div class="col-md-9" id="">        
+                                            <label class="col-md-4 control-label" id="poscode_label"> Poscode </label>
+                                            <div class="col-md-8" id="">        
                                                 <input type="text" class="form-control poscode" name="poscode" id="poscode" value=""/>
                                             </div>
                                         </div>
                                         <div class="form-group address-group">
-                                            <label class="col-md-3 control-label" id="city_label"> City </label>
-                                            <div class="col-md-9" id="">        
+                                            <label class="col-md-4 control-label" id="city_label"> City </label>
+                                            <div class="col-md-8" id="">        
                                                 <input type="text" class="form-control city" name="city" id="city" value=""/>
                                             </div>
                                         </div>
                                         <div class="form-group address-group">
-                                            <label class="col-md-3 control-label" id="state_label"> State </label>
-                                            <div class="col-md-9" id="">        
+                                            <label class="col-md-4 control-label" id="state_label"> State </label>
+                                            <div class="col-md-8" id="">        
                                                 <input type="text" class="form-control state" name="state" id="state" value=""/>
                                             </div>
                                         </div>
                                         <div class="form-group address-group">
-                                            <label class="col-md-3 control-label"> Country </label>
-                                            <div class="col-md-9" id="">        
+                                            <label class="col-md-4 control-label"> Country </label>
+                                            <div class="col-md-8" id="">        
                                                 <input type="text" class="form-control country" name="country" id="country" value=""/>
                                             </div>
                                         </div>
