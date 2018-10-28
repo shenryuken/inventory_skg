@@ -5,7 +5,7 @@
     @parent
 @stop
 @section('content')
-<?php $page_title = 'MyKad\Passport Status Index'; ?>
+<?php $page_title = 'MyKad\Passport Or Company Registration Certificate Status Index'; ?>
 
                
 <div class="row">
@@ -27,12 +27,12 @@
             <p>Total Waiting Approval</p></strong>                             
         </a>                        
     </div>
-    <div class="col-md-2">                        
+    <!-- <div class="col-md-2">                        
         <a href="#" class="tile tile-warning">
             <strong>{{ $mykad_status['pending'] }}
             <p>Total Pending</p> </strong>                            
         </a>                        
-    </div>
+    </div> -->
     <div class="col-md-2">                        
         <a href="#" class="tile tile-danger">
             <strong>{{ $mykad_status['not_valid'] }}

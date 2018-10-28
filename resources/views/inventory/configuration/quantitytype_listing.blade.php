@@ -42,7 +42,7 @@ select{cursor:pointer;}
 			<div class="panel panel-default">
 
 				<div class="panel-heading">
-					<h3 class="panel-title">setting - Quantity Type Listing</h3>
+					<h3 class="panel-title">Setting - Quantity Type Listing</h3>
 					<div class="actions pull-right">
 						<a href="javascript:;" class="btn btn-default  btn-sm btn-circle addnewtype" title="Add New Quantity Type" >
 					<i class="fa fa-plus"></i> New Quantity Type </a>
