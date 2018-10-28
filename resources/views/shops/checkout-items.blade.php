@@ -59,7 +59,7 @@
                                                         <input type="hidden" id="produt_id" value="{{ $value['product_id'] }}">
                                                         <a class="thumbnail pull-left img-content" href="#"> <img class="media-object" src="{{ $value['image'] == '' ? asset('invalid_image.png') : asset('storage/'.$value['image']) }}" style="width: 72px; height: 72px;"> </a>
                                                         <div class="media-body">
-                                                            <h4 class="media-heading"><a href="#">{{ $value['name'] }}</a></h4>
+                                                            <h6 class="media-heading"><a href="#">{{ $value['name'] }}</a></h6>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -67,19 +67,23 @@
                                                     <p>{{ $value['total_quantity'] }}</p>
                                                 </td>
                                                 @if(Auth::guard('admin')->check())
-                                                <td class="col-sm-1 col-md-1"><strong>RM{{ $value['price_staff'] }}</strong></td>
-                                                <td class="col-sm-1 col-md-1"><strong>RM{{ $value['total_price'] }}</strong></td>
+                                                <td class="col-sm-1 col-md-1 unt-price">
+                                                    <strong>RM{{ $value['price_staff'] }}</strong>
+                                                </td>
+                                                <td class="col-sm-1 col-md-1 tot-price">
+                                                    <strong>RM{{ $value['total_price'] }}</strong>
+                                                </td>
                                                 @else
-                                                <td class="col-sm-1 col-md-1" id="price-em">
+                                                <td class="col-sm-1 col-md-1 unt-price" id="price-em">
                                                     <strong>RM{{ $value['price_em'] }}</strong>
                                                 </td>
-                                                <td class="col-sm-1 col-md-1" id="total-price-em">
+                                                <td class="col-sm-1 col-md-1 tot-price" id="total-price-em">
                                                     <strong>RM{{ $value['total_price_em'] }}</strong>
                                                 </td>
-                                                <td class="col-sm-1 col-md-1" id="price-wm">
+                                                <td class="col-sm-1 col-md-1 unt-price" id="price-wm">
                                                     <strong>RM{{ $value['price_wm'] }}</strong>
                                                 </td>
-                                                <td class="col-sm-1 col-md-1" id="total-price-wm">
+                                                <td class="col-sm-1 col-md-1 tot-price" id="total-price-wm">
                                                     <strong>RM{{ $value['total_price_wm'] }}</strong>
                                                 </td>
                                                 @endif
@@ -132,13 +136,13 @@
                                         <div class="form-group">
                                             <label class="col-md-3 control-label"> Name </label>
                                             <div class="col-md-9">        
-                                                <input type="text" class="form-control contect-name" id="contect-name" value="" placeholder="Optional Name" />
+                                                <input type="text" class="form-control contect-name" id="contect-name" value="{{ isset($returnData['name']) ? $returnData['name'] : ''}}" placeholder="Optional Name" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label class="col-md-3 control-label"> Contect No. </label>
                                             <div class="col-md-9">
-                                                <input type="text" class="form-control contect-no" id="contect-no" value="" placeholder="Optional Contect No." />   
+                                                <input type="text" class="form-control contect-no" id="contect-no" value="{{ isset($returnData['contect_no']) ? $returnData['contect_no'] : ''}}" placeholder="Optional Contect No." />   
                                             </div>
                                         </div>
                                     </div>
@@ -414,6 +418,8 @@
                     $('.shipping-code').val(gv_address[i].code);
                     $('.shipping-name').text(gv_address[i].name)
                     $('.shipping-address').text(gv_address[i].address)
+                    $('.contect-name').val(gv_address[i].name);
+                    $('.contect-no').val(gv_address[i].contect_no);
 
                     @if(Auth::guard('web')->check())
                         fn_get_price_state(gv_address[i].state);
@@ -438,6 +444,7 @@
         // var id = $('#id').val();
         // var address_code = $('#address-code').val();
         var name = $('#name').val();
+        var contect_no = $('#contect-no').val();
         var street1 = $('#street1').val();
         var street2 = $('#street2').val();
         var poscode = $('#poscode').val();
@@ -450,6 +457,7 @@
             // id          : id,
             // address_code: address_code,
             name        : name,
+            contect_no  : contect_no,
             street1     : street1,
             street2     : street2,
             poscode     : poscode,

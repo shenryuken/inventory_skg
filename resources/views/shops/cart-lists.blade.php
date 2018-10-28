@@ -59,8 +59,8 @@
                                                         <input type="hidden" id="id" value="{{ $value['id'] }}">
                                                         <input type="hidden" id="produt_id" value="{{ $value['product_id'] }}">
                                                         <a class="thumbnail pull-left img-content" href="#"> <img class="media-object" src="{{ $value['image'] == '' ? asset('invalid_image.png') : asset('storage/'.$value['image']) }}" style="width: 72px; height: 72px;"> </a>
-                                                        <div class="media-body">
-                                                            <h4 class="media-heading"><a href="#">{{ $value['name'] }}</a></h4>
+                                                        <div class="media-body product-name">
+                                                            <h6 class="media-heading"><a href="#">{{ $value['name'] }}</a></h6>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -79,7 +79,7 @@
                                                 <td class="col-sm-1 col-md-1"><strong>RM{{ $value['price_staff'] }}</strong></td>
                                                 <td class="col-sm-1 col-md-1 tot-price-staff"><strong>WM RM{{ $value['total_price_staff'] }}</strong></td>
                                                 @else
-                                                <td class="col-sm-1 col-md-1"><strong>WM RM{{ $value['price_wm'] }}<br>EM RM{{ $value['price_em'] }}</strong></td>
+                                                <td class="col-sm-1 col-md-1 unt-price"><strong>WM RM{{ $value['price_wm'] }}<br>EM RM{{ $value['price_em'] }}</strong></td>
                                                 <td class="col-sm-1 col-md-1 tot-price"><strong>WM RM{{ $value['total_price_wm'] }}<br>EM RM{{ $value['total_price_em'] }}</strong></td>
                                                 @endif
                                                 <td class="col-sm-1 col-md-1">

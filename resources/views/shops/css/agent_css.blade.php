@@ -587,4 +587,9 @@ a.pack-list:hover, a.pack-list:visited, a.pack-list:active{
 	cursor: pointer;
 }
 
+.unt-price,.tot-price,.product,.product-name{
+
+	font-size: 11px;
+}
+
 </style>

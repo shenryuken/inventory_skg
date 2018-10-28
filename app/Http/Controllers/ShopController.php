@@ -530,35 +530,38 @@ class ShopController extends Controller
                         'address'   => $addressData->street1.",".$addressData->street2.",".$addressData->poscode.",".$addressData->city.",".$addressData->state.",".$addressData->country,
                         'btnstatus' => "",
                         'id'        => $addressData->id,
-                        'code'      => $addressData->applicable_id
+                        'code'      => $addressData->applicable_id,
+                        'contect_no'=> $addressData->contect_no
                     ];
                 }
-                elseif($deliveryType == "02"){
+                else if($deliveryType == "02"){
 
-                    $addressData = [];
+                    // $addressData = [];
                     $address = [
 
                         'name'      => "",
-                        'address'   =>  "Self Pickup",
+                        'address'   => "Self Pickup",
                         'btnstatus' => "hidden",
                         'id'        => "",
-                        'code'      => ""
+                        'code'      => "",
+                        'contect_no'=> ""
                     ];
                 }
             }
             else{
 
-                $addressData = [];
+                // $addressData = [];
                 $address = [
 
-                        'name'      => "",
-                        'address'   => "",
-                        'btnstatus' => "",
-                        'id'        => "",
-                        'code'      => ""
-                    ];
+                    'name'      => "",
+                    'address'   => "",
+                    'btnstatus' => "",
+                    'id'        => "",
+                    'code'      => "",
+                    'contect_no'=> ""
+                ];
             }
-            // dd($cartItems,$prdimage,$totalPrice);
+            // dd($addressData,$prdimage,$address);
             //shipping fee
             if(Auth::guard('admin')->check()){
 
@@ -594,7 +597,9 @@ class ShopController extends Controller
                     'totalPrice'        => $totalPrice,
                     'shipping_fee'      => $shipping_fee,
                     'address'           => $address,
-                    'deliveryType'      =>$deliveryType
+                    'deliveryType'      => $deliveryType,
+                    'name'              => $addressData->name,
+                    'contect_no'        => $addressData->contect_no,
                 ];
             }
             else if(Auth::guard('web')->check()){
@@ -643,9 +648,7 @@ class ShopController extends Controller
                 $grandTotalPrice_em = number_format($grandTotalPrice_em,2);
                 $totalPrice_wm      = number_format($totalPrice_wm,2);
                 $grandTotalPrice_wm = number_format($grandTotalPrice_wm,2);
-
-                
-
+                // dd($address);
                 $returnData = [
 
                     'agent_id'             => $agent_id,
@@ -658,8 +661,8 @@ class ShopController extends Controller
                     'address'              => $address,
                     'deliveryType'         => $deliveryType,
                     'state'                => $addressData->state,
-                    // 'shipping_fee'         => 0,
-                    // 'totalPrice'           => 0,
+                    'name'                 => $addressData->name,
+                    'contect_no'           => $addressData->contect_no,
                     // 'grandTotalPrice'      => 0,  
                 ];
             }
@@ -734,7 +737,8 @@ class ShopController extends Controller
                     'code'      => $value['applicable_id'],
                     'name'      => $value->name,
                     'address'   => $value['street1'].",".$value['street2'].",".$value['poscode'].",".$value['city'].",".$value['state'].",".$value['country'],
-                    'state' => $value['state']
+                    'state' => $value['state'],
+                    'contect_no'=>$value['contect_no']
                 );
 
                 $address[] = $addressData;
@@ -816,6 +820,7 @@ class ShopController extends Controller
 
             $address = new Address;
             $address->name          = $data['name'];
+            $address->contect_no    = $data['contect_no'];
             $address->street1       = $data['street1'];
             $address->street2       = $data['street2'];
             $address->poscode       = $data['poscode'];
@@ -971,7 +976,6 @@ class ShopController extends Controller
 
             $sessionData = session("STORE","default");
 
-            // dd($sessionData);
             $address = [];
             if(Auth::guard('admin')->check()){
 
@@ -1018,16 +1022,47 @@ class ShopController extends Controller
                 foreach($cartItems as $k => $v){
 
                     if(Auth::guard('admin')->check()){
-                        $price = $v['price_staff'];
-                    }
-                    else{
-                        if(strtolower($address->state) == strtolower("Sabah") 
-                            || strtolower($address->state) ==  strtolower("Sarawak")){
 
-                            $price = $v['price_em'];
+                         $promotion = $this->checkPromotion($v['product_id']);
+
+                        if($promotion){
+
+                            $price_staff = $promotion->price_staff;
                         }
                         else{
-                            $price = $v['price_wm'];
+
+                            $price_staff = $v['price_staff'];
+                        }
+
+                        $price = $price_staff;
+                    }
+                    else{
+
+                        $promotion = $this->checkPromotion($v['product_id']);
+
+                        if($promotion){
+                            $price_wm = $promotion->price_wm;
+                            $price_em = $promotion->price_em;
+                        }
+                        else{
+
+                            $price_wm = $v['price_wm'];
+                            $price_em = $v['price_em'];
+                        }
+
+                        if($shipping_id == ""){
+
+                            $price = $price_wm;
+                        }
+                        else{
+                            if(strtolower($address->state) == strtolower("Sabah") 
+                                || strtolower($address->state) ==  strtolower("Sarawak")){
+
+                                $price = $price_em;
+                            }
+                            else{
+                                $price = $price_wm;
+                            }
                         }
                     }
 
@@ -1037,6 +1072,7 @@ class ShopController extends Controller
                         'product_id'    => $v['product_id'],
                         'product_qty'   => $v['total_quantity'],
                         'price'         => $price,
+                        'pv'            => $v['point'],
                         'product_typ'   => "",
                         'product_status'=> "01",
                         'created_by'    =>  $id,
@@ -1046,7 +1082,7 @@ class ShopController extends Controller
                     $order_item[] = $item;
 
                     $total_product_quantity = $total_product_quantity + $v->total_quantity;
-                    $total_price += (float)$price;
+                    $total_price += (float)$price * $v['total_quantity'];
                 }
 
                 if($total_price < 300.00){
@@ -1147,14 +1183,19 @@ class ShopController extends Controller
                             }
 
                             // $address = Address::where('id',$shipping_id)->where('address_code',$address_code)->first();
+                            if($shipping_id == ""){
 
-                            if(strtolower($address->state) == strtolower("Sabah") 
-                                || strtolower($address->state) ==  strtolower("Sarawak")){
-
-                                $price = $price_em;
+                                $price = $price_wm;
                             }
                             else{
-                                $price = $price_wm;
+                                if(strtolower($address->state) == strtolower("Sabah") 
+                                    || strtolower($address->state) ==  strtolower("Sarawak")){
+
+                                    $price = $price_em;
+                                }
+                                else{
+                                    $price = $price_wm;
+                                }
                             }
 
                             $lv_product = [
@@ -1199,13 +1240,19 @@ class ShopController extends Controller
 
                             // $address = Address::where('id',$shipping_id)->where('address_code',$address_code)->first();
 
-                            if(strtolower($address->state) == strtolower("Sabah") 
-                                || strtolower($address->state) ==  strtolower("Sarawak")){
+                            if($shipping_id == ""){
 
                                 $price = $price_em;
                             }
                             else{
-                                $price = $price_wm;
+                                if(strtolower($address->state) == strtolower("Sabah") 
+                                    || strtolower($address->state) ==  strtolower("Sarawak")){
+
+                                    $price = $price_em;
+                                }
+                                else{
+                                    $price = $price_wm;
+                                }
                             }
 
                             $lv_product = [
@@ -1293,12 +1340,30 @@ class ShopController extends Controller
                             ->select('orders_hdr.order_no','orders_hdr.agent_id','orders_hdr.agent_id','orders_hdr.invoice_no','orders_hdr.total_items','orders_hdr.total_price','orders_hdr.delivery_type','orders_hdr.purchase_date','orders_hdr.status','orders_hdr.name','orders_hdr.contect_no','delivery_type.delivery_code','delivery_type.type_description')
                             ->where('order_no','=',$order_no)
                             ->first();
+
+                $OrderItem = OrderItem::where('order_no',$order_no)->get()->toArray();
+                foreach ($OrderItem as $key => $value) {
+
+                    $product_name = Product::select('name')->where('id',$value['product_id'])->first();
+
+                    $OrderItem[$key]['product_name'] = $product_name->name;
+                    
+                }
             }
             else if($sessionData == "AGENT_STORE"){
                 $orderHdr = AgentOrderHdr::leftJoin('delivery_type','delivery_type.delivery_code','=','agent_order_hdr.delivery_type')
                             ->select('agent_order_hdr.order_no','agent_order_hdr.agent_id','agent_order_hdr.agent_id','agent_order_hdr.invoice_no','agent_order_hdr.total_items','agent_order_hdr.total_price','agent_order_hdr.delivery_type','agent_order_hdr.purchase_date','agent_order_hdr.status','orders_hdr.name','orders_hdr.contect_no','delivery_type.delivery_code','delivery_type.type_description')
                             ->where('order_no','=',$order_no)
                             ->first();
+
+                $OrderItem = AgentOrderItem::where('order_no',$order_no)->get()->toArray();
+                foreach ($OrderItem as $key => $value) {
+
+                    $product_name = Product::select('name')->where('id',$value['product_id'])->first();
+
+                    $value['product_name'] = $product_name->name;
+                    
+                }
             }
 
             // dd($orderHdr);
@@ -1323,8 +1388,8 @@ class ShopController extends Controller
             $return['status']   = "02";
         }
 
-        // dd($return,$data,$orderHdr);
-        return view('shops.delivery-status',compact('return','data','orderHdr'));
+        // dd($return,$data,$orderHdr,$OrderItem);
+        return view('shops.delivery-status',compact('return','data','orderHdr','OrderItem'));
     }
 
     public function agentsStoreList()

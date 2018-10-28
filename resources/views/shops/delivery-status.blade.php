@@ -1,7 +1,6 @@
 @extends('layouts.joli.app')
 @section('title','Delivery Status')
 @section('content')
-
 <!-- <script src="{!! asset('joli/js/plugins/smartwizard/jquery.smartWizard-2.0.min.js') !!}"></script>  -->
 <!-- START BREADCRUMB -->
 <ul class="breadcrumb">
@@ -17,7 +16,7 @@
             <div class="panel panel-default">
                 <div class="horizontal">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><strong>Delivery Status</strong> </h3>
+                        <h3 class="panel-title"><strong>Order Status</strong> </h3>
                         <ul class="panel-controls">
                         </ul>
                     </div>
@@ -37,7 +36,7 @@
                         <div class="container cart-list col-md-12" style="margin-top:0px;">
                             <div class="row cart-row">
                                 <div class="col-sm-12 col-md-12">
-                                    <div class="wizard">
+                                    <div class="wizard" style="margin-bottom: 3cm;">
                                         <ul class="steps_{{ count($data) }} anchor">
                                             @foreach($data as $k => $v)
                                             <li>
@@ -108,10 +107,37 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div id="ordered-items">
+                                    <span><b>Ordered Items</b></span>
+                                    <table id="" class="table datatable" style="margin-top: 0.2cm;">
+                                        <thead>
+                                            <tr>
+                                                <th>No.</th>
+                                                <th hidden>Id</th>
+                                                <th>Product Name</th>
+                                                <th>Price</th>
+                                                <th>Quantity</th>
+                                                <th>Point Value</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="list-item">
+                                            @foreach($OrderItem as $key => $value)
+                                            <tr>
+                                                <th>{{ $key+1 }}</th>
+                                                <th hidden></th>
+                                                <th>{{ $value['product_name'] }}</th>
+                                                <th>{{ $value['price'] }}</th>
+                                                <th>{{ $value['product_qty'] }}</th>
+                                                <th>{{ $value['pv'] }}</th>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>/
             </div>
         </div>
     </div>
@@ -119,12 +145,15 @@
 @endsection
 {{-- page level scripts --}}
 @section('footer_scripts')
+<script type="text/javascript" src="{{ asset('themes/Joli/js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script type="text/javascript">
-    
+
     $(document).ready(function(){
 
+        $('.actionBar').css('display','none');
+
         var orderHdr = {!! $orderHdr !!};
-        var status = {!! $data !!};
+        var status = {!! json_encode($data) !!};
         console.log(orderHdr,status)
 
         // $('a.orderstatus').each(function(i){

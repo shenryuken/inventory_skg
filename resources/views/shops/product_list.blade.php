@@ -6,9 +6,9 @@
 @section('content')
 
 @if(Auth::guard('admin')->check())
-@php $height = '183px' @endphp
+@php $height = '195px' @endphp
 @else
-@php $height = '230px' @endphp
+@php $height = '255px' @endphp
 @endif
 
 <span hidden="">{{ $id }}</span>
@@ -154,6 +154,10 @@
 										       			</span>
 										       			@endif
 										       			@endif
+										       			<br>
+										       			<span class="ori-price">
+										       				Point :<text class="price-text-color">{{ $value['point'] }}</text>
+										       			</span>
 										       		</div>
 											       	<div class="col-md-5">
 											       		<div style="margin-top: 0px;">
