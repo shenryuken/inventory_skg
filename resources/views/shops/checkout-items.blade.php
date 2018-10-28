@@ -140,7 +140,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-md-3 control-label"> Contect No. </label>
+                                            <label class="col-md-3 control-label"> Contact No. </label>
                                             <div class="col-md-9">
                                                 <input type="text" class="form-control contect-no" id="contect-no" value="{{ isset($returnData['contect_no']) ? $returnData['contect_no'] : ''}}" placeholder="Optional Contect No." />   
                                             </div>

@@ -1345,9 +1345,11 @@ class ShopController extends Controller
                 foreach ($OrderItem as $key => $value) {
 
                     $product_name = Product::select('name')->where('id',$value['product_id'])->first();
+                    $total_price = str_replace(",","",number_format((float)$value['price'] * (float)$value['product_qty'],2));
 
                     $OrderItem[$key]['product_name'] = $product_name->name;
-                    
+                    $OrderItem[$key]['total_price'] = $total_price;
+   
                 }
             }
             else if($sessionData == "AGENT_STORE"){
@@ -1360,12 +1362,13 @@ class ShopController extends Controller
                 foreach ($OrderItem as $key => $value) {
 
                     $product_name = Product::select('name')->where('id',$value['product_id'])->first();
+                    $total_price = str_replace(",","",number_format((float)$value['price'] * (float)$value['product_qty'],2));
 
                     $value['product_name'] = $product_name->name;
+                    $OrderItem[$key]['total_price'] = $total_price;
                     
                 }
             }
-
             // dd($orderHdr);
 
             $date = new \DateTime($orderHdr->purchase_date);
