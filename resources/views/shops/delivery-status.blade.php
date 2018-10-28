@@ -30,7 +30,7 @@
                                 <p><span id="form-title">Purchase Order No. : {{ $orderHdr->order_no }} </span></p>
                                 <p><span id="form-title">Purchase Date : {{ $orderHdr->purchase_date }} </span></p>
                                 <p><span id="form-title">Name. : {{ $orderHdr->name }} </span></p>
-                                <p><span id="form-title">Contect Number : {{ $orderHdr->contect_no }} </span></p>
+                                <p><span id="form-title">Contact Number : {{ $orderHdr->contect_no }} </span></p>
                             </div>
                         </div>
                         <div class="container cart-list col-md-12" style="margin-top:0px;">
@@ -115,8 +115,9 @@
                                                 <th>No.</th>
                                                 <th hidden>Id</th>
                                                 <th>Product Name</th>
-                                                <th>Price</th>
                                                 <th>Quantity</th>
+                                                <th>Price/Unit</th>
+                                                <th>Total Price</th>
                                                 <th>Point Value</th>
                                             </tr>
                                         </thead>
@@ -126,8 +127,9 @@
                                                 <th>{{ $key+1 }}</th>
                                                 <th hidden></th>
                                                 <th>{{ $value['product_name'] }}</th>
-                                                <th>{{ $value['price'] }}</th>
                                                 <th>{{ $value['product_qty'] }}</th>
+                                                <th>{{ $value['price'] }}</th>
+                                                <th>{{ $value['total_price'] }}</th>
                                                 <th>{{ $value['pv'] }}</th>
                                             </tr>
                                             @endforeach
