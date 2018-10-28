@@ -39,13 +39,13 @@ class WalletController extends Controller
 		}
 		elseif ($user->rank_id == 3 && ($wallet && $wallet->pv >= 100))
 		{
-			$qualified_bonus['retail_profit'] = 'yes';
+			$qualified_bonus['retail_profit'] 	= 'yes';
 			$qualified_bonus['personal_rebate'] = 'yes';
 			$qualified_bonus['direct_sponsor']  = 'yes';
 		}
 		elseif($user->rank_id == 4 && ($wallet && $wallet->pv >= 100))
 		{
-			$qualified_bonus['retail_profit'] = 'yes';
+			$qualified_bonus['retail_profit'] 	= 'yes';
 			$qualified_bonus['personal_rebate'] = 'yes';
 			$qualified_bonus['direct_sponsor']  = 'yes';
 			$qualified_bonus['do_group_bonus']  = 'yes';
@@ -54,12 +54,12 @@ class WalletController extends Controller
 		}
 		elseif($user->rank_id == 5 && ($wallet && $wallet->pv >= 100))
 		{
-			$qualified_bonus['retail_profit'] = 'yes';
+			$qualified_bonus['retail_profit'] 	= 'yes';
 			$qualified_bonus['personal_rebate'] = 'yes';
 			$qualified_bonus['direct_sponsor']  = 'yes';
 			$qualified_bonus['do_group_bonus']  = 'yes';
 			if($active_do && $active_do->personal_gpv >= 5000) $qualified_bonus['do_cto'] = 'yes';
-			$qualified_bonus['sdo_cto'] 		  = 'yes'; //need to clarify again - group branch 5k or ???
+			$qualified_bonus['sdo_cto'] 		= 'yes'; //need to clarify again - group branch 5k or ???
 			$qualified_bonus['sdo']             = 'yes';
 			$qualified_bonus['sdo_to_sdo']      = 'yes';
 		}
@@ -83,12 +83,12 @@ class WalletController extends Controller
     	
     	if(Auth::guard('admin')->check())
     	{
-    		$sender   = Auth::guard('admin')->user();
+    		$sender   	= Auth::guard('admin')->user();
     		$hashedCode = Auth::guard('admin')->user()->security_code;
     	}
     	elseif(Auth::guard('web')->check())
     	{
-    		$sender   = Auth::guard('web')->user();
+    		$sender   	= Auth::guard('web')->user();
     		$hashedCode = Auth::guard('web')->user()->security_code;
     	}
 
@@ -100,15 +100,15 @@ class WalletController extends Controller
     		$sender_wallet 		= Wallet::where('user_id', Auth::guard('web')->user()->id)->first();
 		    $receiver_wallet 	= Wallet::where('user_id', $receiver->id)->first(); 
 
-    		if($request->point_to_transfer <= $sender_wallet->p_wallet && $request->point_to_transfer > 0)
+    		if($request->point_to_transfer <= $sender_wallet->vault && $request->point_to_transfer > 0)
     		{
     			$sender_wallet 		= Wallet::where('user_id', $receiver->id)->first();
 		    	$receiver_wallet 	= Wallet::where('user_id', $receiver->id)->first();
 
-		    	$sender_wallet->p_wallet 	= $sender_wallet->p_wallet - $request->point_to_transfer;
+		    	$sender_wallet->vault 	= $sender_wallet->vault - $request->point_to_transfer;
 		    	$sender_wallet->save();
 
-		    	$receiver_wallet->p_wallet 	= $receiver_wallet->p_wallet + $request->point_to_transfer;
+		    	$receiver_wallet->vault 	= $receiver_wallet->vault + $request->point_to_transfer;
 		    	$receiver_wallet->save();
 
 		    	$point_transactions = new PointTransaction;
@@ -121,20 +121,20 @@ class WalletController extends Controller
 
 		    	Session::flash('success', 'Successfully transfer '.$request->point_to_transfer.' points to '.$receiver->username); 
     		}
-    		elseif ($request->point_to_transfer > $sender_wallet->p_wallet) 
+    		elseif ($request->point_to_transfer > $sender_wallet->vault) 
     		{
     			Session::flash('fail', 'Failed to transfer '.$request->point_to_transfer.' points to '.$receiver->username.'. Insufficient point!');
     		}
     		elseif($request->point_to_transfer > 0)
     		{
-    			Session::flash('fail', 'This transaction not valid. Point to transfer must be greater than 0 and less than '. $sender_wallet->p_wallet);
+    			Session::flash('fail', 'This transaction not valid. Point to transfer must be greater than 0 and less than '. $sender_wallet->vault);
     		}
     	}
     	elseif(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode))
     	{
 		    $receiver_wallet 	= Wallet::where('user_id', $receiver->id)->first(); 
 
-	    	$receiver_wallet->p_wallet 	= $receiver_wallet->p_wallet + $request->point_to_transfer;
+	    	$receiver_wallet->vault 	= $receiver_wallet->vault + $request->point_to_transfer;
 	    	$receiver_wallet->save();
 
 	    	if($receiver_wallet){

@@ -12,6 +12,8 @@ use App\Models\NewUser;
 use App\Models\NewProfile;
 use App\Models\Wallet;
 use App\Models\Address;
+use App\Models\Account;
+use App\Models\Bank;
 
 use App\Admin;
 use App\User;
@@ -33,6 +35,8 @@ trait RegisterMember
         }elseif(Auth::guard('admin')->check()){
             $guard = 'admin';
         }
+
+        $bank = Bank::where('name', $newUser['bank'])->first();
 
         $user = new User;
         $user->type         = $newUser['type'];
@@ -87,9 +91,16 @@ trait RegisterMember
         $address->created_by = Auth::guard($guard)->user()->id;
         $address->created_at = \Carbon\Carbon::now();
 
+        $account = new Account;
+        $account->bank_id           = $bank->id;
+        $account->account_no        = $newUser['account_no'];
+        $account->acc_holder_name   = $newUser['acc_holder_name'];
+        $account->account_type      = $newUser['account_type'];
+
         $user->save();
         $user->profile()->save($profile);
         $user->address()->save($address);
+        $user->account()->save($account);
 
         $verifyUser = VerifyUser::create([
             'user_id' => $user->id,

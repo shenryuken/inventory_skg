@@ -43,7 +43,7 @@
 			<div class="panel panel-default">
 
 				<div class="panel-heading">
-					<h3 class="panel-title">setting - Stock Adjustment Type</h3>
+					<h3 class="panel-title">Setting - Stock Adjustment Type</h3>
 					<div class="actions pull-right">
 						<a href="javascript:;" class="btn btn-default  btn-sm btn-circle addnewadjustment" title="Add New Stock Adjustment" >
 					<i class="fa fa-plus"></i> New Stock Adjustment Type</a>

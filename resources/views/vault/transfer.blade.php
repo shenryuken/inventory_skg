@@ -2,22 +2,23 @@
 
 {{-- Page title --}}
 @section('title')
-    User Lists
+    My Vault
     @parent
 @stop
 
 @section('content')
-<?php $page_title = 'User Lists'; ?>
+<?php $page_title = 'My Vault'; ?>
 
 <div class="row">
     <div class="col-lg-12" style="">
         <div class="hpanel">
             <div class="panel-body">
-                <h3>My Wallet</h3>
+                <h3>My Vault</h3>
             </div>
         </div>
     </div>
 </div>
+@if(Auth::check())
 <div class="row">
     <div class="col-md-3" style="">
         <div class="hpanel hbggreen">
@@ -27,9 +28,9 @@
                     <p class="text-big font-light">
                         {{ $wallet->current_pv or 0}}
                     </p>
-                    <small>
+                    <!-- <small>
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                    </small>
+                    </small> -->
                 </div>
             </div>
         </div>
@@ -42,9 +43,9 @@
                     <p class="text-big font-light">
                         {{ $wallet->pv or 0}}
                     </p>
-                    <small>
+                    <!-- <small>
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                    </small>
+                    </small> -->
                 </div>
             </div>
         </div>
@@ -57,9 +58,9 @@
                     <p class="text-big font-light">
                         {{ $wallet->do_pv or 0}}{{-- 750 --}}
                     </p>
-                    <small>
+                    <!-- <small>
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                    </small>
+                    </small> -->
                 </div>
             </div>
         </div>
@@ -72,14 +73,15 @@
                     <p class="text-big font-light">
                         {{ $wallet->do_pv or 0}}{{-- 43 --}}
                     </p>
-                    <small>
+                    <!-- <small>
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                    </small>
+                    </small> -->
                 </div>
             </div>
         </div>
     </div>
 </div>
+@endif
 <div class="row">
     <div class="col-lg-12">
         @component('components.notifications.errors')
@@ -87,13 +89,6 @@
 
         @include('components.notifications.messages')
         <div class="hpanel">
-            <div class="panel-heading">
-                <div class="panel-tools">
-                    <a class="showhide"><i class="fa fa-chevron-up"></i></a>
-                    <a class="closebox"><i class="fa fa-times"></i></a>
-                </div>
-                Tranfer Point
-            </div>
             <div class="panel-body">
                 <form class="form-horizontal" method="post" action="{{ url('vault/transfer-point') }}">
                 	{{csrf_field()}}

@@ -113,13 +113,13 @@ class RegisterController extends Controller
                 'race'              => 'required_if:type,==,personal',
                 'id_type'           => 'required_if:type,==,personal',
                 'id_no'             => 'required_if:type,==,personal',
-                'id_pic'            => 'sometimes|image|mimes:jpeg,bmp,png|max:5120',
+                'id_pic'            => 'sometimes|image|mimes:jpeg,jpg,bmp,png|max:5120',
                 //end personal
                 //business
                 'company_name'      => 'required_if:type,==,business',
                 'company_registration_no' => 'required_if:type,==,business',
-                'comp_reg_cert'     => 'sometimes|image|mimes:jpeg,bmp,png|max:5120',
-                'company_logo'      => 'sometimes|image|mimes:jpeg,bmp,png|max:5120',
+                'comp_reg_cert'     => 'sometimes|image|mimes:jpeg,jpg,bmp,png|max:5120',
+                'company_logo'      => 'sometimes|image|mimes:jpeg,jpg,bmp,png|max:5120',
                 //end business
                 'introducer'        => 'required|exists:'.$table.',username',
                 'mobile_no'         => 'required',

@@ -41,7 +41,7 @@ select{cursor:pointer;}
 			<div class="panel panel-default">
 
 				<div class="panel-heading">
-					<h3 class="panel-title">setting - Product Category Listing</h3>
+					<h3 class="panel-title">Setting - Product Category Listing</h3>
 					<div class="actions pull-right">
 						<a href="javascript:;" class="btn btn-default  btn-sm btn-circle addnewcategory" title="Add New Product Category" >
 					<i class="fa fa-plus"></i> New Product Category </a>
