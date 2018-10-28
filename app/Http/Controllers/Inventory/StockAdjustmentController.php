@@ -47,7 +47,7 @@ class StockAdjustmentController extends Controller
         $product_id = $request->get('product_id');
 
 		
-        $select_query  = StockItem::where('barcode',$barcode);
+        $select_query  = StockItem::where('barcode',$barcode)->where('status','01');
         if($product_id)
         {
             $select_query->where('product_id',$product_id);

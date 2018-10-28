@@ -13,4 +13,9 @@ class DeliveryItem extends Model
     {
         return $this->hasOne('App\Models\Product','id','product_id');
     }
+
+    public function delivery()
+    {
+        return $this->belongsTo("App\Models\Delivery", "id","delivery_id");
+    }
 }

@@ -27,4 +27,9 @@ class Product extends Model
     {
     	return $this->belongsTo('App\Models\OrderItem');
     }
+
+    public function packages()
+    {
+    	return $this->hasMany('App\Models\Product_package','package_id');
+    }
 }
