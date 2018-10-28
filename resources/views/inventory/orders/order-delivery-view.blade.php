@@ -79,14 +79,13 @@ p {font-size:12px !important;}
                         <div  class="panel-body panel-body-pricing A4">  
                                 <div class="row">
                                     <img style="float: right!important;" class="pull-right" src="data:image/png;base64,{{ DNS1D::getBarcodePNG(isset($delivery->delivery_number) ? $delivery->delivery_number : "", "C128",1,33,array(1,1,1),true)  }}" alt="barcode"   />
-                                     
-                                </div>             
                                     <img src="{{ asset('themes/Joli/img/skgwrldogo.png') }}"  height="50" width="200" alt="skgworld">
                                     <h3>SKG WORLD SDN BHD</h3>
                                     <hr>
-                                    <h1 style="text-align: center;">Delivery Order</h1>                          
+                                </div>             
+                                    <h3 style="text-align: center;">Delivery Order</h3>                          
                             
-                            <div style="width:50%;float:left;font-size:12px;">
+                            <div style="width:50%;float:left;font-size:8px;">
                             <p style=""><span class="fa fa-caret-right"></span> <strong>Customer:</strong> {{ isset($delivery->salesOrder->user->username) ? $delivery->salesOrder->user->username : "" }}</p>
                             <p><span class="fa fa-caret-right"></span> <strong>Tel:</strong> {{ isset($delivery->salesOrder->tel) ? $delivery->salesOrder->tel : "" }}</p>                
                             <p><span class="fa fa-caret-right"></span> <strong>Purchase Date:</strong> {{ Carbon\Carbon::parse(isset($delivery->salesOrder->purchase_date) ?$delivery->salesOrder->purchase_date: "")->format('d/m/Y') }}</p>
@@ -107,37 +106,35 @@ p {font-size:12px !important;}
             
                             
                         </div>
-                        <div style="width:50%;float:right;font-size:12px;">
+                        <div style="width:50%;float:right;font-size:8px;">
                                 <p><span class="fa fa-caret-right"></span> <strong>Delivery Order:</strong>#{{ isset($delivery->delivery_number) ? $delivery->delivery_number : ""}}</p>
                                 <p><span class="fa fa-caret-right"></span> <strong>Consignment Note (C/N):</strong> {{ isset($delivery->courier_consignment) ? $delivery->courier_consignment : "" }}</p>
                                 <p><span class="fa fa-caret-right"></span> <strong>Courier:</strong> {{ isset($delivery->courier->courier_name) ? $delivery->courier->courier_name : "" }}</p>
                                 <p><span class="fa fa-caret-right"></span> <strong>Generate Date:</strong> {{ isset($delivery->created_at) ? Carbon\Carbon::parse($delivery->created_at)->format('Y/m/d H:i:s') : "" }}</p>
                         </div>
-                            <table class="table table-condensed">
+                            <table border="1px" class="table table-condensed table-stripe" style="font-size:11px !important;">
                                 <thead>
                                     <tr>
-                                        <th>Items</th>
+                                        <th>Code</th>
+                                        <th>Name</th>
                                         <th>Quantity</th>
-                                        <th>Price</th>
-                                        
                                     </tr>
                                 </thead>
                                 <tbody>
                                         @foreach($items as $item)
                                         <tr>
+                                            <td>{{ isset($item->products->code) ? $item->products->code : "" }}</td>   
                                             <td>{{ isset($item->products->name) ? $item->products->name : "" }}</td>                               
-                                            <td>{{ isset($item->quantity) ? $item->where('product_id',$item->product_id)->sum('quantity') : "" }}</td>
-                                            <td>RM(WM){{ isset($item->products->price_wm) ? $item->products->price_wm : "" }}</td>
+                                            <td>{{ isset($item->quantity) ? $item->where('product_id',$item->product_id)->sum('quantity') : "0" }}</td>
                                         </tr>
                                         @endforeach
                                 </tbody>
                             </table>
-                            <div  style="float: right!important;">
-                            <p ><span class="fa fa-caret-right"></span> <strong>Total Items:{{ isset($delivery->deliveryItem) ? $delivery->deliveryItem->sum('quantity') : "0" }}</strong></p>
-                            <p><span class="fa fa-caret-right"></span> <strong>Total Price: MYR {{ isset($delivery->salesOrder->total_price) ? $delivery->salesOrder->total_price : "0" }}</strong></p>
-                            <p><span class="fa fa-caret-right"></span> <strong>Delivery Price: MYR {{ isset($delivery->salesOrder->shipping_fee) ? $delivery->salesOrder->shipping_fee : "0" }}</strong></p>
-                            </div>
+                            <div>
+                                    <p>This is computer-generated copy,no signature required</p>
+                                </div>
                         </div>
+                        
 
 
                 </page>

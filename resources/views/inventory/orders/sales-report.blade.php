@@ -76,25 +76,43 @@
                                                                  <th class="hidden"></th>
                                                                  <th>Date</th>
                                                                  <th>SO#</th>
-                                                                 <th>Product Code</th>
-                                                                 <th>Quantity</th>                                                                                                                                 
+                                                                 @foreach($products as $product)
+                                                                 <th>{{ $product->code }}</th>
+                                                                 @endforeach
+                                                                 <th>Total Quantity</th>                                                                                                                                 
                                                                  <th>Total Paid</th>
                                                                  
                                                              </tr>
                                                          </thead>
                                                          <tbody>
                                                              @foreach($reports as $report )
-                                                             @foreach(isset($report->orderItems)?$report->orderItems:[]  as $rep)
+                                                             {{-- @foreach(isset($report->orderItems)?$report->orderItems:[]  as $rep) --}}
                                                                 <tr>
                                                                     <td class="hidden">{{ isset($report->purchase_date) ? $report->purchase_date : ""}}</td>
                                                                     <td>{{ isset($report->purchase_date) ? $report->purchase_date : "" }}</td>
                                                                     <td>{{ isset($report->order_no) ? $report->order_no : "" }}</td>
-                                                                    <td>{{ $rep ? $rep->product->code : "" }}</td>
-                                                                    <td>{{ $rep ? $rep->sum('product_qty') : ""  }}</td>
+                                                                    @if(isset($report->orderItems))
+
+                                                                    @foreach($report->orderItems as $rep)  
+                                                                    @foreach($products as $product)
+                                                                    @if($rep->product_id == $product->id)
+                                                                    <td>{{ $report->orderItems->where('product_id',$product->id)->sum('product_qty') }}</td>  
+                                                                                                                                                        
+                                                                    @endif
+
+                                                                    @endforeach
+                                                                   
+                                                                    
+                                                                    @endforeach
+                                                                    @else
+                                                                    <td></td>
+                                                                    @endif
+                                                                    
+                                                                    <td>{{ $report->orderItems ? $report->orderItems->sum('product_qty') : ""  }}</td>
                                                                     <td   class="success">{{ isset($report->total_price) ?  $report->total_price : ""}}</td>
                                                                     
                                                                 </tr>
-                                                                @endforeach
+                                                                {{-- @endforeach --}}
                                                              @endforeach
                                                             </tbody>
                                                         <tfoot>
