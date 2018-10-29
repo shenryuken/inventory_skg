@@ -118,15 +118,15 @@ class RegisterController extends Controller
                 //business
                 'company_name'      => 'required_if:type,==,business',
                 'company_registration_no' => 'required_if:type,==,business',
-                'comp_reg_cert'     => 'sometimes|image|mimes:jpeg,jpg,bmp,png|max:5120',
+                'comp_reg_cert'     => 'required_if:type,==,business|image|mimes:jpeg,jpg,bmp,png|max:5120',
                 'company_logo'      => 'sometimes|image|mimes:jpeg,jpg,bmp,png|max:5120',
                 'office_tel'        => 'required_if:type,==,business',
                 'fax_no'            => 'required_if:type,==,business',
                 'comp_email'        => 'required_if:type,==,business',
                 //end business
                 'introducer'        => 'required|exists:'.$table.',username',
-                'mobile_no'         => 'required',
-                'email'             => 'required',
+                'mobile_no'         => 'required_if:type,==,personal',
+                'email'             => 'required_if:type,==,personal',
                 'street'            => 'required',
                 'street2'           => '',
                 'city'              => 'required',

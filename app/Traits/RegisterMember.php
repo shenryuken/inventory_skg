@@ -68,7 +68,7 @@ trait RegisterMember
             $profile->company_registration_no = $newUser['company_registration_no'];
             $profile->company_reg_cert        = isset($newUser['comp_reg_cert_img']) ? $newUser['comp_reg_cert_img']:'';
             $profile->company_logo            = isset($newUser['comp_logo_img']) ? $newUser['comp_logo_img']:'';
-            $profile->cert_status             = isset($newUser['comp_reg_cert_img']) ? 'Waiting Approval':'';
+            $profile->cert_status             = isset($newUser['comp_reg_cert_img']) ? 'Waiting Approval':'Not Update';
             $profile->contact_no              = $newUser['office_tel'];
             $profile->fax_no                  = $newUser['fax_no'];
         }     
