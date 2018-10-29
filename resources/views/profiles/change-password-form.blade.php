@@ -30,14 +30,14 @@
 					<div class="form-group">
 						<label class="col-md-3 control-label">Old Password</label>
 						<div class="col-md-3">
-							<input class="form-control" type="text" name="old_password">
+							<input class="form-control" type="password" name="old_password">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-md-3 control-label">New Password</label>
 						<div class="col-md-3">
-							<input class="form-control" type="text" name="new_password">
+							<input class="form-control" type="password" name="new_password">
 							{{-- <span class="help-block">This is sample of text field</span> --}}
 						</div>
 					</div>
