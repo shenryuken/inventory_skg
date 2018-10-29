@@ -41,8 +41,15 @@
                         </dl>
                     </div>-->
                     <div class=" col-md-9 col-lg-9 ">
+                        <h2>Personal Information</h2>
                         <table class="table table-user-information" >
                             <tbody>
+                                <tr>
+                                    <td><strong>Full Name</strong></td>
+                                    <td>
+                                        {{ $profile->full_name }}
+                                    </td>
+                                </tr>
                                 <tr>
                                     <td><strong>Address</strong></td>
                                     <td>

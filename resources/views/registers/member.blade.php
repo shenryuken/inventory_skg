@@ -62,7 +62,8 @@
 
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
+<!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDEZqGhlLz3NPU01YbwUmSOl13UkbxygD0&callback=initMap"
+  type="text/javascript"></script> -->
 <!-- END THIS PAGE PLUGINS -->
 <script>
   $(function(){
@@ -92,6 +93,12 @@
   function copyTextValue(bf) {
   var text1 = bf.checked ? document.getElementById("name").value : '';
   document.getElementById("acc_holder_name").value = text1;
+}
+</script>
+<script>
+  function copyTextValue2(bf2) {
+  var text2 = bf2.checked ? document.getElementById("company_name").value : '';
+  document.getElementById("b_acc_holder_name").value = text2;
 }
 </script>
 {{-- Check Matching Password --}}
