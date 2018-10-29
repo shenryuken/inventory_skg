@@ -16,6 +16,9 @@ use App\Models\UserBonus;
 
 use App\User;
 
+use Carbon\Carbon;
+use DateTime;
+
 trait CountAndRecordBonus
 {
     //Retail Profit Bonus

@@ -51,7 +51,6 @@
 					<option value="personal" selected>PERSONAL</option>
 					<option value="business">BUSINESS</option>
 				</select>
-				{{-- <span class="help-block">This is sample of text field</span> --}}
 			</div>
 		</div>
 		<div class="form-group " >
@@ -159,7 +158,7 @@
 			<label class="col-md-3  control-label">Company Name *</label>
 			<div class="col-md-3">
 				
-				<input class="form-control" type="text" name="company_name" id="company_name" onchange="copyTextValue(this);" value="{{ old('company_name')}}">
+				<input class="form-control" type="text" name="company_name" id="company_name" onchange="copyTextValue2(this);" value="{{ old('company_name')}}">
 				
 				{{-- <span class="help-block">This is sample of text field</span> --}}
 			</div>
@@ -211,7 +210,7 @@
 	<div class="panel-heading ui-draggable-handle">
 		<h3 class="panel-title"><strong>Contact Info</strong></h3>
 	</div>
-	<div class="panel-body">
+	<div class="panel-body personal" style="display:show">
 		
 		<div class="form-group">
 			<label class="col-md-3 control-label">Mobile No *</label>
@@ -228,6 +227,38 @@
 			<div class="col-md-3">
 				
 				<input class="form-control" type="text" name="email" value="{{ old('email') }}">
+				
+				{{-- <span class="help-block">This is sample of text field</span> --}}
+			</div>
+		</div>
+		
+	</div>
+	<div class="panel-body business" style="display:none">
+		
+		<div class="form-group">
+			<label class="col-md-3 control-label">Office Tel. *</label>
+			<div class="col-md-2">
+				
+				<input class="form-control" type="text" name="office_tel" value="{{ old('office_tel') }}">
+				
+				{{-- <span class="help-block">This is sample of text field</span> --}}
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-md-3 control-label">Fax No.</label>
+			<div class="col-md-2">
+				
+				<input class="form-control" type="text" name="fax_no" value="{{ old('fax_no') }}">
+				
+				{{-- <span class="help-block">This is sample of text field</span> --}}
+			</div>
+		</div>
+		
+		<div class="form-group">
+			<label class="col-md-3  control-label">Email *</label>
+			<div class="col-md-3">
+				
+				<input class="form-control" type="text" name="comp_email" value="{{ old('comp_email') }}">
 				
 				{{-- <span class="help-block">This is sample of text field</span> --}}
 			</div>
@@ -319,16 +350,28 @@
 				{{-- <span class="help-block">This is sample of text field</span> --}}
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group personal" style="display:show">
 			<label class="col-md-3 control-label">Account Holder Name *</label>
 			<div class="col-md-3">
 				
-				<input class="form-control" type="text" name="acc_holder_name" id="acc_holder_name" value="{{ old('acc_holder_name') }}">
-				
+				<input class="form-control personal" type="text" name="acc_holder_name" id="acc_holder_name" value="{{ old('acc_holder_name') }}">
+
 				{{-- <span class="help-block">This is sample of text field</span> --}}
 			</div>
 			<div class="checkbox pull-left">
 				<label><input type="checkbox" name="check1" onchange="copyTextValue(this);"> Same As Above</label>
+			</div>
+		</div>
+		<div class="form-group business" style="display:none">
+			<label class="col-md-3 control-label">Account Holder Name *</label>
+			<div class="col-md-3">
+				
+				<input class="form-control" type="text" name="acc_holder_name" id="b_acc_holder_name" value="{{ old('acc_holder_name') }}">
+				
+				{{-- <span class="help-block">This is sample of text field</span> --}}
+			</div>
+			<div class="checkbox pull-left">
+				<label><input type="checkbox" name="check2" onchange="copyTextValue2(this);"> Same As Above</label>
 			</div>
 		</div>
 		

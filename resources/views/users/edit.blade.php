@@ -53,7 +53,17 @@
                         {{-- <span class="help-block">This is sample of text field</span> --}}
                     </div>
                 </div>
+                <div class="form-group">
+                <label class="col-md-3 col-xs-12 control-label">Security Code</label>
+                <div class="col-md-6 col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+                        <input class="form-control" type="text" name="security_code">
+                    </div>
+                </div>
             </div>
+            </div>
+            
             <div class="panel-footer">
                 {{-- <button class="btn btn-default">Clear Form</button> --}}
                 <button class="btn btn-primary pull-right" type="submit">Update</button>

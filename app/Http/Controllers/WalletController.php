@@ -102,7 +102,7 @@ class WalletController extends Controller
 
     		if($request->point_to_transfer <= $sender_wallet->vault && $request->point_to_transfer > 0)
     		{
-    			$sender_wallet 		= Wallet::where('user_id', $receiver->id)->first();
+    			$sender_wallet 		= Wallet::where('user_id', $sender->id)->first();
 		    	$receiver_wallet 	= Wallet::where('user_id', $receiver->id)->first();
 
 		    	$sender_wallet->vault 	= $sender_wallet->vault - $request->point_to_transfer;

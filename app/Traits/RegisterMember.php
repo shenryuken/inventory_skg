@@ -43,7 +43,7 @@ trait RegisterMember
         $user->username     = $newUser['username'];
         //$user->password     = $newUser->password;
         $user->password     = $defaultPassword;
-        $user->email        = $newUser['email'];
+        $user->email        = $newUser['email'] != '' ? $newUser['email']:$newUser['comp_email'];
         $user->mobile_no    = $newUser['mobile_no'];
         $user->introducer   = $newUser['introducer'];
         $user->rank_id      = $rank_id;
@@ -68,7 +68,9 @@ trait RegisterMember
             $profile->company_registration_no = $newUser['company_registration_no'];
             $profile->company_reg_cert        = isset($newUser['comp_reg_cert_img']) ? $newUser['comp_reg_cert_img']:'';
             $profile->company_logo            = isset($newUser['comp_logo_img']) ? $newUser['comp_logo_img']:'';
-            $profile->cert_status             = isset($newUser['comp_reg_cert_img']) ? 'Waiting Approval':'';;
+            $profile->cert_status             = isset($newUser['comp_reg_cert_img']) ? 'Waiting Approval':'';
+            $profile->contact_no              = $newUser['office_tel'];
+            $profile->fax_no                  = $newUser['fax_no'];
         }     
        
         $profile->street    = $newUser['street'];
