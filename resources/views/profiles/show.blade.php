@@ -18,8 +18,6 @@
         <p class=" text-info">May 05,2014,03:00 pm </p>
     </div> --}}
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xs-offset-0 col-sm-offset-0 col-md-offset-0 col-lg-offset-0 toppad" >
-        
-        
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h3 class="panel-title">{{ $profile->profileable->username }}</h3>
@@ -127,8 +125,14 @@
                         </dl>
                     </div>-->
                     <div class=" col-md-9 col-lg-9 ">
-                        <table class="table table-user-information">
+                        @if($profile->profileable->type == "personal")
+                        <h2>Personal Information</h2>
+                         <table class="table table-user-information">
                             <tbody>
+                                <tr>
+                                    <td>Full Name</td>
+                                    <td>{{ $profile->full_name }}</td>
+                                </tr>
                                 <tr>
                                     <td>Address</td>
                                     <td>
@@ -170,6 +174,118 @@
                                     </td>
                                 </tr>
                                 
+                            </tbody>
+                        </table>
+                        @else
+                        <h2>Business Information</h2>
+                        <table class="table table-user-information">
+                            <tbody>
+                                <tr>
+                                    <td>Company Name</td>
+                                    <td>{{ $profile->company_name }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Company Registration No</td>
+                                    <td>{{ $profile->company_registration_no }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Company Registration No</td>
+                                    <td>{{ $profile->company_registration_no }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Address</td>
+                                    <td>
+                                        <dd>{{ $profile->street }},</dd>
+                                        <dd>{{ $profile->postcode }} , {{ $profile->city }},</dd>
+                                        <dd>{{ $profile->state }},</dd>
+                                        <dd>{{ $profile->country }},</dd>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Joined date</td>
+                                    <td>{{ $profile->profileable->created_at }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td><a href="mailto:{{ $profile->profileable->email }}">{{ $profile->profileable->email }}</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Phone Number</td>
+                                    <td>
+                                        <dd>{{ $profile->contact_no }}</dd>
+                                        <dd>{{ $profile->contact_no2 }}</dd>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Rank</td>
+                                    <td>{{ $profile->profileable->rank->name }}</td>
+                                </tr>  
+                                <tr>
+                                    <td>MyKad/Passport Status</td>
+                                    <td>
+                                        @if($profile->status_ic === 'Not Update')
+                                            Not Update | <a href="{{ url('profile/upload-ic')}}">Click Here To Upload Your MyKad Or Passport </a>
+                                        @else
+                                            {{ $profile->status_ic }} 
+                                            | 
+                                            <a href="{{ url('profile/show-ic/'.$profile->id) }}">View MyKad</a>
+                                        @endif
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                        @endif
+                    </div>
+                    <div class=" col-md-9 col-lg-9 ">
+                        <h2>Account Information</h2>
+                        <table class="table table-user-information">
+                            <tbody>
+                                <tr>
+                                    <td>Bank</td>
+                                    <td>{{ $profile->profileable->account->bank->name }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Account Holder Name</td>
+                                    <td>
+                                        {{ $profile->profileable->account->acc_holder_name }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Account No</td>
+                                    <td>{{ $profile->profileable->account->account_no }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Account Type</td>
+                                    <td>{{ $profile->profileable->account->account_type }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                     <div class=" col-md-9 col-lg-9 ">
+                        <h2>Beneficiary Information</h2>
+                        <table class="table table-user-information">
+                            <tbody>
+                                <tr>
+                                    <td>Beneficiary Name</td>
+                                    <td>{{ $profile->beneficiary_name or "Not Update" }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Relationship</td>
+                                    <td>
+                                        {{ $profile->relationship or "Not Update"}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Address</td>
+                                    <td>{{ $profile->beneficiary_address or "Not Update" }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Phone Number</td>
+                                    <td>
+                                        {{ $profile->beneficiary_mobile_no or "Not Update"}}
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

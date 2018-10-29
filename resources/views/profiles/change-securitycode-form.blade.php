@@ -31,14 +31,14 @@
 					<div class="form-group">
 						<label class="col-md-3 control-label">Old Security Code</label>
 						<div class="col-md-3">
-							<input class="form-control" type="text" name="old_security_code">
+							<input class="form-control" type="password" name="old_security_code">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-md-3 control-label">New Security Code</label>
 						<div class="col-md-3">
-							<input class="form-control" type="text" name="new_security_code">
+							<input class="form-control" type="password" name="new_security_code">
 							{{-- <span class="help-block">This is sample of text field</span> --}}
 						</div>
 					</div>

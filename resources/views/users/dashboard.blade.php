@@ -111,13 +111,15 @@
                 <table class="table text-uppercase">
                     <thead>
                         <tr>
-                            <th>MO-Vault</th>
-                            <th>PV</th>
+                            <th>Vault</th>
+                            <th>Advance</th>
+                            <th>PV (Min Maintain Monthly: >= 100)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td><strong> {{ $wallet->p_wallet or 0 }} </strong></td>
+                            <td><strong> {{ $wallet->vault or 0 }} </strong></td>
+                            <td><strong> {{ $wallet->advance or 0}} </strong> </td>
                             <td><strong> {{ $wallet->pv or 0}} </strong> </td>
                         </tr>
                     </tbody>

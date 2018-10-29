@@ -158,33 +158,59 @@ class RegisterController extends Controller
                 $defaultPassword = $this->defaultPassword($request->company_registration_no);
             //end default password
 
+            if($request->hasFile('id_pic'))
+            {
+                $ic_image        = $request->file('id_pic');
+                $filename_mykad  = time() . '.' . $ic_image->getClientOriginalExtension();
+                $saveImage       = Image::make($ic_image)->resize(400, 300)->save( public_path('/app/mykad/' . $filename_mykad ) );
+
+                $request->request->add(['id_pic_image' => $filename_mykad]);
+            }
+
+            if($request->hasFile('comp_reg_cert'))
+            {
+                $comp_cert      = $request->file('comp_reg_cert');
+                $filename_cert  = time() . '.' . $comp_cert->getClientOriginalExtension();
+                $save_cert      = Image::make($comp_cert)->resize(400, 300)->save( public_path('/app/comp_cert/' . $filename_cert ) );
+
+                $request->request->add(['comp_reg_cert_img' => $filename_cert]);
+            }
+            
+            if($request->hasFile('company_logo'))
+            {
+                $comp_logo      = $request->file('company_logo');
+                $filename_logo  = time() . '.' . $comp_logo->getClientOriginalExtension();
+                $save_logo      = Image::make($comp_logo)->resize(400, 300)->save( public_path('/app/comp_logo/' . $filename_logo ) );
+                $request->request->add(['comp_logo_img' => $filename_logo]);
+            }
+
             if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode))
             {
-                if($request->hasFile('id_pic'))
-                {
-                    $ic_image        = $request->file('id_pic');
-                    $filename_mykad  = time() . '.' . $ic_image->getClientOriginalExtension();
-                    $saveImage       = Image::make($ic_image)->resize(400, 300)->save( public_path('/app/mykad/' . $filename_mykad ) );
+                // if($request->hasFile('id_pic'))
+                // {
+                //     $ic_image        = $request->file('id_pic');
+                //     $filename_mykad  = time() . '.' . $ic_image->getClientOriginalExtension();
+                //     $saveImage       = Image::make($ic_image)->resize(400, 300)->save( public_path('/app/mykad/' . $filename_mykad ) );
 
-                    $request->request->add(['id_pic_image' => $filename_mykad]);
-                }
+                //     $request->request->add(['id_pic_image' => $filename_mykad]);
+                // }
 
-                if($request->hasFile('comp_reg_cert'))
-                {
-                    $comp_cert      = $request->file('comp_reg_cert');
-                    $filename_cert  = time() . '.' . $comp_cert->getClientOriginalExtension();
-                    $save_cert      = Image::make($comp_cert)->resize(400, 300)->save( public_path('/app/comp_cert/' . $filename_cert ) );
+                // if($request->hasFile('comp_reg_cert'))
+                // {
+                //     $comp_cert      = $request->file('comp_reg_cert');
+                //     $filename_cert  = time() . '.' . $comp_cert->getClientOriginalExtension();
+                //     $save_cert      = Image::make($comp_cert)->resize(400, 300)->save( public_path('/app/comp_cert/' . $filename_cert ) );
 
-                    $request->request->add(['comp_reg_cert_img' => $filename_cert]);
-                }
+                //     $request->request->add(['comp_reg_cert_img' => $filename_cert]);
+                // }
                 
-                if($request->hasFile('company_logo'))
-                {
-                    $comp_logo      = $request->file('company_logo');
-                    $filename_logo  = time() . '.' . $comp_logo->getClientOriginalExtension();
-                    $save_logo      = Image::make($comp_logo)->resize(400, 300)->save( public_path('/app/comp_logo/' . $filename_logo ) );
-                    $request->request->add(['comp_logo_img' => $filename_logo]);
-                }
+                // if($request->hasFile('company_logo'))
+                // {
+                //     $comp_logo      = $request->file('company_logo');
+                //     $filename_logo  = time() . '.' . $comp_logo->getClientOriginalExtension();
+                //     $save_logo      = Image::make($comp_logo)->resize(400, 300)->save( public_path('/app/comp_logo/' . $filename_logo ) );
+                //     $request->request->add(['comp_logo_img' => $filename_logo]);
+                // }
      
                
                 //$this->saveToPreregisterTable($request->all(), $rank->id);
