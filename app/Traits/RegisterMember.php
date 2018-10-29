@@ -96,7 +96,7 @@ trait RegisterMember
         $account = new Account;
         $account->bank_id           = $bank->id;
         $account->account_no        = $newUser['account_no'];
-        $account->acc_holder_name   = $newUser['acc_holder_name'];
+        $account->acc_holder_name   = $newUser['acc_holder_name'] != '' ? $newUser['acc_holder_name']:$newUser['b_acc_holder_name'];
         $account->account_type      = $newUser['account_type'];
 
         $user->save();
