@@ -366,7 +366,7 @@
 			<label class="col-md-3 control-label">Account Holder Name *</label>
 			<div class="col-md-3">
 				
-				<input class="form-control" type="text" name="acc_holder_name" id="b_acc_holder_name" value="{{ old('acc_holder_name') }}">
+				<input class="form-control" type="text" name="b_acc_holder_name" id="b_acc_holder_name" value="{{ old('b_acc_holder_name') }}">
 				
 				{{-- <span class="help-block">This is sample of text field</span> --}}
 			</div>
