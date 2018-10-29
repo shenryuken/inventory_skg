@@ -163,6 +163,7 @@ class UserController extends Controller
                 'username'  => 'required|unique:users,username,'.$id,
                 'email'     => 'required|unique:users,email,'.$id,
                 'mobile_no' => 'required',
+                'security_code' => 'required',
             ]);
 
         if($validator->fails()){
@@ -172,11 +173,20 @@ class UserController extends Controller
         } else {
 
             $user = User::find($id);
-            $user->username = $request->username;
-            $user->email    = $request->email;
-            $user->mobile_no= $request->mobile_no;
-            $user->save();
-
+            
+            if((Auth::check() && Hash::check($request->security_code, $user->security_code)) && (Auth::guard('admin')->check() && Hash::check($request->security_code, Auth::guard('admin')->user()->security_code)))
+            {
+               
+                $user->username = $request->username;
+                $user->email    = $request->email;
+                $user->mobile_no= $request->mobile_no;
+                $user->save();
+            }
+            else 
+            {
+                return redirect()->back()->with('fail','You are not permitted for this action');
+            }
+           
             //return redirect('user/lists');
             return redirect()->back()->with('success','User update successfully');
         }
