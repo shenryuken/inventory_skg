@@ -103,7 +103,14 @@
                                     {{ $user->username }}
                                 </td>
                                 <td>
-                                    {{ $user->profile->status_ic or 'Not Update'}}
+                                @if(!is_null($user->profile) && $user->type == 'personal' )
+                                    {{ $user->profile->status_ic or "Not Update"}}
+                                @elseif(!is_null($user->profile) && $user->type == 'business')
+                                    {{ $user->profile->cert_status or "Not Update"}}
+                                @else
+                                    No Profile Found
+                                @endif
+
                                 </td>
                                 <td>
                                 @if(!is_null($user->profile) && $user->type == 'personal' )

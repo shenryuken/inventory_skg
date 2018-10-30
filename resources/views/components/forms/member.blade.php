@@ -175,13 +175,13 @@
 		<div class="form-group business" style="display:none">
 			<label class="col-md-3 control-label">Upload Company Registration Cert. *</label>
 			<div class="col-md-3 ">
-				<input type="file" multiple id="file-simple" name="comp_reg_cert" value="{{ old('comp_reg_cert') }}" />
+				<input type="file" multiple name="comp_reg_cert" value="{{ old('comp_reg_cert') }}" />
 			</div>
 		</div>
 		<div class="form-group business" style="display:none">
 			<label class="col-md-3 control-label">Upload Company Logo</label>
 			<div class="col-md-3 ">
-				<input type="file" multiple id="file-simple" name="company_logo" value="{{ old('company_logo') }}" />
+				<input type="file" multiple name="company_logo" value="{{ old('company_logo') }}" />
 			</div>
 		</div>
 		<!--// End Business Info //-->

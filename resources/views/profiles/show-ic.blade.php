@@ -44,11 +44,28 @@
                          <table class="table table-user-information">
                             <tbody>
                                 <tr>
-                                    <td>Full Name</td>
+                                    <td><strong>Full Name</strong></td>
                                     <td>{{ $profile->full_name }}</td>
                                 </tr>
                                 <tr>
-                                    <td>Address</td>
+                                    <td><strong>MyKad/Passport No</strong></td>
+                                    <td>{{ $profile->id_no }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>MyKad/Passport Status</strong></td>
+                                    <td>
+                                        {{ $profile->status_ic }}  
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Bank:Account No.</strong></td>
+                                    <td>
+                                        <strong>{{ $profile->profileable->account->bank->name }}:</strong>
+                                        {{ $profile->profileable->account->account_no }}  
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Address</strong></td>
                                     <td>
                                         <dd>{{ $profile->street }},</dd>
                                         <dd>{{ $profile->postcode }} , {{ $profile->city }},</dd>
@@ -57,30 +74,25 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Joined date</td>
+                                    <td><strong>Joined date</strong></td>
                                     <td>{{ $profile->profileable->created_at }}</td>
                                 </tr>
                                 <tr>
-                                    <td>Email</td>
+                                    <td><strong>Email</strong></td>
                                     <td><a href="mailto:{{ $profile->profileable->email }}">{{ $profile->profileable->email }}</a></td>
                                 </tr>
                                 <tr>
-                                    <td>Phone Number</td>
+                                    <td><strong>Phone Number</strong></td>
                                     <td>
                                         <dd>{{ $profile->contact_no }}</dd>
                                         <dd>{{ $profile->contact_no2 }}</dd>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Rank</td>
+                                    <td><strong>Rank</strong></td>
                                     <td>{{ $profile->profileable->rank->name }}</td>
                                 </tr>  
-                                <tr>
-                                    <td>MyKad/Passport Status</td>
-                                    <td>
-                                        {{ $profile->status_ic }}  
-                                    </td>
-                                </tr>
+                                
                                 
                             </tbody>
                         </table>
@@ -128,13 +140,6 @@
                                     <td>Rank</td>
                                     <td>{{ $profile->profileable->rank->name }}</td>
                                 </tr>  
-                                <tr>
-                                    <td>MyKad/Passport Status</td>
-                                    <td>
-                                        {{ $profile->status_ic }} 
-                                    </td>
-                                </tr>
-                                
                             </tbody>
                         </table>
                     @endif

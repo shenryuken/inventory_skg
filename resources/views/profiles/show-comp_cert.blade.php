@@ -28,19 +28,26 @@
                         <table class="table table-user-information">
                             <tbody>
                                 <tr>
-                                    <td>Company Name</td>
+                                    <td><strong>Company Name</strong></td>
                                     <td>{{ $profile->company_name }}</td>
                                 </tr>
                                 <tr>
-                                    <td>Company Registration No</td>
+                                    <td><strong>Company Registration No</strong></td>
                                     <td>{{ $profile->company_registration_no }}</td>
                                 </tr>
                                 <tr>
-                                    <td>Company Registration No</td>
-                                    <td>{{ $profile->company_registration_no }}</td>
+                                    <td><strong>Company Registration Certificate Status</strong></td>
+                                    <td>{{ $profile->cert_status }}</td>
                                 </tr>
                                 <tr>
-                                    <td>Address</td>
+                                    <td><strong>Bank:Account No.</strong></td>
+                                    <td>
+                                        <strong>{{ $profile->profileable->account->bank->name }}:</strong>
+                                        {{ $profile->profileable->account->account_no }}  
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Address</strong></td>
                                     <td>
                                         <dd>{{ $profile->street }},</dd>
                                         <dd>{{ $profile->postcode }} , {{ $profile->city }},</dd>
@@ -49,31 +56,33 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Joined date</td>
+                                    <td><strong>Joined date</strong></td>
                                     <td>{{ $profile->profileable->created_at }}</td>
                                 </tr>
                                 <tr>
-                                    <td>Email</td>
+                                    <td><strong>Email</strong></td>
                                     <td><a href="mailto:{{ $profile->profileable->email }}">{{ $profile->profileable->email }}</a></td>
                                 </tr>
                                 <tr>
-                                    <td>Phone Number</td>
                                     <td>
-                                        <dd>{{ $profile->contact_no }}</dd>
-                                        <dd>{{ $profile->contact_no2 }}</dd>
+                                        <dd><strong>Office Tel.(1)</strong><dd>
+                                        <dd><strong>Office Tel.(2)</strong><dd>
+                                    </td>
+                                    <td>
+                                        <dd>{{ $profile->contact_no or "Not Update"}}</dd>
+                                        <dd>{{ $profile->contact_no2 or "Not Update"}}</dd>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Rank</td>
+                                    <td><strong>Fax Number</strong></td>
+                                    <td>
+                                        {{ $profile->fax_no }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Rank</strong></td>
                                     <td>{{ $profile->profileable->rank->name }}</td>
                                 </tr>  
-                                <tr>
-                                    <td>MyKad/Passport Status</td>
-                                    <td>
-                                        {{ $profile->status_ic }} 
-                                    </td>
-                                </tr>
-                                
                             </tbody>
                         </table>
                     @else
