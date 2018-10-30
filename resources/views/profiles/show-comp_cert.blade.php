@@ -22,7 +22,65 @@
                 <h3 class="panel-title">{{ $profile->profileable->username }}</h3>
             </div>
             <div class="panel-body">
-                <div class="row">
+                <div class="col-md-4">
+                    @if($profile->profileable->type == "business")
+                        <h2>Business Information</h2>
+                        <table class="table table-user-information">
+                            <tbody>
+                                <tr>
+                                    <td>Company Name</td>
+                                    <td>{{ $profile->company_name }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Company Registration No</td>
+                                    <td>{{ $profile->company_registration_no }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Company Registration No</td>
+                                    <td>{{ $profile->company_registration_no }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Address</td>
+                                    <td>
+                                        <dd>{{ $profile->street }},</dd>
+                                        <dd>{{ $profile->postcode }} , {{ $profile->city }},</dd>
+                                        <dd>{{ $profile->state }},</dd>
+                                        <dd>{{ $profile->country }},</dd>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Joined date</td>
+                                    <td>{{ $profile->profileable->created_at }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td><a href="mailto:{{ $profile->profileable->email }}">{{ $profile->profileable->email }}</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Phone Number</td>
+                                    <td>
+                                        <dd>{{ $profile->contact_no }}</dd>
+                                        <dd>{{ $profile->contact_no2 }}</dd>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Rank</td>
+                                    <td>{{ $profile->profileable->rank->name }}</td>
+                                </tr>  
+                                <tr>
+                                    <td>MyKad/Passport Status</td>
+                                    <td>
+                                        {{ $profile->status_ic }} 
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    @else
+                        No Company Profile Found For This User.
+                    @endif
+                </div>
+                <div class="col-md-8">
                 	@if(!empty($profile->company_reg_cert))
                     <div class="col-md-12 col-lg-12 " align="center"> <img alt="User Pic" src="{{ asset('app/comp_cert/'.$profile->company_reg_cert) }}" class="img-responsive">
                     </div>
