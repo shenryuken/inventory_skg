@@ -39,7 +39,7 @@
             </div>
             <div class="panel-body">
                 <div class="col-md-4">
-                     @if($profile->profileable->type == "personal")
+                    @if($profile->profileable->type == "personal")
                         <h2>Personal Information</h2>
                          <table class="table table-user-information">
                             <tbody>
@@ -137,7 +137,7 @@
                                 
                             </tbody>
                         </table>
-                        @endif
+                    @endif
                 </div>
                 <div class="col-md-8">
                 	@if(!empty($profile->id_pic))

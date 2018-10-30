@@ -28,7 +28,7 @@ $page_title = 'Upload MyKad\Passport';
 
     @endif
 	<div class="col-md-12">
-        @if(is_null($user->profile->id_pic))
+        @if(is_null($user->profile->id_pic) || empty($user->profile->id_pic))
 		<form enctype="multipart/form-data" class="form-horizontal" method="post" action="{{ route('upload.ic.post')}}">
 		<div class="panel panel-default">
 			<div class="panel-body">
@@ -64,7 +64,7 @@ $page_title = 'Upload MyKad\Passport';
                 </div>
             </div>
             <div class="panel-footer">
-                <a class="btn btn-info pull-right" href="{{url('user/profile'..$user->profile->id)}}">Back</a>
+                <a class="btn btn-info pull-right" href="{{url('user/profile'.$user->profile->id)}}">Back</a>
             </div>
         </div>
         @endif
