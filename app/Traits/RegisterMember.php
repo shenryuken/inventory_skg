@@ -14,6 +14,7 @@ use App\Models\Wallet;
 use App\Models\Address;
 use App\Models\Account;
 use App\Models\Bank;
+use App\Models\ShareHolder;
 
 use App\Admin;
 use App\User;
@@ -71,6 +72,7 @@ trait RegisterMember
             $profile->cert_status             = isset($newUser['comp_reg_cert_img']) ? 'Waiting Approval':'Not Update';
             $profile->contact_no              = $newUser['office_tel'];
             $profile->fax_no                  = $newUser['fax_no'];
+
         }     
        
         $profile->street    = $newUser['street'];

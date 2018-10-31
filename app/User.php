@@ -37,6 +37,11 @@ class User extends Authenticatable
         return $this->morphOne('App\Models\Profile', 'profileable');
     }
 
+    public function shareHolders()
+    {
+        return $this->hasMany('App\Models\ShareHolder');
+    }
+
     public function account()
     {
         return $this->hasOne('App\Models\Account');
