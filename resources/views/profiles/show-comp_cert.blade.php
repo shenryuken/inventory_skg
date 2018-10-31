@@ -83,6 +83,10 @@
                                     <td><strong>Rank</strong></td>
                                     <td>{{ $profile->profileable->rank->name }}</td>
                                 </tr>  
+                                <tr>
+                                    <td><strong>Introducer</strong></td>
+                                    <td>{{ $profile->profileable->introducer }}</td>
+                                </tr>
                             </tbody>
                         </table>
                     @else
