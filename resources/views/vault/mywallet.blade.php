@@ -23,13 +23,13 @@
         <div class="hpanel hbggreen">
             <div class="panel-body">
                 <div class="text-center">
-                    <h3>Current PV</h3>
+                    <h3>Vault</h3>
                     <p class="text-big font-light">
-                        {{ $wallet->current_pv or 0}}
+                        <strong>{{ $wallet->vault or 0}}</strong>
                     </p>
-                    <small>
+                    <!-- <small>
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                    </small>
+                    </small> -->
                 </div>
             </div>
         </div>
@@ -38,13 +38,13 @@
         <div class="hpanel hbgblue">
             <div class="panel-body">
                 <div class="text-center">
-                    <h3>Available PV</h3>
+                    <h3>Advance</h3>
                     <p class="text-big font-light">
-                        {{ $wallet->pv or 0}}
+                        <strong>{{ $wallet->advance or 0}}</strong>
                     </p>
-                    <small>
+                    <!-- <small>
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                    </small>
+                    </small> -->
                 </div>
             </div>
         </div>
@@ -53,13 +53,13 @@
         <div class="hpanel hbgyellow">
             <div class="panel-body">
                 <div class="text-center">
-                    <h3>DO GPV</h3>
+                    <h3>PTS</h3>
                     <p class="text-big font-light">
-                        {{ $wallet->do_pv or 0}}{{-- 750 --}}
+                        <strong>{{ $wallet->pv or 0}}{{-- 750 --}}</strong>
                     </p>
-                    <small>
+                    <!-- <small>
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                    </small>
+                    </small> -->
                 </div>
             </div>
         </div>
@@ -68,13 +68,13 @@
         <div class="hpanel hbgred">
             <div class="panel-body">
                 <div class="text-center">
-                    <h3>SDO GPV</h3>
+                    <h3>DO GPTS</h3>
                     <p class="text-big font-light">
-                        {{ $wallet->do_pv or 0}}{{-- 43 --}}
+                        <strong>{{ $wallet->do_pv or 0}}{{-- 43 --}}</strong>
                     </p>
-                    <small>
+                    <!-- <small>
                         Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-                    </small>
+                    </small> -->
                 </div>
             </div>
         </div>

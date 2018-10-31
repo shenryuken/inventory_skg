@@ -96,6 +96,22 @@
                                     <td><strong>Introducer</strong></td>
                                     <td>{{ $profile->profileable->introducer }}</td>
                                 </tr>
+                                <tr>
+                                    <td>Beneficiary Name</td>
+                                    <td>{{ $profile->beneficiary_name or "Not Update"}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Relationship</td>
+                                    <td>{{ $profile->relationship or "Not Update"}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Beneficiary Address</td>
+                                    <td>{{ $profile->beneficiary_address or "Not Update"}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Beneficiary Mobile No.</td>
+                                    <td>{{ $profile->beneficiary_mobile_no or "Not Update"}}</td>
+                                </tr>
                             </tbody>
                         </table>
                         @else

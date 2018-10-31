@@ -18,7 +18,7 @@
             <div class="panel-heading ui-draggable-handle">
                 <h3>
                     <span class="fa fa-user"></span> 
-                    <span class="xn-text">My Account</span>
+                    <span class="xn-text" style=" text-transform: capitalize;">My Account ({{$user->type}})</span>
                 </h3>  
             </div>
             <div class="panel-body">
@@ -42,7 +42,19 @@
                             <td>
                                 <strong>
                                     @if(!is_null($user->profile)) 
-                                        @switch( $user->profile->status_ic )
+                                        @php 
+                                            $status = '';
+                                            if($user->type == 'personal' && (!is_null($user->profile->id_pic) || !empty($user->profile->id_pic)))
+                                            {
+                                                $status = $user->profile->status_ic;
+                                            }
+                                            elseif($user->type == 'business' && (!is_null($user->profile->company_reg_cert) || !empty($user->profile->id_pic)))
+                                            {
+                                                $status = $user->profile->cert_status;
+                                            }
+                                        @endphp
+
+                                        @switch( $status )
                                             @case('Approved')
                                                 @php 
                                                     $label = 'success'; 
