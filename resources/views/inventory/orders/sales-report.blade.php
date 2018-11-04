@@ -81,38 +81,44 @@
                                                                  @endforeach
                                                                  <th>Total Quantity</th>                                                                                                                                 
                                                                  <th>Total Paid</th>
+                                                                 <th>Order Status</th>
                                                                  
                                                              </tr>
                                                          </thead>
                                                          <tbody>
-                                                             @foreach($reports as $report )
-                                                             
+                                                             @if(count($reports) > 0)   
+                                                             @foreach($reports as $report )                                                        
                                                                 <tr>
                                                                     <td class="hidden">{{ isset($report->purchase_date) ? $report->purchase_date : ""}}</td>
                                                                     <td>{{ isset($report->purchase_date) ? $report->purchase_date : "" }}</td>
                                                                     <td>{{ isset($report->order_no) ? $report->order_no : "" }}</td>
-                                                                    @php
                                                                     
-                                                                    foreach($products as $product){
-                                                                        $sum = "";
-                                                                    if(isset($report->orderItems)){
-                                                                        foreach($report->orderItems as $rep)
-                                                                        {
-                                                                            if($product->id === $rep->product_id){
-                                                                                $sum = $rep->product_qty;
-                                                                            }    
-                                                                                           
-                                                                        }
-                                                                    }
-
-                                                                        echo '<td>'.$sum.'</td>';
-                                                                    }
-                                                                    @endphp
-                                                                    <td>{{ $report->orderItems ? $report->orderItems->sum('product_qty') : ""  }}</td>
-                                                                    <td   class="success">{{ isset($report->total_price) ?  $report->total_price : ""}}</td>
+                                                                    @foreach($products as $product)
+                                                                    @php $sum = "";    @endphp 
+                                                                    @if(isset($report->orderItems))
+                                                                        @foreach($report->orderItems as $rep)
+                                                                            @if($product->id != "")
+                                                                                @if($product->id === $rep->product_id)
+                                                                                @php $sum = $rep->product_qty;    @endphp 
+                                                                                @endif                                                                           
+                                                                            @endif     
+                                                                        @endforeach
+                                                                    @endif
+                                                                    
+                                                                        <td>{{ $sum }}</td>
+                                                                    @endforeach
+                                                                        
+                                                                    
+                                                                    <td>{{ $report->orderItems ? $report->orderItems->sum('product_qty') : ""  }}</td>                                                                    
+                                                                    <td class="success">{{ isset($report->total_price) ?  $report->total_price : ""}}</td>
+                                                                    <td>{{ isset($report->globalstatus->description) ? $report->globalstatus->description : "" }}</td>
                                                                     
                                                                 </tr>
                                                              @endforeach
+                                                             @else
+                                                             <tr><td>No Data</td></tr>
+                                                             @endif
+
                                                             </tbody>
                                                         {{-- <tfoot>
                                                             <tr style="background-color: mistyrose;">
@@ -174,81 +180,8 @@
         var today = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +("0" + d.getDate()).slice(-2)
 
         var t = $('#stock_bal_report').DataTable({
-            "searching":false,
-        "footerCallback": function ( row, data, start, end, display ) {
-            var api = this.api(), data;
- 
-            // Remove the formatting to get integer data for summation
-            var intVal = function ( i ) {
-                return typeof i === 'string' ?
-                    i.replace(/[\$,]/g, '')*1 :
-                    typeof i === 'number' ?
-                        i : 0;
-            };
- 
-            // Total over all pages
-            total1 = api
-                .column( 4   )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-
-            total2 = api
-            .column( 5 )
-            .data()
-            .reduce( function (a, b) {
-                return intVal(a) + intVal(b);
-            }, 0 );
- 
-            // Total over this page
-            pageTotal1 = api
-                .column( 4  , { page: 'current'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-
-            pageTotal2 = api
-                .column( 5, { page: 'current'} )
-                .data()
-                .reduce( function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0 );
-
- 
-            // Update footer
-            // $( api.column( 4     ).footer() ).html(
-            //     '<strong>'+pageTotal1 +'</strong>'
-            // );
-
-            // $( api.column( 5 ).footer() ).html(
-            //     '<strong>'+pageTotal2.toFixed(2) + '</strong>'
-            // );
-
-            // $( api.column( 9 ).footer() ).html(
-            //     '<strong>'+ (parseInt(pageTotal1) - parseInt(pageTotal2))  + '</strong>'
-            // );
-        },
-
-        "rowCallback": function ( row, data, index ) {
-            var balance = 0;
-
-            if (index == 0) {
-                 balance = data[7] ||  0;
-                } else {
-                    var prev_row = this.api().row( index -1 ).data()
-                    balance = parseInt(prev_row[9]) + parseInt(data[7] || 0) - parseInt(data[8] || 0);
-                    
-                }
-
-            data[9] = balance;
-            $('td',row).eq(9).text(balance)
-
-        },
+                    "searching":false,
                     "order": [],
-                    // "scrollY":        "200px",
-                    // "scrollCollapse": true,
                     "paging":true,
                     "columnDefs": [
                                 { targets: 'no-sort', orderable: false }
