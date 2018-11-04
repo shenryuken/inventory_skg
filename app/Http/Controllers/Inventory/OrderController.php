@@ -19,6 +19,7 @@ use Storage;
 use Response;
 use App\Classes\GlobalNumberRange;
 use Log;
+use App\Models\Address;
 
 
 class OrderController extends Controller
@@ -83,8 +84,9 @@ class OrderController extends Controller
     public function deliveryIndex()
     {
         $deliveries = Delivery::all();
+        $address = Address::groupBy('state')->get();
 
-        return view('inventory.orders.order-delivery-index',[ 'deliveries' => $deliveries]);
+        return view('inventory.orders.order-delivery-index',[ 'deliveries' => $deliveries,'address'=>$address]);
     }
 
     public function deliveryCreate($order_no)
