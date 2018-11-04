@@ -36,7 +36,7 @@ class SalesReportController extends Controller
     public function index()
     {
         $reports = OrderHdr::all();
-        $products = Product::all();
+        $products = Product::where('category','<>',3)->whereStatus(1)->orderBy('id')->get();
 
         return view('inventory.orders.sales-report',compact('reports','products'));
     }

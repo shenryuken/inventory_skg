@@ -19,9 +19,8 @@
         <div class="login-container lightmode">
             
             <div class="login-box animated fadeInDown">
-                <h1 class="text-info">SKG WORLD</h1>
                 <div class="login-body">
-                    <div class="login-title"><strong>Log In</strong> to your account</div>
+                    <div class="login-title"><strong>Administrator Log In</strong></div>
                     
                     <form id="loginForm" class="form-horizontal" method="post" action="{{ route('admin.login.submit') }}">
                         {{ csrf_field() }}
@@ -47,11 +46,11 @@
                         </div>
                         
                         <div class="form-group">
-                        <div class="col-md-6">
+                        {{-- <div class="col-md-6">
                             <a href="#" class="btn btn-link btn-block">Forgot your password?</a>
-                        </div>
-                        <div class="col-md-6">
-                            <button class="btn btn-info btn-block">Log In</button>
+                        </div> --}}
+                        <div class="col-md-12">
+                            <button class="btn btn-primary btn-block">Log In</button>
                         </div>
                     </div>
                     <div class="login-or hide">OR</div>
@@ -66,12 +65,18 @@
                             <button class="btn btn-info btn-block btn-google"><span class="fa fa-google-plus"></span> Google</button>
                         </div>
                     </div>
-                    <div class="login-subtitle ">
+                    {{-- <div class="login-subtitle ">
                         Want to log in as agent? <a href="{{url('/login')}}">Agent Login</a>
+                    </div> --}}
+                    <div class="form-group">
+                    <div class="col-md-6 pull-right">
+                            <a href="{{url('/login')}}"  class="btn btn-warning btn-block">Want to login as Agent?</a>
+                            {{-- <button class="btn btn-primary btn-block">Log In</button> --}}
+                        </div>
                     </div>
                     </form>
                 </div>
-                <div class="login-footer">
+                <div class="login-footer hide">
                     <div class="pull-left">
                         &copy; 2014 AppName
                     </div>

@@ -31,6 +31,7 @@
                 align-items: center;
                 display: flex;
                 justify-content: center;
+                /* background-color: red; */
             }
 
             .position-ref {
@@ -97,6 +98,13 @@
         </style>
     </head>
     <body>
+        <!-- Image and text -->
+<nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">
+          <img src="/docs/4.0/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+          SKG WORLD
+        </a>
+      </nav>
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
@@ -111,25 +119,25 @@
 
             <div class="container">
                     <div class="card-deck mb-3 text-center">
-                      <div class="card mb-4 shadow-sm">
+                      <div class="card text-white bg-warning mb-3">
                         <div class="card-header">
                           <h1 class="my-0 font-weight-normal">Agent</h1>
                         </div>
                         <div class="card-body">
                           <h1 class="card-title pricing-card-title"></h1>
                           
-                          <a href="{{url('login')}}" class="btn btn-lg btn-block btn-outline-primary">Login</a>
+                          <a href="{{url('login')}}" class="btn btn-lg btn-block btn-light">Login here</a>
                         </div>
                       </div>
 
-                      <div class="card mb-4 shadow-sm">
+                      <div class="card text-white bg-danger mb-3">
                             <div class="card-header">
                               <h1 class="my-0 font-weight-normal">Admin</h1>
                             </div>
                             <div class="card-body">
                               <h1 class="card-title pricing-card-title"></h1>
                               
-                              <a href="{{url('admin/login')}}" class="btn btn-lg btn-block btn-outline-primary">Login</a>
+                              <a href="{{url('admin/login')}}" class="btn btn-lg btn-block btn-light">Login here</a>
                             </div>
                           </div>
                        
