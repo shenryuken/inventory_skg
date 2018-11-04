@@ -86,37 +86,35 @@
                                                          </thead>
                                                          <tbody>
                                                              @foreach($reports as $report )
+                                                             
                                                                 <tr>
                                                                     <td class="hidden">{{ isset($report->purchase_date) ? $report->purchase_date : ""}}</td>
                                                                     <td>{{ isset($report->purchase_date) ? $report->purchase_date : "" }}</td>
                                                                     <td>{{ isset($report->order_no) ? $report->order_no : "" }}</td>
-                                                                    @foreach($products as $product)
                                                                     @php
-                                                                    $sum = "";
-                                                                    @endphp
-                                                                        @if(isset($report->orderItems))
-                                                                            @foreach($report->orderItems as $rep)        
-                                                                                @php                                                                       
-                                                                                        if($rep->product_id == $product->id)
-                                                                                        {
-                                                                                            $sum = intval($sum);
-                                                                                            $sum += intval($rep->product_qty);  
-                                                                                        }                                                                                                                                                            
-                                                                                @endphp               
-                                                                            @endforeach  
-                                                                            <td>{{ $sum }}</td>        
-                                                                        @else
-                                                                        <td></td>
-                                                                        @endif
-                                                                    @endforeach
                                                                     
+                                                                    foreach($products as $product){
+                                                                        $sum = "";
+                                                                    if(isset($report->orderItems)){
+                                                                        foreach($report->orderItems as $rep)
+                                                                        {
+                                                                            if($product->id === $rep->product_id){
+                                                                                $sum = $rep->product_qty;
+                                                                            }    
+                                                                                           
+                                                                        }
+                                                                    }
+
+                                                                        echo '<td>'.$sum.'</td>';
+                                                                    }
+                                                                    @endphp
                                                                     <td>{{ $report->orderItems ? $report->orderItems->sum('product_qty') : ""  }}</td>
                                                                     <td   class="success">{{ isset($report->total_price) ?  $report->total_price : ""}}</td>
                                                                     
                                                                 </tr>
                                                              @endforeach
                                                             </tbody>
-                                                        <tfoot>
+                                                        {{-- <tfoot>
                                                             <tr style="background-color: mistyrose;">
                                                                 <td  class="hidden"></td>
                                                                 <td><strong>Total</strong></td>                                                              
@@ -127,7 +125,7 @@
                                                                 <td></td>
                                                                 <td></td>                                                                
                                                             </tr>
-                                                        </tfoot>
+                                                        </tfoot> --}}
                                                      </table>
                                                  </div>  
                         </div>
@@ -176,6 +174,7 @@
         var today = d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +("0" + d.getDate()).slice(-2)
 
         var t = $('#stock_bal_report').DataTable({
+            "searching":false,
         "footerCallback": function ( row, data, start, end, display ) {
             var api = this.api(), data;
  
@@ -219,13 +218,13 @@
 
  
             // Update footer
-            $( api.column( 4     ).footer() ).html(
-                '<strong>'+pageTotal1 +'</strong>'
-            );
+            // $( api.column( 4     ).footer() ).html(
+            //     '<strong>'+pageTotal1 +'</strong>'
+            // );
 
-            $( api.column( 5 ).footer() ).html(
-                '<strong>'+pageTotal2.toFixed(2) + '</strong>'
-            );
+            // $( api.column( 5 ).footer() ).html(
+            //     '<strong>'+pageTotal2.toFixed(2) + '</strong>'
+            // );
 
             // $( api.column( 9 ).footer() ).html(
             //     '<strong>'+ (parseInt(pageTotal1) - parseInt(pageTotal2))  + '</strong>'

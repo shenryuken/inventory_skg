@@ -19,9 +19,8 @@
         <div class="login-container lightmode">
             
             <div class="login-box animated fadeInDown">
-                <h1 class="text-danger">SKG WORLD - AGENT</h1>
                 <div class="login-body">
-                    <div class="login-title"><strong>Log In</strong> to your account</div>
+                    <div class="login-title"><strong>Agent Log In</strong></div>
                     
                     <form id="loginForm" class="form-horizontal" method="post" action="{{ route('login') }}">
                         {{ csrf_field() }}
@@ -47,11 +46,11 @@
                         </div>
                         
                         <div class="form-group">
-                        <div class="col-md-6">
+                        {{-- <div class="col-md-6">
                             <a href="#" class="btn btn-link btn-block">Forgot your password?</a>
-                        </div>
-                        <div class="col-md-6">
-                            <button class="btn btn-info btn-block">Log In</button>
+                        </div> --}}
+                        <div class="col-md-12">
+                            <button class="btn btn-primary btn-block">Log In</button>
                         </div>
                     </div>
                     <div class="login-or hide">OR</div>
@@ -71,7 +70,7 @@
                     </div>
                     </form>
                 </div>
-                <div class="login-footer">
+                <div class="login-footer hide">
                     <div class="pull-left">
                         &copy; 2014 AppName
                     </div>
