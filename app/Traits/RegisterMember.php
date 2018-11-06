@@ -73,6 +73,18 @@ trait RegisterMember
             $profile->contact_no              = $newUser['office_tel'];
             $profile->fax_no                  = $newUser['fax_no'];
 
+            $shareHolder = new ShareHolder;
+            $shareHolder->name      = $newUser['share_holder_name'];
+            $shareHolder->dob       = $newUser['share_holder_dob'];
+            $shareHolder->gender    = $newUser['share_holder_gender'];
+            $shareHolder->marital_status = $newUser['share_holder_marital_status'];
+            $shareHolder->race      = $newUser['share_holder_race'];
+            $shareHolder->id_type   = $newUser['share_holder_id_type'];
+            $shareHolder->id_no     = $newUser['share_holder_id_no'];
+            $shareHolder->id_image  = $newUser['share_holder_id_pic'];
+            $shareHolder->mobile_no = $newUser['share_holder_mobile_no'];
+            $shareHolder->email     = $newUser['share_holder_email'];
+            $shareHolder->id_image  = $newUser['id_image_share_holder'];
         }     
        
         $profile->street    = $newUser['street'];
@@ -105,6 +117,9 @@ trait RegisterMember
         $user->profile()->save($profile);
         $user->address()->save($address);
         $user->account()->save($account);
+
+        if($newUser['type'] == 'business')
+            $user->shareHolders()->save($shareHolder);
 
         $verifyUser = VerifyUser::create([
             'user_id' => $user->id,

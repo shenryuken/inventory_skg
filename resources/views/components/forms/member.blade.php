@@ -47,7 +47,7 @@
 		<div class="form-group">
 			<label class="col-md-3  control-label">Type *</label>
 			<div class="col-md-1">
-				<select name="type" class="form-control" id="type">
+				<select name="type" class="form-control" id="type" selected="personal">
 					<option value="personal" selected>PERSONAL</option>
 					<option value="business">BUSINESS</option>
 				</select>
@@ -440,7 +440,115 @@
 			</div>
 		</div>
 	</div>
-	<!--END Bank Account -->
+	<!--END Beneficiary Info -->
+	<!--// Share Holder Info //-->
+	<div class="panel-heading ui-draggable-handle business" style="display:none">
+		<h3 class="panel-title"><strong>Share Holder Info</strong></h3>
+	</div>
+	<div class="panel-body">
+		<div class="form-group business" style="display:none">
+			<label class="col-md-3  control-label">Name *</label>
+			<div class="col-md-3">
+				
+				<input class="form-control" type="text" name="share_holder_name"  value="{{ old('share_holder_name')}}">
+				
+				{{-- <span class="help-block">This is sample of text field</span> --}}
+			</div>
+		</div>
+		<div class="form-group business" style="display:none">
+			<label class="col-md-3 control-label">Date Of Birth *</label>
+			<div class="col-md-2">
+				<input class="form-control" type="date" id="datepicker" name="share_holder_dob">
+			</div>
+		</div>
+		
+		<div class="form-group business" style="display:none">
+			<label class="col-md-3  control-label">Gender *</label>
+			<div class="col-md-2">
+				
+					<select name="share_holder_gender" class="form-control">
+						<option value="Male">Male</option>
+						<option value="Female">Female</option>
+					</select>
+				
+				{{-- <span class="help-block">This is sample of text field</span> --}}
+			</div>
+		</div>
+		<div class="form-group business" style="display:none">
+			<label class="col-md-3 control-label">Marital Status *</label>
+			<div class="col-md-2">
+				
+					<select name="share_holder_marital_status" class="form-control">
+						<option value="Single">Single</option>
+						<option value="Married">Married</option>
+					</select>
+				
+				{{-- <span class="help-block">This is sample of text field</span> --}}
+			</div>
+		</div>
+		<div class="form-group business" style="display:none">
+			<label class="col-md-3  control-label">Race *</label>
+			<div class="col-md-2">
+				
+					<select name="share_holder_race" class="form-control">
+						<option value="Malay">Malay</option>
+						<option value="Chinese">Chinese</option>
+						<option value="Indian">Indian</option>
+						<option value="Others">Others</option>
+					</select>
+				
+				{{-- <span class="help-block">This is sample of text field</span> --}}
+			</div>
+		</div>
+		<div class="form-group business" style="display:none">
+			<label class="col-md-3 control-label">ID Type *</label>
+			<div class="col-md-2">
+				
+				<select name="share_holder_id_type" class="form-control">
+					<option value="MyKad">MyKad</option>
+					<option value="Passport">Passport</option>
+				</select>
+				
+				{{-- <span class="help-block">This is sample of text field</span> --}}
+			</div>
+		</div>
+		<div class="form-group business" style="display:none">
+			<label class="col-md-3  control-label">ID No *</label>
+			<div class="col-md-2 ">
+				
+				<input class="form-control" type="text" name="share_holder_id_no" value="{{ old('share_holder_id_no') }}">
+				
+				{{-- <span class="help-block">This is sample of text field</span> --}}
+			</div>
+		</div>
+		<div class="form-group business" style="display:none">
+			<label class="col-md-3 control-label">Upload ID</label>
+			<div class="col-md-3 ">
+				
+				<input type="file" multiple id="file-simple" name="share_holder_id_pic" value="{{ old('share_holder_id_pic') }}" />
+				
+			</div>
+		</div>
+		<div class="form-group business" style="display:none">
+			<label class="col-md-3  control-label">Email *</label>
+			<div class="col-md-2 ">
+				
+				<input class="form-control" type="text" name="share_holder_email" value="{{ old('share_holder_email') }}">
+				
+				{{-- <span class="help-block">This is sample of text field</span> --}}
+			</div>
+		</div>
+		<div class="form-group business" style="display:none">
+			<label class="col-md-3  control-label">Mobile No. *</label>
+			<div class="col-md-2 ">
+				
+				<input class="form-control" type="text" name="share_holder_mobile_no" value="{{ old('share_holder_mobile_no') }}">
+				
+				{{-- <span class="help-block">This is sample of text field</span> --}}
+			</div>
+		</div>
+	</div>
+		<!--// END Share Holder Info //-->
 	<!-- Security Info -->
 	<div class="panel-heading ui-draggable-handle">
 		<h3 class="panel-title"><strong>Security</strong></h3>

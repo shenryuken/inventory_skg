@@ -89,6 +89,48 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <h2>Share Holder Information</h2>
+                        <table class="table table-user-information">
+                            <tbody>
+                                <tr>
+                                    <td><strong>Share Holder Name</strong></td>
+                                    <td>{{ $profile->profileable->shareHolders->name }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Date of Birth</strong></td>
+                                    <td>{{ $profile->profileable->shareHolders->dob }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Gender</strong></td>
+                                    <td>{{ $profile->profileable->shareHolders->gender }}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>ID.</strong></td>
+                                    <td>
+                                        <strong>{{ $profile->profileable->shareHolders->id_type }}:</strong>
+                                        {{ $profile->profileable->shareHolders->id_no }}  
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mobile No.</strong></td>
+                                    <td>
+                                        {{ $profile->profileable->shareHolders->mobile_no }}  
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Email</strong></td>
+                                    <td>
+                                        {{ $profile->profileable->shareHolders->email }}  
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Id Image</strong></td>
+                                    <td>
+                                        {{ $profile->profileable->shareHolders->id_image }}  
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     @else
                         No Company Profile Found For This User.
                     @endif

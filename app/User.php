@@ -39,7 +39,7 @@ class User extends Authenticatable
 
     public function shareHolders()
     {
-        return $this->hasMany('App\Models\ShareHolder');
+        return $this->hasOne('App\Models\ShareHolder');
     }
 
     public function account()

@@ -29,7 +29,11 @@
                             <th>Rank</th>
                             <th>Introducer</th>
                             <th>Date Registered</th>
+                            @if($user->type == 'personal')
                             <th>IC Verify</th>
+                            @elseif($user->type == 'business')
+                            <th>Company Cert. Verify</th>
+                            @endif
                             <th>Email Verify</th>
                         </tr>
                     </thead>
@@ -44,11 +48,12 @@
                                     @if(!is_null($user->profile)) 
                                         @php 
                                             $status = '';
+
                                             if($user->type == 'personal' && (!is_null($user->profile->id_pic) || !empty($user->profile->id_pic)))
                                             {
                                                 $status = $user->profile->status_ic;
                                             }
-                                            elseif($user->type == 'business' && (!is_null($user->profile->company_reg_cert) || !empty($user->profile->id_pic)))
+                                            elseif($user->type == 'business' && (!is_null($user->profile->company_reg_cert) || !empty($user->profile->company_reg_cert)))
                                             {
                                                 $status = $user->profile->cert_status;
                                             }
@@ -81,11 +86,21 @@
                                                 @endphp
                                         @endswitch
                                         @if($label == 'warning')
-                                        <a href="{{ url('profile/upload-ic')}}">
-                                            <span class="label label-{{$label}} label-form">{{ $user->profile->status_ic}} | Upload IC</span>
-                                        </a>
+                                            @if($user->type == 'personal')
+                                            <a href="{{ url('profile/upload-ic')}}">
+                                                <span class="label label-{{$label}} label-form">{{ $user->profile->status_ic}} | Upload IC</span>
+                                            </a>
+                                            @else
+                                            <a href="{{ url('profile/upload-company-cert')}}">
+                                                <span class="label label-{{$label}} label-form">{{ $user->profile->cert_status}} | Upload Cert</span>
+                                            </a>
+                                            @endif
                                         @else
-                                        <span class="label label-{{$label}} label-form">{{ $user->profile->status_ic}}</span>
+                                            @if($user->type == 'personal')
+                                            <span class="label label-{{$label}} label-form">{{ $user->profile->status_ic}}</span>
+                                            @else
+                                            <span class="label label-{{$label}} label-form">{{ $user->profile->cert_status}}</span>
+                                            @endif
                                         @endif
                                     @else
                                         <a href="{{url('profile/create') }}">
