@@ -123,6 +123,14 @@ class RegisterController extends Controller
                 'office_tel'        => 'required_if:type,==,business',
                 'fax_no'            => 'required_if:type,==,business',
                 'comp_email'        => 'required_if:type,==,business',
+                'share_holder_name'             => 'required_if:type,==,business',
+                'share_holder_dob'              => 'required_if:type,==,business',
+                'share_holder_gender'           =>'required_if:type,==,business',
+                'share_holder_marital_status'   => 'required_if:type,==,business',
+                'share_holder_race'             => 'required_if:type,==,business',
+                'share_holder_id_type'          => 'required_if:type,==,business',
+                'share_holder_id_no'            => 'required_if:type,==,business',
+                'share_holder_id_pic'           => 'required_if:type,==,business',
                 //end business
                 'introducer'        => 'required|exists:'.$table.',username',
                 'mobile_no'         => 'required_if:type,==,personal',
@@ -186,6 +194,14 @@ class RegisterController extends Controller
                 $filename_logo  = time() . '.' . $comp_logo->getClientOriginalExtension();
                 $save_logo      = Image::make($comp_logo)->resize(400, 300)->save( public_path('/app/comp_logo/' . $filename_logo ) );
                 $request->request->add(['comp_logo_img' => $filename_logo]);
+            }
+
+             if($request->hasFile('share_holder_id_pic'))
+            {
+                $ic_image_share_holder      = $request->file('share_holder_id_pic');
+                $filename_share_holder      = time() . '.' . $ic_image_share_holder->getClientOriginalExtension();
+                $save_share_holder_id      = Image::make($ic_image_share_holder)->resize(400, 300)->save( public_path('/app/share_holder_id/' . $filename_share_holder ) );
+                $request->request->add(['id_image_share_holder' => $filename_share_holder]);
             }
 
             if(Auth::guard('admin')->check() && Hash::check($request->security_code, $hashedCode))
