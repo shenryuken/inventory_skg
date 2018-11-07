@@ -124,13 +124,13 @@
                                         <tbody id="list-item">
                                             @foreach($OrderItem as $key => $value)
                                             <tr>
-                                                <th>{{ $key+1 }}</th>
-                                                <th hidden></th>
-                                                <th>{{ $value['product_name'] }}</th>
-                                                <th>{{ $value['product_qty'] }}</th>
-                                                <th>{{ $value['price'] }}</th>
-                                                <th>{{ $value['total_price'] }}</th>
-                                                <th>{{ $value['pv'] }}</th>
+                                                <td>{{ $key+1 }}</td>
+                                                <td hidden></td>
+                                                <td>{{ $value['product_name'] }}</td>
+                                                <td>{{ $value['product_qty'] }}</td>
+                                                <td>{{ $value['price'] }}</td>
+                                                <td>{{ $value['total_price'] }}</td>
+                                                <td>{{ $value['pv'] }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>

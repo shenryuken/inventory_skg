@@ -134,15 +134,15 @@
                                     </div>
                                     <div class="row form-field">
                                         <div class="form-group">
-                                            <label class="col-md-3 control-label"> Name </label>
+                                            <label class="col-md-3 control-label">Name </label>
                                             <div class="col-md-9">        
-                                                <input type="text" class="form-control contect-name" id="contect-name" value="{{ isset($returnData['name']) ? $returnData['name'] : ''}}" placeholder="Optional Name" />
+                                                <input type="text" class="form-control contact-name" id="contact-name" value="{{ $returnData['name'] }}" placeholder="Optional Name" />
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <label class="col-md-3 control-label"> Contact No. </label>
+                                            <label class="col-md-3 control-label">Contact No. </label>
                                             <div class="col-md-9">
-                                                <input type="text" class="form-control contect-no" id="contect-no" value="{{ isset($returnData['contect_no']) ? $returnData['contect_no'] : ''}}" placeholder="Optional Contect No." />   
+                                                <input type="text" class="form-control contact-no" id="contact-no" value="{{ $returnData['contect_no'] }}" placeholder="Optional Contect No." />   
                                             </div>
                                         </div>
                                     </div>
@@ -346,10 +346,9 @@
         var shipping_id = $('.shipping-id').val();
         var billing_id = $('.billing-id').val();
         var delivery_type = "{{ $returnData['deliveryType'] }}";
-        var name = $('#contect-name').val();
-        var contect_no = $('#contect-no').val();
-
-        // console.log(total_price,shipping_fee)
+        var name = $('#contact-name').val();
+        var contect_no = $('#contact-no').val();
+        console.log(name,contect_no)
 
         // console.log(agent_id,shipping_id, billing_id,total_price,shipping_fee,name,contect_no);
 
@@ -421,8 +420,8 @@
                     $('.shipping-code').val(gv_address[i].code);
                     $('.shipping-name').text(gv_address[i].name)
                     $('.shipping-address').text(gv_address[i].address)
-                    $('.contect-name').val(gv_address[i].name);
-                    $('.contect-no').val(gv_address[i].contect_no);
+                    $('#contact-name').val(gv_address[i].name);
+                    $('#contact-no').val(gv_address[i].contect_no);
 
                     @if(Auth::guard('web')->check())
                         fn_get_price_state(gv_address[i].state);
@@ -447,7 +446,7 @@
         // var id = $('#id').val();
         // var address_code = $('#address-code').val();
         var name = $('#name').val();
-        var contect_no = $('#contect-no').val();
+        var contect_no = $('#contact-no').val();
         var street1 = $('#street1').val();
         var street2 = $('#street2').val();
         var poscode = $('#poscode').val();
