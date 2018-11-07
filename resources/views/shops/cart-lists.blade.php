@@ -44,17 +44,17 @@
                                         <thead class="">
                                             <tr>
                                                 <th class="col-md-5">Product</th>
-                                                <th class="col-md-3">Quantity</th>
+                                                <th class="col-md-2">Quantity</th>
                                                 <th class="col-md-2">Unit Price</th>
                                                 <th class="col-md-2">Total</th>
-                                                <th class=""><input type="hidden" id="agent_id" value="{{ $returnData['agent_id'] }}"></th>
+                                                <th class="col-md-1"><input type="hidden" id="agent_id" value="{{ $returnData['agent_id'] }}"></th>
                                             </tr>
                                         </thead>
                                         <tbody class="item-body">
                                             @if(count($cartItems) > 0)
                                             @foreach($cartItems as $key => $value)
                                             <tr class="row-cart-item">
-                                                <td class="col-sm-8 col-md-4 column-cart-item">
+                                                <td class="column-cart-item">
                                                     <div class="media cart-content">
                                                         <input type="hidden" id="id" value="{{ $value['id'] }}">
                                                         <input type="hidden" id="produt_id" value="{{ $value['product_id'] }}">
@@ -64,7 +64,7 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td class="col-sm-1 col-md-1 quantity-item" style="text-align: center">
+                                                <td class="quantity-item" style="text-align: center;">
                                                     <div class="input-group col-md-12 qty">
                                                         <span class="input-group-btn">
                                                             <button class="btn btn-secondary btn-minus" type="button">-</button>
@@ -76,11 +76,11 @@
                                                     </div>
                                                 </td>
                                                 @if(Auth::guard('admin')->check() == true)
-                                                <td class="col-sm-1 col-md-1"><strong>RM{{ $value['price_staff'] }}</strong></td>
-                                                <td class="col-sm-1 col-md-1 tot-price-staff"><strong>WM RM{{ $value['total_price_staff'] }}</strong></td>
+                                                <td class=""><strong>RM{{ $value['price_staff'] }}</strong></td>
+                                                <td class="tot-price-staff"><strong>WM RM{{ $value['total_price_staff'] }}</strong></td>
                                                 @else
-                                                <td class="col-sm-1 col-md-1 unt-price"><strong>WM RM{{ $value['price_wm'] }}<br>EM RM{{ $value['price_em'] }}</strong></td>
-                                                <td class="col-sm-1 col-md-1 tot-price"><strong>WM RM{{ $value['total_price_wm'] }}<br>EM RM{{ $value['total_price_em'] }}</strong></td>
+                                                <td class="unt-price" ><strong>WM RM{{ $value['price_wm'] }}<br>EM RM{{ $value['price_em'] }}</strong></td>
+                                                <td class="tot-price"><strong>WM RM{{ $value['total_price_wm'] }}<br>EM RM{{ $value['total_price_em'] }}</strong></td>
                                                 @endif
                                                 <td class="col-sm-1 col-md-1">
                                                     <button type="button" class="btn btn-danger remove-item">
@@ -183,7 +183,7 @@
         console.log($(this).closest('.qty').find('input.quantity').val())
         var now = $(this).closest('.qty').find('input.quantity').val();
         var productid = $(this).closest('.row-cart-item').children('.column-cart-item').children('.cart-content').find('input#produt_id').val();
-        console.log(productid)
+        // console.log(productid)
 
         if ($.isNumeric(now)){
             if (parseInt(now) -1 > 0){ now--;}
@@ -198,7 +198,7 @@
         var now = $(this).closest('.qty').find('input.quantity').val();
         var max = $(this).closest('.qty').find('input.quantity').attr('max');
         var productid = $(this).closest('.row-cart-item').children('.column-cart-item').children('.cart-content').find('input#produt_id').val();
-        console.log(productid)
+        // console.log(productid)
 
         if(now == max){
              $(this).closest('.qty').find('input.quantity').val(max);
@@ -213,6 +213,14 @@
             }
         }
     });
+
+    $('.quantity').on('change',function(){
+
+        var now = $(this).val();
+        var productid = $(this).closest('.row-cart-item').children('.column-cart-item').children('.cart-content').find('input#produt_id').val();
+        // console.log(productid,now)
+        fn_calculate_order($(this).closest('.row-cart-item'),now,productid);
+    })
 
     function fn_calculate_order(table,quantity,productid){
 

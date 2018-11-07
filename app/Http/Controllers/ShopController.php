@@ -539,12 +539,12 @@ class ShopController extends Controller
                     // $addressData = [];
                     $address = [
 
-                        'name'      => "",
-                        'address'   => "Self Pickup",
+                        'name'      => $addressData->name,
+                        'address'   => "Self-Collect",
                         'btnstatus' => "hidden",
                         'id'        => "",
                         'code'      => "",
-                        'contect_no'=> ""
+                        'contect_no'=> $addressData->contect_no
                     ];
                 }
             }
