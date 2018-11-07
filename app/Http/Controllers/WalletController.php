@@ -181,4 +181,10 @@ class WalletController extends Controller
     	
     	return view('vault.transfer-point-history', compact('pointTransactions'));
     }
+
+    public function selfMaintain()
+    {
+    	$user = Auth::user();
+    	return view('vault/self-maintain', compact('user'));
+    }
 }
