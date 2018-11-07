@@ -42,7 +42,7 @@ Agents Store List
 						<tr>
 							<th>No.</th>
 							<th>Agent's Store</th>
-							{{-- <th>PV</th> --}}
+							{{-- <th>Pts</th> --}}
 							{{-- <th>Total</th>
 							<th>Status</th>
 							<th>Balance</th>--}}

@@ -39,7 +39,7 @@
                     EM : MYR {{ $product->price_em }}  
                 </h4>
 	            <p>
-	                ({{ $product->point}} PV)
+	                ({{ $product->point}} Pts)
 	            </p>
 
 			</div>			

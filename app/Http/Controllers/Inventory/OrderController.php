@@ -192,7 +192,7 @@ class OrderController extends Controller
                                     }
                 }else{
                     Session::flash('message', 'Error');
-                    return Redirect::back();
+                    return redirect()->back();
                 }
     
                 $delivery_item = new DeliveryItem($data_item);

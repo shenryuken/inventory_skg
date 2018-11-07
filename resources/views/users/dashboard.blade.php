@@ -140,7 +140,7 @@
                         <tr>
                             <th>Vault</th>
                             <th>Advance</th>
-                            <th>PV (Min Maintain Monthly: >= 100)</th>
+                            <th>Pts (Min Maintain Monthly: >= 100)</th>
                         </tr>
                     </thead>
                     <tbody>
