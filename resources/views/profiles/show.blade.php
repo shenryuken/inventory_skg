@@ -184,6 +184,7 @@
                             </tbody>
                         </table>
                         @else
+                        
                         <h2>Business Information</h2>
                         <table class="table table-user-information">
                             <tbody>
@@ -196,8 +197,16 @@
                                     <td>{{ $profile->company_registration_no }}</td>
                                 </tr>
                                 <tr>
-                                    <td>Company Registration No</td>
-                                    <td>{{ $profile->company_registration_no }}</td>
+                                    <td>Company Registration Cert. Status</td>
+                                    <td> @if($profile->cert_status === 'Not Update')
+                                            Not Update | <a href="{{ url('profile/upload-company_cert')}}">Click Here To Upload Comapny Cert. </a>
+                                        @else
+                                            {{ $profile->cert_status }} 
+                                            | 
+                                            <a href="{{ url('profile/show-comp_cert/'.$profile->id) }}">View Company Cert.</a>
+                                        @endif
+                                       
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Address</td>
@@ -227,18 +236,52 @@
                                     <td>Rank</td>
                                     <td>{{ $profile->profileable->rank->name }}</td>
                                 </tr>  
+                                
+                                
+                            </tbody>
+                        </table>
+                        <h2>Share Holder Information</h2>
+                        <table class="table table-user-information">
+                            <tbody>
                                 <tr>
-                                    <td>MyKad/Passport Status</td>
+                                    <td>Share Holder Name</td>
+                                    <td>{{ $profile->profileable->shareHolders->name }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Date of Birth</td>
+                                    <td>{{ $profile->profileable->shareHolders->dob }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Gender</td>
+                                    <td>{{ $profile->profileable->shareHolders->gender }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Marital Status</td>
+                                    <td>{{ $profile->profileable->shareHolders->marital_status }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Race</td>
+                                    <td>{{ $profile->profileable->shareHolders->race }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ID</td>
                                     <td>
-                                        @if($profile->status_ic === 'Not Update')
-                                            Not Update | <a href="{{ url('profile/upload-ic')}}">Click Here To Upload Your MyKad Or Passport </a>
-                                        @else
-                                            {{ $profile->status_ic }} 
-                                            | 
-                                            <a href="{{ url('profile/show-ic/'.$profile->id) }}">View MyKad</a>
-                                        @endif
+                                        <strong>{{ $profile->profileable->shareHolders->id_type }} :</strong> 
+                                        {{ $profile->profileable->shareHolders->id_no }}
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>Contact</td>
+                                    <td>
+                                        <dd>Mobile No:{{ $profile->profileable->shareHolders->mobile_no }}</dd>
+                                        <dd>Email:{{ $profile->profileable->shareHolders->email }}</dd>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Rank</td>
+                                    <td>{{ $profile->profileable->rank->name }}</td>
+                                </tr>  
+                                
                                 
                             </tbody>
                         </table>

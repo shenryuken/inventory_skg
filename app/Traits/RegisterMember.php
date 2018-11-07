@@ -62,6 +62,11 @@ trait RegisterMember
             $profile->id_no     = $newUser['id_no'];
             $profile->id_pic    = isset($newUser['id_pic_image']) ? $newUser['id_pic_image']:'';
             $profile->status_ic = isset($newUser['id_pic_image']) ? 'Waiting Approval':'Not Update';
+            $profile->beneficiary_name      = $newUser['beneficiary_name'];
+            $profile->relationship          = $newUser['relationship'];
+            $profile->beneficiary_address   = $newUser['beneficiary_address'];
+            $profile->beneficiary_address   = $newUser['beneficiary_address'];
+            $profile->beneficiary_mobile_no = $newUser['beneficiary_mobile_no'];
         } 
         elseif ($newUser['type'] == 'business') 
         { 
