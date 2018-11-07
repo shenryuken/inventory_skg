@@ -96,7 +96,7 @@
                             <th>Items</th>                            
                             <th>Quantity</th>
                             <th>Price Per Item</th>
-                            <th>PV</th>
+                            <th>Pts</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -114,7 +114,7 @@
                 <p><span class="fa fa-caret-right"></span> <strong>Total Items: {{ isset($order->total_items) ? $order->total_items : "0" }}</strong></p>
                 <p><span class="fa fa-caret-right"></span> <strong>Total Price: MYR  {{ isset($order->total_price) ? $order->total_price : "0" }}</strong></p>
                 <p><span class="fa fa-caret-right"></span> <strong>Delivery Price: MYR {{ isset($order->shipping_fee) ? $order->shipping_fee : "0" }}</strong></p>
-                <p><span class="fa fa-caret-right"></span> <strong>Total PV:  {{ isset($order->orderItems) ? $order->orderItems->where('order_no',$order->order_no)->sum('pv') : "0" }}</strong></p>
+                <p><span class="fa fa-caret-right"></span> <strong>Total Pts:  {{ isset($order->orderItems) ? $order->orderItems->where('order_no',$order->order_no)->sum('pv') : "0" }}</strong></p>
 
             </div>
             

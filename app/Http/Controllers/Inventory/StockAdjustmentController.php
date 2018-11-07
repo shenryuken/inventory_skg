@@ -95,7 +95,7 @@ class StockAdjustmentController extends Controller
         
         
 
-            return back()->with('success', 'Successfully saved!');
+            return back()->with('message', 'Sucessfully adjusting items!');;
         }catch(\Exception $e){
             return back()->withErrors(['msg', $e->getMessage()]);;
         }

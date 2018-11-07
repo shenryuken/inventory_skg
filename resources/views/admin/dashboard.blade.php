@@ -54,7 +54,7 @@
             <div class="widget-data">
                 <div class="widget-int num-count">MYR {{ number_format($sale_stats['total_sales'],2) }}</div>
                 <div class="widget-title">Sales of {{ \Carbon\Carbon::now()->year}}</div>
-                <div class="widget-subtitle">Total of PV: {{ number_format($sale_stats['total_pv']) }}</div>
+                <div class="widget-subtitle">Total of Pts: {{ number_format($sale_stats['total_pv']) }}</div>
             </div>
             <div class="widget-controls">                                
                 <a href="{{ url('reports/sales') }}" class="widget-control-right"><span class="fa fa-bars"></span></a>

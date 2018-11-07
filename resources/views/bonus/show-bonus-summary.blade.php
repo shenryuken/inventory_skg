@@ -21,7 +21,7 @@ Bonus Summary
         <div class="hpanel hbggreen">
             <div class="panel-body">
                 <div class="text-center">
-                    <h3>Current PV</h3>
+                    <h3>Current Pts</h3>
                     <p class="text-big font-light">
                         {{ $wallet->current_pv or 0}}
                     </p>
@@ -36,7 +36,7 @@ Bonus Summary
         <div class="hpanel hbgblue">
             <div class="panel-body">
                 <div class="text-center">
-                    <h3>Available PV</h3>
+                    <h3>Available Pts</h3>
                     <p class="text-big font-light">
                         {{ $wallet->pv or 0}}
                     </p>

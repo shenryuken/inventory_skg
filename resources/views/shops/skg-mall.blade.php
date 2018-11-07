@@ -44,7 +44,7 @@ SKG MALL
                     EM : MYR {{ $product->em_price }}  
                 </h4>
 	            <p>
-	                ({{ $product->pv}} PV)
+	                ({{ $product->pv}} Pts)
 	            </p>
 
 			</div>			
