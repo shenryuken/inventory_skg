@@ -98,52 +98,56 @@
                                        
                         
                     </div>
-
-                    <div class="panel-body">    
-                        <div class="form-horizontal">
-                            
-                                <div class="form-group">
-                                        <div class="col-md-12">
-                                                <p class="text-warning"> Please use appropriate input (Once) </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                                <div class="has-success has-feedback">
-                                                <label for="Barcode"><input type="radio" name="optradio" checked>Product S/N</label>                        
-                                                <input type="text" class="form-control" id="input_barcode">
-                                                <span class="glyphicon glyphicon-barcode form-control-feedback"></span>
+                        <div class="panel-body">                             
+                                        <div class="form-group"> 
+                                            <label for="description" class="col-md-3 col-xs-12 control-label text-warning">Please use appropriate input (Once) </label> 
+                                            <div class="col-md-12">
+                                                   
                                             </div>
-                                        </div>    
-                                        <div class="col-md-4">
-                                                <div class="has-warning">
-                                                <label for="Quantity"><input type="radio" name="optradio">Quantity</label>                        
-                                                <input type="number" class="form-control" id="input_quantity">
-                                                </div>
                                         </div>
-                                        <div class="col-md-4 hide">
-                                                <label for="Barcode">Upload</label>                        
-                                                <input type="file" class="btn-danger" name="csv" id="inputCsv" data-filename-placement="inside" title="File name goes inside" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
-                                        </div>    
-                                </div>
-                        </div>
-                               
-                        <div class="table-responsive">
-                                <table class="table datatable" id="table_listing">
-                                    <thead>
-                                        <tr>
-                                            <th width="5px"></th>
-                                            <th>Serial Number</th> 
-                                            <th>Quantity</th>                                     
-                                            <th></th>                                      
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                </table>
-                            </div>
-                    </div>
-                    <div class="panel panel-colorful">
-                        <div class="panel-body">  
-                            <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="description" class="col-md-3 col-xs-12 control-label">Product S/N</label> 
+                                            <div class="col-md-6 col-xs-12">
+                                                    <div class="has-success has-feedback">                  
+                                                    <input type="text" class="form-control" id="input_barcode">
+                                                    <span class="glyphicon glyphicon-barcode form-control-feedback"></span>
+                                                </div>
+                                            </div>  
+                                        </div>
+                                        <div class="form-group">  
+                                                <label for="Quantity"  class="col-md-3 col-xs-12 control-label">Quantity</label>
+                                                    <div class="col-md-6 col-xs-12">                                                                   
+                                                    <div class="has-warning">                                                             
+                                                    <input type="number" class="form-control" id="input_quantity">
+                                                    </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-md-6 col-xs-12 hide">
+                                                    <label for="Barcode">Upload</label>                        
+                                                    <input type="file" class="btn-danger" name="csv" id="inputCsv" data-filename-placement="inside" title="File name goes inside" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                                            </div>    
+                                        </div>
+                                        <div class="form-group">  
+                                                <label class="col-md-3 col-xs-12 control-label"></label> 
+                                        <div class="table-responsive col-md-6 col-xs-12">
+                                                <table class="table datatable" id="table_listing">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="5px"></th>
+                                                            <th>Serial Number</th> 
+                                                            <th>Quantity</th>                                     
+                                                            <th></th>                                      
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>  
+                            <div class="form-group"> 
+                                    <label class="col-md-3 col-xs-12 control-label"></label> 
+                                <div class="col-md-6 col-xs-12">
                             <table class="table">
                                 <thead>
                                     <h5>Stock Info</h5>
@@ -160,10 +164,10 @@
                                         <td id="remain_table"></td>
                                     </tr>
                                 </tbody>
-                            </table>  
+                            </table>
+                        </div> 
+                        </div> 
                         </div>
-                        </div>
-                    </div>
                     
                     <div class="panel-footer">
                             {{-- <input type="button" id="clearBtn" class="btn btn-default hide" value="Clear Form"> --}}
