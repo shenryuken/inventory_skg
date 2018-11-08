@@ -195,7 +195,7 @@ class StockReportController extends Controller
 
             foreach($stocks as $key=>$value){
 		    $productId          = $value->id;
-		    $instore = $stock_item->where('product_id',$productId)->whereIn('status',['01','99'])->sum('quantity');
+		    $instore = $stock_item->where('product_id',$productId)->whereIn('status',['01','99','98'])->sum('quantity');
 		    $outstore = $stock_item->where('product_id',$productId)->whereIn('status',['04','05'])->sum('quantity');
                 
                 
