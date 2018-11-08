@@ -219,7 +219,7 @@ class ShopController extends Controller
 
             $cartItems = OrderTransection::leftJoin('products','products.id','=','orders_transection.product_id')
                                         ->select('orders_transection.id','products.id as product_id','products.name','products.description','products.price_wm','products.price_em','products.price_staff','products.quantity_min'
-                                            ,'products.quantity as stock_quantity','orders_transection.quantity as total_quantity')
+                                            ,'products.quantity as stock_quantity','products.point','orders_transection.quantity as total_quantity')
                                         ->where('order_type',$order_type)
                                         ->where('mall_type',$sessionData)
                                         ->where('orders_transection.agent_id','=',$agent_id)
@@ -450,7 +450,7 @@ class ShopController extends Controller
             // dd($addressData);
             $cartItems = OrderTransection::leftJoin('products','products.id','=','orders_transection.product_id')
                                             ->select('orders_transection.id','products.id as product_id','products.name','products.description','products.price_wm','products.price_em','products.price_staff','products.quantity_min'
-                                                ,'products.quantity as stock_quantity','orders_transection.quantity as total_quantity')
+                                                ,'products.quantity as stock_quantity','products.point','orders_transection.quantity as total_quantity')
                                             ->where('order_type',$order_type)
                                             ->where('mall_type',$sessionData)
                                             ->where('orders_transection.agent_id','=',$agent_id)
