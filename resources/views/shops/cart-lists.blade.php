@@ -143,9 +143,15 @@
                                             <tr id="row-total-price">
                                                 <td><h5>Total Price</h5></td>
                                                 @if(Auth::guard('admin')->check() == true)
-                                                <td id="col-total-price-staff">RM{{ $returnData['totalPrice_staff'] }}</h5></td>
+                                                <td id="col-total-price-staff">
+                                                    <h5>RM{{ $returnData['totalPrice_staff'] }}</h5>
+                                                </td>
                                                 @else
-                                                <td id="col-total-price"><h5>WM RM{{ $returnData['totalPrice_wm'] }}<br>EM RM{{ $returnData['totalPrice_em'] }}</h5></td>
+                                                <td id="col-total-price"><h5>
+                                                    WM RM{{ $returnData['totalPrice_wm'] }}
+                                                    <br>
+                                                    EM RM{{ $returnData['totalPrice_em'] }}</h5>
+                                                </td>
                                                 @endif
                                             </tr>
                                             <tr>
@@ -158,7 +164,7 @@
                                             <tr>
                                                 <td>
                                                     <button type="button" class="btn btn-default continue-shopping">
-                                                        Continue Shopping <i class="glyphicon glyphicon-shopping-cart"></i>
+                                                        Go Shopping <i class="glyphicon glyphicon-shopping-cart"></i>
                                                     </button>
                                                 </td>
                                                 <td>
