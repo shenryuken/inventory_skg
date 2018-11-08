@@ -39,15 +39,16 @@
                         @endif
                         <div class="container cart-list" style="margin-top:0px;">
                             <div class="row cart-row">
-                                <div class="col-sm-12 col-md-8">
+                                <div class="col-sm-12 col-md-9">
                                     <table class="table table-actions table-cart-item" id="item-table">
                                         <thead class="">
                                             <tr>
                                                 <th class="col-md-5">Product</th>
-                                                <th class="col-md-2">Quantity</th>
+                                                <th class="col-md-3">Quantity</th>
+                                                <th class="">Point</th>
                                                 <th class="col-md-2">Unit Price</th>
                                                 <th class="col-md-2">Total</th>
-                                                <th class="col-md-1"><input type="hidden" id="agent_id" value="{{ $returnData['agent_id'] }}"></th>
+                                                <th class=""><input type="hidden" id="agent_id" value="{{ $returnData['agent_id'] }}"></th>
                                             </tr>
                                         </thead>
                                         <tbody class="item-body">
@@ -64,16 +65,22 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td class="quantity-item" style="text-align: center;">
-                                                    <div class="input-group col-md-12 qty">
+                                                <td class="quantity-item">
+                                                    <div class="input-group col-md-12 qty" style="text-align: center;">
                                                         <span class="input-group-btn">
-                                                            <button class="btn btn-secondary btn-minus" type="button">-</button>
+                                                            <button class="btn btn-danger btn-minus" type="button">-</button>
                                                         </span>
-                                                        <input type="text" class="form-control quantity" id="quantity" value="{{ $value['total_quantity'] }}">
+                                                        <input type="text" class="form-control quantity" id="quantity" value="{{ $value['total_quantity'] }}" min="1" max="200">
                                                         <span class="input-group-btn">
-                                                            <button class="btn btn-secondary btn-plus" type="button">+</button>
+                                                            <button class="btn btn-danger btn-plus" type="button">+</button>
                                                         </span>
                                                     </div>
+                                                    
+                                                </td>
+                                                <td>
+                                                   <div style="font-size: 11px;">
+                                                        <strong>{{ $value['point'] }}</strong>
+                                                    </div> 
                                                 </td>
                                                 @if(Auth::guard('admin')->check() == true)
                                                 <td class=""><strong>RM{{ $value['price_staff'] }}</strong></td>
@@ -97,7 +104,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <div class="col-md-12 col-md-4">
+                                <div class="col-md-12 col-md-3">
                                    <div class="row" id="form-field">
                                         <div class="col-md-12">
                                             <div class="col-md-8">
@@ -214,13 +221,32 @@
         }
     });
 
+    $('.quantity').keyup(function(){
+        var value = $(this).val();
+        value = value.replace(/[^\d]/g, '');
+        $(this).val(value);
+    });
+
     $('.quantity').on('change',function(){
+
+        var val = $(this).val();
+        var min = $(this).attr('min');
+        var max = $(this).attr('max');
+        // console.log(val,max)
+
+        if(parseFloat(val) == 0 || val == ""){
+            $(this).val(min);
+        }
+        else if(parseFloat(val) > parseFloat(max)){
+            $(this).val(max);
+        }
+        
 
         var now = $(this).val();
         var productid = $(this).closest('.row-cart-item').children('.column-cart-item').children('.cart-content').find('input#produt_id').val();
         // console.log(productid,now)
         fn_calculate_order($(this).closest('.row-cart-item'),now,productid);
-    })
+    });
 
     function fn_calculate_order(table,quantity,productid){
 

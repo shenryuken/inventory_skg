@@ -177,11 +177,11 @@
 												                <label class="control-label">Quantity</label>
 												                <div class="input-group col-md-12 qty">
 																	<span class="input-group-btn">
-																        <button class="btn btn-secondary btn-minus" type="button">-</button>
+																        <button class="btn btn-danger btn-minus" type="button">-</button>
 																    </span>
 																	<input type="text" class="form-control quantity" name="quantity" id="quantity" min="1" max="200" step="1" value="1">
 																	<span class="input-group-btn">
-																	  	<button class="btn btn-secondary btn-plus" type="button">+</button>
+																	  	<button class="btn btn-danger btn-plus" type="button">+</button>
 																	</span>
 																</div>
 											                </div>
@@ -274,12 +274,23 @@
 	        }
         });
 
+        $('.quantity').keyup(function(){
+	        var value = $(this).val();
+	        value = value.replace(/[^\d]/g, '');
+	        $(this).val(value);
+	    });
 
         $('.quantity').on('change',function(){
+
         	var val = $(this).val();
+        	var min = $(this).attr('min');
         	var max = $(this).attr('max');
-        	console.log(val,max)
-        	if(parseFloat(val) > parseFloat(max)){
+        	// console.log(val,max)
+
+			if(parseFloat(val) == 0 || val == ""){
+	            $(this).val(min);
+	        }
+        	else if(parseFloat(val) > parseFloat(max)){
         		$(this).val(max);
         	}
         });

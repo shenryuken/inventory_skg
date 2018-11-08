@@ -44,9 +44,10 @@
                                             <tr>
                                                 <th class="col-md-5">Product</th>
                                                 <th class="col-md-2">Quantity</th>
+                                                <th class="col-md-1">Point</th>
                                                 <th class="col-md-2">Unit Price</th>
                                                 <th class="col-md-2">Total</th>
-                                                <th hidden=""><input type="hidden" id="agent_id" value="{{ $returnData['agent_id'] }}"></th>
+                                                <th hidden=><input type="hidden" id="agent_id" value="{{ $returnData['agent_id'] }}"></th>
                                             </tr>
                                         </thead>
                                         <tbody class="item-body">
@@ -65,6 +66,9 @@
                                                 </td>
                                                 <td class="col-md-2 quantity-item" style="text-align: center">
                                                     <p>{{ $value['total_quantity'] }}</p>
+                                                </td>
+                                                <td class="col-md-2 quantity-item">
+                                                    <p>{{ $value['point'] }}</p>
                                                 </td>
                                                 @if(Auth::guard('admin')->check())
                                                 <td class="col-sm-1 col-md-1 unt-price">
