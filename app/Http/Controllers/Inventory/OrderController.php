@@ -137,9 +137,9 @@ class OrderController extends Controller
         
                     $this->storeProductStocks($product_stock_array);
     
-                if($delivery_id){
-                    OrderHdr::where('id',$order_no)->update(['status'=>'02']);
-                }
+                // if($delivery_id){
+                //     OrderHdr::where('id',$order_no)->update(['status'=>'02']);
+                // }
                 
     
             Session::flash('message', 'Successfully created delivery order');
@@ -155,7 +155,7 @@ class OrderController extends Controller
     }
 
     public function storeProductStocks($product_stock_array){
-        
+        \Log::info($product_stock_array);
         try{
         foreach($product_stock_array['barcode'] as $product_supplier){
             $product = new Product;
@@ -188,16 +188,47 @@ class OrderController extends Controller
                         }
                             
                                     }catch(Exception $e){
-                    
+                                        Session::flash('message', 'Error');
+                                        return redirect()->back();
                                     }
-                }else{
-                    Session::flash('message', 'Error');
-                    return redirect()->back();
+                }else{ //No barcode
+                    try{
+                        $stock_item_qty = StockItem::where('product_id',$product_query->id)->whereIn('status',['01'])->sum('quantity');
+    
+                        if($stock_item_qty){
+
+
+                            if(intval($stock_item_qty) > intval($product_supplier->quantity))
+                            {
+                                StockItem::insert(['product_id' => $product_query->id, 'quantity'=>$product_supplier->quantity,'status'=>'05']);
+                            }
+            
+                            // $new = $stock_item->replicate();
+            
+                            // $new->status = "05"; //adjust out sell
+                            // // $new->stock_adjustment_id = $product_stock_array['stock_adjustment_id'];
+                            // $new->updated_by = Auth::user()->id;
+                            // $new->save();
+            
+                            // $stock_item->status = "98"; //sold
+                            // $stock_item->update();
+                        }else{
+                            Session::flash('message', 'No Stocks');
+                            return redirect()->back();
+                        }
+                            
+                                    }catch(Exception $e){
+                                        Session::flash('message', 'Error');
+                                        return redirect()->back();
+                                    }
                 }
     
                 $delivery_item = new DeliveryItem($data_item);
                 $delivery_item->save();
 
+            }else{
+                Session::flash('message', 'Error');
+                return redirect()->back();
             }
             
         }

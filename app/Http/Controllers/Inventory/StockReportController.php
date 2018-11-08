@@ -184,6 +184,7 @@ class StockReportController extends Controller
                         ->groupBy('product_id')
                         ->havingRaw('qty <= '.$minStock )
                         ->get();
+                        
         #3 Last Adjustment
         $stock_adjustments = $StockAdjustment->selectRaw('MAX(created_at) as last_adjust')->value('last_adjust');
 
@@ -194,8 +195,8 @@ class StockReportController extends Controller
 
             foreach($stocks as $key=>$value){
 		    $productId          = $value->id;
-		    $instore = $stock_item->where('product_id',$productId)->whereIn('status',['01'])->sum('quantity');
-		    $outstore = $stock_item->where('product_id',$productId)->whereIn('status',['04'])->sum('quantity');
+		    $instore = $stock_item->where('product_id',$productId)->whereIn('status',['01','99'])->sum('quantity');
+		    $outstore = $stock_item->where('product_id',$productId)->whereIn('status',['04','05'])->sum('quantity');
                 
                 
                 $totalserial_number = (float)$instore - (float)$outstore;
@@ -206,7 +207,7 @@ class StockReportController extends Controller
                         $quantity   = $v->quantity;
                         $operation  = $v->stockAdjustmentType()->operation;
                         
-                        $totalserial_number = $this->calcAdjustment($totalserial_number,$quantity,$operation);
+                        // $totalserial_number = $this->calcAdjustment($totalserial_number,$quantity,$operation);
                         
                     }
                     $data[] = [
