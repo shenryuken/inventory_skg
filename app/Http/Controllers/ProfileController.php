@@ -9,6 +9,7 @@ use App\Http\Requests;
 
 
 use App\Models\Profile;
+use App\Models\ShareHolder;
 use App\Admin;
 use App\User;
 
@@ -67,17 +68,51 @@ class ProfileController extends Controller
     public function update(Request $request, $id)
     {
     	$profile = Profile::find($id);
+        
 
     	$request->validate([
-    		'full_name' 		=> 'required',
-    		'id_no'  	 		=> 'required',
-    		'street'    		=> 'required',
-    		'postcode'   		=> 'required',
-    		'city' 		 		=> 'required',
-    		'state'      		=> 'required',
-    		'country'    		=> 'required',
-    		'contact_no' 		=> 'required',
-    		'contact_no2'		=> '',
+    		    'country'   => 'required',
+                //personal
+                'name'      => 'required_if:type,==,personal',
+                'dob'       => 'required_if:type,==,personal',
+                'gender'    => 'required_if:type,==,personal',
+                'marital_status'    => 'required_if:type,==,personal',
+                'race'              => 'required_if:type,==,personal',
+                'id_type'           => 'required_if:type,==,personal',
+                'id_no'             => 'required_if:type,==,personal|unique:profiles,id_no,'.$id,
+                'id_pic'            => 'sometimes|image|mimes:jpeg,jpg,bmp,png|max:5120',
+                //end personal
+                //business
+                'company_name'      => 'required_if:type,==,business',
+                'company_registration_no' => 'required_if:type,==,business|unique:profiles,company_registration_no,'.$id,
+                'comp_reg_cert'     => 'required_if:type,==,business|image|mimes:jpeg,jpg,bmp,png|max:5120',
+                'company_logo'      => 'sometimes|image|mimes:jpeg,jpg,bmp,png|max:5120',
+                'office_tel'        => 'required_if:type,==,business',
+                'fax_no'            => 'required_if:type,==,business',
+                'comp_email'        => 'required_if:type,==,business',
+                'share_holder_name'             => 'required_if:type,==,business',
+                'share_holder_dob'              => 'required_if:type,==,business',
+                'share_holder_gender'           =>'required_if:type,==,business',
+                'share_holder_marital_status'   => 'required_if:type,==,business',
+                'share_holder_race'             => 'required_if:type,==,business',
+                'share_holder_id_type'          => 'required_if:type,==,business',
+                'share_holder_id_no'            => 'required_if:type,==,business',
+                'share_holder_id_pic'           => 'required_if:type,==,business',
+                //end business
+                'mobile_no'         => 'required_if:type,==,personal',
+                'email'             => 'required_if:type,==,personal',
+                'street'            => 'required',
+                'street2'           => '',
+                'city'              => 'required',
+                'postcode'          => 'required',
+                'state'             => 'required',
+                'check1'            => '',
+                'beneficiary_name'  => '',
+                'relationship'      => 'required_with:beneficiary_name',
+                'beneficiary_address'   => 'required_with:beneficiary_name',
+                'beneficiary_mobile_no' => 'required_with:beneficiary_name, beneficiary_address',
+                'rank_id'               => '',
+                'security_code'         => 'required',
     	]);
 
         if(Auth::check()){
@@ -87,18 +122,54 @@ class ProfileController extends Controller
             $hashedCode = Auth::guard('admin')->user()->security_code;
         }
 
-        if(Hash::check($request->security_code, $hashedCode)){
-            $profile->full_name   = $request->full_name;
-            $profile->id_no        = $request->id_no;
-            $profile->street      = $request->street;
-            $profile->postcode    = $request->postcode;
-            $profile->city        = $request->city;
-            $profile->state       = $request->state;
-            $profile->country     = $request->country;
-            $profile->contact_no  = $request->contact_no;
-            $profile->contact_no2 = $request->contact_no2;
-            $profile->save();
+        if(Hash::check($request->security_code, $hashedCode))
+        {
+            if($profile->profileable->type == 'personal')
+            {
+                $profile->full_name   = $request->full_name;
+                $profile->id_no       = $request->id_no;
+                $profile->street      = $request->street;
+                $profile->street2     = $request->street2;
+                $profile->postcode    = $request->postcode;
+                $profile->city        = $request->city;
+                $profile->state       = $request->state;
+                $profile->country     = $request->country;
+                $profile->contact_no  = $request->contact_no;
+                $profile->contact_no2 = $request->contact_no2;
 
+                $profile->beneficiary_name      = $request->beneficiary_name;
+                $profile->relationship          = $request->relationship;
+                $profile->beneficiary_address   = $request->beneficiary_address;
+                $profile->beneficiary_mobile_no = $request->beneficiary_mobile_no;
+                $profile->save();
+            } 
+            elseif($profile->profileable->type == 'business')
+            {
+                $profile->company_name                  = $request->company_name;
+                $profile->company_registration_no       = $request->company_registration_no;
+                $profile->street                        = $request->street;
+                $profile->street2                       = $request->street2;
+                $profile->postcode                      = $request->postcode;
+                $profile->city                          = $request->city;
+                $profile->state                         = $request->state;
+                $profile->country                       = $request->country;
+                $profile->contact_no                    = $request->contact_no;
+                $profile->contact_no2                   = $request->contact_no2;
+                $profile->fax_no                        = $request->fax_no;
+                $profile->save();
+
+                $share_holder = ShareHolder::where('user_id', $profile->profileable_id )->first();
+                $share_holder->name         = $request->share_holder_name;
+                $share_holder->dob          = $request->share_holder_dob;
+                $share_holder->gender       = $request->share_holder_gender;
+                $share_holder->marital_status = $request->share_holder_marital_status;
+                $share_holder->race         = $request->share_holder_race;
+                $share_holder->id_type      = $request->share_holder_id_type;
+                $share_holder->id_no        = $request->share_holder_id_no;
+                $share_holder->mobile_no    = $request->share_holder_mobile_no;
+                $share_holder->save();
+                
+            }
             return back()->with('success', $profile->profileable->username .' you are successfully updated your profile!');
         }
 

@@ -85,14 +85,32 @@
         @endcomponent
 
         @include('components.notifications.messages')
-        <div class="hpanel">
+        <div class="panel panel-default">
+            <div class="panel-heading ui-draggable-handle">
+                <h3 class="panel-title"><strong>Maintain Account (Own Account)</strong></h3>
+            </div>
             <div class="panel-body">
-                <form class="form-horizontal" method="post" action="{{ url('vault/transfer-point') }}">
-                	{{csrf_field()}}
-    
-      				@include('components.forms.transfer-point')
-
-                </form>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Product Name</th>
+                            <th>Available</th>
+                            <th>Price/Unit</th>
+                            <th>PTS/Unit</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($products as $product)
+                        <tr>
+                            <td>{{ $product->product_name }}</td>
+                            <td>{{ $product->price }}</td>
+                            <td>{{ $product->pv }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody> 
+                </table>
             </div>
         </div>
     </div>

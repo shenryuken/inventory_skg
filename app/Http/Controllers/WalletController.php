@@ -185,6 +185,7 @@ class WalletController extends Controller
     public function selfMaintain()
     {
     	$user = Auth::user();
-    	return view('vault/self-maintain', compact('user'));
+    	$products = $user->stores();
+    	return view('vault/self-maintain', compact('user','products'));
     }
 }

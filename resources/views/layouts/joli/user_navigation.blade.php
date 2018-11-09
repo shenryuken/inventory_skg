@@ -78,7 +78,7 @@
                 <a href="{{ url('vault/transfer-point-history')}}">Transfer Point History</a>
             </li>
             <li>
-                <a href="#">Self Maintain</a>
+                <a href="{{ url('vault/self-maintain') }}">Self Maintain</a>
             </li>  
             <li>
                 <a href="#">Agent Maintain</a>
