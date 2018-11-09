@@ -81,6 +81,7 @@ Route::get('profile/create', 'ProfileController@create');
 Route::get('profile/{id}/edit', 'ProfileController@edit');
 Route::get('user/profile/{id}', 'ProfileController@show');
 Route::get('admin/profile/{id}', 'ProfileController@showAdmin');
+Route::put('profile/update/{id}', 'ProfileController@update')->name('profile.update');
 
 Route::get('profile/upload-avatar', 'ProfileController@uploadAvatar');
 Route::post('profile/upload-avatar', 'ProfileController@postUploadAvatar');

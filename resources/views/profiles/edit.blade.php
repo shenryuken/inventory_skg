@@ -1,10 +1,10 @@
 @extends('layouts.joli.app')
 {{-- Page title --}}
 @section('title')
-    MyKad\Passport Status Index
+    Profile - Update
     @parent
 @stop
-<?php $page_title = 'Create My Profile'; ?>
+<?php $page_title = 'Profile - Update'; ?>
 @section('content') 
 
 <div class="row">
@@ -18,6 +18,7 @@
 
     @if(Auth::guard('admin')->check() || Auth::guard('web')->check())                       
     <form class="form-horizontal" method="post" action="{{ route('profile.update', $profile->id) }}">
+      <input name="_method" type="hidden" value="PUT">
       {{ csrf_field() }}
 
       @include('components.forms.profile')

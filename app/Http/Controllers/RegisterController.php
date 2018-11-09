@@ -112,12 +112,12 @@ class RegisterController extends Controller
                 'marital_status'    => 'required_if:type,==,personal',
                 'race'              => 'required_if:type,==,personal',
                 'id_type'           => 'required_if:type,==,personal',
-                'id_no'             => 'required_if:type,==,personal',
+                'id_no'             => 'required_if:type,==,personal|unique:users,id_no',
                 'id_pic'            => 'sometimes|image|mimes:jpeg,jpg,bmp,png|max:5120',
                 //end personal
                 //business
                 'company_name'      => 'required_if:type,==,business',
-                'company_registration_no' => 'required_if:type,==,business',
+                'company_registration_no' => 'required_if:type,==,business|unique:profiles,company_registration_no',
                 'comp_reg_cert'     => 'required_if:type,==,business|image|mimes:jpeg,jpg,bmp,png|max:5120',
                 'company_logo'      => 'sometimes|image|mimes:jpeg,jpg,bmp,png|max:5120',
                 'office_tel'        => 'required_if:type,==,business',
