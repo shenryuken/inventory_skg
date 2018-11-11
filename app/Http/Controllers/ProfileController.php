@@ -38,6 +38,7 @@ class ProfileController extends Controller
     	$request->validate([
     		'_token'            => 'required',
     		'full_name' 		=> 'required',
+            'id_type'           => 'required',
     		'id_no'  	 		=> 'required',
     		'street'    		=> 'required',
     		'postcode'   		=> 'required',

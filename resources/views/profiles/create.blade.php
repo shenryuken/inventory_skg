@@ -15,21 +15,22 @@
 
         @include('components.notifications.messages')
 
-        @if(Auth::guard('admin')->check())
+        <!-- @if(Auth::guard('admin')->check())
             <input type="hidden" name="profileable_id" value="{{ Auth::guard('admin')->user()->id }}">
             <input type="hidden" name="profileable_type" value="App\Admin">
             @else
             <input type="hidden" name="profileable_id" value="{{ Auth::guard('web')->user()->id }}">
             <input type="hidden" name="profileable_type" value="App\User">
-        @endif                     
-        
-        <form class="form-horizontal" method="post" action="{{ url('/profile') }}">
-            {{ csrf_field() }}
+        @endif                   -->   
+        <div class="panel panel-default">
+            <form class="form-horizontal" method="post" action="{{ url('/profile') }}">
+                {{ csrf_field() }}
 
-            @component('components.forms.profile')
-            @endcomponent
+                @component('components.forms.profile')
+                @endcomponent
 
-        </form>
+            </form>
+        </div>
     </div> 
 </div>
 
