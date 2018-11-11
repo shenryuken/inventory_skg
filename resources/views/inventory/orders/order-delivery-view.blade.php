@@ -125,7 +125,7 @@ p {font-size:12px !important;}
                                         <tr>
                                             <td>{{ isset($item->products->code) ? $item->products->code : "" }}</td>   
                                             <td>{{ isset($item->products->name) ? $item->products->name : "" }}</td>                               
-                                            <td>{{ isset($item->quantity) ? $item->where('product_id',$item->product_id)->sum('quantity') : "0" }}</td>
+                                            <td>{{ isset($item->quantity) ? $item->where('id',$item->id)->where('product_id',$item->product_id)->sum('quantity') : "0" }}</td>
                                         </tr>
                                         @endforeach
                                 </tbody>
