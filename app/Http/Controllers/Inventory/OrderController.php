@@ -21,6 +21,13 @@ use App\Classes\GlobalNumberRange;
 use Log;
 use App\Models\Address;
 
+/**
+ * Stock status 
+ * 99/98-adjusted
+ * 05 - out for sell
+ * 01 - still in inventory
+ * 04 - adjusted new item
+ */
 
 class OrderController extends Controller
 {
@@ -141,8 +148,10 @@ class OrderController extends Controller
                 //     OrderHdr::where('id',$order_no)->update(['status'=>'02']);
                 // }
                 
-    
-            Session::flash('message', 'Successfully created delivery order');
+            if(!Session::has('message')){
+                Session::flash('message', 'Successfully created delivery order');
+            }
+            
             return redirect('inventory/order/delivery/');
 
         }
@@ -191,17 +200,18 @@ class OrderController extends Controller
                                         Session::flash('message', 'Error');
                                         return redirect()->back();
                                     }
-                }else{ //No barcode
-                    try{
-                        $stock_item_qty = StockItem::where('product_id',$product_query->id)->whereIn('status',['01'])->sum('quantity');
+                }else{ //No barcode (already check in front end )
+                    // try{
+                        // $stock_item_qty = $this->checkSumProduct($product_query->id);
     
-                        if($stock_item_qty){
-
-
-                            if(intval($stock_item_qty) > intval($product_supplier->quantity))
-                            {
+                        // if($stock_item_qty){
+                            // if(intval($stock_item_qty) > intval($product_supplier->quantity))
+                            // {
                                 StockItem::insert(['product_id' => $product_query->id, 'quantity'=>$product_supplier->quantity,'status'=>'05']);
-                            }
+                            // }else{
+                            //     Session::flash('message', 'No Item in Stocks');
+                            //     return redirect()->back();
+                            // }
             
                             // $new = $stock_item->replicate();
             
@@ -212,15 +222,16 @@ class OrderController extends Controller
             
                             // $stock_item->status = "98"; //sold
                             // $stock_item->update();
-                        }else{
-                            Session::flash('message', 'No Stocks');
-                            return redirect()->back();
-                        }
+                        // }else{
+                        //     Session::flash('message', 'No Item in Stocks');
+                        //     return redirect()->back();
+                        // }
                             
-                                    }catch(Exception $e){
-                                        Session::flash('message', 'Error');
-                                        return redirect()->back();
-                                    }
+                        //             }catch(Exception $e){
+                        //                 \Log::error($e->getMessage());
+                        //                 Session::flash('message', 'Error');
+                        //                 return redirect()->back();
+                        //             }
                 }
     
                 $delivery_item = new DeliveryItem($data_item);
@@ -237,6 +248,13 @@ class OrderController extends Controller
             return false;
         }
         
+    }
+
+    public function checkSumProduct($product_id)
+    {
+        $item = StockItem::where('product_id',$product_id)->whereIn('status',['01'])->sum('quantity');
+
+        return $item;
     }
 
     public function deliveryComplete(Request $request)

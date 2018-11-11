@@ -91,7 +91,7 @@ textarea {
                                     </form>
     
                             </div>
-
+                            
                             <div class="panel-body">
                                 <table  id="delivery-order" class="table"> 
                                         <thead>
@@ -125,7 +125,7 @@ textarea {
                                                     <a href="{{ url('inventory/order/delivery/view/'.(isset($delivery->delivery_number) ? base64_encode($delivery->delivery_number) : "")) }}" class="btn btn-default">Order Note</a>
                                                     @if($delivery->status == 'pending')
                                                     <input type="hidden" value="{{$delivery->id}}" name="order_no">
-                                                    <button type="submit" class="btn btn-info pickup-btn">Pickup</button>   
+                                                    <button type="submit" id="pickup-btn" class="btn btn-info pickup-btn hide">Pickup</button>   
                                                 @endif
                                                 </td>
                                                  </form> 
@@ -178,6 +178,14 @@ textarea {
                         return false;
                     }
                 );
+            
+                t.on( 'search.dt', function () {
+                    $('.pickup-btn').removeClass('hide');
+                    $(".dataTables_filter").hide();
+                    $
+                } );
+
+    
     });
 </script>
 
