@@ -387,9 +387,11 @@ $(document).ready(function() {
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 url: "{{url('inventory/stock/quantity')}}/" + product_id
                             }).done(function(result){
-                                    if( $('#input_quantity').val() > result );
-                                    console.log("Product no stock")
-                                    alert("Product is empty in stock")
+                                    if( $('#input_quantity').val() > result )
+                                    {
+                                        console.log("Product no stock")
+                                        alert("Product is empty in stock")
+                                    }
                                     else{
                                         t.row.add( [
                                             "",
