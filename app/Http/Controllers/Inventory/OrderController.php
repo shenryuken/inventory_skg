@@ -250,9 +250,11 @@ class OrderController extends Controller
         
     }
 
-    public function checkSumProduct($product_id)
+    public function checkSumProduct($product_code)
     {
-        $item = StockItem::where('product_id',$product_id)->whereIn('status',['01'])->sum('quantity');
+        $product = new Product;
+        $product = $product->where('code',$product_code)->first();
+        $item = StockItem::where('product_id',$product->id)->whereIn('status',['01'])->sum('quantity');
 
         return $item;
     }
