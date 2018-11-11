@@ -387,18 +387,18 @@ $(document).ready(function() {
                 headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
                 url: "{{url('inventory/stock/quantity')}}/" + product_id
                             }).done(function(result){
-                                if(result!=""){
-                                    $('#input_quantity').val() > result;
+                                    if( $('#input_quantity').val() > result );
                                     console.log("Product no stock")
                                     alert("Product is empty in stock")
-                                }else{
-                                    t.row.add( [
-                                    "",
-                                    $('#input_product').val(),
-                                    $('#input_quantity').val(),                                    
-                                    ' <span class="glyphicon glyphicon-remove-sign" style="color:red;"></span>'
-                                ] ).draw( false );
-                                }
+                                    else{
+                                        t.row.add( [
+                                            "",
+                                            $('#input_product').val(),
+                                            $('#input_quantity').val(),                                    
+                                            ' <span class="glyphicon glyphicon-remove-sign" style="color:red;"></span>'
+                                        ] ).draw( false );
+                                    }
+                                
                             })
                         
     })
