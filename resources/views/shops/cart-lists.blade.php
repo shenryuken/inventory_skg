@@ -44,8 +44,7 @@
                                         <thead class="">
                                             <tr>
                                                 <th class="col-md-5">Product</th>
-                                                <th class="col-md-3">Quantity</th>
-                                                <th class="">Point</th>
+                                                <th class="col-md-3">Quantity /Pts (Total Pts)</th>
                                                 <th class="col-md-2">Unit Price</th>
                                                 <th class="col-md-2">Total</th>
                                                 <th class=""><input type="hidden" id="agent_id" value="{{ $returnData['agent_id'] }}"></th>
@@ -75,11 +74,8 @@
                                                             <button class="btn btn-danger btn-plus" type="button">+</button>
                                                         </span>
                                                     </div>
-                                                    
-                                                </td>
-                                                <td>
-                                                   <div style="font-size: 11px;">
-                                                        <strong>{{ $value['point'] }}</strong>
+                                                    <div id="point" style="font-size: 11px;">
+                                                        <strong>{{ $value['point'] }} ({{ $value['total_point'] }})</strong>
                                                     </div> 
                                                 </td>
                                                 @if(Auth::guard('admin')->check() == true)
@@ -261,8 +257,9 @@
         var newTotal_staff = 0.00;
         var newTotal_wm = 0.00;
         var newTotal_em = 0.00;
+        var tot_point = 0;
         quantity = parseInt(quantity);
-        console.log(quantity)
+        // console.log(quantity)
 
         for(var i=0;i<cartItems.length;i++){
             if(cartItems[i].product_id == productid){
@@ -270,6 +267,7 @@
                 newTotal_staff = parseFloat(cartItems[i].price_staff) * parseInt(quantity);
                 newTotal_wm = parseFloat(cartItems[i].price_wm) * parseInt(quantity);
                 newTotal_em = parseFloat(cartItems[i].price_em) * parseInt(quantity);
+                tot_point = parseInt(cartItems[i].point) * parseInt(quantity);
                 
                 newTotal_staff = newTotal_staff.toFixed(2);
                 newTotal_wm = newTotal_wm.toFixed(2);
@@ -278,6 +276,7 @@
                 cartItems[i].total_price_staff = newTotal_staff;
                 cartItems[i].total_price_wm = newTotal_wm;
                 cartItems[i].total_price_em = newTotal_em;
+                cartItems[i].total_point = tot_point;
                 quantity = quantity.toString();
                 
                 newTotal_staff = newTotal_staff.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
@@ -287,6 +286,7 @@
 
                 table.children('.tot-price-staff').html('<strong>WM RM'+newTotal_staff);
                 table.children('.tot-price').html('<strong>WM RM'+newTotal_wm+'<br>EM RM'+newTotal_em+'</strong>');
+                table.children('.quantity-item').find('#point').html('<strong>'+cartItems[i].point+' ('+tot_point+')</strong>');
                 break;
             }
         }
@@ -296,7 +296,7 @@
         var newTotal_price_staff = 0.00;
         var newTotal_price_wm = 0.00;
         var newTotal_price_em = 0.00;
-        console.log(cartItems)
+        // console.log(cartItems)
         for(var i=0;i<cartItems.length;i++){
 
             newTotal_price_staff = newTotal_price_staff + parseFloat(cartItems[i].total_price_staff.replace(",",""));
@@ -308,9 +308,9 @@
         newTotal_price_wm = newTotal_price_wm.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
         newTotal_price_em = newTotal_price_em.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 
-        console.log($('#total-price').children('tbody').children('tr#row-total-price').children('td#col-total-price-staff').html('<h5>RM'+newTotal_price_staff+'</h5>'))
-        console.log($('#total-price').children('tbody').children('tr#row-total-price').children('td#col-total-price').html('<h5>WM RM'+newTotal_price_wm+'<br>EM RM'+newTotal_price_em+'</h5>'))
-        console.log($('#total-price').children('tbody').children('tr#row-grand-total').children('td#col-grand-total').html('<h4>WM RM'+newTotal_price_wm+'<br>EM RM'+newTotal_price_em+'</h4>'))
+        $('#total-price').children('tbody').children('tr#row-total-price').children('td#col-total-price-staff').html('<h5>RM'+newTotal_price_staff+'</h5>')
+        $('#total-price').children('tbody').children('tr#row-total-price').children('td#col-total-price').html('<h5>WM RM'+newTotal_price_wm+'<br>EM RM'+newTotal_price_em+'</h5>')
+        $('#total-price').children('tbody').children('tr#row-grand-total').children('td#col-grand-total').html('<h4>WM RM'+newTotal_price_wm+'<br>EM RM'+newTotal_price_em+'</h4>')
     }
     
     $('.remove-item').on('click', function () {

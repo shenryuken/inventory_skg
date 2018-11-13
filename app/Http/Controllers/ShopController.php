@@ -232,6 +232,7 @@ class ShopController extends Controller
             $grandTotalPrice_em     = 0.00;
             $grandTotalPrice_staff  = 0.00;
             $shipping_fee           = 0.00;
+            $total_point            = 0.00;  
 
             foreach ($cartItems as $key => $value){
 
@@ -257,10 +258,12 @@ class ShopController extends Controller
                 $total_price_wm     = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price_wm']);
                 $total_price_em     = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price_em']);
                 $total_price_staff  = $this->fn_calc_total_price($cartItems[$key]['total_quantity'],$cartItems[$key]['price_staff']);
+                $total_point        = $cartItems[$key]['total_quantity'] * $cartItems[$key]['point'];
 
                 $cartItems[$key]['total_price_wm']      = $total_price_wm;
                 $cartItems[$key]['total_price_em']      = $total_price_em;
                 $cartItems[$key]['total_price_staff']   = $total_price_staff;
+                $cartItems[$key]['total_point']         = $total_point;
 
                 $image = product_image::select('type','description','file_name','path')
                                         ->where('product_id',$cartItems[$key]['product_id'])
@@ -466,6 +469,8 @@ class ShopController extends Controller
             $totalPrice         = 0.00;
             $grandTotalPrice    = 0.00;
             $shipping_fee       = 0.00;
+            $total_point        = 0.00;
+
             foreach ($cartItems as $key => $value){
 
                 $promotion = $this->checkPromotion($cartItems[$key]['product_id']);
@@ -512,6 +517,9 @@ class ShopController extends Controller
                     $totalPrice_em = round($totalPrice_em,2);
                     $totalPrice_wm = round($totalPrice_wm,2);
                 }
+
+                $total_point = $cartItems[$key]['total_quantity'] * $cartItems[$key]['point'];
+                $cartItems[$key]['total_point'] = $total_point;
 
                 $prdimage = Product_image::select('type','description','file_name','path')
                                         ->where('product_id',$cartItems[$key]['product_id'])
@@ -1332,6 +1340,9 @@ class ShopController extends Controller
         // echo $order_no;die();
 
         $sessionData = session('STORE','default');
+        $product_name = "";
+        $total_price = 0.00;
+        $total_point = 0;
         // dd($sessionData);
         try{
 
@@ -1346,9 +1357,11 @@ class ShopController extends Controller
 
                     $product_name = Product::select('name')->where('id',$value['product_id'])->first();
                     $total_price = str_replace(",","",number_format((float)$value['price'] * (float)$value['product_qty'],2));
+                    $total_point = (int)$value['pv'] * (int)$value['product_qty'];
 
                     $OrderItem[$key]['product_name'] = $product_name->name;
                     $OrderItem[$key]['total_price'] = $total_price;
+                    $OrderItem[$key]['total_point'] = $total_point;
    
                 }
             }
@@ -1363,9 +1376,11 @@ class ShopController extends Controller
 
                     $product_name = Product::select('name')->where('id',$value['product_id'])->first();
                     $total_price = str_replace(",","",number_format((float)$value['price'] * (float)$value['product_qty'],2));
+                    $total_point = (int)$value['pv'] * (int)$value['product_qty'];
 
                     $value['product_name'] = $product_name->name;
                     $OrderItem[$key]['total_price'] = $total_price;
+                    $OrderItem[$key]['total_point'] = $total_point;
                     
                 }
             }

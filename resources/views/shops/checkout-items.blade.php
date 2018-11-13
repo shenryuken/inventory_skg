@@ -44,7 +44,7 @@
                                             <tr>
                                                 <th class="col-md-5">Product</th>
                                                 <th class="col-md-2">Quantity</th>
-                                                <th class="col-md-1">Point</th>
+                                                <th class="col-md-2">Pts (Total Pts)</th>
                                                 <th class="col-md-2">Unit Price</th>
                                                 <th class="col-md-2">Total</th>
                                                 <th hidden=><input type="hidden" id="agent_id" value="{{ $returnData['agent_id'] }}"></th>
@@ -64,11 +64,11 @@
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td class="col-md-2 quantity-item" style="text-align: center">
+                                                <td class="col-md-2 quantity-item" style="font-size: 11px;">
                                                     <p>{{ $value['total_quantity'] }}</p>
                                                 </td>
-                                                <td class="col-md-2 quantity-item">
-                                                    <p>{{ $value['point'] }}</p>
+                                                <td class="col-md-1" style="font-size: 11px;">
+                                                    <strong>{{ $value['point'] }} ({{ $value['total_point'] }})</strong>
                                                 </td>
                                                 @if(Auth::guard('admin')->check())
                                                 <td class="col-sm-1 col-md-1 unt-price">
@@ -100,7 +100,7 @@
                                             @endforeach
                                             @else
                                             <tr>
-                                                <td colspan="4" class="active" align="center">No Item</td>
+                                                <td colspan="5" class="active" align="center">No Item</td>
                                             </tr>
                                             @endif
                                         </tbody>
