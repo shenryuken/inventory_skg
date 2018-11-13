@@ -118,7 +118,8 @@
                                                 <th>Quantity</th>
                                                 <th>Price/Unit</th>
                                                 <th>Total Price</th>
-                                                <th>Point Value</th>
+                                                <th>Point</th>
+                                                <th>Total Point</th>
                                             </tr>
                                         </thead>
                                         <tbody id="list-item">
@@ -131,6 +132,7 @@
                                                 <td>{{ $value['price'] }}</td>
                                                 <td>{{ $value['total_price'] }}</td>
                                                 <td>{{ $value['pv'] }}</td>
+                                                <td>{{ $value['total_point'] }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>
