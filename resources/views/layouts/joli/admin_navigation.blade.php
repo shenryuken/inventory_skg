@@ -96,6 +96,17 @@
             <span class="fa fa-file-text-o"></span> Count Bonus
         </a>
     </li> 
+    <li class="xn-openable {{ Request::is('testbonus/*') ? 'active' : '' }}">
+        <a href="#" class="arrow"><span class="fa fa-table"></span> <span class="xn-text">Test Bonus</span></a>
+        <ul>                              
+            <li class="{{ Request::is('testbonus/user-list') ? 'active' : '' }}">
+                <a href="{{ url('testbonus/user-list')}}">User List</a>
+            </li>  
+            <li class="{{ Request::is('vault/transfer') ? 'active' : '' }}">
+                <a href="{{ url('vault/transfer-point-history')}}">Transfer Point History</a>
+            </li>       
+        </ul>
+    </li>
     <li class="xn-openable {{ Request::is('reports/*') ? 'active' : '' }}">
         <a href="#"><span class="fa fa-table"></span> <span class="xn-text">Reports</span></a>
         <ul>                            

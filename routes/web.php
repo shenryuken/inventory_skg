@@ -427,6 +427,22 @@ Route::post('inventory/setting/deliverytype/check_existcode', 'Inventory\Configu
 
 ======================================================================================
 */
+
+/*
+======================================================================================
+Test Bonus 
+======================================================================================
+*/
+Route::get('testbonus/user-list', 'TestBonusController@userList');
+Route::get('testbonus/retail-profit/{id}', 'TestBonusController@getRetailProfitByUserId');
+Route::get('testbonus/override-retail-profit/{id}', 'TestBonusController@getOverrideRetailProfitByUserId');
+
+/*
+======================================================================================
+End Test Bonus  
+======================================================================================
+*/
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
